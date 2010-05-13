@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, Todo.txt Touch!</string>
+    <string name="app_name">Todo.txt Touch</string>
+    <string-array name="tasks_array">
+        <item>Call Mom</item>
+        <item>Call dentist to schedule cleaning</item>
+        <item>Learn Android development</item>
+        <item>Add configurable project/context/priority tabs to this list (defaults: @phone, @shopping)</item>
+        <item>Add checkboxes to mark items as done</item>
+        <item>Implement Dropbox API to read/write todo.txt and done.txt</item>
+    </string-array>
+</resources>
