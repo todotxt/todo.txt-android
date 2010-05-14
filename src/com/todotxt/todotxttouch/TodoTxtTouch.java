@@ -12,13 +12,18 @@ import org.apache.http.util.EntityUtils;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,14 +34,35 @@ public class TodoTxtTouch extends ListActivity {
 	private ArrayList<Task> m_tasks = null;
 	private TaskAdapter m_adapter;
 	private Runnable viewTasks;
+	private String fileUrl = "http://ginatrapani.github.com/todo.txt-touch/todo.txt";
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		Button prefBtn = (Button) findViewById(R.id.prefButton);
+		prefBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent settingsActivity = new Intent(getBaseContext(),
+						Preferences.class);
+				startActivity(settingsActivity);
+			}
+		});
+
+		Button refreshBtn = (Button) findViewById(R.id.refreshButton);
+		refreshBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Thread thread = new Thread(null, viewTasks, "MagentoBackground");
+				thread.start();
+				m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
+						"Please wait...", "Retrieving todo.txt ...", true);
+			}
+		});
+
 		m_tasks = new ArrayList<Task>();
 		this.m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks);
+
 		setListAdapter(this.m_adapter);
 
 		viewTasks = new Runnable() {
@@ -49,6 +75,26 @@ public class TodoTxtTouch extends ListActivity {
 		thread.start();
 		m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
 				"Please wait...", "Retrieving todo.txt ...", true);
+	}
+
+	protected void onStart() {
+		super.onStart();
+		this.getPrefs();
+	}
+
+	private void getPrefs() {
+		// Get the xml/preferences.xml preferences
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+		this.setFileUrl(prefs.getString("editTextPref", this.getFileUrl()));
+	}
+
+	private void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
+	}
+
+	private String getFileUrl() {
+		return this.fileUrl;
 	}
 
 	private Runnable returnRes = new Runnable() {
@@ -70,7 +116,7 @@ public class TodoTxtTouch extends ListActivity {
 			String todotxt_file_contents = "No todo's to display";
 			try {
 				HttpClient client = new DefaultHttpClient();
-				String getURL = "http://ginatrapani.github.com/todo.txt-touch/todo.txt";
+				String getURL = this.getFileUrl();
 				HttpGet get = new HttpGet(getURL);
 				HttpResponse responseGet = client.execute(get);
 				HttpEntity resEntityGet = responseGet.getEntity();
