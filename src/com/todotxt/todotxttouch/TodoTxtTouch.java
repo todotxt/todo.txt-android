@@ -2,6 +2,13 @@ package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -60,16 +67,28 @@ public class TodoTxtTouch extends ListActivity {
 
 	private void getTasks() {
 		try {
-			// TODO: Retrieve todo.txt from some (web-based) location here
-			// Perhaps using this tutorial: http://www.softwarepassion.com/android-series-get-post-and-multipart-post-requests/
-			String todotxt_file_contents = "Call Mom @phone\n"
-					+ "Schedule teeth cleaning with dentist @phone\n"
-					+ "Pick up milk and bread @store\n"
-					+ "Develop Android app\n"
-					+ "Add configurable project/context/priority tabs to this list (defaults: priority A, @phone, @store)\n"
-					+ "Add checkboxes to mark items as done\n"
-					+ "Apply for Dropbox API access\n"
-					+ "Implement Dropbox Anywhere API to read/write todo.txt and done.txt\n";
+			String todotxt_file_contents = "No todo's to display";
+			try {
+				HttpClient client = new DefaultHttpClient();
+				String getURL = "http://ginatrapani.github.com/todo.txt-touch/todo.txt";
+				HttpGet get = new HttpGet(getURL);
+				HttpResponse responseGet = client.execute(get);
+				HttpEntity resEntityGet = responseGet.getEntity();
+				if (resEntityGet != null) {
+					// do something with the response
+					long len = resEntityGet.getContentLength();
+					if (len != -1 && len < 2048) {
+						todotxt_file_contents = EntityUtils
+								.toString(resEntityGet);
+					} else {
+						todotxt_file_contents = "File too long";
+						Log.i("GET RESPONSE", EntityUtils
+								.toString(resEntityGet));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			String todos[] = todotxt_file_contents.split("\n");
 			m_tasks = new ArrayList<Task>();
 			for (String todo : todos) {
