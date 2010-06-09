@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.todotxt.todotxttouch" android:versionCode="1"
 	android:versionName="1.0">
+        <uses-sdk android:minSdkVersion="3" />
+        <supports-screens android:smallScreens="true"
+                android:normalScreens="true" 
+                android:largeScreens="true"
+                android:anyDensity="true" 
+                android:resizeable="true" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".TodoTxtTouch" android:label="@string/app_name">

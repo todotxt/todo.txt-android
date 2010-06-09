@@ -3,4 +3,6 @@
     <string name="app_name">Todo.txt Touch</string>
     <string name="main_no_items">No to-do\'s to display</string>
     <string name="set_preferences">Todo.txt Preferences</string>
+    <string name="settings">Settings</string>
+    <string name="refresh">Refresh</string>
 </resources>

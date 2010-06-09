@@ -2,152 +2,120 @@ package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class TodoTxtTouch extends ListActivity {
+
+	private final static String TAG = TodoTxtTouch.class.getSimpleName();
+	
+	private final static int MENU_REFRESH_ID = 0;
+	private final static int MENU_SETTINGS_ID = 1;
+	
 	private ProgressDialog m_ProgressDialog = null;
 	private ArrayList<Task> m_tasks = null;
 	private TaskAdapter m_adapter;
-	private Runnable viewTasks;
-	private String fileUrl = "http://ginatrapani.github.com/todo.txt-touch/todo.txt";
+	private String m_fileUrl = "http://ginatrapani.github.com/todo.txt-touch/todo.txt";
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		Button prefBtn = (Button) findViewById(R.id.prefButton);
-		prefBtn.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent settingsActivity = new Intent(getBaseContext(),
-						Preferences.class);
-				startActivity(settingsActivity);
-			}
-		});
-
-		Button refreshBtn = (Button) findViewById(R.id.refreshButton);
-		refreshBtn.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Thread thread = new Thread(null, viewTasks, "MagentoBackground");
-				thread.start();
-				m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-						"Please wait...", "Retrieving todo.txt ...", true);
-			}
-		});
 
 		m_tasks = new ArrayList<Task>();
-		this.m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks);
+		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks);
 
 		setListAdapter(this.m_adapter);
 
-		viewTasks = new Runnable() {
-			@Override
-			public void run() {
-				getTasks();
-			}
-		};
-		Thread thread = new Thread(null, viewTasks, "MagentoBackground");
-		thread.start();
-		m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-				"Please wait...", "Retrieving todo.txt ...", true);
-	}
-
-	protected void onStart() {
-		super.onStart();
-		this.getPrefs();
-	}
-
-	private void getPrefs() {
 		// Get the xml/preferences.xml preferences
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
-		this.setFileUrl(prefs.getString("editTextPref", this.getFileUrl()));
+		m_fileUrl = prefs.getString("editTextPref", m_fileUrl);
+
+		populate();
 	}
 
-	private void setFileUrl(String fileUrl) {
-		this.fileUrl = fileUrl;
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem item;
+        item = menu.add(Menu.NONE, MENU_SETTINGS_ID, Menu.NONE, R.string.settings);
+        item.setIcon(android.R.drawable.ic_menu_preferences);
+        item = menu.add(Menu.NONE, MENU_REFRESH_ID, Menu.NONE, R.string.refresh);
+        item.setIcon(android.R.drawable.ic_menu_rotate);
+		return super.onCreateOptionsMenu(menu);
 	}
-
-	private String getFileUrl() {
-		return this.fileUrl;
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        int id = item.getItemId();
+        if(MENU_SETTINGS_ID == id) {
+			Intent settingsActivity = new Intent(getBaseContext(),
+					Preferences.class);
+			startActivity(settingsActivity);
+        }else if(MENU_REFRESH_ID == id){
+        	populate();
+        }else{
+    		return super.onMenuItemSelected(featureId, item);
+        }
+        return true;
 	}
-
-	private Runnable returnRes = new Runnable() {
-
-		@Override
-		public void run() {
-			if (m_tasks != null && m_tasks.size() > 0) {
-				m_adapter.notifyDataSetChanged();
-				for (int i = 0; i < m_tasks.size(); i++)
-					m_adapter.add(m_tasks.get(i));
-			}
-			m_ProgressDialog.dismiss();
-			m_adapter.notifyDataSetChanged();
-		}
-	};
-
-	private void getTasks() {
-		try {
-			String todotxt_file_contents = "No todo's to display";
-			try {
-				HttpClient client = new DefaultHttpClient();
-				String getURL = this.getFileUrl();
-				HttpGet get = new HttpGet(getURL);
-				HttpResponse responseGet = client.execute(get);
-				HttpEntity resEntityGet = responseGet.getEntity();
-				if (resEntityGet != null) {
-					// do something with the response
-					long len = resEntityGet.getContentLength();
-					if (len != -1 && len < 2048) {
-						todotxt_file_contents = EntityUtils
-								.toString(resEntityGet);
-					} else {
-						todotxt_file_contents = "File too long";
-						Log.i("GET RESPONSE", EntityUtils
-								.toString(resEntityGet));
+	
+	private void populate(){
+    	new AsyncTask<Void, Void, Void>(){
+    		@Override
+    		protected void onPreExecute() {
+    			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
+    					"Please wait...", "Retrieving todo.txt ...", true);
+    		}
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					String todotxt_file_contents = "No todo's to display";
+					todotxt_file_contents = Util.fetchContent(m_fileUrl);
+					String todos[] = todotxt_file_contents.split("\n");
+					m_tasks = new ArrayList<Task>();
+					for (String todo : todos) {
+						Task t = new Task();
+						t.setTaskDescription(todo);
+						m_tasks.add(t);
 					}
+					Log.i(TAG, "ARRAY " + m_tasks.size());
+				} catch (Exception e) {
+					Log.e(TAG, "BACKGROUND_PROC "+ e.getMessage());
+					Util.showToastLong(TodoTxtTouch.this, e.getMessage());
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+				return null;
 			}
-			String todos[] = todotxt_file_contents.split("\n");
-			m_tasks = new ArrayList<Task>();
-			for (String todo : todos) {
-				Task t = new Task();
-				t.setTaskDescription(todo);
-				m_tasks.add(t);
-			}
-			Thread.sleep(5000);
-			Log.i("ARRAY", "" + m_tasks.size());
-		} catch (Exception e) {
-			Log.e("BACKGROUND_PROC", e.getMessage());
-		}
-		runOnUiThread(returnRes);
+    		@Override
+    		protected void onPostExecute(Void result) {
+    			if (m_tasks != null && m_tasks.size() > 0) {
+    				m_adapter.clear();
+    				for (int i = 0; i < m_tasks.size(); i++){
+    					m_adapter.add(m_tasks.get(i));
+    				}
+    			}
+    			m_ProgressDialog.dismiss();
+    			m_adapter.notifyDataSetChanged();
+    		}
+    	}.execute();
 	}
 
 	private class TaskAdapter extends ArrayAdapter<Task> {
@@ -189,4 +157,5 @@ public class TodoTxtTouch extends ListActivity {
 			return v;
 		}
 	}
+
 }

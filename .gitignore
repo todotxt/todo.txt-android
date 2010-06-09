@@ -1,3 +1,13 @@
-.*
-gen/*
-bin/*
+#/.gitignore
+.project
+.classpath
+.settings/
+build.properties
+build.xml
+#default.properties
+local.properties
+bin/
+gen/
+/todo/report.txt
+/todo/todo.txt.bak
+/todo/todo.tmp
