@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:title="@string/menu_add" android:id="@+id/add_new" android:icon="@drawable/ic_menu_add"/>
+	<item android:title="@string/menu_preferences" android:id="@+id/preferences" android:icon="@drawable/ic_menu_preferences"/>
+	<item android:title="@string/menu_sync" android:id="@+id/sync" android:icon="@drawable/ic_menu_refresh"/>
+</menu>

@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,26 +56,31 @@ public class TodoTxtTouch extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem item;
-        item = menu.add(Menu.NONE, MENU_SETTINGS_ID, Menu.NONE, R.string.settings);
-        item.setIcon(android.R.drawable.ic_menu_preferences);
-        item = menu.add(Menu.NONE, MENU_REFRESH_ID, Menu.NONE, R.string.refresh);
-        item.setIcon(android.R.drawable.ic_menu_rotate);
-		return super.onCreateOptionsMenu(menu);
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		
+		return true;
 	}
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        int id = item.getItemId();
-        if(MENU_SETTINGS_ID == id) {
-			Intent settingsActivity = new Intent(getBaseContext(),
+
+        switch(item.getItemId())
+        {
+        case R.id.add_new:
+        	// Switch to task adding acctivity
+        	break;
+        case R.id.sync:
+        	populate();
+        	break;
+        case R.id.preferences:
+        	Intent settingsActivity = new Intent(getBaseContext(),
 					Preferences.class);
 			startActivity(settingsActivity);
-        }else if(MENU_REFRESH_ID == id){
-        	populate();
-        }else{
-    		return super.onMenuItemSelected(featureId, item);
+			break;
         }
+        
         return true;
 	}
 	
