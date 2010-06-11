@@ -1,5 +1,6 @@
 package com.todotxt.todotxttouch;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.ListActivity;
@@ -28,20 +29,24 @@ public class TodoTxtTouch extends ListActivity {
 
 	private final static String TAG = TodoTxtTouch.class.getSimpleName();
 	
-	private final static int MENU_REFRESH_ID = 0;
-	private final static int MENU_SETTINGS_ID = 1;
-	
 	private ProgressDialog m_ProgressDialog = null;
 	private ArrayList<Task> m_tasks = null;
 	private TaskAdapter m_adapter;
 	private String m_fileUrl = "http://ginatrapani.github.com/todo.txt-touch/todo.txt";
+	private LocalFile m_localFile = new LocalFile(LocalFile.Type.TODO);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		m_tasks = new ArrayList<Task>();
+		try {
+			m_tasks = m_localFile.getTasks();
+		} catch (IOException e) {
+			Log.e(TAG, e.getMessage());
+			m_tasks = new ArrayList<Task>();
+		}
+		
 		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks);
 
 		setListAdapter(this.m_adapter);
@@ -69,7 +74,9 @@ public class TodoTxtTouch extends ListActivity {
         switch(item.getItemId())
         {
         case R.id.add_new:
-        	// Switch to task adding acctivity
+        	// Switch to task adding activity
+        	// TODO: Get rid of this toast
+        	Toast.makeText(getApplicationContext(), "Unimplemented", Toast.LENGTH_SHORT).show();
         	break;
         case R.id.sync:
         	populate();
@@ -97,12 +104,13 @@ public class TodoTxtTouch extends ListActivity {
 					String todotxt_file_contents = "No todo's to display";
 					todotxt_file_contents = Util.fetchContent(m_fileUrl);
 					String todos[] = todotxt_file_contents.split("\n");
-					m_tasks = new ArrayList<Task>();
-					for (String todo : todos) {
-						Task t = new Task();
-						t.setTaskDescription(todo);
-						m_tasks.add(t);
-					}
+					
+					m_localFile.update();
+					m_localFile.mergeTasks(todos);
+					m_localFile.save();
+					
+					m_tasks = m_localFile.getTasks();
+					
 					Log.i(TAG, "ARRAY " + m_tasks.size());
 				} catch (Exception e) {
 					Log.e(TAG, "BACKGROUND_PROC "+ e.getMessage());
