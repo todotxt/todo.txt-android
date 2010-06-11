@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import android.os.Environment;
-import android.util.Log;
 
 public class LocalFile {
 
@@ -26,7 +25,6 @@ public class LocalFile {
 	
 	public void update() throws IOException
 	{
-		Log.i("Update", "Update Reached");
 		initializeFile();
 		
 		Scanner lineScan = new Scanner(m_file);
@@ -42,11 +40,7 @@ public class LocalFile {
 			// Add to arraylist if string is not empty
 			if(newTaskDesc.length() > 0)
 			{
-				Task t = new Task();
-				t.setTaskDescription(newTaskDesc);
-				
-				Log.i("New Task", t.getTaskDescription());
-				
+				Task t = TodoUtil.createTask(TodoUtil.getNextId(), newTaskDesc);				
 				m_tasks.add(t);
 			}
 		}
@@ -62,20 +56,20 @@ public class LocalFile {
 		return m_tasks;
 	}
 	
-	public void mergeTasks(String remoteSource[])
+	public void mergeTasks(ArrayList<Task> remoteSource)
 	{
 		ArrayList<Task> tmpNewValues = new ArrayList<Task>();
 		
-		for(int i = 0; i < remoteSource.length; ++i)
+		for(int i = 0; i < remoteSource.size(); ++i)
 		{
-			String compVal = remoteSource[i].trim();
+			String compVal = remoteSource.get(i).toFileFormat();
 			if(compVal.length() == 0)
 				continue;
 			
 			boolean newVal = true;
 			for(int j = 0; j < m_tasks.size(); ++j)
 			{
-				if(m_tasks.get(j).getTaskDescription().equalsIgnoreCase(compVal))
+				if(m_tasks.get(j).toFileFormat().equalsIgnoreCase(compVal))
 				{
 					newVal = false;
 					break;
@@ -83,12 +77,7 @@ public class LocalFile {
 			}
 			
 			if(newVal)
-			{
-				Task t = new Task();
-				t.setTaskDescription(compVal);
-				
-				tmpNewValues.add(t);
-			}
+				tmpNewValues.add(remoteSource.get(i));
 		}
 		
 		m_tasks.addAll(tmpNewValues);
@@ -101,12 +90,12 @@ public class LocalFile {
 	
 	public void save() throws IOException
 	{
-		if(isDeviceWritable() && m_file.canWrite())
+		if(Util.isDeviceWritable() && m_file.canWrite())
 		{
 			FileWriter fw = new FileWriter(m_file);
 			for(int i = 0; i < m_tasks.size(); ++i)
 			{
-				fw.write(m_tasks.get(i).getTaskDescription());
+				fw.write(m_tasks.get(i).toFileFormat());
 				fw.write("\n");
 			}
 			fw.close();
@@ -119,7 +108,7 @@ public class LocalFile {
 	
 	private void initializeFile() throws IOException
 	{
-		if(isDeviceReadable())
+		if(Util.isDeviceReadable())
 		{
 			// Attempt to create file if it does not yet exist
 			if(m_file == null)
@@ -158,7 +147,7 @@ public class LocalFile {
 	{
 		if(m_storageDir == null)
 		{
-			if(isDeviceWritable())
+			if(Util.isDeviceWritable())
 			{
 				File rootDir = Environment.getExternalStorageDirectory();
 				m_storageDir = new File(rootDir, "data/com.todotxt.todotxttouch/");
@@ -177,24 +166,4 @@ public class LocalFile {
 		else
 			return true;
 	}
-	
-	private static boolean isDeviceWritable()
-	{
-		String sdState = Environment.getExternalStorageState();
-		if(Environment.MEDIA_MOUNTED.equals(sdState))
-			return true;
-		else
-			return false;
-	}
-	
-	private static boolean isDeviceReadable()
-	{
-		String sdState = Environment.getExternalStorageState();
-		if(Environment.MEDIA_MOUNTED.equals(sdState) ||
-				Environment.MEDIA_MOUNTED_READ_ONLY.equals(sdState))
-			return true;
-		else
-			return false;
-	}
-	
 }

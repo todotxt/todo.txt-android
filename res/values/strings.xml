@@ -5,5 +5,13 @@
     <string name="set_preferences">Todo.txt Preferences</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_sync">Sync</string>
-<string name="menu_add">Add Task</string>
+	<string name="menu_add">Add Task</string>
+    <string name="menu_priority">Priority</string>
+    <string name="menu_context">Context</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="todourl_key">editTextPref</string>
+    <string name="todourl_title">Todo.txt Location:</string>
+    <string name="todourl_summary">The URL of your todo.txt file</string>
+    <string name="todourl_default">http://ginatrapani.github.com/todo.txt-touch/todo.txt</string>
 </resources>
