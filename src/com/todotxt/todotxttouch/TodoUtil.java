@@ -12,12 +12,9 @@ import java.util.regex.Pattern;
 import com.todotxt.todotxttouch.TodoTxtTouch.TaskAdapter;
 
 import android.content.Context;
-import android.util.Log;
 
 public class TodoUtil {
 	
-	private final static String TAG = TodoUtil.class.getSimpleName();
-
 	private final static Pattern prioPattern = Pattern.compile("\\(([A-Z])\\) (.*)");
 
 	private final static Pattern contextPattern = Pattern.compile("@(\\w+)");
