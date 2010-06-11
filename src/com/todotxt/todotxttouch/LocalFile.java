@@ -32,6 +32,7 @@ public class LocalFile {
 		
 		// Go through file line by line, adding tasks to the list
 		m_tasks = new ArrayList<Task>();
+		int counter = 0;
 		while(lineScan.hasNext())
 		{
 			String newTaskDesc = lineScan.next();
@@ -40,9 +41,10 @@ public class LocalFile {
 			// Add to arraylist if string is not empty
 			if(newTaskDesc.length() > 0)
 			{
-				Task t = TodoUtil.createTask(TodoUtil.getNextId(), newTaskDesc);				
+				Task t = TodoUtil.createTask(counter, newTaskDesc);				
 				m_tasks.add(t);
 			}
+			counter++;
 		}
 	}
 	
@@ -62,14 +64,14 @@ public class LocalFile {
 		
 		for(int i = 0; i < remoteSource.size(); ++i)
 		{
-			String compVal = remoteSource.get(i).toFileFormat();
+			String compVal = TaskHelper.toFileFormat(remoteSource.get(i));
 			if(compVal.length() == 0)
 				continue;
 			
 			boolean newVal = true;
 			for(int j = 0; j < m_tasks.size(); ++j)
 			{
-				if(m_tasks.get(j).toFileFormat().equalsIgnoreCase(compVal))
+				if(TaskHelper.toFileFormat(m_tasks.get(j)).equalsIgnoreCase(compVal))
 				{
 					newVal = false;
 					break;
@@ -95,7 +97,7 @@ public class LocalFile {
 			FileWriter fw = new FileWriter(m_file);
 			for(int i = 0; i < m_tasks.size(); ++i)
 			{
-				fw.write(m_tasks.get(i).toFileFormat());
+				fw.write(TaskHelper.toFileFormat(m_tasks.get(i)));
 				fw.write("\n");
 			}
 			fw.close();

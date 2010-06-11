@@ -156,20 +156,22 @@ public class Util {
 	public static boolean isDeviceWritable()
 	{
 		String sdState = Environment.getExternalStorageState();
-		if(Environment.MEDIA_MOUNTED.equals(sdState))
+		if(Environment.MEDIA_MOUNTED.equals(sdState)){
 			return true;
-		else
+		}else{
 			return false;
+		}
 	}
 	
 	public static boolean isDeviceReadable()
 	{
 		String sdState = Environment.getExternalStorageState();
 		if(Environment.MEDIA_MOUNTED.equals(sdState) ||
-				Environment.MEDIA_MOUNTED_READ_ONLY.equals(sdState))
+				Environment.MEDIA_MOUNTED_READ_ONLY.equals(sdState)){
 			return true;
-		else
+		}else{
 			return false;
+		}
 	}
 
 }

@@ -107,4 +107,35 @@ public class TaskHelper {
 		return res;
 	}
 
+	public static String getContextsAsString(Task task){
+		StringBuilder sb = new StringBuilder();
+		for (String cxt : task.contexts) {
+			sb.append("[").append(cxt).append("] ");
+		}
+		return sb.toString();
+	}
+
+	public static String toFileFormat(Task task) {
+		StringBuilder sb = new StringBuilder();
+		if (task.prio > 0) {
+			sb.append("(");
+			TaskHelper.appendPrio(sb, task.prio);
+			sb.append(") ");
+		}
+		sb.append(task.text);
+		return sb.toString();
+	}
+
+	public static String toDisplayFormat(Task task) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(task.id).append(" ");
+		if (task.prio > 0) {
+			sb.append("(");
+			TaskHelper.appendPrio(sb, task.prio);
+			sb.append(") ");
+		}
+		sb.append(task.text);
+		return sb.toString();
+	}
+
 }
