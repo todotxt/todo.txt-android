@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<EditTextPreference android:name="EditText Preference"
-		android:summary="The URL of your todo.txt file"
-		android:defaultValue="http://ginatrapani.github.com/todo.txt-touch/todo.txt"
-		android:title="Todo.txt Location:" android:key="editTextPref" />
+	<EditTextPreference 
+		android:key="@string/todourl_key"
+		android:title="@string/todourl_title" 
+		android:summary="@string/todourl_summary"
+		android:defaultValue="@string/todourl_default" />
 </PreferenceScreen>

@@ -12,7 +12,10 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -25,6 +28,10 @@ public class Util {
 	private static final int SOCKET_TIMEOUT = 120000;
 
 	private Util() {
+	}
+	
+	public static boolean isEmpty(String in){
+		return in == null || in.length() == 0;
 	}
 
 	public static HttpParams getTimeoutHttpParams() {
@@ -44,21 +51,24 @@ public class Util {
 			}
 		}
 	}
+	
+	public static InputStream getInputStreamFromUrl(String url)
+			throws ClientProtocolException, IOException {
+		HttpGet request = new HttpGet(url);
+		DefaultHttpClient client = new DefaultHttpClient(getTimeoutHttpParams());
+		HttpResponse response = client.execute(request);
+		int statusCode = response.getStatusLine().getStatusCode();
+		if (statusCode != 200) {
+			Log.e(TAG, "Failed to get stream for: " + url);
+			throw new IOException("Failed to get stream for: " + url);
+		}
+		return response.getEntity().getContent();
+	}
 
 	public static String fetchContent(String url)
 			throws ClientProtocolException, IOException {
-		HttpGet request = new HttpGet(url);
-		InputStream input = null;
+		InputStream input = getInputStreamFromUrl(url);
 		try {
-			DefaultHttpClient client = new DefaultHttpClient(
-					getTimeoutHttpParams());
-			HttpResponse response = client.execute(request);
-			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != 200) {
-				Log.e(TAG, "Failed to download file: " + url);
-				throw new IOException("Failed to download file: " + url);
-			}
-			input = response.getEntity().getContent();
 			int c;
 			byte[] buffer = new byte[8192];
 			StringBuilder sb = new StringBuilder();
@@ -85,6 +95,61 @@ public class Util {
 
 	public static void showToastShort(Context cxt, String msg) {
 		Toast.makeText(cxt, msg, Toast.LENGTH_SHORT).show();
+	}
+
+	public interface OnMultiChoiceDialogListener{
+		void onClick(boolean[] selected);
+	}
+
+	public static Dialog createMultiChoiceDialog(Context cxt,
+			CharSequence[] keys, boolean[] values, Integer titleId,
+			Integer iconId, final OnMultiChoiceDialogListener listener) {
+		final boolean[] res;
+		if(values == null){
+			res = new boolean[keys.length];
+		}else{
+			res = values;
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+		if(iconId != null){
+			builder.setIcon(iconId);
+		}
+		if(titleId != null){
+			builder.setTitle(titleId);
+		}
+		builder.setMultiChoiceItems(keys, values,
+				new DialogInterface.OnMultiChoiceClickListener() {
+					public void onClick(DialogInterface dialog,
+							int whichButton, boolean isChecked) {
+						res[whichButton] = isChecked;
+					}
+				});
+		builder.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						listener.onClick(res);
+					}
+				});
+		builder.setNegativeButton(R.string.cancel, null);
+		return builder.create();
+	}
+
+	public static void showDialog(Context cxt, int titleid, int msgid) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+		builder.setTitle(titleid);
+		builder.setMessage(msgid);
+		builder.setPositiveButton(android.R.string.ok, null);
+		builder.setCancelable(true);
+		builder.show();
+	}
+
+	public static void showDialog(Context cxt, int titleid, String msg) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+		builder.setTitle(titleid);
+		builder.setMessage(msg);
+		builder.setPositiveButton(android.R.string.ok, null);
+		builder.setCancelable(true);
+		builder.show();
 	}
 
 }

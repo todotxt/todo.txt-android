@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/toptext"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp"
-    android:textSize="16sp" >
-</TextView>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<TextView android:id="@+id/taskid" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:padding="2dip"
+		android:textSize="10sp" />
+
+	<TextView android:id="@+id/taskprio" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:padding="2dip"
+		android:textStyle="bold" android:textSize="16sp" android:layout_below="@id/taskid" />
+
+	<TextView android:id="@+id/tasktext" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:padding="2dip"
+		android:layout_toRightOf="@id/taskid" android:textSize="16sp" />
+
+	<TextView android:id="@+id/taskcontexts" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:padding="2dip"
+		android:textSize="16sp" android:layout_toRightOf="@id/taskid"
+		android:layout_below="@id/tasktext" />
+
+</RelativeLayout>

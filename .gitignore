@@ -8,6 +8,3 @@ build.xml
 local.properties
 bin/
 gen/
-/todo/report.txt
-/todo/todo.txt.bak
-/todo/todo.tmp
