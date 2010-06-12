@@ -1,6 +1,6 @@
-Call Mom @phone
+(A) Call Mom @phone
 Develop Android app @computer
 Add configurable tabs to list to-do's by default by priority, context (like @phone, @store)
 Buy milk @store
-Apply for Dropbox API access
-Implement Dropbox API to read/write todo.txt done.txt files
+(B) Apply for Dropbox API access
+(A) Implement Dropbox API to read/write todo.txt done.txt files
