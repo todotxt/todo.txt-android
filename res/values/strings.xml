@@ -6,6 +6,7 @@
     <string name="addtask_title">Add New Task</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_sync">Sync</string>
+    <string name="menu_refresh">Refresh</string>
 	<string name="menu_add">Add Task</string>
     <string name="menu_priority">Priority</string>
     <string name="menu_context">Context</string>

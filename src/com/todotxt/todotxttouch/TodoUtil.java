@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.todotxt.todotxttouch.TodoTxtTouch.TaskAdapter;
-
 import android.content.Context;
 import android.os.Environment;
+
+import com.todotxt.todotxttouch.TodoTxtTouch.TaskAdapter;
 
 public class TodoUtil {
 	
@@ -21,14 +22,7 @@ public class TodoUtil {
 
 	private final static Pattern contextPattern = Pattern.compile("@(\\w+)");
 	
-	private static int nextId = 1;
-	
 	private static File storageDirectory = null;
-	
-	public static int getNextId()
-	{
-		return nextId++;
-	}
 	
 	public static File getStorageDirectory()
 	{
@@ -51,11 +45,6 @@ public class TodoUtil {
 		while(m.find()){
 			String context = m.group(1);
 			contexts.add(context);
-			
-			// FIXME Causes toFileFormat output to lose all context tag data
-			// Will remove for now until we decide how this data should be
-			// displayed to the user.
-			//text = text.replace("@"+context, "");
 		}
 		return new Task(id, prio, text.trim(), contexts);
 	}
@@ -68,10 +57,13 @@ public class TodoUtil {
 		try {
 			in = new BufferedReader(new InputStreamReader(is));
 			String line;
+			int counter = 0;
 			while ((line = in.readLine()) != null) {
 				line = line.trim();
-				if(line.length() > 0)
-					items.add(createTask(getNextId(), line));
+				if(line.length() > 0){
+					items.add(createTask(counter, line));
+				}
+				counter++;
 			}
 		} finally {
 			Util.closeStream(in);
@@ -80,8 +72,33 @@ public class TodoUtil {
 		return items;
 	}
 
+	/*
+	public static ArrayList<Task> loadTasksFromFile()
+			throws IOException {
+		ArrayList<Task> items = new ArrayList<Task>();
+		BufferedReader in = null;
+		InputStream is = new FileInputStream(TODOFILE);
+		try {
+			in = new BufferedReader(new InputStreamReader(is));
+			String line;
+			int counter = 0;
+			while ((line = in.readLine()) != null) {
+				line = line.trim();
+				if (line.length() > 0) {
+					items.add(createTask(counter, line));
+				}
+				counter++;
+			}
+		} finally {
+			Util.closeStream(in);
+			Util.closeStream(is);
+		}
+		return items;
+	}*/
+
 	public static void setTasks(TaskAdapter adapter, List<Task> tasks){
 		if (tasks != null && tasks.size() > 0) {
+			Collections.sort(tasks, TaskHelper.byPrio);
 			adapter.clear();
 			for (int i = 0; i < tasks.size(); i++){
 				adapter.add(tasks.get(i));
@@ -115,5 +132,23 @@ public class TodoUtil {
 		else
 			return true;
 	}
+
+	/*
+	public static void writeToFile(List<Task> tasks){
+		try{
+			if(Util.isDeviceWritable()){
+				FileWriter fw = new FileWriter(TODOFILE);
+				for(int i = 0; i < tasks.size(); ++i)
+				{
+					String fileFormat = TaskHelper.toFileFormat(tasks.get(i));
+					fw.write(fileFormat);
+					fw.write("\n");
+				}
+				fw.close();
+			}
+		} catch (IOException e) {
+			Log.e(TAG, e.getMessage());
+		}
+	}*/
 
 }

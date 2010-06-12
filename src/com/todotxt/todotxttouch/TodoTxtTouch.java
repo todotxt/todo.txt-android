@@ -2,6 +2,7 @@ package com.todotxt.todotxttouch;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -9,8 +10,10 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,7 +28,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
@@ -35,7 +37,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	
 	private SharedPreferences m_prefs;
 	private ProgressDialog m_ProgressDialog = null;
-	private ArrayList<Task> m_tasks = null;
+	private ArrayList<Task> m_tasks = new ArrayList<Task>();
 	private TaskAdapter m_adapter;
 	private String m_fileUrl;
 
@@ -45,15 +47,6 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		
 		setContentView(R.layout.main);
 
-		// Load saved tasks from file
-		try {
-			LocalFile localFile = LocalFile.getInstance();
-			m_tasks = localFile.getTasks();
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
-			m_tasks = new ArrayList<Task>();
-		}
-		
 		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks, getLayoutInflater());
 
 		setListAdapter(this.m_adapter);
@@ -68,6 +61,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		m_prefs.registerOnSharedPreferenceChangeListener(this);
 		String defValue = getString(R.string.todourl_default);
 		m_fileUrl = m_prefs.getString(getString(R.string.todourl_key), defValue);
+
+		populateFromFile();
 	}
 	
 	@Override
@@ -78,10 +73,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
-		
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -96,7 +89,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
         	startActivity(addTaskActivity);
         	break;
         case R.id.sync:
-        	populate();
+        	populateFromUrl();
         	break;
         case R.id.preferences:
         	Intent settingsActivity = new Intent(getBaseContext(),
@@ -112,17 +105,18 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
         default:
         	return super.onMenuItemSelected(featureId, item);
         }
-        
         return true;
 	}
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
+		final Dialog d;
 		switch (id) {
 		case R.id.priority:
 			Set<String> prios = TaskHelper.getPrios(m_tasks);
 			final List<String> pStrs = new ArrayList<String>(prios);
-			return Util.createMultiChoiceDialog(this, pStrs
+			Collections.sort(pStrs);
+			d = Util.createMultiChoiceDialog(this, pStrs
 					.toArray(new String[prios.size()]), null, null, null,
 					new OnMultiChoiceDialogListener() {
 						@Override
@@ -135,12 +129,21 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 							}
 							List<Task> items = TaskHelper.getByPrio(m_tasks, pInts);
 							TodoUtil.setTasks(m_adapter, items);
+							removeDialog(R.id.priority);
 						}
 					});
+			d.setOnCancelListener(new OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					removeDialog(R.id.priority);
+				}
+			});
+			return d;
 		case R.id.context:
 			Set<String> contexts = TaskHelper.getContexts(m_tasks);
 			final List<String> cStrs = new ArrayList<String>(contexts);
-			return Util.createMultiChoiceDialog(this, cStrs
+			Collections.sort(cStrs);
+			d = Util.createMultiChoiceDialog(this, cStrs
 					.toArray(new String[contexts.size()]), null, null, null,
 					new OnMultiChoiceDialogListener() {
 						@Override
@@ -153,8 +156,16 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 							}
 							List<Task> items = TaskHelper.getByContext(m_tasks, cStrs2);
 							TodoUtil.setTasks(m_adapter, items);
+							removeDialog(R.id.context);
 						}
 					});
+			d.setOnCancelListener(new OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					removeDialog(R.id.context);
+				}
+			});
+			return d;
 		}
 		return null;
 	}
@@ -172,12 +183,23 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		if(getString(R.string.todourl_key).equals(key)) {
 			String defValue = getString(R.string.todourl_default);
 			m_fileUrl = sharedPreferences.getString(key, defValue);
-			populate();
+			populateFromUrl();
 		}
 	}
 
-	private void populate(){
-    	new AsyncTask<Void, Void, Void>(){
+	private void populateFromFile(){
+		try {
+			LocalFile localFile = LocalFile.getInstance();
+			m_tasks = localFile.getTasks();
+		} catch (IOException e) {
+			Log.e(TAG, "localFile" + e.getMessage());
+		}
+		Log.d(TAG, "populateFromFile size=" + m_tasks.size());
+		TodoUtil.setTasks(m_adapter, m_tasks);
+	}
+
+	private void populateFromUrl(){
+    	new AsyncTask<Void, Void, Void>() {
     		@Override
     		protected void onPreExecute() {
     			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
@@ -185,10 +207,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
     		}
 			@Override
 			protected Void doInBackground(Void... params) {
-				ArrayList<Task> todos = new ArrayList<Task>();
-				
 				try {
-					todos = TodoUtil.loadTasksFromUrl(TodoTxtTouch.this, m_fileUrl);
+					ArrayList<Task> todos = TodoUtil.loadTasksFromUrl(TodoTxtTouch.this, m_fileUrl);
 
 					if(Util.isDeviceWritable())
 					{
@@ -204,9 +224,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 					
 					Log.i(TAG, "ARRAY " + m_tasks.size());
 				} catch (IOException e) {
-					Log.e(TAG, "localFile" + e.getMessage());
-				} catch (Exception e) {
-					Log.e(TAG, "BACKGROUND_PROC "+ e.getMessage());
+					Log.e(TAG, e.getMessage());
 				}
 				return null;
 			}
@@ -214,6 +232,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
     		protected void onPostExecute(Void result) {
     			m_ProgressDialog.dismiss();
     			TodoUtil.setTasks(m_adapter, m_tasks);
+    			Log.d(TAG, "populateFromUrl size=" + m_tasks.size());
     		}
     	}.execute();
 	}
@@ -249,8 +268,9 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			if (task != null) {
 				holder.taskid.setText(String.format("%04d", task.id));
 				holder.taskprio.setText("("+TaskHelper.toString(task.prio)+")");
-				holder.tasktext.setText(task.taskDescription);
-				holder.taskcontexts.setText(task.getContextsAsString());
+				holder.tasktext.setText(task.text);
+				String cxtStrs = TaskHelper.getContextsAsString(task);
+				holder.taskcontexts.setText(cxtStrs);
 				
 				switch (task.prio) {
 				case 1:
