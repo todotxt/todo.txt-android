@@ -1,6 +1,7 @@
 package com.todotxt.todotxttouch;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
 import com.todotxt.todotxttouch.TodoTxtTouch.TaskAdapter;
 
 import android.content.Context;
+import android.os.Environment;
 
 public class TodoUtil {
 	
@@ -21,9 +23,16 @@ public class TodoUtil {
 	
 	private static int nextId = 1;
 	
+	private static File storageDirectory = null;
+	
 	public static int getNextId()
 	{
 		return nextId++;
+	}
+	
+	public static File getStorageDirectory()
+	{
+		return storageDirectory;
 	}
 
 	public static Task createTask(int id, String line){
@@ -79,6 +88,32 @@ public class TodoUtil {
 			}
 			adapter.notifyDataSetChanged();
 		}
+	}
+	
+	// Creates our applications storage directory if it has not yet been created
+	// Stores data in /<external-device>/data/com.todotxt.todotxttouch/
+	public static boolean createStorageDirectory()
+	{
+		if(storageDirectory == null)
+		{
+			if(Util.isDeviceWritable())
+			{
+				File rootDir = Environment.getExternalStorageDirectory();
+				storageDirectory = new File(rootDir, "data/com.todotxt.todotxttouch/");
+				
+				if(storageDirectory.isDirectory() || storageDirectory.mkdirs())
+					return true;
+				else
+				{
+					storageDirectory = null;
+					return false;
+				}
+			}
+			else
+				return false;
+		}
+		else
+			return true;
 	}
 
 }

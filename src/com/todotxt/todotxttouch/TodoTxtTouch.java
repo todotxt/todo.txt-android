@@ -38,16 +38,17 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	private ArrayList<Task> m_tasks = null;
 	private TaskAdapter m_adapter;
 	private String m_fileUrl;
-	private LocalFile m_localFile = new LocalFile(LocalFile.Type.TODO);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.main);
 
 		// Load saved tasks from file
 		try {
-			m_tasks = m_localFile.getTasks();
+			LocalFile localFile = LocalFile.getInstance();
+			m_tasks = localFile.getTasks();
 		} catch (IOException e) {
 			Log.e(TAG, e.getMessage());
 			m_tasks = new ArrayList<Task>();
@@ -67,7 +68,6 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		m_prefs.registerOnSharedPreferenceChangeListener(this);
 		String defValue = getString(R.string.todourl_default);
 		m_fileUrl = m_prefs.getString(getString(R.string.todourl_key), defValue);
-		populate();
 	}
 	
 	@Override
@@ -91,9 +91,9 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
         switch(item.getItemId())
         {
         case R.id.add_new:
-        	// Switch to task adding activity
-        	// TODO: Get rid of this toast
-        	Toast.makeText(getApplicationContext(), "Unimplemented", Toast.LENGTH_SHORT).show();
+        	Intent addTaskActivity = new Intent(getBaseContext(),
+        			AddTask.class);
+        	startActivity(addTaskActivity);
         	break;
         case R.id.sync:
         	populate();
@@ -192,10 +192,12 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 
 					if(Util.isDeviceWritable())
 					{
-						m_localFile.mergeTasks(todos);
-						m_localFile.save();
+						LocalFile localFile = LocalFile.getInstance();
 						
-						m_tasks = m_localFile.getTasks();
+						localFile.mergeTasks(todos);
+						localFile.save();
+						
+						m_tasks = localFile.getTasks();
 					}
 					else
 						m_tasks = todos;

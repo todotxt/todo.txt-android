@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+  <Button android:id="@+id/addTask" android:layout_width="100dip"
+  	android:layout_height="50dip" android:text="@string/addtask_add"></Button>
+  	
+  <EditText android:id="@+id/newTaskText" android:layout_width="fill_parent"
+  	android:layout_height="wrap_content" android:editable="true" />
+  
+</LinearLayout>

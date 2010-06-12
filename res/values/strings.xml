@@ -3,6 +3,7 @@
     <string name="app_name">Todo.txt Touch</string>
     <string name="main_no_items">No to-do\'s to display</string>
     <string name="set_preferences">Todo.txt Preferences</string>
+    <string name="addtask_title">Add New Task</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_sync">Sync</string>
 	<string name="menu_add">Add Task</string>
@@ -14,4 +15,5 @@
     <string name="todourl_title">Todo.txt Location:</string>
     <string name="todourl_summary">The URL of your todo.txt file</string>
     <string name="todourl_default">http://ginatrapani.github.com/todo.txt-touch/todo.txt</string>
+    <string name="addtask_add">Add</string>
 </resources>

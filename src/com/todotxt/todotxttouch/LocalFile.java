@@ -6,42 +6,59 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import android.os.Environment;
-
 public class LocalFile {
 
-	public static enum Type { TODO, DONE, TEMP };
+// *** SINGLETON CODE START ***
 	
-	private static File m_storageDir = null;
+	private static boolean m_init = false;
+	private static LocalFile m_singleFile = null;
+	private static Object m_lock = new Object();
+	public static LocalFile getInstance() throws IOException {
+		if(!m_init)
+		{
+			synchronized(m_lock) {
+				if(!m_init && m_singleFile == null)
+					m_singleFile = new LocalFile();
+			}
+			synchronized(m_lock) {
+				m_init = true;
+			}
+		}
+		return m_singleFile;
+	}
+	
+// *** SINGLETON CODE END ***
 	
 	private File m_file = null;
 	private ArrayList<Task> m_tasks = null;
-	private Type m_type;
 	
-	public LocalFile(Type type)
+	private LocalFile() throws IOException
 	{
-		m_type = type;
+		if(TodoUtil.createStorageDirectory())
+			initializeFile();
+		else
+			throw new IOException("Unable to create storage directory");
 	}
 	
 	public void update() throws IOException
 	{
-		initializeFile();
-		
-		Scanner lineScan = new Scanner(m_file);
-		lineScan.useDelimiter("\n");
-		
-		// Go through file line by line, adding tasks to the list
-		m_tasks = new ArrayList<Task>();
-		while(lineScan.hasNext())
-		{
-			String newTaskDesc = lineScan.next();
-			newTaskDesc = newTaskDesc.trim();
+		synchronized(m_file) {
+			Scanner lineScan = new Scanner(m_file);
+			lineScan.useDelimiter("\n");
 			
-			// Add to arraylist if string is not empty
-			if(newTaskDesc.length() > 0)
+			// Go through file line by line, adding tasks to the list
+			m_tasks = new ArrayList<Task>();
+			while(lineScan.hasNext())
 			{
-				Task t = TodoUtil.createTask(TodoUtil.getNextId(), newTaskDesc);				
-				m_tasks.add(t);
+				String newTaskDesc = lineScan.next();
+				newTaskDesc = newTaskDesc.trim();
+				
+				// Add to arraylist if string is not empty
+				if(newTaskDesc.length() > 0)
+				{
+					Task t = TodoUtil.createTask(TodoUtil.getNextId(), newTaskDesc);				
+					m_tasks.add(t);
+				}
 			}
 		}
 	}
@@ -60,45 +77,51 @@ public class LocalFile {
 	{
 		ArrayList<Task> tmpNewValues = new ArrayList<Task>();
 		
-		for(int i = 0; i < remoteSource.size(); ++i)
-		{
-			String compVal = remoteSource.get(i).toFileFormat();
-			if(compVal.length() == 0)
-				continue;
-			
-			boolean newVal = true;
-			for(int j = 0; j < m_tasks.size(); ++j)
+		synchronized(m_tasks) {
+			for(int i = 0; i < remoteSource.size(); ++i)
 			{
-				if(m_tasks.get(j).toFileFormat().equalsIgnoreCase(compVal))
+				String compVal = remoteSource.get(i).toFileFormat();
+				if(compVal.length() == 0)
+					continue;
+				
+				boolean newVal = true;
+				for(int j = 0; j < m_tasks.size(); ++j)
 				{
-					newVal = false;
-					break;
+					if(m_tasks.get(j).toFileFormat().equalsIgnoreCase(compVal))
+					{
+						newVal = false;
+						break;
+					}
 				}
+				
+				if(newVal)
+					tmpNewValues.add(remoteSource.get(i));
 			}
-			
-			if(newVal)
-				tmpNewValues.add(remoteSource.get(i));
+			m_tasks.addAll(tmpNewValues);
 		}
-		
-		m_tasks.addAll(tmpNewValues);
 	}
 	
-	public void addTask(Task task)
+	public void addTask(String task)
 	{
-		m_tasks.add(task);
+		synchronized(m_tasks) {
+			m_tasks.add(TodoUtil.createTask(TodoUtil.getNextId(), task));
+		}
 	}
 	
 	public void save() throws IOException
 	{
 		if(Util.isDeviceWritable() && m_file.canWrite())
 		{
-			FileWriter fw = new FileWriter(m_file);
-			for(int i = 0; i < m_tasks.size(); ++i)
+			synchronized(m_file)
 			{
-				fw.write(m_tasks.get(i).toFileFormat());
-				fw.write("\n");
+				FileWriter fw = new FileWriter(m_file);
+				for(int i = 0; i < m_tasks.size(); ++i)
+				{
+					fw.write(m_tasks.get(i).toFileFormat());
+					fw.write("\n");
+				}
+				fw.close();
 			}
-			fw.close();
 			
 			update();
 		}
@@ -112,25 +135,10 @@ public class LocalFile {
 		{
 			// Attempt to create file if it does not yet exist
 			if(m_file == null)
-			{	
-				String fileName;
-				switch(m_type)
+			{					
+				if(TodoUtil.createStorageDirectory())
 				{
-				case DONE:
-					fileName = "done.txt";
-					break;
-				case TEMP:
-					fileName = "tmp.txt";
-					break;
-				case TODO:
-				default:
-					fileName = "todo.txt";
-					break;
-				}
-				
-				if(createStorageDirectory())
-				{
-					m_file = new File(m_storageDir, fileName);
+					m_file = new File(TodoUtil.getStorageDirectory(), "todo.txt");
 					m_file.createNewFile();
 				}
 				else
@@ -139,31 +147,5 @@ public class LocalFile {
 		}
 		else
 			throw new IOException("SD Storage is not readable");
-	}
-	
-	// Creates our applications storage directory if it has not yet been created
-	// Stores data in /<external-device>/data/com.todotxt.todotxttouch/
-	private static boolean createStorageDirectory()
-	{
-		if(m_storageDir == null)
-		{
-			if(Util.isDeviceWritable())
-			{
-				File rootDir = Environment.getExternalStorageDirectory();
-				m_storageDir = new File(rootDir, "data/com.todotxt.todotxttouch/");
-				
-				if(m_storageDir.isDirectory() || m_storageDir.mkdirs())
-					return true;
-				else
-				{
-					m_storageDir = null;
-					return false;
-				}
-			}
-			else
-				return false;
-		}
-		else
-			return true;
 	}
 }
