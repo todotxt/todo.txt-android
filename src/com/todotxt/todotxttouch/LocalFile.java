@@ -29,10 +29,12 @@ public class LocalFile {
 	
 // *** SINGLETON CODE END ***
 	
+	protected static final String FILE_NAME = "todo.txt";
+	
 	private File m_file = null;
 	private ArrayList<Task> m_tasks = null;
 	
-	private LocalFile() throws IOException
+	protected LocalFile() throws IOException
 	{
 		if(TodoUtil.createStorageDirectory())
 			initializeFile();
@@ -136,7 +138,7 @@ public class LocalFile {
 			{					
 				if(TodoUtil.createStorageDirectory())
 				{
-					m_file = new File(TodoUtil.getStorageDirectory(), "todo.txt");
+					m_file = new File(TodoUtil.getStorageDirectory(), FILE_NAME);
 					m_file.createNewFile();
 				}
 				else

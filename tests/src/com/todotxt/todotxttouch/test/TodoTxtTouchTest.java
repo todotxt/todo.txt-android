@@ -9,5 +9,13 @@ public class TodoTxtTouchTest extends
 	public TodoTxtTouchTest() {
 		super("com.todotxt.todotxttouch", TodoTxtTouch.class);
 	}
-
+	
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		m_activity = this.getActivity();
+	}
+	
+	@SuppressWarnings("unused") // TODO: Remove
+	private TodoTxtTouch m_activity;
 }
