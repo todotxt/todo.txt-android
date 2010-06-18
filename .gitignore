@@ -1,6 +1,6 @@
 #/.gitignore
-.project
-.classpath
+#.project
+#.classpath
 .settings/
 build.properties
 build.xml
