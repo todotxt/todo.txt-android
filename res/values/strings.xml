@@ -9,10 +9,14 @@
 	<string name="menu_add">Add Task</string>
     <string name="menu_priority">Priority</string>
     <string name="menu_context">Context</string>
+    <string name="menu_project">Project</string>
+    <string name="menu_tag">Tag</string>
+    <string name="menu_search">Search</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="todourl_key">editTextPref</string>
     <string name="todourl_title">Todo.txt Location:</string>
     <string name="todourl_summary">The URL of your todo.txt file</string>
     <string name="todourl_default">http://ginatrapani.github.com/todo.txt-touch/todo.txt</string>
+    <string name="search_summary">Enter text to search for.</string>
 </resources>

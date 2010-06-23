@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.todotxt.todotxttouch.Util.InputDialogListener;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
 public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChangeListener {
@@ -40,6 +41,13 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	private ArrayList<Task> m_tasks = new ArrayList<Task>();
 	private TaskAdapter m_adapter;
 	private String m_fileUrl;
+
+	//filter variables
+	private List<Integer> m_prios = Collections.emptyList();
+	private List<String> m_contexts = Collections.emptyList();
+	private List<String> m_projects = Collections.emptyList();
+	private List<String> m_tags = Collections.emptyList();
+	private String m_search;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +110,24 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
         case R.id.context:
         	showDialog(R.id.context);
         	break;
+        case R.id.project:
+        	showDialog(R.id.project);
+        	break;
+        case R.id.tag:
+        	showDialog(R.id.tag);
+        	break;
+        case R.id.search:
+        	InputDialogListener oklistener = new InputDialogListener() {
+				@Override
+				public void onClick(String input) {
+					m_search = input;
+					setFilteredTasks();
+				}
+			};
+			Util.showInputDialog(this, R.string.menu_search,
+					R.string.search_summary, m_search, 1, oklistener,
+					android.R.drawable.ic_menu_search);
+        	break;
         default:
         	return super.onMenuItemSelected(featureId, item);
         }
@@ -111,13 +137,21 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		final Dialog d;
-		switch (id) {
-		case R.id.priority:
+		if(R.id.priority == id){
 			Set<String> prios = TaskHelper.getPrios(m_tasks);
 			final List<String> pStrs = new ArrayList<String>(prios);
 			Collections.sort(pStrs);
+			int size = prios.size();
+			boolean[] values = new boolean[size];
+			for (Integer prio : m_prios) {
+				String str = TaskHelper.toString(prio);
+				int index = pStrs.indexOf(str);
+				if(index != -1){
+					values[index] = true;
+				}
+			}
 			d = Util.createMultiChoiceDialog(this, pStrs
-					.toArray(new String[prios.size()]), null, null, null,
+					.toArray(new String[size]), values, null, null,
 					new OnMultiChoiceDialogListener() {
 						@Override
 						public void onClick(boolean[] selected) {
@@ -127,8 +161,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 									pInts.add(TaskHelper.parsePrio(pStrs.get(i)));
 								}
 							}
-							List<Task> items = TaskHelper.getByPrio(m_tasks, pInts);
-							TodoUtil.setTasks(m_adapter, items);
+							m_prios = pInts;
+							setFilteredTasks();
 							removeDialog(R.id.priority);
 						}
 					});
@@ -139,35 +173,109 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 				}
 			});
 			return d;
-		case R.id.context:
+		}else if(R.id.context == id){
 			Set<String> contexts = TaskHelper.getContexts(m_tasks);
-			final List<String> cStrs = new ArrayList<String>(contexts);
-			Collections.sort(cStrs);
-			d = Util.createMultiChoiceDialog(this, cStrs
-					.toArray(new String[contexts.size()]), null, null, null,
-					new OnMultiChoiceDialogListener() {
-						@Override
-						public void onClick(boolean[] selected) {
-							List<String> cStrs2 = new ArrayList<String>();
-							for (int i = 0; i < selected.length; i++) {
-								if(selected[i]){
-									cStrs2.add(cStrs.get(i));
-								}
-							}
-							List<Task> items = TaskHelper.getByContext(m_tasks, cStrs2);
-							TodoUtil.setTasks(m_adapter, items);
-							removeDialog(R.id.context);
-						}
-					});
-			d.setOnCancelListener(new OnCancelListener() {
+			return createDialog(contexts, m_contexts, R.id.context, new OnClickListener() {
 				@Override
-				public void onCancel(DialogInterface dialog) {
-					removeDialog(R.id.context);
+				public void onClick(List<String> strs) {
+					m_contexts = strs;
 				}
 			});
-			return d;
+		}else if(R.id.project == id){
+			Set<String> projects = TaskHelper.getProjects(m_tasks);
+			return createDialog(projects, m_projects, R.id.project, new OnClickListener(){
+				@Override
+				public void onClick(List<String> strs) {
+					m_projects = strs;
+				}
+			});
+		}else if(R.id.tag == id){
+			Set<String> tags = TaskHelper.getTags(m_tasks);
+			return createDialog(tags, m_tags, R.id.tag, new OnClickListener() {
+				@Override
+				public void onClick(List<String> strs) {
+					m_tags = strs;
+				}
+			});
+		}else{
+			return null;
 		}
-		return null;
+	}
+	
+	private interface OnClickListener {
+		void onClick(List<String> strs);
+	}
+	
+	private Dialog createDialog(Set<String> in, List<String> selected,
+			final int dialogid, final OnClickListener listener) {
+		final List<String> cStrs = new ArrayList<String>(in);
+		Collections.sort(cStrs);
+		int size = in.size();
+		boolean[] values = new boolean[size];
+		for (String sel : selected) {
+			int index = cStrs.indexOf(sel);
+			if(index != -1){
+				values[index] = true;
+			}
+		}
+		Dialog d = Util.createMultiChoiceDialog(this, cStrs
+				.toArray(new String[size]), values, null, null,
+				new OnMultiChoiceDialogListener() {
+					@Override
+					public void onClick(boolean[] selected) {
+						List<String> cStrs2 = new ArrayList<String>();
+						for (int i = 0; i < selected.length; i++) {
+							if(selected[i]){
+								cStrs2.add(cStrs.get(i));
+							}
+						}
+						listener.onClick(cStrs2);
+						setFilteredTasks();
+						removeDialog(dialogid);
+					}
+				});
+		d.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				removeDialog(dialogid);
+			}
+		});
+		return d;
+	}
+	
+	private void clearFilter(){
+		m_prios = Collections.emptyList();
+		m_contexts = Collections.emptyList();
+		m_projects = Collections.emptyList();
+		m_tags = Collections.emptyList();
+	}
+	
+	private void setFilteredTasks(){
+		List<Task> tasks = m_tasks;
+		if(m_prios.size() > 0){
+			tasks = TaskHelper.getByPrio(tasks, m_prios);
+		}
+		if(m_contexts.size() > 0){
+			tasks = TaskHelper.getByContext(tasks, m_contexts);
+		}
+		if(m_projects.size() > 0){
+			tasks = TaskHelper.getByProject(tasks, m_projects);
+		}
+		if(m_tags.size() > 0){
+			tasks = TaskHelper.getByTag(tasks, m_tags);
+		}
+		if(!Util.isEmpty(m_search)){
+			tasks = TaskHelper.getByText(tasks, m_search);
+		}
+		if (tasks != null) {
+			Collections.sort(tasks, TaskHelper.byPrio);
+			m_adapter.clear();
+			int size = tasks.size();
+			for (int i = 0; i < size; i++){
+				m_adapter.add(tasks.get(i));
+			}
+			m_adapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
@@ -194,7 +302,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			Log.e(TAG, "localFile" + e.getMessage());
 		}
 		Log.d(TAG, "populateFromFile size=" + m_tasks.size());
-		TodoUtil.setTasks(m_adapter, m_tasks);
+		clearFilter();
+		setFilteredTasks();
 	}
 
 	private void populateFromUrl(){
@@ -217,7 +326,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
     		@Override
     		protected void onPostExecute(Void result) {
     			m_ProgressDialog.dismiss();
-    			TodoUtil.setTasks(m_adapter, m_tasks);
+    			clearFilter();
+    			setFilteredTasks();
     			Log.d(TAG, "populateFromUrl size=" + m_tasks.size());
     		}
     	}.execute();

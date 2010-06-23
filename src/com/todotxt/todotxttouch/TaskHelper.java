@@ -91,10 +91,38 @@ public class TaskHelper {
 		return res;
 	}
 
-	public static Set<String> getContexts(List<Task> items){
-		Set<String> res = new HashSet<String>();
+	public static List<Task> getByProject(List<Task> items, List<String> projects) {
+		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
-			res.addAll(item.contexts);
+			for (String cxt : item.projects) {
+				if (projects.contains(cxt)) {
+					res.add(item);
+					break;
+				}
+			}
+		}
+		return res;
+	}
+
+	public static List<Task> getByTag(List<Task> items, List<String> tags) {
+		List<Task> res = new ArrayList<Task>();
+		for (Task item : items) {
+			for (String cxt : item.tags) {
+				if (tags.contains(cxt)) {
+					res.add(item);
+					break;
+				}
+			}
+		}
+		return res;
+	}
+
+	public static List<Task> getByText(List<Task> items, String text) {
+		List<Task> res = new ArrayList<Task>();
+		for (Task item : items) {
+			if(item.text.contains(text)){
+				res.add(item);
+			}
 		}
 		return res;
 	}
@@ -103,6 +131,30 @@ public class TaskHelper {
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
 			res.add(toString(item.prio));
+		}
+		return res;
+	}
+
+	public static Set<String> getContexts(List<Task> items){
+		Set<String> res = new HashSet<String>();
+		for (Task item : items) {
+			res.addAll(item.contexts);
+		}
+		return res;
+	}
+
+	public static Set<String> getProjects(List<Task> items){
+		Set<String> res = new HashSet<String>();
+		for (Task item : items) {
+			res.addAll(item.projects);
+		}
+		return res;
+	}
+
+	public static Set<String> getTags(List<Task> items){
+		Set<String> res = new HashSet<String>();
+		for (Task item : items) {
+			res.addAll(item.tags);
 		}
 		return res;
 	}
