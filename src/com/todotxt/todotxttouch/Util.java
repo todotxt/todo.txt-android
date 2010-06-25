@@ -16,6 +16,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -155,7 +156,18 @@ public class Util {
 		builder.setCancelable(true);
 		builder.show();
 	}
-	
+
+	public static void showConfirmationDialog(Context cxt, int msgid,
+			OnClickListener oklistener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+		// builder.setTitle(cxt.getPackageName());
+		builder.setMessage(msgid);
+		builder.setPositiveButton(android.R.string.ok, oklistener);
+		builder.setNegativeButton(android.R.string.cancel, null);
+		builder.setCancelable(true);
+		builder.show();
+	}
+
 	public static boolean isDeviceWritable()
 	{
 		String sdState = Environment.getExternalStorageState();

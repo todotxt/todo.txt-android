@@ -15,6 +15,8 @@ public class Task {
 	public List<String> projects;
 
 	public List<String> tags;
+	
+	public boolean deleted;
 
 	public Task(int id, int prio, String taskDescription,
 			List<String> contexts, List<String> projects, List<String> tags) {

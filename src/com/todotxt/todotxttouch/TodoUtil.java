@@ -13,16 +13,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
+
+import com.dropbox.client.DropboxClient;
+import com.dropbox.client.DropboxClientHelper;
+import com.dropbox.client.DropboxException;
 
 public class TodoUtil {
 	
 	private final static String TAG = TodoUtil.class.getSimpleName();
-	
-	private final static File TODOFILE = new File(Environment
-			.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/todo.txt");
 	
 	private final static Pattern prioPattern = Pattern.compile("\\(([A-Z])\\) (.*)");
 
@@ -69,32 +68,14 @@ public class TodoUtil {
 
 	public static ArrayList<Task> loadTasksFromUrl(Context cxt, String url)
 			throws IOException {
-		ArrayList<Task> items = new ArrayList<Task>();
-		BufferedReader in = null;
 		InputStream is = Util.getInputStreamFromUrl(url);
-		try {
-			in = new BufferedReader(new InputStreamReader(is));
-			String line;
-			int counter = 0;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if(line.length() > 0){
-					items.add(createTask(counter, line));
-				}
-				counter++;
-			}
-		} finally {
-			Util.closeStream(in);
-			Util.closeStream(is);
-		}
-		return items;
+		return loadTasksFromStream(cxt, is);
 	}
 
-	public static ArrayList<Task> loadTasksFromFile()
+	public static ArrayList<Task> loadTasksFromStream(Context cxt, InputStream is)
 			throws IOException {
 		ArrayList<Task> items = new ArrayList<Task>();
 		BufferedReader in = null;
-		InputStream is = new FileInputStream(TODOFILE);
 		try {
 			in = new BufferedReader(new InputStreamReader(is));
 			String line;
@@ -113,10 +94,33 @@ public class TodoUtil {
 		return items;
 	}
 
-	public static void writeToFile(List<Task> tasks){
+	public static ArrayList<Task> loadTasksFromFile()
+			throws IOException {
+		ArrayList<Task> items = new ArrayList<Task>();
+		BufferedReader in = null;
+		InputStream is = new FileInputStream(Constants.TODOFILE);
+		try {
+			in = new BufferedReader(new InputStreamReader(is));
+			String line;
+			int counter = 0;
+			while ((line = in.readLine()) != null) {
+				line = line.trim();
+				if (line.length() > 0) {
+					items.add(createTask(counter, line));
+				}
+				counter++;
+			}
+		} finally {
+			Util.closeStream(in);
+			Util.closeStream(is);
+		}
+		return items;
+	}
+
+	public static void writeToFile(List<Task> tasks, File file){
 		try{
 			if(Util.isDeviceWritable()){
-				FileWriter fw = new FileWriter(TODOFILE);
+				FileWriter fw = new FileWriter(file);
 				for(int i = 0; i < tasks.size(); ++i)
 				{
 					String fileFormat = TaskHelper.toFileFormat(tasks.get(i));
@@ -130,4 +134,21 @@ public class TodoUtil {
 		}
 	}
 
+	public static void addTask(DropboxClient client, List<Task> tasks,
+			String input) throws DropboxException {
+		if(client != null && !Util.isEmpty(input)){
+			Task task = createTask(tasks.size(), input);
+			tasks.add(task);
+			pushTasks(client, tasks);
+		}
+	}
+
+	public static void pushTasks(DropboxClient client, List<Task> tasks)
+			throws DropboxException {
+		writeToFile(tasks, Constants.TODOFILETEMP);
+		DropboxClientHelper.putFile(client, "/", Constants.TODOFILETEMP);
+		//TODO verify
+//		Constants.TODOFILE.delete();
+		Constants.TODOFILETEMP.renameTo(Constants.TODOFILE);
+	}
 }

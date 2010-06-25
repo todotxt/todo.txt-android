@@ -7,16 +7,25 @@
     <string name="menu_sync">Sync</string>
     <string name="menu_refresh">Refresh</string>
 	<string name="menu_add">Add Task</string>
+	<string name="menu_update">Update</string>
+	<string name="menu_delete">Delete</string>
     <string name="menu_priority">Priority</string>
+    <string name="menu_done">Done</string>
     <string name="menu_context">Context</string>
     <string name="menu_project">Project</string>
     <string name="menu_tag">Tag</string>
     <string name="menu_search">Search</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="search_summary">Enter text to search for.</string>
     <string name="todourl_key">editTextPref</string>
     <string name="todourl_title">Todo.txt Location:</string>
     <string name="todourl_summary">The URL of your todo.txt file</string>
     <string name="todourl_default">http://ginatrapani.github.com/todo.txt-touch/todo.txt</string>
-    <string name="search_summary">Enter text to search for.</string>
+    <string name="username_key">dropboxusername</string>
+    <string name="username_title">Dropbox username:</string>
+    <string name="username_summary">Your dropbox username</string>
+    <string name="password_key">dropboxpassword</string>
+    <string name="password_title">Dropbox password</string>
+    <string name="password_summary">Your dropbox password</string>
 </resources>

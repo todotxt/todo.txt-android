@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-<!-- Not implemented.
 	<item android:title="@string/menu_add" android:id="@+id/add_new" android:icon="@drawable/menu_add"/>
- -->
 	<item android:title="@string/menu_priority" android:id="@+id/priority" android:icon="@drawable/menu_priority"/>
 	<item android:title="@string/menu_context" android:id="@+id/context" android:icon="@drawable/menu_context"/>
 	<item android:title="@string/menu_project" android:id="@+id/project" android:icon="@drawable/menu_context"/>

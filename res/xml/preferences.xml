@@ -7,4 +7,15 @@
 		android:summary="@string/todourl_summary"
 		android:defaultValue="@string/todourl_default" />
 
+	<EditTextPreference 
+		android:key="@string/username_key"
+		android:title="@string/username_title" 
+		android:summary="@string/username_summary" />
+
+	<EditTextPreference 
+		android:password="true"
+		android:key="@string/password_key"
+		android:title="@string/password_title" 
+		android:summary="@string/password_summary"/>
+
 </PreferenceScreen>
