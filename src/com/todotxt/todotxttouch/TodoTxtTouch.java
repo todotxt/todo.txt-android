@@ -62,6 +62,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.main);
 
 		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks,
