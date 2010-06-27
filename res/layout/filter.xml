@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+	<LinearLayout android:id="@+id/buttons"
+		android:orientation="horizontal"
+		android:layout_alignParentBottom="true" 
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+		<Button android:id="@+id/ok"
+				android:text="OK"
+				android:layout_weight="1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+	
+		<Button android:id="@+id/cancel" 
+				android:text="Cancel"
+				android:layout_weight="1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+
+	</LinearLayout>
+	
+	<LinearLayout android:id="@+id/priorities"
+		android:layout_above="@id/buttons"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<ListView android:id="@+id/prioritieslv" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+
+	</LinearLayout>
+
+	<LinearLayout android:id="@+id/projects"
+		android:layout_above="@id/buttons"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<ListView android:id="@+id/projectslv" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+
+	</LinearLayout>
+
+	<LinearLayout android:id="@+id/contexts"
+		android:layout_above="@id/buttons"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<ListView android:id="@+id/contextslv" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+
+	</LinearLayout>
+
+	<LinearLayout android:id="@+id/tags"
+		android:layout_above="@id/buttons"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<ListView android:id="@+id/tagslv" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+
+	</LinearLayout>
+
+	<LinearLayout android:id="@+id/search"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+		<EditText android:id="@+id/searchet" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+
+	</LinearLayout>
+	
+</RelativeLayout>

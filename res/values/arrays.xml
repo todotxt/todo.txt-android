@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="sort">
+        <item>Priority</item>
+        <item>Id</item>
+        <item>Text (A-Z)</item>
+    </string-array>
+
+</resources>

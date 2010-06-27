@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Task {
 
-	public int id;
+	public long id;
 
-	public int prio;
+	public char prio;
 
 	public String text;
 
@@ -18,22 +18,27 @@ public class Task {
 	
 	public boolean deleted;
 
-	public Task(int id, int prio, String taskDescription,
-			List<String> contexts, List<String> projects, List<String> tags) {
+	public boolean completed;
+
+	public Task(long id, char prio, String text) {
 		this.id = id;
 		this.prio = prio;
-		this.text = taskDescription;
-		this.contexts = contexts;
-		this.projects = projects;
-		this.tags = tags;
+		this.text = text;
+		this.contexts = TaskHelper.getContexts(text);
+		this.projects = TaskHelper.getProjects(text);
+		this.tags = TaskHelper.getTags(text);
+		this.deleted = Util.isEmpty(text);
+		this.completed = text.startsWith(TaskHelper.COMPLETED);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[id=").append(id).append("]");
 		sb.append("[prio=").append(prio).append("]");
-		sb.append("[taskDescription=").append(text).append("]");
+		sb.append("[text=").append(text).append("]");
+		sb.append("[deleted=").append(deleted).append("]");
+		sb.append("[completed=").append(completed).append("]");
 		//contexts
 		sb.append("[contexts:");
 		for (String cxt : contexts) {
