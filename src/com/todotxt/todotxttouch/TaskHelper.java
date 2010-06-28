@@ -205,7 +205,9 @@ public class TaskHelper {
 		StringBuilder sb = new StringBuilder();
 		if(!task.deleted) {
 			if(task.completed){
-				sb.append(COMPLETED);
+				if(!task.text.startsWith(COMPLETED)){
+					sb.append(COMPLETED);
+				}
 			}else{
 				if (task.prio >= 'A' && task.prio <= 'Z') {
 					sb.append("(");
