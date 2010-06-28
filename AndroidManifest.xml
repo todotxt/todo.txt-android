@@ -15,5 +15,6 @@
 		</activity>
 		<activity android:name=".Filter" android:label="Filter" />
 		<activity android:name=".Preferences" android:label="@string/set_preferences" />
+		<activity android:name=".AddTask" android:label="@string/addtask" />
 	</application>
 </manifest> 

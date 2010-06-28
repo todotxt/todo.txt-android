@@ -11,13 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 public class TodoUtil {
 	
 	private final static String TAG = TodoUtil.class.getSimpleName();
 	
-	public static ArrayList<Task> loadTasksFromUrl(Context cxt, String url)
+    private static File storageDirectory = null;
+
+    public static ArrayList<Task> loadTasksFromUrl(Context cxt, String url)
 			throws IOException {
 		InputStream is = Util.getInputStreamFromUrl(url);
 		return loadTasksFromStream(cxt, is);
@@ -84,6 +87,31 @@ public class TodoUtil {
 		} catch (IOException e) {
 			Log.e(TAG, e.getMessage());
 		}
+	}
+
+	// Creates our applications storage directory if it has not yet been created
+	// Stores data in /<external-device>/data/com.todotxt.todotxttouch/
+	public static boolean createStorageDirectory() {
+		if (storageDirectory == null) {
+			if (Util.isDeviceWritable()) {
+				File rootDir = Environment.getExternalStorageDirectory();
+				storageDirectory = new File(rootDir,
+						"data/com.todotxt.todotxttouch/");
+
+				if (storageDirectory.isDirectory() || storageDirectory.mkdirs())
+					return true;
+				else {
+					storageDirectory = null;
+					return false;
+				}
+			} else
+				return false;
+		} else
+			return true;
+	}
+
+	public static File getStorageDirectory() {
+		return storageDirectory;
 	}
 
 }
