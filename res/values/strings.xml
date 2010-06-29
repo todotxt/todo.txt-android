@@ -25,8 +25,8 @@
     <string name="todourl_default">http://ginatrapani.github.com/todo.txt-touch/todo.txt</string>
     <string name="username_key">dropboxusername</string>
     <string name="username_title">Dropbox username:</string>
-    <string name="username_summary">Your dropbox username</string>
+    <string name="username_summary">Your Dropbox username</string>
     <string name="password_key">dropboxpassword</string>
     <string name="password_title">Dropbox password</string>
-    <string name="password_summary">Your dropbox password</string>
+    <string name="password_summary">Your Dropbox password</string>
 </resources>
