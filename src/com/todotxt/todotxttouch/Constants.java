@@ -15,6 +15,10 @@ public class Constants {
 			.getExternalStorageDirectory(),
 			"data/com.todotxt.todotxttouch/todo.txt");
 	
+	public final static File TODOFILETMP = new File(Environment
+			.getExternalStorageDirectory(),
+			"data/com.todotxt.todotxttouch/tmp/todo.txt");
+	
 	public final static String EXTRA_PRIORITIES = "PRIORITIES";
 	public final static String EXTRA_PRIORITIES_SELECTED = "PRIORITIES_SELECTED";
 	public final static String EXTRA_PROJECTS = "PROJECTS";

@@ -104,6 +104,19 @@ public class Filter extends TabActivity {
 				finish();
 			}
 		});
+
+		Button clear = (Button) findViewById(R.id.clear);
+		clear.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.v(TAG, "onClick Clear");
+				setSelected(priorities, null);
+				setSelected(projects, null);
+				setSelected(contexts, null);
+				setSelected(tags, null);
+				search.setText("");
+			}
+		});
 	}
 
 	private static ArrayList<String> getItems(ListView adapter) {
@@ -121,9 +134,7 @@ public class Filter extends TabActivity {
 		int count = lv.getCount();
 		for (int i = 0; i < count; i++) {
 			String str = (String) lv.getItemAtPosition(i);
-			if(selected.contains(str)){
-				lv.setItemChecked(i, true);
-			}
+			lv.setItemChecked(i, selected != null && selected.contains(str));
 		}
 	}
 

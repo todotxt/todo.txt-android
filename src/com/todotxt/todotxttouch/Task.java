@@ -15,10 +15,6 @@ public class Task {
 	public List<String> projects;
 
 	public List<String> tags;
-	
-	public boolean deleted;
-
-	public boolean completed;
 
 	public Task(long id, char prio, String text) {
 		this.id = id;
@@ -27,8 +23,6 @@ public class Task {
 		this.contexts = TaskHelper.getContexts(text);
 		this.projects = TaskHelper.getProjects(text);
 		this.tags = TaskHelper.getTags(text);
-		this.deleted = Util.isEmpty(text);
-		this.completed = text.startsWith(TaskHelper.COMPLETED);
 	}
 
 	@Override
@@ -37,8 +31,8 @@ public class Task {
 		sb.append("[id=").append(id).append("]");
 		sb.append("[prio=").append(prio).append("]");
 		sb.append("[text=").append(text).append("]");
-		sb.append("[deleted=").append(deleted).append("]");
-		sb.append("[completed=").append(completed).append("]");
+		sb.append("[deleted=").append(TaskHelper.isDeleted(this)).append("]");
+		sb.append("[completed=").append(TaskHelper.isCompleted(this)).append("]");
 		//contexts
 		sb.append("[contexts:");
 		for (String cxt : contexts) {

@@ -161,6 +161,17 @@ public class TaskHelper {
 		return res;
 	}
 
+	public static List<Task> getByTextIgnoreCase(List<Task> items, String text) {
+		text = text.toUpperCase();
+		List<Task> res = new ArrayList<Task>();
+		for (Task item : items) {
+			if(item.text.toUpperCase().contains(text)){
+				res.add(item);
+			}
+		}
+		return res;
+	}
+
 	public static Set<String> getPrios(List<Task> items){
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
@@ -203,12 +214,8 @@ public class TaskHelper {
 
 	public static String toFileFormat(Task task) {
 		StringBuilder sb = new StringBuilder();
-		if(!task.deleted) {
-			if(task.completed){
-				if(!task.text.startsWith(COMPLETED)){
-					sb.append(COMPLETED);
-				}
-			}else{
+		if(!TaskHelper.isDeleted(task)) {
+			if(!TaskHelper.isCompleted(task)){
 				if (task.prio >= 'A' && task.prio <= 'Z') {
 					sb.append("(");
 					sb.append(task.prio);
@@ -242,12 +249,28 @@ public class TaskHelper {
 	
 	public static void copy(Task src, Task dest){
 		dest.id = src.id;
-		dest.deleted = src.deleted;
 		dest.contexts = src.contexts;
 		dest.prio = src.prio;
 		dest.projects = src.projects;
 		dest.tags = src.tags;
 		dest.text = src.text;
+	}
+
+	public static Task find(List<Task> tasks, Task task){
+		for (Task task2 : tasks) {
+			if(task2.text.equals(task.text) && task2.prio == task.prio){
+				return copy(task2);
+			}
+		}
+		return null;
+	}
+
+	public static boolean isDeleted(Task task){
+		return Util.isEmpty(task.text);
+	}
+
+	public static boolean isCompleted(Task task){
+		return task.text.startsWith(COMPLETED);
 	}
 
 }

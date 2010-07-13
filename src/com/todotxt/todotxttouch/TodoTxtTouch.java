@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dropbox.client.DropboxClient;
 import com.dropbox.client.DropboxClientHelper;
 import com.todotxt.todotxttouch.DropboxUtil.DropboxProvider;
 import com.todotxt.todotxttouch.Util.InputDialogListener;
@@ -84,14 +85,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		m_fileUrl = m_prefs.getString(getString(R.string.todourl_key), defValue);
 
 		//dropbox initialization
-		String key = getString(R.string.username_key);
-		String username = m_prefs.getString(key, null);
-		key = getString(R.string.password_key);
-		String password = m_prefs.getString(key, null);
-		if(!Util.isEmpty(username) && !Util.isEmpty(password)){
-			m_client = new DropboxProvider(Constants.CONSUMER_KEY,
-					Constants.CONSUMER_SECRET, username, password);
-		}
+		initDropbox();
 
 		populateFromFile();
 	}
@@ -132,12 +126,17 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 					new AsyncTask<Void, Void, Boolean>(){
 						protected void onPreExecute() {
 			    			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-			    					"Done", "Please wait...", true);
+			    					"Update", "Please wait...", true);
 						}
 						@Override
 						protected Boolean doInBackground(Void... params) {
-							return DropboxUtil.updateTask(m_client.get(), m_tasks, backup.id,
-									backup.prio, input);
+							try {
+								return DropboxUtil.updateTask(m_client.get(),
+										backup.prio, input, backup);
+							} catch (Exception e) {
+								Log.e(TAG, e.getMessage(), e);
+								return false;
+							}
 						}
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
@@ -146,7 +145,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 							}else{
 								Util.showToastLong(TodoTxtTouch.this, "Coult not update task "+input);
 							}
-							setFilteredTasks();
+							setFilteredTasks(true);
 						}
 					}.execute();
 				}
@@ -163,11 +162,17 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 					new AsyncTask<Void, Void, Boolean>(){
 						protected void onPreExecute() {
 			    			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-			    					"Done", "Please wait...", true);
+			    					"Delete", "Please wait...", true);
 						}
 						@Override
 						protected Boolean doInBackground(Void... params) {
-							return DropboxUtil.deleteTask(m_client.get(), m_tasks, task);
+							try {
+								return DropboxUtil.updateTask(m_client.get(),
+										TaskHelper.NONE, "", task);
+							} catch (Exception e) {
+								Log.e(TAG, e.getMessage(), e);
+								return false;
+							}
 						}
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
@@ -178,7 +183,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 								Util.showToastLong(TodoTxtTouch.this, "Coult not delete task "
 										+ TaskHelper.toFileFormat(task));
 							}
-							setFilteredTasks();
+							setFilteredTasks(true);
 						}
 					}.execute();
 				}
@@ -197,7 +202,15 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 						}
 						@Override
 						protected Boolean doInBackground(Void... params) {
-							return DropboxUtil.completeTask(m_client.get(), m_tasks, task);
+							try {
+								String text = task.text
+										.startsWith(TaskHelper.COMPLETED) ? task.text
+										: TaskHelper.COMPLETED + task.text;
+								return DropboxUtil.updateTask(m_client.get(), TaskHelper.NONE, text, task);
+							} catch (Exception e) {
+								Log.e(TAG, e.getMessage(), e);
+								return false;
+							}
 						}
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
@@ -208,7 +221,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 								Util.showToastLong(TodoTxtTouch.this, "Coult not complete task "
 										+ TaskHelper.toFileFormat(task));
 							}
-							setFilteredTasks();
+							setFilteredTasks(true);
 						}
 					}.execute();
 				}
@@ -233,11 +246,16 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 					new AsyncTask<Void, Void, Boolean>(){
 						protected void onPreExecute() {
 			    			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-			    					"Done", "Please wait...", true);
+			    					"Add", "Please wait...", true);
 						}
 						@Override
 						protected Boolean doInBackground(Void... params) {
-							return DropboxUtil.addTask(m_client.get(), m_tasks, input);
+							try {
+								return DropboxUtil.addTask(m_client.get(), input);
+							} catch (Exception e) {
+								Log.e(TAG, e.getMessage(), e);
+								return false;
+							}
 						}
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
@@ -248,7 +266,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 								Util.showToastLong(TodoTxtTouch.this,
 										"Coult not add task " + input);
 							}
-							setFilteredTasks();
+							setFilteredTasks(true);
 						}
 					}.execute();
 				}
@@ -317,7 +335,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			m_contexts = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
 			m_tags = data.getStringArrayListExtra(Constants.EXTRA_TAGS);
 			m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
-			setFilteredTasks();
+			setFilteredTasks(false);
 		}
 	}
 
@@ -347,7 +365,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 									m_prios.add(pStrs.get(i));
 								}
 							}
-							setFilteredTasks();
+							setFilteredTasks(false);
 							removeDialog(R.id.priority);
 						}
 					});
@@ -371,7 +389,14 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		m_search = "";
 	}
 	
-	private void setFilteredTasks(){
+	private void setFilteredTasks(boolean reload){
+		if(reload){
+			try {
+				m_tasks = TodoUtil.loadTasksFromFile();
+			} catch (IOException e) {
+				Log.e(TAG, e.getMessage(), e);
+			}
+		}
 		List<Task> tasks = m_tasks;
 		if(m_prios.size() > 0){
 			tasks = TaskHelper.getByPrio(tasks, m_prios);
@@ -386,7 +411,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			tasks = TaskHelper.getByTag(tasks, m_tags);
 		}
 		if(!Util.isEmpty(m_search)){
-			tasks = TaskHelper.getByText(tasks, m_search);
+			tasks = TaskHelper.getByTextIgnoreCase(tasks, m_search);
 		}
 		if (tasks != null) {
 			Collections.sort(tasks, TaskHelper.byPrio);
@@ -413,50 +438,80 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			String defValue = getString(R.string.todourl_default);
 			m_fileUrl = sharedPreferences.getString(key, defValue);
 			populateFromExternal();
+		} else if (getString(R.string.username_key).equals(key)
+				|| getString(R.string.password_key).equals(key)) {
+			initDropbox();
 		}
 	}
 
 	private void populateFromFile(){
-		try {
-			m_tasks = TodoUtil.loadTasksFromFile();
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-		}
-		Log.d(TAG, "populateFromFile size=" + m_tasks.size());
+		Log.d(TAG, "populateFromFile");
 		clearFilter();
-		setFilteredTasks();
+		setFilteredTasks(true);
 	}
 
 	private void populateFromExternal(){
-    	new AsyncTask<Void, Void, Void>() {
+    	new AsyncTask<Void, Void, Boolean>() {
     		@Override
     		protected void onPreExecute() {
     			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
     					"Please wait...", "Retrieving todo.txt ...", true);
     		}
 			@Override
-			protected Void doInBackground(Void... params) {
+			protected Boolean doInBackground(Void... params) {
 				try {
-					if(m_client.get() != null){
-						InputStream is = DropboxClientHelper.getFileStream(m_client.get(), Constants.REMOTE_FILE);
-						m_tasks = TodoUtil.loadTasksFromStream(TodoTxtTouch.this, is);
+					DropboxClient client = m_client != null ? m_client.get() : null;
+					if(client != null){
+						try{
+							InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
+							m_tasks = TodoUtil.loadTasksFromStream(is);
+						}catch(Exception e){
+							Log.w(TAG, "Failed to fetch todo file! Initializing dropbox support!"+e.getMessage());
+							if(!Constants.TODOFILE.exists()){
+								Constants.TODOFILE.createNewFile();
+							}
+							DropboxClientHelper.putFile(client, "/", Constants.TODOFILE);
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									Util.showToastLong(TodoTxtTouch.this, R.string.initialized_dropbox);
+								}
+							});
+						}
 					}else{
-						m_tasks = TodoUtil.loadTasksFromUrl(TodoTxtTouch.this, m_fileUrl);
+						m_tasks = TodoUtil.loadTasksFromUrl(m_fileUrl);
 					}
 					TodoUtil.writeToFile(m_tasks, Constants.TODOFILE);
+					return true;
 				} catch (Exception e) {
 					Log.e(TAG, e.getMessage(), e);
+					return false;
 				}
-				return null;
 			}
     		@Override
-    		protected void onPostExecute(Void result) {
+    		protected void onPostExecute(Boolean result) {
     			m_ProgressDialog.dismiss();
     			clearFilter();
-    			setFilteredTasks();
+    			setFilteredTasks(false);
     			Log.d(TAG, "populateFromUrl size=" + m_tasks.size());
+    			if(!result){
+    				Util.showToastLong(TodoTxtTouch.this, "Sync failed");
+    			}else{
+    				Util.showToastShort(TodoTxtTouch.this, m_tasks.size()+" items");
+    			}
     		}
     	}.execute();
+	}
+
+	private void initDropbox(){
+		String key = getString(R.string.username_key);
+		String username = m_prefs.getString(key, null);
+		key = getString(R.string.password_key);
+		String password = m_prefs.getString(key, null);
+		if(!Util.isEmpty(username) && !Util.isEmpty(password)){
+			m_client = new DropboxProvider(Constants.CONSUMER_KEY,
+					Constants.CONSUMER_SECRET, username, password);
+		}
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> {

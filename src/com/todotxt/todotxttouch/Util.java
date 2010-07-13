@@ -1,6 +1,8 @@
 package com.todotxt.todotxttouch;
 
 import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -83,6 +85,41 @@ public class Util {
 			return sb.toString();
 		} finally {
 			closeStream(input);
+		}
+	}
+
+	public static String readStream(InputStream is) {
+		if (is == null) {
+			return null;
+		}
+		try {
+			int c;
+			byte[] buffer = new byte[8192];
+			StringBuilder sb = new StringBuilder();
+			while ((c = is.read(buffer)) != -1) {
+				sb.append(new String(buffer, 0, c));
+			}
+			return sb.toString();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		} finally {
+			closeStream(is);
+		}
+		return null;
+	}
+
+	public static void writeFile(InputStream is, File file)
+			throws ClientProtocolException, IOException {
+		FileOutputStream os = new FileOutputStream(file);
+		try {
+			int c;
+			byte[] buffer = new byte[8192];
+			while ((c = is.read(buffer)) != -1) {
+				os.write(buffer, 0, c);
+			}
+		} finally {
+			closeStream(is);
+			closeStream(os);
 		}
 	}
 
@@ -223,6 +260,24 @@ public class Util {
 				});
 		builder.setCancelable(true);
 		builder.show();
+	}
+
+	public static void createParentDirectory(File dest)
+			throws TodoException {
+		if (dest == null) {
+			throw new TodoException("createParentDirectory: dest is null");
+		}
+		File dir = dest.getParentFile();
+		if (dir != null && !dir.exists()) {
+			createParentDirectory(dir);
+		}
+		if (!dir.exists()) {
+			if (!dir.mkdirs()) {
+				Log.e(TAG, "Could not create dirs: " + dir.getAbsolutePath());
+				throw new TodoException("Could not create dirs: "
+						+ dir.getAbsolutePath());
+			}
+		}
 	}
 
 }

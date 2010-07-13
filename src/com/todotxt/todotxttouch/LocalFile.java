@@ -6,7 +6,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import android.os.Environment;
+
 public class LocalFile {
+
+    private static File storageDirectory = null;
+
+	// Creates our applications storage directory if it has not yet been created
+	// Stores data in /<external-device>/data/com.todotxt.todotxttouch/
+	public static boolean createStorageDirectory() {
+		if (storageDirectory == null) {
+			if (Util.isDeviceWritable()) {
+				File rootDir = Environment.getExternalStorageDirectory();
+				storageDirectory = new File(rootDir,
+						"data/com.todotxt.todotxttouch/");
+
+				if (storageDirectory.isDirectory() || storageDirectory.mkdirs())
+					return true;
+				else {
+					storageDirectory = null;
+					return false;
+				}
+			} else
+				return false;
+		} else
+			return true;
+	}
+
+	public static File getStorageDirectory() {
+		return storageDirectory;
+	}
 
 // *** SINGLETON CODE START ***
 	
@@ -36,7 +65,7 @@ public class LocalFile {
 	
 	protected LocalFile() throws IOException
 	{
-		if(TodoUtil.createStorageDirectory())
+		if(createStorageDirectory())
 			initializeFile();
 		else
 			throw new IOException("Unable to create storage directory");
@@ -136,9 +165,9 @@ public class LocalFile {
 			// Attempt to create file if it does not yet exist
 			if(m_file == null)
 			{					
-				if(TodoUtil.createStorageDirectory())
+				if(createStorageDirectory())
 				{
-					m_file = new File(TodoUtil.getStorageDirectory(), FILE_NAME);
+					m_file = new File(getStorageDirectory(), FILE_NAME);
 					m_file.createNewFile();
 				}
 				else
@@ -148,4 +177,6 @@ public class LocalFile {
 		else
 			throw new IOException("SD Storage is not readable");
 	}
+
+
 }

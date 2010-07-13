@@ -10,23 +10,19 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 
 public class TodoUtil {
 	
 	private final static String TAG = TodoUtil.class.getSimpleName();
 	
-    private static File storageDirectory = null;
-
-    public static ArrayList<Task> loadTasksFromUrl(Context cxt, String url)
+    public static ArrayList<Task> loadTasksFromUrl(String url)
 			throws IOException {
 		InputStream is = Util.getInputStreamFromUrl(url);
-		return loadTasksFromStream(cxt, is);
+		return loadTasksFromStream(is);
 	}
 
-	public static ArrayList<Task> loadTasksFromStream(Context cxt, InputStream is)
+	public static ArrayList<Task> loadTasksFromStream(InputStream is)
 			throws IOException {
 		ArrayList<Task> items = new ArrayList<Task>();
 		BufferedReader in = null;
@@ -52,21 +48,25 @@ public class TodoUtil {
 			throws IOException {
 		ArrayList<Task> items = new ArrayList<Task>();
 		BufferedReader in = null;
-		InputStream is = new FileInputStream(Constants.TODOFILE);
-		try {
-			in = new BufferedReader(new InputStreamReader(is));
-			String line;
-			int counter = 0;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.length() > 0) {
-					items.add(TaskHelper.createTask(counter, line));
+		if(!Constants.TODOFILE.exists()){
+			Log.w(TAG, Constants.TODOFILE.getAbsolutePath()+" does not exists!");
+		}else{
+			InputStream is = new FileInputStream(Constants.TODOFILE);
+			try {
+				in = new BufferedReader(new InputStreamReader(is));
+				String line;
+				int counter = 0;
+				while ((line = in.readLine()) != null) {
+					line = line.trim();
+					if (line.length() > 0) {
+						items.add(TaskHelper.createTask(counter, line));
+					}
+					counter++;
 				}
-				counter++;
+			} finally {
+				Util.closeStream(in);
+				Util.closeStream(is);
 			}
-		} finally {
-			Util.closeStream(in);
-			Util.closeStream(is);
 		}
 		return items;
 	}
@@ -76,6 +76,7 @@ public class TodoUtil {
 			if(!Util.isDeviceWritable()){
 				throw new IOException("Device Not Writable!");
 			}
+			Util.createParentDirectory(file);
 			FileWriter fw = new FileWriter(file);
 			for(int i = 0; i < tasks.size(); ++i)
 			{
@@ -84,34 +85,9 @@ public class TodoUtil {
 				fw.write("\n");
 			}
 			fw.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 		}
-	}
-
-	// Creates our applications storage directory if it has not yet been created
-	// Stores data in /<external-device>/data/com.todotxt.todotxttouch/
-	public static boolean createStorageDirectory() {
-		if (storageDirectory == null) {
-			if (Util.isDeviceWritable()) {
-				File rootDir = Environment.getExternalStorageDirectory();
-				storageDirectory = new File(rootDir,
-						"data/com.todotxt.todotxttouch/");
-
-				if (storageDirectory.isDirectory() || storageDirectory.mkdirs())
-					return true;
-				else {
-					storageDirectory = null;
-					return false;
-				}
-			} else
-				return false;
-		} else
-			return true;
-	}
-
-	public static File getStorageDirectory() {
-		return storageDirectory;
 	}
 
 }

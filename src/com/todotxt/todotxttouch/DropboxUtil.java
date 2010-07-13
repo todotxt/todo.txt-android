@@ -1,12 +1,12 @@
 package com.todotxt.todotxttouch;
 
-import java.util.List;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 import android.util.Log;
 
 import com.dropbox.client.DropboxClient;
 import com.dropbox.client.DropboxClientHelper;
-import com.dropbox.client.DropboxException;
 
 public class DropboxUtil {
 
@@ -25,92 +25,61 @@ public class DropboxUtil {
 			this.username = username;
 			this.password = password;
 		}
-		public DropboxClient get(){
+		public DropboxClient get() throws Exception{
 			synchronized (DropboxClient.class) {
 				if(client == null){
-					try {
-						client = DropboxClientHelper.newClient(consumerKey,
-								consumerSecret, username, password);
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage(), e);
-					}
+					client = DropboxClientHelper.newClient(consumerKey,
+							consumerSecret, username, password);
 				}
 			}
 			return client;
 		}
 	}
 	
-	public static boolean addTask(DropboxClient client, List<Task> tasks,
-			String input) {
+	public static boolean addTask(DropboxClient client, String input) {
 		if (client != null) {
-			Task task = TaskHelper.createTask(tasks.size(), input);
-			tasks.add(task);
+			ArrayList<Task> tasks = null;
 			try {
-				pushTasks(client, tasks);
-				return true;
-			} catch (DropboxException e) {
-				Log.e(TAG, e.getMessage(), e);
-				tasks.remove(tasks.size()-1);
+				tasks = fetchTasks(client);
+				Task task = TaskHelper.createTask(tasks.size(), input);
+				tasks.add(task);
+				TodoUtil.writeToFile(tasks, Constants.TODOFILETMP);
+				DropboxClientHelper.putFile(client, "/", Constants.TODOFILETMP);
 				TodoUtil.writeToFile(tasks, Constants.TODOFILE);
+				return true;
+			} catch (Exception e) {
+				Log.e(TAG, e.getMessage(), e);
 			}
 		}
 		return false;
 	}
 
-	public static boolean updateTask(DropboxClient client, List<Task> tasks,
-			long id, char prio, String input) {
+	public static boolean updateTask(DropboxClient client, 
+			char prio, String input, Task backup) {
 		if (client != null) {
-			Task t = TaskHelper.createTask(id, input);
+			Task t = TaskHelper.createTask(backup.id, input);
 			t.prio = prio;
-			Task backup = TaskHelper.updateById(tasks, t);
 			try {
-				pushTasks(client, tasks);
-				return true;
-			} catch (DropboxException e) {
+				ArrayList<Task> tasks = fetchTasks(client);
+				Task found = TaskHelper.find(tasks, backup);
+				if(found != null){
+					t.id = found.id;
+					TaskHelper.updateById(tasks, t);
+					TodoUtil.writeToFile(tasks, Constants.TODOFILETMP);
+					DropboxClientHelper.putFile(client, "/", Constants.TODOFILETMP);
+					TodoUtil.writeToFile(tasks, Constants.TODOFILE);
+					return true;
+				}
+			} catch (Exception e) {
 				Log.e(TAG, e.getMessage(), e);
-				TaskHelper.updateById(tasks, backup);
-				TodoUtil.writeToFile(tasks, Constants.TODOFILE);
 			}
 		}
 		return false;
 	}
 
-	public static boolean deleteTask(DropboxClient client, List<Task> tasks,
-			Task task) {
-		if (client != null) {
-			task.deleted = true;
-			try {
-				pushTasks(client, tasks);
-				return true;
-			} catch (DropboxException e) {
-				Log.e(TAG, e.getMessage(), e);
-				task.deleted = false;
-				TodoUtil.writeToFile(tasks, Constants.TODOFILE);
-			}
-		}
-		return false;
-	}
-
-	public static boolean completeTask(DropboxClient client, List<Task> tasks,
-			Task task) {
-		if (client != null) {
-			task.completed = true;
-			try {
-				pushTasks(client, tasks);
-				return true;
-			} catch (DropboxException e) {
-				Log.e(TAG, e.getMessage(), e);
-				task.completed = false;
-				TodoUtil.writeToFile(tasks, Constants.TODOFILE);
-			}
-		}
-		return false;
-	}
-
-	public static void pushTasks(DropboxClient client, List<Task> tasks)
-			throws DropboxException {
-		TodoUtil.writeToFile(tasks, Constants.TODOFILE);
-		DropboxClientHelper.putFile(client, "/", Constants.TODOFILE);
+	public static ArrayList<Task> fetchTasks(DropboxClient client) throws Exception {
+		InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
+		return TodoUtil.loadTasksFromStream(is);
 	}
 
 }

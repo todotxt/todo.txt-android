@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="initialized_dropbox">Initialized dropbox support! Check Dropbox/Todo.txt/todo.txt.</string>
+    <string name="sort">Sort</string>
+    <string name="filter">Filter</string>
     <string name="app_name">Todo.txt Touch</string>
     <string name="main_no_items">No to-do\'s to display</string>
     <string name="set_preferences">Todo.txt Preferences</string>

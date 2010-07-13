@@ -20,6 +20,12 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
 
+		<Button android:id="@+id/clear" 
+				android:text="Clear"
+				android:layout_weight="1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+
 	</LinearLayout>
 	
 	<LinearLayout android:id="@+id/priorities"
