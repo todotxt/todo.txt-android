@@ -1,13 +1,21 @@
-(A) Introduce tags?
-(A) Display filter at top of list view.
-(B) Multiple todo.txt files. One per tab?
-Fix sort.
-How to display completed items.
-Sort ascending/descending.
-sort filter criterias.
-Remove tag concept.
-Display prio tasks before non prio tasks. fixed with sort?
-Id/line nr is not correct when re-opening the app. after add/update? has to do with task sort and priorities.
-Add date on Done, i.e. 'x 2010-07-13 ...'.
-Filter search auto complete, e.g. AutoCompleteTextView.
-Invalid dropbox credentials error is not clear to user.
+(C) Display current filter at top of list view.
+(C) Multiple todo.txt files. How? One per tab?
+(A) Fix options menu 'Sort'. Prio, Id (line nr), Text A-Z.
+(A) How to display/access completed/done items? done.txt?
+(C) Options menu 'Sort' ascending/descending logic.
+(B) Sort (A-Z) filter criterias, i.e. projects, contexts... when displayed in filter dialog.
+(C) Remove tag functionality? Current implementation filters out #tag as a tag.
+(A) Display prio tasks before non prio tasks. Fixed with sort?
+(C) Bug: Id/line nr is not correct when re-opening the app. After add/update? Has to do with task sort and priorities.
+(A) Add date on done/complete, e.g. 'x 2010-07-13 ...'.
+(C) Filter search auto complete, e.g. AutoCompleteTextView.
+(C) Invalid dropbox credentials error is not clear to user.
+(B) Manually update prio doesn't work, i.e. update task and add '(X) '.
+(C) Search: clear search field button (x to right of).
+(C) Auto complete project, context... when adding task (use add task dialog/activity). How?
+(B) 'Add task' dialog/activity with separate priority!, project?, context? input logic, e.g. prio should have dropdown/spinner.
+(C) Make UI more intuitive from new install. Initial help dialog?
+(A) Remove contexts displayed separately (below text) for each task.
+(B) How to handle deleted tasks? Currently text is cleared and row kept.
+(A) Implement context menu 'Priority' (long press task).
+(C) Bug: Id/line nr does not match todo.sh line number ('todo.sh ls' shows id+1?).
