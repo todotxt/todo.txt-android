@@ -34,8 +34,6 @@ public class Filter extends TabActivity {
 				.setContent(R.id.projects));
 		tabHost.addTab(tabHost.newTabSpec("Contexts").setIndicator("Contexts")
 				.setContent(R.id.contexts));
-		tabHost.addTab(tabHost.newTabSpec("Tags").setIndicator("Tags")
-				.setContent(R.id.tags));
 		tabHost.addTab(tabHost.newTabSpec("Search").setIndicator("Search")
 				.setContent(R.id.search));
 		
@@ -43,12 +41,10 @@ public class Filter extends TabActivity {
 		ArrayList<String> priosArr = data.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
 		ArrayList<String> projectsArr = data.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
 		ArrayList<String> contextsArr = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
-		ArrayList<String> tagsArr = data.getStringArrayListExtra(Constants.EXTRA_TAGS);
 
 		ArrayList<String> priosArrSelected = data.getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED);
 		ArrayList<String> projectsArrSelected = data.getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED);
 		ArrayList<String> contextsArrSelected = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED);
-		ArrayList<String> tagsArrSelected = data.getStringArrayListExtra(Constants.EXTRA_TAGS_SELECTED);
 
 		String searchTerm = data.getStringExtra(Constants.EXTRA_SEARCH);
 
@@ -70,12 +66,6 @@ public class Filter extends TabActivity {
 				android.R.layout.simple_list_item_multiple_choice, contextsArr));
 		setSelected(contexts, contextsArrSelected);
 
-		final ListView tags = (ListView) findViewById(R.id.tagslv);
-		tags.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		tags.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_multiple_choice, tagsArr));
-		setSelected(tags, tagsArrSelected);
-
 		final EditText search = (EditText) findViewById(R.id.searchet);
 		search.setText(searchTerm);
 
@@ -88,7 +78,6 @@ public class Filter extends TabActivity {
 				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES, getItems(priorities));
 				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS, getItems(projects));
 				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS, getItems(contexts));
-				data.putStringArrayListExtra(Constants.EXTRA_TAGS, getItems(tags));
 				data.putExtra(Constants.EXTRA_SEARCH, search.getText().toString());
 				setResult(Activity.RESULT_OK, data);
 				finish();
@@ -113,7 +102,6 @@ public class Filter extends TabActivity {
 				setSelected(priorities, null);
 				setSelected(projects, null);
 				setSelected(contexts, null);
-				setSelected(tags, null);
 				search.setText("");
 			}
 		});

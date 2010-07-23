@@ -16,7 +16,7 @@ public class TodoUtil {
 	
 	private final static String TAG = TodoUtil.class.getSimpleName();
 	
-    public static ArrayList<Task> loadTasksFromUrl(String url)
+	public static ArrayList<Task> loadTasksFromUrl(String url)
 			throws IOException {
 		InputStream is = Util.getInputStreamFromUrl(url);
 		return loadTasksFromStream(is);

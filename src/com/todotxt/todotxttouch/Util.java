@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -20,9 +21,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Environment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -276,6 +281,26 @@ public class Util {
 				Log.e(TAG, "Could not create dirs: " + dir.getAbsolutePath());
 				throw new TodoException("Could not create dirs: "
 						+ dir.getAbsolutePath());
+			}
+		}
+	}
+
+	public static ArrayAdapter<String> newSpinnerAdapter(Context cxt,
+			List<String> items) {
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(cxt,
+				android.R.layout.simple_spinner_item, items);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		return adapter;
+	}
+
+	public static void setBold(SpannableString ss, List<String> items){
+		String data = ss.toString();
+		for (String item : items) {
+			int i = data.indexOf(item);
+			if(i != -1){
+				//ss.setSpan(what, start, end, flags);
+				ss.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), i, 
+						i+item.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
 	}

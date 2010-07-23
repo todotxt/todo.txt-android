@@ -1,6 +1,8 @@
 package com.todotxt.todotxttouch;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -8,19 +10,23 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.util.Log;
+
 public class TaskHelper {
+	
+	private final static String TAG = TaskHelper.class.getSimpleName();
 	
 	public final static char NONE = '-';
 
 	public final static String COMPLETED = "x ";
+
+	public final static SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd ");
 
 	private final static Pattern prioPattern = Pattern.compile("\\(([A-Z])\\) (.*)");
 
 	private final static Pattern contextPattern = Pattern.compile("@(\\w+)");
 
 	private final static Pattern projectPattern = Pattern.compile("\\+(\\w+)");
-
-	private final static Pattern tagPattern = Pattern.compile("#(\\w+)");
 
 	public static Task createTask(long id, String line){
 		//prio and text
@@ -42,10 +48,6 @@ public class TaskHelper {
 
 	public static List<String> getProjects(String text){
 		return getItems(projectPattern, text);
-	}
-
-	public static List<String> getTags(String text){
-		return getItems(tagPattern, text);
 	}
 
 	private static List<String> getItems(Pattern p, String text){
@@ -72,7 +74,25 @@ public class TaskHelper {
 		@Override
 		public int compare(Task arg0, Task arg1) {
 			if (arg0 != null && arg1 != null) {
-				return new Integer(arg0.prio).compareTo(new Integer(arg1.prio));
+				if (arg0.prio == TaskHelper.NONE
+						|| arg1.prio == TaskHelper.NONE) {
+					//Put prio NONE last.
+					return new Character(arg1.prio).compareTo(new Character(arg0.prio));
+				}else{
+					return new Character(arg0.prio).compareTo(new Character(arg1.prio));
+				}
+			}
+			return -1;
+		}
+	};
+
+	public static Comparator<Task> byText = new Comparator<Task>() {
+		@Override
+		public int compare(Task arg0, Task arg1) {
+			try{
+				return arg0.text.compareTo(arg1.text);
+			}catch(Exception e){
+				Log.e(TAG, e.getMessage(), e);
 			}
 			return -1;
 		}
@@ -138,19 +158,6 @@ public class TaskHelper {
 		return res;
 	}
 
-	public static List<Task> getByTag(List<Task> items, List<String> tags) {
-		List<Task> res = new ArrayList<Task>();
-		for (Task item : items) {
-			for (String cxt : item.tags) {
-				if (tags.contains(cxt)) {
-					res.add(item);
-					break;
-				}
-			}
-		}
-		return res;
-	}
-
 	public static List<Task> getByText(List<Task> items, String text) {
 		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
@@ -172,44 +179,34 @@ public class TaskHelper {
 		return res;
 	}
 
-	public static Set<String> getPrios(List<Task> items){
+	public static ArrayList<String> getPrios(List<Task> items){
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
 			res.add(toString(item.prio));
 		}
-		return res;
+		ArrayList<String> ret = new ArrayList<String>(res);
+		Collections.sort(ret);
+		return ret;
 	}
 
-	public static Set<String> getContexts(List<Task> items){
+	public static ArrayList<String> getContexts(List<Task> items){
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
 			res.addAll(item.contexts);
 		}
-		return res;
+		ArrayList<String> ret = new ArrayList<String>(res);
+		Collections.sort(ret);
+		return ret;
 	}
 
-	public static Set<String> getProjects(List<Task> items){
+	public static ArrayList<String> getProjects(List<Task> items){
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
 			res.addAll(item.projects);
 		}
-		return res;
-	}
-
-	public static Set<String> getTags(List<Task> items){
-		Set<String> res = new HashSet<String>();
-		for (Task item : items) {
-			res.addAll(item.tags);
-		}
-		return res;
-	}
-
-	public static String getContextsAsString(Task task){
-		StringBuilder sb = new StringBuilder();
-		for (String cxt : task.contexts) {
-			sb.append("[").append(cxt).append("] ");
-		}
-		return sb.toString();
+		ArrayList<String> ret = new ArrayList<String>(res);
+		Collections.sort(ret);
+		return ret;
 	}
 
 	public static String toFileFormat(Task task) {
@@ -252,7 +249,6 @@ public class TaskHelper {
 		dest.contexts = src.contexts;
 		dest.prio = src.prio;
 		dest.projects = src.projects;
-		dest.tags = src.tags;
 		dest.text = src.text;
 	}
 

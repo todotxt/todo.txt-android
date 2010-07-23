@@ -2,10 +2,11 @@ package com.todotxt.todotxttouch;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,13 +16,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -38,27 +37,28 @@ import android.widget.TextView;
 
 import com.dropbox.client.DropboxClient;
 import com.dropbox.client.DropboxClientHelper;
-import com.todotxt.todotxttouch.DropboxUtil.DropboxProvider;
-import com.todotxt.todotxttouch.Util.InputDialogListener;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
-public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChangeListener {
+public class TodoTxtTouch extends ListActivity {
 
 	private final static String TAG = TodoTxtTouch.class.getSimpleName();
+	
+	private final static int SORT_PRIO = 0;
+	private final static int SORT_ID = 1;
+	private final static int SORT_TEXT = 2;
 
-	private SharedPreferences m_prefs;
 	private ProgressDialog m_ProgressDialog = null;
 	private ArrayList<Task> m_tasks = new ArrayList<Task>();
 	private TaskAdapter m_adapter;
-	private String m_fileUrl;
-	private DropboxProvider m_client;
 
 	//filter variables
 	private ArrayList<String> m_prios = new ArrayList<String>();
 	private ArrayList<String> m_contexts = new ArrayList<String>();
 	private ArrayList<String> m_projects = new ArrayList<String>();
-	private ArrayList<String> m_tags = new ArrayList<String>();
 	private String m_search;
+	
+	private int m_pos = Constants.INVALID_POSITION;
+	private int m_sort = SORT_PRIO;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,23 +77,25 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 
 		getListView().setOnCreateContextMenuListener(this);
 
-		// Get the xml/preferences.xml preferences
-		m_prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		m_prefs.registerOnSharedPreferenceChangeListener(this);
-		String defValue = getString(R.string.todourl_default);
-		m_fileUrl = m_prefs.getString(getString(R.string.todourl_key), defValue);
-
-		//dropbox initialization
-		initDropbox();
-
 		populateFromFile();
 	}
 	
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		m_prefs.unregisterOnSharedPreferenceChangeListener(this);
+	protected void onResume() {
+		super.onResume();
+		setFilteredTasks(true);
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("sort", m_sort);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle state) {
+		super.onRestoreInstanceState(state);
+		m_sort = state.getInt("sort");
 	}
 
 	@Override
@@ -116,43 +118,19 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
 		int menuid = item.getItemId();
-		final int pos = menuInfo.position;
+		final int pos;
+		if(m_pos != Constants.INVALID_POSITION){
+			pos = m_pos;
+			m_pos = Constants.INVALID_POSITION;
+		}else{
+			pos = menuInfo.position;
+		}
 		if(menuid == R.id.update){
 			Log.v(TAG, "update");
 			final Task backup = m_adapter.getItem(pos);
-			InputDialogListener listener = new InputDialogListener() {
-				@Override
-				public void onClick(final String input) {
-					new AsyncTask<Void, Void, Boolean>(){
-						protected void onPreExecute() {
-			    			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-			    					"Update", "Please wait...", true);
-						}
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								return DropboxUtil.updateTask(m_client.get(),
-										backup.prio, input, backup);
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-								return false;
-							}
-						}
-						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
-							if (result) {
-								Util.showToastLong(TodoTxtTouch.this, "Updated task "+input);
-							}else{
-								Util.showToastLong(TodoTxtTouch.this, "Coult not update task "+input);
-							}
-							setFilteredTasks(true);
-						}
-					}.execute();
-				}
-			};
-			Util.showInputDialog(this, R.string.update, R.string.update,
-					TaskHelper.toFileFormat(backup), 4, listener,
-					R.drawable.menu_add);
+			Intent intent = new Intent(this, AddTask.class);
+			intent.putExtra(Constants.EXTRA_TASK, (Serializable)backup);
+			startActivity(intent);
 		}else if(menuid == R.id.delete){
 			Log.v(TAG, "delete");
 			OnClickListener listener = new OnClickListener() {
@@ -167,7 +145,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								return DropboxUtil.updateTask(m_client.get(),
+								TodoApplication app = (TodoApplication) getApplication();
+								return DropboxUtil.updateTask(app.m_client.get(),
 										TaskHelper.NONE, "", task);
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -203,10 +182,14 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								String text = task.text
-										.startsWith(TaskHelper.COMPLETED) ? task.text
-										: TaskHelper.COMPLETED + task.text;
-								return DropboxUtil.updateTask(m_client.get(), TaskHelper.NONE, text, task);
+								TodoApplication app = (TodoApplication) getApplication();
+								if(task.text.startsWith(TaskHelper.COMPLETED)){
+									return true;
+								}else{
+									String format = TaskHelper.DATEFORMAT.format(new Date());
+									String text = TaskHelper.COMPLETED +format+task.text;
+									return DropboxUtil.updateTask(app.m_client.get(), TaskHelper.NONE, text, task);
+								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
 								return false;
@@ -229,7 +212,47 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		}else if(menuid == R.id.priority){
 			Log.v(TAG, "priority");
-			//TODO priority logic
+			final String[] prioArr = new String['Z'-'A'+1];
+			prioArr[0] = ""+TaskHelper.NONE;
+			for (char c = 0; c < prioArr.length; c++) {
+				prioArr[1+c] = ""+('A'+c);
+			}
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setSingleChoiceItems(prioArr, -1, new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, final int which) {
+					final Task task = m_adapter.getItem(pos);
+					new AsyncTask<Void, Void, Boolean>(){
+						protected void onPreExecute() {
+			    			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
+			    					"Priority", "Please wait...", true);
+						}
+						@Override
+						protected Boolean doInBackground(Void... params) {
+							try {
+								TodoApplication app = (TodoApplication) getApplication();
+								return DropboxUtil.updateTask(app.m_client
+										.get(), prioArr[which].charAt(0),
+										task.text, task);
+							} catch (Exception e) {
+								Log.e(TAG, e.getMessage(), e);
+								return false;
+							}
+						}
+						protected void onPostExecute(Boolean result) {
+							m_ProgressDialog.dismiss();
+							if(result){
+								Util.showToastLong(TodoTxtTouch.this, "Prioritized task "
+										+ TaskHelper.toFileFormat(task));
+							}else{
+								Util.showToastLong(TodoTxtTouch.this, "Coult not prioritize task "
+										+ TaskHelper.toFileFormat(task));
+							}
+							setFilteredTasks(true);
+						}
+					}.execute();
+				}
+			});
 		}
 		return super.onContextItemSelected(item);
 	}
@@ -240,39 +263,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
         switch(item.getItemId())
         {
         case R.id.add_new:
-			InputDialogListener listener = new InputDialogListener() {
-				@Override
-				public void onClick(final String input) {
-					new AsyncTask<Void, Void, Boolean>(){
-						protected void onPreExecute() {
-			    			m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-			    					"Add", "Please wait...", true);
-						}
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								return DropboxUtil.addTask(m_client.get(), input);
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-								return false;
-							}
-						}
-						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
-							if(result){
-								Util.showToastLong(TodoTxtTouch.this, "Added task "
-										+ input);
-							}else{
-								Util.showToastLong(TodoTxtTouch.this,
-										"Coult not add task " + input);
-							}
-							setFilteredTasks(true);
-						}
-					}.execute();
-				}
-			};
-			Util.showInputDialog(this, R.string.addtask, R.string.addtask,
-					null, 4, listener, R.drawable.menu_add);
+        	Intent intent = new Intent(this, AddTask.class);
+        	startActivity(intent);
 			break;
         case R.id.sync:
     		Log.v(TAG, "onMenuItemSelected: sync");
@@ -286,35 +278,32 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		case R.id.filter:
 			Intent i = new Intent(this, Filter.class);
 			
-			i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-					new ArrayList<String>(TaskHelper.getPrios(m_tasks)));
-			i.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-					new ArrayList<String>(TaskHelper.getProjects(m_tasks)));
-			i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-					new ArrayList<String>(TaskHelper.getContexts(m_tasks)));
-			i.putStringArrayListExtra(Constants.EXTRA_TAGS,
-					new ArrayList<String>(TaskHelper.getTags(m_tasks)));
+			i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES, TaskHelper
+					.getPrios(m_tasks));
+			i.putStringArrayListExtra(Constants.EXTRA_PROJECTS, TaskHelper
+					.getProjects(m_tasks));
+			i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS, TaskHelper
+					.getContexts(m_tasks));
 
 			i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED,
-					new ArrayList<String>(m_prios));
+					m_prios);
 			i.putStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED,
-					new ArrayList<String>(m_projects));
+					m_projects);
 			i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED,
-					new ArrayList<String>(m_contexts));
-			i.putStringArrayListExtra(Constants.EXTRA_TAGS_SELECTED,
-					new ArrayList<String>(m_tags));
+					m_contexts);
 			i.putExtra(Constants.EXTRA_SEARCH, m_search);
 
 			startActivityIfNeeded(i, 0);
 			break;
 		case R.id.sort:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setSingleChoiceItems(R.array.sort, -1, new OnClickListener() {
+			builder.setSingleChoiceItems(R.array.sort, m_sort, new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Log.v(TAG, "onClick "+which);
+					m_sort = which;
 					dialog.dismiss();
-					Util.showToastLong(TodoTxtTouch.this, "Not implemented");
+					setFilteredTasks(false);
 				}
 			});
 			builder.show();
@@ -333,7 +322,6 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			m_prios = data.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
 			m_projects = data.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
 			m_contexts = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
-			m_tags = data.getStringArrayListExtra(Constants.EXTRA_TAGS);
 			m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
 			setFilteredTasks(false);
 		}
@@ -343,10 +331,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	protected Dialog onCreateDialog(int id) {
 		final Dialog d;
 		if(R.id.priority == id){
-			Set<String> prios = TaskHelper.getPrios(m_tasks);
-			final List<String> pStrs = new ArrayList<String>(prios);
-			Collections.sort(pStrs);
-			int size = prios.size();
+			final List<String> pStrs = TaskHelper.getPrios(m_tasks);
+			int size = pStrs.size();
 			boolean[] values = new boolean[size];
 			for (String prio : m_prios) {
 				int index = pStrs.indexOf(prio);
@@ -385,7 +371,6 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		m_prios = new ArrayList<String>(); //Collections.emptyList();
 		m_contexts = new ArrayList<String>(); //Collections.emptyList();
 		m_projects = new ArrayList<String>(); //Collections.emptyList();
-		m_tags = new ArrayList<String>(); //Collections.emptyList();
 		m_search = "";
 	}
 	
@@ -407,14 +392,17 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		if(m_projects.size() > 0){
 			tasks = TaskHelper.getByProject(tasks, m_projects);
 		}
-		if(m_tags.size() > 0){
-			tasks = TaskHelper.getByTag(tasks, m_tags);
-		}
 		if(!Util.isEmpty(m_search)){
 			tasks = TaskHelper.getByTextIgnoreCase(tasks, m_search);
 		}
 		if (tasks != null) {
-			Collections.sort(tasks, TaskHelper.byPrio);
+			if(m_sort == SORT_PRIO){
+				Collections.sort(tasks, TaskHelper.byPrio);
+			}else if(m_sort == SORT_ID){
+				Collections.sort(tasks, TaskHelper.byId);
+			}else if(m_sort == SORT_TEXT){
+				Collections.sort(tasks, TaskHelper.byText);
+			}
 			m_adapter.clear();
 			int size = tasks.size();
 			for (int i = 0; i < size; i++){
@@ -426,22 +414,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Task item = m_adapter.items.get(position);
-		Util.showDialog(this, R.string.app_name, item.toString());
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
-		Log.v(TAG, "onSharedPreferenceChanged key="+key);
-		if(getString(R.string.todourl_key).equals(key)) {
-			String defValue = getString(R.string.todourl_default);
-			m_fileUrl = sharedPreferences.getString(key, defValue);
-			populateFromExternal();
-		} else if (getString(R.string.username_key).equals(key)
-				|| getString(R.string.password_key).equals(key)) {
-			initDropbox();
-		}
+		m_pos = position;
+		openContextMenu(getListView());
 	}
 
 	private void populateFromFile(){
@@ -460,7 +434,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					DropboxClient client = m_client != null ? m_client.get() : null;
+					TodoApplication app = (TodoApplication) getApplication();
+					DropboxClient client = app.m_client != null ? app.m_client.get() : null;
 					if(client != null){
 						try{
 							InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
@@ -479,7 +454,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 							});
 						}
 					}else{
-						m_tasks = TodoUtil.loadTasksFromUrl(m_fileUrl);
+						m_tasks = TodoUtil.loadTasksFromUrl(app.m_fileUrl);
 					}
 					TodoUtil.writeToFile(m_tasks, Constants.TODOFILE);
 					return true;
@@ -501,17 +476,6 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
     			}
     		}
     	}.execute();
-	}
-
-	private void initDropbox(){
-		String key = getString(R.string.username_key);
-		String username = m_prefs.getString(key, null);
-		key = getString(R.string.password_key);
-		String password = m_prefs.getString(key, null);
-		if(!Util.isEmpty(username) && !Util.isEmpty(password)){
-			m_client = new DropboxProvider(Constants.CONSUMER_KEY,
-					Constants.CONSUMER_SECRET, username, password);
-		}
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> {
@@ -541,19 +505,19 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 				holder.taskid = (TextView) convertView.findViewById(R.id.taskid);
 				holder.taskprio = (TextView) convertView.findViewById(R.id.taskprio);
 				holder.tasktext = (TextView) convertView.findViewById(R.id.tasktext);
-				holder.taskcontexts = (TextView) convertView.findViewById(R.id.taskcontexts);
 				convertView.setTag(holder);
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			Task task = items.get(position);
 			if (task != null) {
-				holder.taskid.setText(String.format("%04d", task.id));
+				holder.taskid.setText(String.format("%02d", task.id));
 				holder.taskprio.setText("("+TaskHelper.toString(task.prio)+")");
-				holder.tasktext.setText(task.text);
-				String cxtStrs = TaskHelper.getContextsAsString(task);
-				holder.taskcontexts.setText(cxtStrs);
-				
+				SpannableString ss = new SpannableString(task.text);
+				Util.setBold(ss, TaskHelper.getProjects(task.text));
+				Util.setBold(ss, TaskHelper.getContexts(task.text));
+				holder.tasktext.setText(ss);
+
 				switch (task.prio) {
 				case 'A':
 					holder.taskprio.setTextColor(0xFFFF0000);
@@ -581,7 +545,6 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		private TextView taskid;
 		private TextView taskprio;
 		private TextView tasktext;
-		private TextView taskcontexts;
 	}
 
 }

@@ -1,8 +1,10 @@
 package com.todotxt.todotxttouch;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Task {
+@SuppressWarnings("serial")
+public class Task implements Serializable {
 
 	public long id;
 
@@ -14,15 +16,12 @@ public class Task {
 
 	public List<String> projects;
 
-	public List<String> tags;
-
 	public Task(long id, char prio, String text) {
 		this.id = id;
 		this.prio = prio;
 		this.text = text;
 		this.contexts = TaskHelper.getContexts(text);
 		this.projects = TaskHelper.getProjects(text);
-		this.tags = TaskHelper.getTags(text);
 	}
 
 	@Override
@@ -43,12 +42,6 @@ public class Task {
 		sb.append("[projects:");
 		for (String prj : projects) {
 			sb.append("[project=").append(prj).append("]");
-		}
-		sb.append("]");
-		//tags
-		sb.append("[tags:");
-		for (String tag : tags) {
-			sb.append("[tag=").append(tag).append("]");
 		}
 		sb.append("]");
 		return sb.toString();

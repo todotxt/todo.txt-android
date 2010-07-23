@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-  
-  <Button android:id="@+id/addTask" android:layout_width="100dip"
-  	android:layout_height="50dip" android:text="@string/addtask"></Button>
-  	
-  <EditText android:id="@+id/newTaskText" android:layout_width="fill_parent"
-  	android:layout_height="wrap_content" android:editable="true" />
-  
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	<LinearLayout android:id="@+id/buttons"
+		android:orientation="horizontal" android:layout_alignParentBottom="true"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+
+		<Button android:id="@+id/addTask" android:layout_weight="1"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/add" />
+
+		<Button android:id="@+id/cancel" android:layout_weight="1"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/cancel" />
+
+	</LinearLayout>
+
+	<Spinner android:id="@+id/contexts" android:layout_above="@id/buttons"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+	<Spinner android:id="@+id/projects" android:layout_above="@id/contexts"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+	<Spinner android:id="@+id/priorities" android:layout_above="@id/projects"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+	<EditText android:id="@+id/taskText"
+		android:layout_alignParentTop="true" android:layout_above="@id/priorities"
+		android:layout_width="fill_parent" android:layout_height="fill_parent" />
+
+</RelativeLayout>

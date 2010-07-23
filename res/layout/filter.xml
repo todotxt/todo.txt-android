@@ -55,15 +55,6 @@
 
 	</LinearLayout>
 
-	<LinearLayout android:id="@+id/tags"
-		android:layout_above="@id/buttons"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-
-		<ListView android:id="@+id/tagslv" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" />
-
-	</LinearLayout>
-
 	<LinearLayout android:id="@+id/search"
 		android:layout_width="fill_parent" android:layout_height="wrap_content">
 
