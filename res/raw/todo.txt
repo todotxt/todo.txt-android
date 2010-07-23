@@ -19,3 +19,7 @@
 (B) How to handle deleted tasks? Currently text is cleared and row kept.
 (A) Implement context menu 'Priority' (long press task).
 (C) Bug: Id/line nr does not match todo.sh line number ('todo.sh ls' shows id+1?).
+(A) Bug: Dropbox sometimes failes to add task. Workaround: store latest text in add dialog.
+(A) Queue added/updated/deleted tasks when fail/no network. Retry next sync/update.
+(A) Write tasks to DB instead of file.
+(A) Highlight context, project, task in text for each task item.
