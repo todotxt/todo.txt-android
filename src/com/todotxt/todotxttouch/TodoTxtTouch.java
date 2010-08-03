@@ -443,6 +443,7 @@ public class TodoTxtTouch extends ListActivity {
 						}catch(Exception e){
 							Log.w(TAG, "Failed to fetch todo file! Initializing dropbox support!"+e.getMessage());
 							if(!Constants.TODOFILE.exists()){
+								Util.createParentDirectory(Constants.TODOFILE);
 								Constants.TODOFILE.createNewFile();
 							}
 							DropboxClientHelper.putFile(client, "/", Constants.TODOFILE);
@@ -511,7 +512,7 @@ public class TodoTxtTouch extends ListActivity {
 			}
 			Task task = items.get(position);
 			if (task != null) {
-				holder.taskid.setText(String.format("%02d", task.id));
+				holder.taskid.setText(String.format("%02d", task.id + 1));
 				holder.taskprio.setText("("+TaskHelper.toString(task.prio)+")");
 				SpannableString ss = new SpannableString(task.text);
 				Util.setBold(ss, TaskHelper.getProjects(task.text));
