@@ -1,0 +1,26 @@
+(C) Display current filter at top of list view.
+(B) Multiple todo.txt files. How? One per tab?
+(C) How to display/access completed/done items? done.txt? Handle archiving manually.
+(B) Options menu 'Sort' ascending/descending logic.
+(C) Bug: Id/line nr is not correct when re-opening the app. After add/update? Has to do with task sort and priorities.
+(C) Filter search auto complete, e.g. AutoCompleteTextView.
+(C) Invalid dropbox credentials error is not clear to user.
+(C) Search: clear search field button (x to right of).
+(C) Make UI more intuitive from new install. Initial help dialog?
+(C) How to handle deleted tasks? Currently text is cleared and row kept.
+(C) Bug: Id/line nr does not match todo.sh line number ('todo.sh ls' shows id+1?).
+(B) Queue added/updated/deleted tasks when fail/no network. Retry next sync/update.
+(C) Write tasks to DB instead of file.
+(C) Retry on dropbox timeout (timeout after hours, days?) to avoid failed add/update.
+(C) Remember last filter tab.
+(C) Run profiler on application.
+(B) Build release for beta users to evaluate.
+(A) Separating the generic logic to a separate java library, e.g. todo.txt-java, would simplify automatic junit testing with maven.
+Browse dropbox files and present data in edit text box. Confirm save.
+Support DUE:date or f:date?
+Improve layout, text size, background looks bad.
+On pref url change populate from external.
+Prio sort; sort by prio then desc id.
+Replace menu icons with androids or create icons with higher res.
+Should filtered projects be AND or OR? AND! Contexts?
+Widget top prio.

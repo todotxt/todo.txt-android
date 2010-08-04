@@ -1,30 +1,31 @@
-(C) Display current filter at top of list view.
-(B) Multiple todo.txt files. How? One per tab?
+x 2010-06-11 Sort priorities in dialog.
+x 2010-06-11 Sort contexts in dialog.
+x 2010-06-11 Fix id to be line row and not increasing all the time.
+x 2010-06-11 onPref update should reload tasks.
+x 2010-06-11 Sort tasks by priority.
+x 2010-06-27 Tab filter settings view.
+x 2010-06-27 Long press to change prio. or modify.
+x 2010-07-13 Check done/complete logic.
+x 2010-07-13 Add changelog.
+x 2010-07-13 Sort menu image (Use android.R.drawable.ic_menu_sort).
+x 2010-07-13 Filter menu image.
+x 2010-07-13 Pull and check/verify contents from dropbox before add, update, delete, complete...
+x done bug. x added every add task.
+x 2010-07-13 add task and update progress dialog title is 'done'. test
+x merge add task and localfile files back in.
+x 2010-07-13 clear filter button.
+x 2010-07-13 Dropbox authorization bug fixed.
+x 2010-07-13 Case insensitive filter search.
 x 2010-07-23 Fix options menu 'Sort'. Prio, Id (line nr), Text A-Z.
-(C) How to display/access completed/done items? done.txt? Handle archiving manually.
-(B) Options menu 'Sort' ascending/descending logic.
 x 2010-07-23 Sort (A-Z) filter criterias, i.e. projects, contexts... when displayed in filter dialog.
 x 2010-07-23 Remove tag functionality? Current implementation filters out #tag as a tag.
 x 2010-07-23 Display prio tasks before non prio tasks. Fixed with sort?
-(C) Bug: Id/line nr is not correct when re-opening the app. After add/update? Has to do with task sort and priorities.
 x 2010-07-23 Add date on done/complete, e.g. 'x 2010-07-13 ...'.
-(C) Filter search auto complete, e.g. AutoCompleteTextView.
-(C) Invalid dropbox credentials error is not clear to user.
 x 2010-07-23 Manually update prio doesn't work, i.e. update task and add '(X) '.
-(C) Search: clear search field button (x to right of).
 x 2010-07-23 Auto complete project, context... when adding task (use add task dialog/activity). How? Insert text from spinners.
 x 2010-07-23 'Add task' dialog/activity with separate priority!, project?, context? input logic, e.g. prio should have dropdown/spinner. Inserts text at cursor.
-(C) Make UI more intuitive from new install. Initial help dialog?
 x 2010-07-23 Remove contexts displayed separately (below text) for each task.
-(C) How to handle deleted tasks? Currently text is cleared and row kept.
 x 2010-07-23 Implement context menu 'Priority' (long press task).
-(C) Bug: Id/line nr does not match todo.sh line number ('todo.sh ls' shows id+1?).
 x 2010-07-23 Bug: Dropbox sometimes failes to add task. Workaround: store latest text in add dialog.
-(B) Queue added/updated/deleted tasks when fail/no network. Retry next sync/update.
-(C) Write tasks to DB instead of file.
 x 2010-07-23 Highlight context, project, task in text for each task item.
-(C) Retry on dropbox timeout (timeout after hours, days?) to avoid failed add/update.
 x 2010-07-23 Make contexts and projects text bold.
-(C) Remember last filter tab.
-(C) Run profiler on application.
-(B) Build release for beta users to evaluate.
