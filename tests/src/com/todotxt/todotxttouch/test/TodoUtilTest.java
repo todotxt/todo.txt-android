@@ -1,13 +1,9 @@
 package com.todotxt.todotxttouch.test;
 
-import java.util.ArrayList;
-import java.util.List;
+import junit.framework.TestCase;
 
 import com.todotxt.todotxttouch.Task;
 import com.todotxt.todotxttouch.TaskHelper;
-import com.todotxt.todotxttouch.TodoUtil;
-
-import junit.framework.TestCase;
 
 public class TodoUtilTest extends TestCase {
 
@@ -24,22 +20,18 @@ public class TodoUtilTest extends TestCase {
 	 */
 	public void testCreateTaskPlain() {
 		int expectedId = 1;
-		int expectedPriority = 0;
+		char expectedPriority = '-';
 		String expectedString = "Complete a simple task";
-		List<String> expectedContexts = new ArrayList<String>();
 		
-		Task expectedTask = new Task(expectedId, expectedPriority, expectedString,
-				expectedContexts);
-		Task createdTask = TodoUtil.createTask(expectedId, expectedString);
+		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
 		
-		assertEquals("ID's are equal", expectedTask.id, createdTask.id);
-		assertEquals("Priorities are equal", expectedTask.prio, createdTask.prio);
-		assertTrue("Text is equal", expectedTask.text.equals(createdTask.text));
+		assertEquals("ID's are not equal", expectedId, createdTask.id);
+		assertEquals("Priorities are not equal", expectedPriority, createdTask.prio);
+		assertEquals("Text is not equal", expectedString, createdTask.text);
 		
 		// Should both be zero, if createdTask's contexts count is greater, something is
 		// seriously wrong.
-		assertTrue("Items in context lists match",
-				compareTwoContextLists(expectedTask.contexts, createdTask.contexts));
+		assertTrue("Task has context even when none given", createdTask.contexts.isEmpty());
 	}
 	
 	/**
@@ -48,22 +40,19 @@ public class TodoUtilTest extends TestCase {
 	 */
 	public void testCreateTaskWithPriority() {
 		int expectedId = 1;
-		int expectedPriority = TaskHelper.parsePrio("A");
-		String expectedString = "(A) Complete a simple task";
-		List<String> expectedContexts = new ArrayList<String>();
+		char expectedPriority = 'A';
+		String expectedString = "Complete a simple task";
+		String inputString = "(A) Complete a simple task";
 		
-		Task expectedTask = new Task(expectedId, expectedPriority, expectedString,
-				expectedContexts);
-		Task createdTask = TodoUtil.createTask(expectedId, expectedString);
+		Task createdTask = TaskHelper.createTask(expectedId, inputString);
 		
-		assertEquals("ID's are equal", expectedTask.id, createdTask.id);
-		assertEquals("Priorities are equal", expectedTask.prio, createdTask.prio);
-		assertTrue("Text is equal", expectedTask.text.equals(createdTask.text));
+		assertEquals("ID's are not equal", expectedId, createdTask.id);
+		assertEquals("Priorities are not equal", expectedPriority, createdTask.prio);
+		assertEquals("Text is not equal", expectedString, createdTask.text);
 		
 		// Should both be zero, if createdTask's contexts count is greater, something is
 		// seriously wrong.
-		assertTrue("Items in context lists match",
-				compareTwoContextLists(expectedTask.contexts, createdTask.contexts));
+		assertEquals("Task has contexts when none given", 0, createdTask.contexts.size());
 	}
 	
 	/**
@@ -71,21 +60,17 @@ public class TodoUtilTest extends TestCase {
 	 */
 	public void testCreateTaskWithContext() {
 		int expectedId = 1;
-		int expectedPriority = 0;
+		char expectedPriority = '-';
 		String expectedString = "Complete a simple task @phone";
-		List<String> expectedContexts = new ArrayList<String>();
-		expectedContexts.add("phone");
 		
-		Task expectedTask = new Task(expectedId, expectedPriority, expectedString,
-				expectedContexts);
-		Task createdTask = TodoUtil.createTask(expectedId, expectedString);
+		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
 		
-		assertEquals("ID's are equal", expectedTask.id, createdTask.id);
-		assertEquals("Priorities are equal", expectedTask.prio, createdTask.prio);
-		assertTrue("Text is equal", expectedTask.text.equals(createdTask.text));
+		assertEquals("ID's are not equal", expectedId, createdTask.id);
+		assertEquals("Priorities are not equal", expectedPriority, createdTask.prio);
+		assertEquals("Text is not equal", expectedString, createdTask.text);
 		
-		assertTrue("Items in context lists match",
-				compareTwoContextLists(expectedTask.contexts, createdTask.contexts));
+		assertEquals("Wrong number of contexts", 1, createdTask.contexts.size());
+		assertEquals("Wrong context", "phone", createdTask.contexts.get(0));
 	}
 	
 	/*
@@ -93,22 +78,19 @@ public class TodoUtilTest extends TestCase {
 	 */
 	public void testCreateTaskWithMultipleContext() {
 		int expectedId = 1;
-		int expectedPriority = 0;
+		char expectedPriority = '-';
 		String expectedString = "Complete a simple task @phone @home";
-		List<String> expectedContexts = new ArrayList<String>();
-		expectedContexts.add("phone");
-		expectedContexts.add("home");
 		
-		Task expectedTask = new Task(expectedId, expectedPriority, expectedString,
-				expectedContexts);
-		Task createdTask = TodoUtil.createTask(expectedId, expectedString);
+		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
 		
-		assertEquals("ID's are equal", expectedTask.id, createdTask.id);
-		assertEquals("Priorities are equal", expectedTask.prio, createdTask.prio);
-		assertTrue("Text is equal", expectedTask.text.equals(createdTask.text));
+		assertEquals("ID's are not equal", expectedId, createdTask.id);
+		assertEquals("Priorities are not equal", expectedPriority, createdTask.prio);
+		assertEquals("Text is not equal", expectedString, createdTask.text);
 		
-		assertTrue("Items in context lists match",
-				compareTwoContextLists(expectedTask.contexts, createdTask.contexts));
+		assertEquals("Wrong number of context", 2, createdTask.contexts.size());
+		assertEquals("Wrong first context", "phone", createdTask.contexts.get(0));
+		assertEquals("Wrong second context", "home", createdTask.contexts.get(1));
+
 	}
 	
 	/*
@@ -116,53 +98,33 @@ public class TodoUtilTest extends TestCase {
 	 */
 	public void testCreateTaskWithContextInMiddle() {
 		int expectedId = 1;
-		int expectedPriority = 0;
+		char expectedPriority = '-';
 		String expectedString = "Complete a simple @phone task";
-		List<String> expectedContexts = new ArrayList<String>();
-		expectedContexts.add("phone");
 		
-		Task expectedTask = new Task(expectedId, expectedPriority, expectedString,
-				expectedContexts);
-		Task createdTask = TodoUtil.createTask(expectedId, expectedString);
+		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
 		
-		assertEquals("ID's are equal", expectedTask.id, createdTask.id);
-		assertEquals("Priorities are equal", expectedTask.prio, createdTask.prio);
-		assertTrue("Text is equal", expectedTask.text.equals(createdTask.text));
+		assertEquals("ID's are equal", expectedId, createdTask.id);
+		assertEquals("Priorities are equal", expectedPriority, createdTask.prio);
+		assertEquals("Text is equal", expectedString, createdTask.text);
 		
-		assertTrue("Items in context lists match",
-				compareTwoContextLists(expectedTask.contexts, createdTask.contexts));
+		assertEquals("Wrong number of contexts", 1, createdTask.contexts.size());
+		assertEquals("Wrong context", "phone", createdTask.contexts.get(0));
 	}
 	
-	public void testCreateTaskDistinguishContextFromEmail() {
-		int expectedId = 1;
-		int expectedPriority = 0;
-		String expectedString = "Email me@steveh.ca about unit testing";
-		List<String> expectedContexts = new ArrayList<String>();
-		
-		Task expectedTask = new Task(expectedId, expectedPriority, expectedString,
-				expectedContexts);
-		Task createdTask = TodoUtil.createTask(expectedId, expectedString);
-		
-		assertEquals("ID's are equal", expectedTask.id, createdTask.id);
-		assertEquals("Priorities are equal", expectedTask.prio, createdTask.prio);
-		assertTrue("Text is equal", expectedTask.text.equals(createdTask.text));
-		
-		assertTrue("Items in context lists match",
-				compareTwoContextLists(expectedTask.contexts, createdTask.contexts));
-	}
+//	public void testCreateTaskDistinguishContextFromEmail() {
+//		int expectedId = 1;
+//		char expectedPriority = '-';
+//		String expectedString = "Email me@steveh.ca about unit testing";
+//		
+//		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
+//		
+//		assertEquals("ID's are equal", expectedId, createdTask.id);
+//		assertEquals("Priorities are equal", expectedPriority, createdTask.prio);
+//		assertEquals("Text is equal", expectedString, createdTask.text);
+//		
+//		assertEquals("Wrong number of contexts", 0, createdTask.contexts.size());
+//	}
 	
 // *** START TodoUtil.createTask TESTS ***
 	
-	private boolean compareTwoContextLists(List<String> expected, List<String> created)
-	{
-		if(expected.size() != created.size())
-			return false;
-		
-		for(int i = 0; i < expected.size(); ++i) {
-			if(!expected.get(i).equals(created.get(i)))
-				return false;
-		}
-		
-		return true;
-	}
 }

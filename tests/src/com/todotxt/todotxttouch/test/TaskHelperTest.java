@@ -1,10 +1,9 @@
 package com.todotxt.todotxttouch.test;
 
+import junit.framework.TestCase;
+
 import com.todotxt.todotxttouch.Task;
 import com.todotxt.todotxttouch.TaskHelper;
-import com.todotxt.todotxttouch.TodoUtil;
-
-import junit.framework.TestCase;
 
 public class TaskHelperTest extends TestCase {
 	
@@ -22,7 +21,7 @@ public class TaskHelperTest extends TestCase {
 	 */
 	public void testToFileFormat() {
 		String expectedString = "A Simple test with no curve balls";
-		Task t = TodoUtil.createTask(0, expectedString);
+		Task t = TaskHelper.createTask(0, expectedString);
 		
 		assertTrue("File output matches original input",
 				expectedString.equals(TaskHelper.toFileFormat(t)));
@@ -34,7 +33,7 @@ public class TaskHelperTest extends TestCase {
 	 */
 	public void testToFileFormatWithPriority() {
 		String expectedString = "(A) Simple test with a priority";
-		Task t = TodoUtil.createTask(0, expectedString);
+		Task t = TaskHelper.createTask(0, expectedString);
 		
 		assertTrue("File output matches original input",
 				expectedString.equals(TaskHelper.toFileFormat(t)));
@@ -46,7 +45,7 @@ public class TaskHelperTest extends TestCase {
 	 */
 	public void testToFileFormatWithContext() {
 		String expectedString = "Simple test with a context @home";
-		Task t = TodoUtil.createTask(0, expectedString);
+		Task t = TaskHelper.createTask(0, expectedString);
 		
 		assertTrue("File output matches original input",
 				expectedString.equals(TaskHelper.toFileFormat(t)));
@@ -58,7 +57,7 @@ public class TaskHelperTest extends TestCase {
 	 */
 	public void testToFileFormatWithMultipleContexts() {
 		String expectedString = "Simple @phone test @home";
-		Task t = TodoUtil.createTask(0, expectedString);
+		Task t = TaskHelper.createTask(0, expectedString);
 		
 		assertTrue("File output matches original input",
 				expectedString.equals(TaskHelper.toFileFormat(t)));
