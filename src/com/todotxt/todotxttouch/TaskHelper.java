@@ -24,7 +24,7 @@ public class TaskHelper {
 
 	private final static Pattern prioPattern = Pattern.compile("\\(([A-Z])\\) (.*)");
 
-	private final static Pattern contextPattern = Pattern.compile("@(\\w+)");
+	private final static Pattern contextPattern = Pattern.compile("[\\s]@(\\w+)");
 
 	private final static Pattern projectPattern = Pattern.compile("\\+(\\w+)");
 

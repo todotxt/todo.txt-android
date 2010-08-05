@@ -111,19 +111,19 @@ public class TodoUtilTest extends TestCase {
 		assertEquals("Wrong context", "phone", createdTask.contexts.get(0));
 	}
 	
-//	public void testCreateTaskDistinguishContextFromEmail() {
-//		int expectedId = 1;
-//		char expectedPriority = '-';
-//		String expectedString = "Email me@steveh.ca about unit testing";
-//		
-//		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
-//		
-//		assertEquals("ID's are equal", expectedId, createdTask.id);
-//		assertEquals("Priorities are equal", expectedPriority, createdTask.prio);
-//		assertEquals("Text is equal", expectedString, createdTask.text);
-//		
-//		assertEquals("Wrong number of contexts", 0, createdTask.contexts.size());
-//	}
+	public void testCreateTaskDistinguishContextFromEmail() {
+		int expectedId = 1;
+		char expectedPriority = '-';
+		String expectedString = "Email me@steveh.ca about unit testing";
+		
+		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
+		
+		assertEquals("ID's are equal", expectedId, createdTask.id);
+		assertEquals("Priorities are equal", expectedPriority, createdTask.prio);
+		assertEquals("Text is equal", expectedString, createdTask.text);
+		
+		assertEquals("Wrong number of contexts", 0, createdTask.contexts.size());
+	}
 	
 // *** START TodoUtil.createTask TESTS ***
 	
