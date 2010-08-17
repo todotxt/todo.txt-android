@@ -24,3 +24,12 @@ Prio sort; sort by prio then desc id.
 Replace menu icons with androids or create icons with higher res.
 Should filtered projects be AND or OR? AND! Contexts?
 Widget top prio.
+(A) Use dropbox oauth.
+(E) Support for Google Tasks.
+(B) SD card full. what happens? Can't add task? Error msg.
+(A) Require dropbox account?
+(A) List projects and contexts in context menu, filter on selected.
+(A) Improve auth logic, i.e. check if already authenticated. Store access token.
+(A) +bug prio for task context menu force closes.
+(A) Add due menu option in add task activity. Adds DUE. Date picker.
+(A) Improve confirmation dialog text. Are you sure you want to... update, delete...
