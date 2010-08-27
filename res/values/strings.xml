@@ -32,7 +32,7 @@
     <string name="todourl_summary">The URL of your todo.txt file</string>
     <string name="todourl_default">http://ginatrapani.github.com/todo.txt-touch/todo.txt</string>
     <string name="username_key">dropboxusername</string>
-    <string name="username_title">Dropbox username:</string>
+    <string name="username_title">Email address</string>
     <string name="username_summary">Your Dropbox username</string>
     <string name="password_key">dropboxpassword</string>
     <string name="password_title">Dropbox password</string>
