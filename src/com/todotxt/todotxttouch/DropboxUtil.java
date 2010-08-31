@@ -58,8 +58,7 @@ public class DropboxUtil {
 				Task task = TaskHelper.createTask(tasks.size(), input);
 				tasks.add(task);
 				TodoUtil.writeToFile(tasks, Constants.TODOFILETMP);
-				client.putFile(Constants.DROPBOX_MODUS, "/", Constants.TODOFILETMP);
-//				DropboxClientHelper.putFile(client, "/", Constants.TODOFILETMP);
+				client.putFile(Constants.DROPBOX_MODUS, Constants.PATH_TO_TODO_TXT, Constants.TODOFILETMP);
 				TodoUtil.writeToFile(tasks, Constants.TODOFILE);
 				return true;
 			} catch (Exception e) {
@@ -80,8 +79,7 @@ public class DropboxUtil {
 					t.id = found.id;
 					TaskHelper.updateById(tasks, t);
 					TodoUtil.writeToFile(tasks, Constants.TODOFILETMP);
-					client.putFile(Constants.DROPBOX_MODUS, "/", Constants.TODOFILETMP);
-//					DropboxClientHelper.putFile(client, "/", Constants.TODOFILETMP);
+					client.putFile(Constants.DROPBOX_MODUS, Constants.PATH_TO_TODO_TXT, Constants.TODOFILETMP);
 					TodoUtil.writeToFile(tasks, Constants.TODOFILE);
 					return true;
 				}
@@ -96,7 +94,6 @@ public class DropboxUtil {
 
 	public static ArrayList<Task> fetchTasks(DropboxClient client) throws Exception {
 		HttpResponse file = client.getFile(Constants.DROPBOX_MODUS, Constants.REMOTE_FILE);
-//		InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
 		return TodoUtil.loadTasksFromStream(file.getEntity().getContent());
 	}
 

@@ -10,7 +10,8 @@ public class Constants {
 	public static final String CONSUMER_SECRET = "arl24x8l1jgqy7p";
 	
 	public static final String DROPBOX_MODUS = "sandbox";
-	
+	public static final String PATH_TO_TODO_TXT = "/";
+
 	public static final String REMOTE_FILE = "/todo.txt";
 
 	public final static File TODOFILE = new File(Environment

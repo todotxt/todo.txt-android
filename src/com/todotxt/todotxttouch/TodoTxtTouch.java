@@ -439,7 +439,6 @@ public class TodoTxtTouch extends ListActivity {
 					if(client != null){
 						try{
 							HttpResponse file = client.getFile(Constants.DROPBOX_MODUS, Constants.REMOTE_FILE);
-//							InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
 							m_tasks = TodoUtil.loadTasksFromStream(file.getEntity().getContent());
 						}catch(Exception e){
 							Log.w(TAG, "Failed to fetch todo file! Initializing dropbox support!"+e.getMessage());
@@ -447,8 +446,7 @@ public class TodoTxtTouch extends ListActivity {
 								Util.createParentDirectory(Constants.TODOFILE);
 								Constants.TODOFILE.createNewFile();
 							}
-							client.putFile(Constants.DROPBOX_MODUS, "/", Constants.TODOFILE);
-//							DropboxClientHelper.putFile(client, "/", Constants.TODOFILE);
+							client.putFile(Constants.DROPBOX_MODUS, Constants.PATH_TO_TODO_TXT, Constants.TODOFILE);
 							runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
