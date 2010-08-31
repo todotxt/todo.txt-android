@@ -1,12 +1,13 @@
 package com.todotxt.todotxttouch;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.http.HttpResponse;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,28 +16,27 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dropbox.client.DropboxClient;
-import com.dropbox.client.DropboxClientHelper;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
 public class TodoTxtTouch extends ListActivity {
@@ -438,15 +438,17 @@ public class TodoTxtTouch extends ListActivity {
 					DropboxClient client = app.m_client != null ? app.m_client.get() : null;
 					if(client != null){
 						try{
-							InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
-							m_tasks = TodoUtil.loadTasksFromStream(is);
+							HttpResponse file = client.getFile(Constants.DROPBOX_MODUS, Constants.REMOTE_FILE);
+//							InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
+							m_tasks = TodoUtil.loadTasksFromStream(file.getEntity().getContent());
 						}catch(Exception e){
 							Log.w(TAG, "Failed to fetch todo file! Initializing dropbox support!"+e.getMessage());
 							if(!Constants.TODOFILE.exists()){
 								Util.createParentDirectory(Constants.TODOFILE);
 								Constants.TODOFILE.createNewFile();
 							}
-							DropboxClientHelper.putFile(client, "/", Constants.TODOFILE);
+							client.putFile(Constants.DROPBOX_MODUS, "/", Constants.TODOFILE);
+//							DropboxClientHelper.putFile(client, "/", Constants.TODOFILE);
 							runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
