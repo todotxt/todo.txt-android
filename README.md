@@ -6,7 +6,7 @@ An Android application by [Gina Trapani](http://ginatrapani.org) and [the Todo.t
 
 ![Todo.Txt Touch](https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=https://github.com/downloads/ginatrapani/todo.txt-touch/todo.txt-touch.apk)
 
-Right now, when you install the app, log into Dropbox and it creates a Dropbox/Todo.txt/todo.txt file. To get started, choose "Add Task" from the menu and add your todo item. If you've already got a todo.txt file, just copy and paste it into your Dropbox/Todo.txt/ folder, then choose "Sync" from the menu in the Android app to load your tasks.
+Right now, when you install the app, log into Dropbox and it creates a Dropbox/todo.txt file. To get started, choose "Add Task" from the menu and add your todo item. If you've already got a todo.txt file, just copy and paste it into your Dropbox/ folder, then choose "Sync" from the menu in the Android app to load your tasks.
 
 When you edit, complete, prioritize, or delete a task, the app makes the changes to your todo.txt file and syncs those changes back to Dropbox. You can filter by project, context, or priority, search, and sort by todo ID, priority, or alphabetically.
 

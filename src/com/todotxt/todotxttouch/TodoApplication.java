@@ -1,6 +1,8 @@
 package com.todotxt.todotxttouch;
 
-import android.app.Activity;
+import com.dropbox.client.DropboxAPI;
+import com.dropbox.client.DropboxAPI.Config;
+
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -8,24 +10,59 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.dropbox.client.DropboxClient;
-import com.dropbox.client.DropboxClientHelper;
-
 public class TodoApplication extends Application implements
 		OnSharedPreferenceChangeListener {
 
 	private final static String TAG = TodoApplication.class.getSimpleName();
 
 	public SharedPreferences m_prefs;
-	private DropboxClient m_client;
+	private DropboxAPI m_api = new DropboxAPI();
+	private Config m_config;
+	public boolean m_loggedIn = false;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
 		m_prefs.registerOnSharedPreferenceChangeListener(this);
+
+		String[] user_auth_keys = getAuthKeys();
+		if (user_auth_keys[0] == null || user_auth_keys[1] == null) {
+			m_loggedIn = false;
+		} else {
+			m_loggedIn = true;
+		}
+
+		authenticate();
+	}
+
+	private boolean authenticate() {
+		if (m_config == null)
+			m_config = getConfig();
+
+		String[] user_auth_keys = getAuthKeys();
+		if (user_auth_keys[0] != null && user_auth_keys[1] != null) {
+			m_config = m_api.authenticateToken(user_auth_keys[0],
+					user_auth_keys[1], m_config);
+			if (m_config != null)
+				return true;
+		}
+		clearKeys();
+		m_loggedIn = false;
+		return false;
+	}
+
+	private void clearKeys() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private String[] getAuthKeys() {
+		String[] keys = { null, null };
+		keys[0] = m_prefs.getString(Constants.PREF_ACCESSTOKEN_KEY, null);
+		keys[1] = m_prefs.getString(Constants.PREF_ACCESSTOKEN_SECRET, null);
+		return keys;
 	}
 
 	@Override
@@ -47,78 +84,29 @@ public class TodoApplication extends Application implements
 		}
 	}
 
-	public DropboxClient getClient(Activity cxt) {
-		if (m_client == null) {
-			initDropboxClient(cxt);
-		}
-		return m_client;
-	}
-
-	private void initDropboxClient(final Activity act) {
-		String accessToken = m_prefs.getString(Constants.PREF_ACCESSTOKEN_KEY,
-				null);
-		String accessTokenSecret = m_prefs.getString(
-				Constants.PREF_ACCESSTOKEN_SECRET, null);
-		if (!Util.isEmpty(accessToken) && !Util.isEmpty(accessTokenSecret)) {
+	protected Config getConfig() {
+		if (m_config == null) {
 			String consumerKey = getResources().getText(
 					R.string.dropbox_consumer_key).toString();
 			String consumerSecret = getText(R.string.dropbox_consumer_secret)
 					.toString();
-			Log.i(TAG, "Using Dropbox key " + consumerKey + " and secret "
-					+ consumerSecret);
-			DropboxClient tempClient = DropboxClientHelper
-					.newAuthenticatedClient(consumerKey, consumerSecret,
-							accessToken, accessTokenSecret);
-			boolean valid = DropboxClientHelper.isValidClient(tempClient);
-			if (valid) {
-				m_client = tempClient;
-				return;
-			}
+
+			m_config = m_api.getConfig(null, false);
+			m_config.consumerKey = consumerKey;
+			m_config.consumerSecret = consumerSecret;
+			m_config.server = "api.dropbox.com";
+			m_config.contentServer = "api-content.dropbox.com";
+			m_config.port = 80;
+
 		}
-		// Show login dialog
-		act.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				Util.LoginDialogListener dialogListener = new Util.LoginDialogListener() {
-					@Override
-					public void onClick(String username, String password) {
-						try {
-							String consumerKey = getResources().getText(
-									R.string.dropbox_consumer_key).toString();
-							String consumerSecret = getResources().getText(
-									R.string.dropbox_consumer_secret)
-									.toString();
-							Log.i(TAG, "Using Dropbox key " + consumerKey
-									+ " and secret " + consumerSecret);
-							DropboxClient tempClient = DropboxClientHelper
-									.newClient(consumerKey, consumerSecret,
-											username, password);
-							boolean valid = DropboxClientHelper
-									.isValidClient(tempClient);
-							if (valid) {
-								Editor editor = m_prefs.edit();
-								editor.putString(
-										Constants.PREF_ACCESSTOKEN_KEY,
-										tempClient.getAccessToken());
-								editor.putString(
-										Constants.PREF_ACCESSTOKEN_SECRET,
-										tempClient.getAccessTokenSecret());
-								editor.commit();
-								m_client = tempClient;
-							}
-						} catch (Exception e) {
-							Util.showToastLong(TodoApplication.this,
-									"Could not create Dropbox client!");
-							Log.i(TAG,
-									"Could not create Dropbox client! Exception details: "
-											+ e.getLocalizedMessage());
-						}
-					}
-				};
-				Util.showLoginDialog(act, R.string.dropbox_authentication,
-						R.string.login, "", dialogListener,
-						R.drawable.menu_sync);
-			}
-		});
+		return m_config;
+	}
+
+	public DropboxAPI getAPI() {
+		return m_api;
+	}
+
+	public void setConfig(Config authenticate) {
+		m_config = authenticate;
 	}
 }
