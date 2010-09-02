@@ -267,6 +267,46 @@ public class Util {
 		builder.show();
 	}
 
+    public interface LoginDialogListener {
+		void onClick(String username, String password);
+	}
+
+	public static void showLoginDialog(Context cxt, int titleid, int msgid,
+			String defaultusername, final LoginDialogListener listener, int icon) {
+		LayoutInflater factory = LayoutInflater.from(cxt);
+		final View textEntryView = factory.inflate(R.layout.logindialog, null);
+		final TextView usernameTV = (TextView) textEntryView
+				.findViewById(R.id.username);
+		final TextView passwordTV = (TextView) textEntryView
+				.findViewById(R.id.password);
+		usernameTV.setText(defaultusername);
+		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+		if (icon > 0) {
+			builder.setIcon(icon);
+		}
+		// builder.setTitle(cxt.getPackageName());
+		builder.setTitle(titleid);
+		builder.setMessage(msgid);
+		builder.setView(textEntryView);
+		builder.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						if (listener != null) {
+							String username = usernameTV.getText().toString();
+							String password = passwordTV.getText().toString();
+							listener.onClick(username, password);
+						}
+					}
+				});
+		builder.setNegativeButton(R.string.cancel,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+					}
+				});
+		builder.setCancelable(true);
+		builder.show();
+	}
+
 	public static void createParentDirectory(File dest)
 			throws TodoException {
 		if (dest == null) {

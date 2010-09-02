@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="login">Login</string>
+    <string name="dropbox_authentication">Dropbox Authentication</string>
     <string name="added_task">Added task</string>
     <string name="add_task_failed">Could not add task</string>
     <string name="updated_task">Updated task</string>
@@ -27,14 +29,8 @@
     <string name="cancel">Cancel</string>
     <string name="areyousure">Are you sure?</string>
     <string name="search_summary">Enter text to search for.</string>
-    <string name="todourl_key">editTextPref</string>
-    <string name="todourl_title">Todo.txt Location:</string>
-    <string name="todourl_summary">The URL of your todo.txt file</string>
-    <string name="todourl_default">http://ginatrapani.github.com/todo.txt-touch/todo.txt</string>
-    <string name="username_key">dropboxusername</string>
-    <string name="username_title">Dropbox username:</string>
-    <string name="username_summary">Your Dropbox username</string>
-    <string name="password_key">dropboxpassword</string>
-    <string name="password_title">Dropbox password</string>
-    <string name="password_summary">Your Dropbox password</string>
+    <!-- preferences -->
+    <string name="PREFCLEAR_key">prefclear</string>
+    <string name="PREFCLEAR_title">Logout</string>
+    <string name="PREFCLEAR_summary">Logout dropbox user</string>
 </resources>

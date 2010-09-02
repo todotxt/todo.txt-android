@@ -9,6 +9,10 @@ public class Constants {
 	public static final String CONSUMER_KEY = "24uvvbp09jcgkv0";
 	public static final String CONSUMER_SECRET = "arl24x8l1jgqy7p";
 	
+	public static final String PREF_FIRSTRUN = "firstrun";
+	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";
+	public static final String PREF_ACCESSTOKEN_SECRET = "accesstokensecret";
+
 	public static final String REMOTE_FILE = "/todo.txt";
 
 	public final static File TODOFILE = new File(Environment

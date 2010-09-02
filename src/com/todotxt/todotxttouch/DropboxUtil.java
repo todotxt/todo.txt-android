@@ -11,31 +11,7 @@ import com.dropbox.client.DropboxClientHelper;
 public class DropboxUtil {
 
 	private final static String TAG = DropboxUtil.class.getSimpleName();
-	
-	public static class DropboxProvider {
-		private String consumerKey;
-		private String consumerSecret;
-		private String username;
-		private String password;
-		private DropboxClient client;
-		public DropboxProvider(String consumerKey,
-				String consumerSecret, String username, String password){
-			this.consumerSecret = consumerSecret;
-			this.consumerKey = consumerKey;
-			this.username = username;
-			this.password = password;
-		}
-		public DropboxClient get() throws Exception{
-			synchronized (DropboxClient.class) {
-				if(client == null){
-					client = DropboxClientHelper.newClient(consumerKey,
-							consumerSecret, username, password);
-				}
-			}
-			return client;
-		}
-	}
-	
+
 	public static boolean addTask(DropboxClient client, String input) {
 		if (client != null) {
 			ArrayList<Task> tasks = null;

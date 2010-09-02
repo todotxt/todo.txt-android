@@ -16,8 +16,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -39,7 +42,7 @@ import com.dropbox.client.DropboxClient;
 import com.dropbox.client.DropboxClientHelper;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
-public class TodoTxtTouch extends ListActivity {
+public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChangeListener {
 
 	private final static String TAG = TodoTxtTouch.class.getSimpleName();
 	
@@ -50,6 +53,7 @@ public class TodoTxtTouch extends ListActivity {
 	private ProgressDialog m_ProgressDialog = null;
 	private ArrayList<Task> m_tasks = new ArrayList<Task>();
 	private TaskAdapter m_adapter;
+	private TodoApplication m_app;
 
 	//filter variables
 	private ArrayList<String> m_prios = new ArrayList<String>();
@@ -66,18 +70,36 @@ public class TodoTxtTouch extends ListActivity {
 		
 		setContentView(R.layout.main);
 
+		m_app = (TodoApplication) getApplication();
+		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
+
 		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks,
 				getLayoutInflater());
 
 		setListAdapter(this.m_adapter);
 
-		//FIXME ?
+		//FIXME adapter implements Filterable?
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 
 		getListView().setOnCreateContextMenuListener(this);
 
-		populateFromFile();
+		boolean firstrun = m_app.m_prefs.getBoolean(Constants.PREF_FIRSTRUN, true);
+		if(firstrun){
+    		Log.i(TAG, "Initializing app");
+    		Editor editor = m_app.m_prefs.edit();
+    		editor.putBoolean(Constants.PREF_FIRSTRUN, false);
+    		editor.commit();
+        	populateFromExternal();
+		}else{
+			populateFromFile();
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		m_app.m_prefs.unregisterOnSharedPreferenceChangeListener(this);
 	}
 	
 	@Override
@@ -86,6 +108,16 @@ public class TodoTxtTouch extends ListActivity {
 		setFilteredTasks(true);
 	}
 	
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		Log.v(TAG, "onSharedPreferenceChanged key="+key);
+		if(Constants.PREF_ACCESSTOKEN_SECRET.equals(key)) {
+			Log.i(TAG, "New access token secret. Syncing!");
+			populateFromExternal();
+		}
+	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -145,13 +177,15 @@ public class TodoTxtTouch extends ListActivity {
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								TodoApplication app = (TodoApplication) getApplication();
-								return DropboxUtil.updateTask(app.m_client.get(),
-										TaskHelper.NONE, "", task);
+								DropboxClient client = m_app.getClient(TodoTxtTouch.this);
+								if(client != null){
+									return DropboxUtil.updateTask(client,
+											TaskHelper.NONE, "", task);
+								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
-								return false;
 							}
+							return false;
 						}
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
@@ -182,18 +216,21 @@ public class TodoTxtTouch extends ListActivity {
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								TodoApplication app = (TodoApplication) getApplication();
 								if(task.text.startsWith(TaskHelper.COMPLETED)){
 									return true;
 								}else{
 									String format = TaskHelper.DATEFORMAT.format(new Date());
 									String text = TaskHelper.COMPLETED +format+task.text;
-									return DropboxUtil.updateTask(app.m_client.get(), TaskHelper.NONE, text, task);
+									DropboxClient client = m_app.getClient(TodoTxtTouch.this);
+									if(client != null){
+										return DropboxUtil.updateTask(client,
+												TaskHelper.NONE, text, task);
+									}
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
-								return false;
 							}
+							return false;
 						}
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
@@ -230,14 +267,16 @@ public class TodoTxtTouch extends ListActivity {
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								TodoApplication app = (TodoApplication) getApplication();
-								return DropboxUtil.updateTask(app.m_client
-										.get(), prioArr[which].charAt(0),
-										task.text, task);
+								DropboxClient client = m_app.getClient(TodoTxtTouch.this);
+								if(client != null) {
+									return DropboxUtil.updateTask(client,
+											prioArr[which].charAt(0), task.text,
+											task);
+								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
-								return false;
 							}
+							return false;
 						}
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
@@ -434,8 +473,7 @@ public class TodoTxtTouch extends ListActivity {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					TodoApplication app = (TodoApplication) getApplication();
-					DropboxClient client = app.m_client != null ? app.m_client.get() : null;
+					DropboxClient client = m_app.getClient(TodoTxtTouch.this);
 					if(client != null){
 						try{
 							InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
@@ -455,7 +493,7 @@ public class TodoTxtTouch extends ListActivity {
 							});
 						}
 					}else{
-						m_tasks = TodoUtil.loadTasksFromUrl(app.m_fileUrl);
+						Log.w(TAG, "Could not get tasks!");
 					}
 					TodoUtil.writeToFile(m_tasks, Constants.TODOFILE);
 					return true;
