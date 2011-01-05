@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import com.dropbox.client.DropboxClient;
+
 public class AddTask extends Activity {
 	
 	private final static String TAG = AddTask.class.getSimpleName();
@@ -143,17 +145,19 @@ public class AddTask extends Activity {
 					protected Boolean doInBackground(Void... params) {
 						try {
 							TodoApplication app = (TodoApplication) getApplication();
-							if(m_backup != null){
-								Task updatedTask = TaskHelper.createTask(m_backup.id, input);
-								return DropboxUtil.updateTask(app.m_client.get(), updatedTask.prio, input, m_backup);
-							}else{
-								return DropboxUtil.addTask(app.m_client.get(), input);
+							DropboxClient client = app.getClient(AddTask.this);
+							if(client != null){
+								if(m_backup != null){
+									Task updatedTask = TaskHelper.createTask(m_backup.id, input);
+									return DropboxUtil.updateTask(client, updatedTask.prio, input, m_backup);
+								}else{
+									return DropboxUtil.addTask(client, input);
+								}
 							}
 						} catch (Exception e) {
-							Log.e(TAG, "input: "+input);
-							Log.e(TAG, e.getMessage(), e);
-							return false;
+							Log.e(TAG, "input: "+input+" - "+e.getMessage());
 						}
+						return false;
 					}
 					protected void onPostExecute(Boolean result) {
 						m_ProgressDialog.dismiss();
