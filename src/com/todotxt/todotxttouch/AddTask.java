@@ -19,7 +19,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.dropbox.client.DropboxClient;
 
 public class AddTask extends Activity {
-	
+
 	private final static String TAG = AddTask.class.getSimpleName();
 
 	private ProgressDialog m_ProgressDialog = null;
@@ -31,7 +31,7 @@ public class AddTask extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.add_task);
-		
+
 		ArrayList<Task> tasks;
 		try {
 			tasks = TodoUtil.loadTasksFromFile();
@@ -39,50 +39,53 @@ public class AddTask extends Activity {
 			Log.e(TAG, e.getMessage(), e);
 			tasks = new ArrayList<Task>();
 		}
-		
-		//text
+
+		// text
 		final EditText text = (EditText) findViewById(R.id.taskText);
-		Task task = (Task) getIntent().getSerializableExtra(Constants.EXTRA_TASK);
-		if(task != null){
+		Task task = (Task) getIntent().getSerializableExtra(
+				Constants.EXTRA_TASK);
+		if (task != null) {
 			m_backup = task;
 			text.setText(TaskHelper.toFileFormat(task));
 			setTitle(R.string.update);
-		}else{
+		} else {
 			setTitle(R.string.addtask);
 		}
 
-		//priorities
+		// priorities
 		Spinner priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add("Priorities");
-		prioArr.add(""+TaskHelper.NONE);
+		prioArr.add("" + TaskHelper.NONE);
 		for (char c = 'A'; c <= 'Z'; c++) {
-			prioArr.add(""+c);
+			prioArr.add("" + c);
 		}
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
-		if(m_backup != null && m_backup.prio >= 'A'){
-			priorities.setSelection(2+m_backup.prio-'A');
+		if (m_backup != null && m_backup.prio >= 'A') {
+			priorities.setSelection(2 + m_backup.prio - 'A');
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
-				if(position > 0){
+				if (position > 0) {
 					String item = prioArr.get(position);
 					String t = text.getText().toString();
 					Task task = TaskHelper.createTask(-1, t);
 					task.prio = item.charAt(0);
-					if(Util.isEmpty(t) && task.prio != TaskHelper.NONE){
+					if (Util.isEmpty(t) && task.prio != TaskHelper.NONE) {
 						task.text = ".";
 					}
 					text.setText(TaskHelper.toFileFormat(task));
 				}
 			}
+
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {}
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
 		});
 
-		//projects
+		// projects
 		Spinner projects = (Spinner) findViewById(R.id.projects);
 		final ArrayList<String> projectsArr = TaskHelper.getProjects(tasks);
 		projectsArr.add(0, "Projects");
@@ -91,16 +94,18 @@ public class AddTask extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
-				if(position > 0){
+				if (position > 0) {
 					String item = projectsArr.get(position);
-					text.append("+"+item+" ");
+					text.append("+" + item + " ");
 				}
 			}
+
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {}
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
 		});
 
-		//contexts
+		// contexts
 		Spinner contexts = (Spinner) findViewById(R.id.contexts);
 		final ArrayList<String> contextsArr = TaskHelper.getContexts(tasks);
 		contextsArr.add(0, "Contexts");
@@ -109,16 +114,18 @@ public class AddTask extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
-				if(position > 0){
+				if (position > 0) {
 					String item = contextsArr.get(position);
-					text.append("@"+item+" ");
+					text.append("@" + item + " ");
 				}
 			}
+
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {}
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
 		});
 
-		//cancel
+		// cancel
 		Button cancel = (Button) findViewById(R.id.cancel);
 		cancel.setOnClickListener(new OnClickListener() {
 			@Override
@@ -126,47 +133,52 @@ public class AddTask extends Activity {
 				finish();
 			}
 		});
-		
-		//add
+
+		// add
 		Button addBtn = (Button) findViewById(R.id.addTask);
-		if(m_backup != null){
+		if (m_backup != null) {
 			addBtn.setText(R.string.update);
 		}
 		addBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				final String input = text.getText().toString();
-				new AsyncTask<Void, Void, Boolean>(){
+				new AsyncTask<Void, Void, Boolean>() {
 					protected void onPreExecute() {
-		    			m_ProgressDialog = ProgressDialog.show(AddTask.this,
-		    					getTitle(), "Please wait...", true);
+						m_ProgressDialog = ProgressDialog.show(AddTask.this,
+								getTitle(), "Please wait...", true);
 					}
+
 					@Override
 					protected Boolean doInBackground(Void... params) {
 						try {
 							TodoApplication app = (TodoApplication) getApplication();
 							DropboxClient client = app.getClient(AddTask.this);
-							if(client != null){
-								if(m_backup != null){
-									Task updatedTask = TaskHelper.createTask(m_backup.id, input);
-									return DropboxUtil.updateTask(client, updatedTask.prio, input, m_backup);
-								}else{
+							if (client != null) {
+								if (m_backup != null) {
+									Task updatedTask = TaskHelper.createTask(
+											m_backup.id, input);
+									return DropboxUtil.updateTask(client,
+											updatedTask.prio, input, m_backup);
+								} else {
 									return DropboxUtil.addTask(client, input);
 								}
 							}
 						} catch (Exception e) {
-							Log.e(TAG, "input: "+input+" - "+e.getMessage());
+							Log.e(TAG,
+									"input: " + input + " - " + e.getMessage());
 						}
 						return false;
 					}
+
 					protected void onPostExecute(Boolean result) {
 						m_ProgressDialog.dismiss();
-						if(result){
+						if (result) {
 							String res = m_backup != null ? getString(R.string.updated_task)
 									: getString(R.string.added_task);
 							Util.showToastLong(AddTask.this, res);
 							finish();
-						}else{
+						} else {
 							String res = m_backup != null ? getString(R.string.update_task_failed)
 									: getString(R.string.add_task_failed);
 							Util.showToastLong(AddTask.this, res);

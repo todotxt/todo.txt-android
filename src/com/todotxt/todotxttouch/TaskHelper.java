@@ -13,47 +13,61 @@ import java.util.regex.Pattern;
 import android.util.Log;
 
 public class TaskHelper {
-	
+
 	private final static String TAG = TaskHelper.class.getSimpleName();
-	
+
 	public final static char NONE = '-';
 
 	public final static String COMPLETED = "x ";
 
-	public final static SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd ");
+	public final static SimpleDateFormat DATEFORMAT = new SimpleDateFormat(
+			"yyyy-MM-dd ");
 
-	private final static Pattern prioPattern = Pattern.compile("\\(([A-Z])\\) (.*)");
+	private final static Pattern prioPattern = Pattern
+			.compile("\\(([A-Z])\\) (.*)");
 
 	private final static Pattern contextPattern = Pattern.compile("@(\\w+)");
 
 	private final static Pattern projectPattern = Pattern.compile("\\+(\\w+)");
 
-	public static Task createTask(long id, String line){
-		//prio and text
+	private final static Pattern prependedDatePattern = Pattern
+			.compile("(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
+
+	public static Task createTask(long id, String line) {
+		// prio and text
 		Matcher m = prioPattern.matcher(line);
 		char prio = NONE;
 		String text;
-		if(m.find()){
+		String prepended_date = "";
+		if (m.find()) {
 			prio = m.group(1).charAt(0);
 			text = m.group(2);
-		}else{
+		} else {
 			text = line;
 		}
-		return new Task(id, prio, text.trim());
+		// prepended date
+		Matcher match_prepended_date = prependedDatePattern.matcher(text);
+		if (match_prepended_date.find()) {
+			text = match_prepended_date.group(0).substring(11);
+			Log.i(TAG, "Date " + match_prepended_date.group(0).substring(0, 10)
+					+ " found in line " + text);
+			prepended_date = match_prepended_date.group(0).substring(0, 10);
+		}
+		return new Task(id, prio, prepended_date, text.trim());
 	}
-	
-	public static List<String> getContexts(String text){
+
+	public static List<String> getContexts(String text) {
 		return getItems(contextPattern, text);
 	}
 
-	public static List<String> getProjects(String text){
+	public static List<String> getProjects(String text) {
 		return getItems(projectPattern, text);
 	}
 
-	private static List<String> getItems(Pattern p, String text){
+	private static List<String> getItems(Pattern p, String text) {
 		Matcher m = p.matcher(text);
 		List<String> projects = new ArrayList<String>();
-		while(m.find()){
+		while (m.find()) {
 			String project = m.group(1);
 			projects.add(project);
 		}
@@ -76,10 +90,12 @@ public class TaskHelper {
 			if (arg0 != null && arg1 != null) {
 				if (arg0.prio == TaskHelper.NONE
 						|| arg1.prio == TaskHelper.NONE) {
-					//Put prio NONE last.
-					return new Character(arg1.prio).compareTo(new Character(arg0.prio));
-				}else{
-					return new Character(arg0.prio).compareTo(new Character(arg1.prio));
+					// Put prio NONE last.
+					return new Character(arg1.prio).compareTo(new Character(
+							arg0.prio));
+				} else {
+					return new Character(arg0.prio).compareTo(new Character(
+							arg1.prio));
 				}
 			}
 			return -1;
@@ -89,9 +105,9 @@ public class TaskHelper {
 	public static Comparator<Task> byText = new Comparator<Task>() {
 		@Override
 		public int compare(Task arg0, Task arg1) {
-			try{
+			try {
 				return arg0.text.compareTo(arg1.text);
-			}catch(Exception e){
+			} catch (Exception e) {
 				Log.e(TAG, e.getMessage(), e);
 			}
 			return -1;
@@ -115,7 +131,7 @@ public class TaskHelper {
 	public static List<Task> getByPrio(List<Task> items, List<String> prios) {
 		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
-			if (prios.contains(""+item.prio)) {
+			if (prios.contains("" + item.prio)) {
 				res.add(item);
 			}
 		}
@@ -132,7 +148,8 @@ public class TaskHelper {
 		return res;
 	}
 
-	public static List<Task> getByContext(List<Task> items, List<String> contexts) {
+	public static List<Task> getByContext(List<Task> items,
+			List<String> contexts) {
 		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
 			for (String cxt : item.contexts) {
@@ -145,7 +162,8 @@ public class TaskHelper {
 		return res;
 	}
 
-	public static List<Task> getByProject(List<Task> items, List<String> projects) {
+	public static List<Task> getByProject(List<Task> items,
+			List<String> projects) {
 		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
 			for (String cxt : item.projects) {
@@ -161,7 +179,7 @@ public class TaskHelper {
 	public static List<Task> getByText(List<Task> items, String text) {
 		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
-			if(item.text.contains(text)){
+			if (item.text.contains(text)) {
 				res.add(item);
 			}
 		}
@@ -172,14 +190,14 @@ public class TaskHelper {
 		text = text.toUpperCase();
 		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
-			if(item.text.toUpperCase().contains(text)){
+			if (item.text.toUpperCase().contains(text)) {
 				res.add(item);
 			}
 		}
 		return res;
 	}
 
-	public static ArrayList<String> getPrios(List<Task> items){
+	public static ArrayList<String> getPrios(List<Task> items) {
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
 			res.add(toString(item.prio));
@@ -189,7 +207,7 @@ public class TaskHelper {
 		return ret;
 	}
 
-	public static ArrayList<String> getContexts(List<Task> items){
+	public static ArrayList<String> getContexts(List<Task> items) {
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
 			res.addAll(item.contexts);
@@ -199,7 +217,7 @@ public class TaskHelper {
 		return ret;
 	}
 
-	public static ArrayList<String> getProjects(List<Task> items){
+	public static ArrayList<String> getProjects(List<Task> items) {
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
 			res.addAll(item.projects);
@@ -211,12 +229,15 @@ public class TaskHelper {
 
 	public static String toFileFormat(Task task) {
 		StringBuilder sb = new StringBuilder();
-		if(!TaskHelper.isDeleted(task)) {
-			if(!TaskHelper.isCompleted(task)){
+		if (!TaskHelper.isDeleted(task)) {
+			if (!TaskHelper.isCompleted(task)) {
 				if (task.prio >= 'A' && task.prio <= 'Z') {
 					sb.append("(");
 					sb.append(task.prio);
 					sb.append(") ");
+				}
+				if (!task.prepended_date.equalsIgnoreCase("")) {
+					sb.append(task.prepended_date + " ");
 				}
 			}
 			sb.append(task.text);
@@ -229,9 +250,9 @@ public class TaskHelper {
 	 * @param task
 	 * @return old task or null
 	 */
-	public static Task updateById(List<Task> tasks, Task task){
+	public static Task updateById(List<Task> tasks, Task task) {
 		for (Task task2 : tasks) {
-			if(task.id == task2.id){
+			if (task.id == task2.id) {
 				Task backup = copy(task2);
 				copy(task, task2);
 				return backup;
@@ -240,11 +261,11 @@ public class TaskHelper {
 		return null;
 	}
 
-	public static Task copy(Task src){
-		return new Task(src.id, src.prio, src.text);
+	public static Task copy(Task src) {
+		return new Task(src.id, src.prio, src.prepended_date, src.text);
 	}
-	
-	public static void copy(Task src, Task dest){
+
+	public static void copy(Task src, Task dest) {
 		dest.id = src.id;
 		dest.contexts = src.contexts;
 		dest.prio = src.prio;
@@ -252,20 +273,20 @@ public class TaskHelper {
 		dest.text = src.text;
 	}
 
-	public static Task find(List<Task> tasks, Task task){
+	public static Task find(List<Task> tasks, Task task) {
 		for (Task task2 : tasks) {
-			if(task2.text.equals(task.text) && task2.prio == task.prio){
+			if (task2.text.equals(task.text) && task2.prio == task.prio) {
 				return copy(task2);
 			}
 		}
 		return null;
 	}
 
-	public static boolean isDeleted(Task task){
+	public static boolean isDeleted(Task task) {
 		return Util.isEmpty(task.text);
 	}
 
-	public static boolean isCompleted(Task task){
+	public static boolean isCompleted(Task task) {
 		return task.text.startsWith(COMPLETED);
 	}
 

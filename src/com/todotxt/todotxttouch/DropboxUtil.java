@@ -30,19 +30,20 @@ public class DropboxUtil {
 		return false;
 	}
 
-	public static boolean updateTask(DropboxClient client, 
-			char prio, String input, Task backup) {
+	public static boolean updateTask(DropboxClient client, char prio,
+			String input, Task backup) {
 		if (client != null) {
 			Task t = TaskHelper.createTask(backup.id, input);
 			t.prio = prio;
 			try {
 				ArrayList<Task> tasks = fetchTasks(client);
 				Task found = TaskHelper.find(tasks, backup);
-				if(found != null){
+				if (found != null) {
 					t.id = found.id;
 					TaskHelper.updateById(tasks, t);
 					TodoUtil.writeToFile(tasks, Constants.TODOFILETMP);
-					DropboxClientHelper.putFile(client, "/", Constants.TODOFILETMP);
+					DropboxClientHelper.putFile(client, "/",
+							Constants.TODOFILETMP);
 					TodoUtil.writeToFile(tasks, Constants.TODOFILE);
 					return true;
 				}
@@ -53,8 +54,10 @@ public class DropboxUtil {
 		return false;
 	}
 
-	public static ArrayList<Task> fetchTasks(DropboxClient client) throws Exception {
-		InputStream is = DropboxClientHelper.getFileStream(client, Constants.REMOTE_FILE);
+	public static ArrayList<Task> fetchTasks(DropboxClient client)
+			throws Exception {
+		InputStream is = DropboxClientHelper.getFileStream(client,
+				Constants.REMOTE_FILE);
 		return TodoUtil.loadTasksFromStream(is);
 	}
 

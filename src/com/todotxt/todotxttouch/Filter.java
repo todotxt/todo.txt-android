@@ -28,23 +28,29 @@ public class Filter extends TabActivity {
 		LayoutInflater.from(this).inflate(R.layout.filter,
 				tabHost.getTabContentView(), true);
 
-		tabHost.addTab(tabHost.newTabSpec("Priorities").setIndicator("Priorities")
-				.setContent(R.id.priorities));
+		tabHost.addTab(tabHost.newTabSpec("Priorities")
+				.setIndicator("Priorities").setContent(R.id.priorities));
 		tabHost.addTab(tabHost.newTabSpec("Projects").setIndicator("Projects")
 				.setContent(R.id.projects));
 		tabHost.addTab(tabHost.newTabSpec("Contexts").setIndicator("Contexts")
 				.setContent(R.id.contexts));
 		tabHost.addTab(tabHost.newTabSpec("Search").setIndicator("Search")
 				.setContent(R.id.search));
-		
-		Intent data = getIntent();
-		ArrayList<String> priosArr = data.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
-		ArrayList<String> projectsArr = data.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
-		ArrayList<String> contextsArr = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
 
-		ArrayList<String> priosArrSelected = data.getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED);
-		ArrayList<String> projectsArrSelected = data.getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED);
-		ArrayList<String> contextsArrSelected = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED);
+		Intent data = getIntent();
+		ArrayList<String> priosArr = data
+				.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
+		ArrayList<String> projectsArr = data
+				.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
+		ArrayList<String> contextsArr = data
+				.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
+
+		ArrayList<String> priosArrSelected = data
+				.getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED);
+		ArrayList<String> projectsArrSelected = data
+				.getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED);
+		ArrayList<String> contextsArrSelected = data
+				.getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED);
 
 		String searchTerm = data.getStringExtra(Constants.EXTRA_SEARCH);
 
@@ -75,10 +81,14 @@ public class Filter extends TabActivity {
 			public void onClick(View v) {
 				Log.v(TAG, "onClick OK");
 				Intent data = new Intent();
-				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES, getItems(priorities));
-				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS, getItems(projects));
-				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS, getItems(contexts));
-				data.putExtra(Constants.EXTRA_SEARCH, search.getText().toString());
+				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
+						getItems(priorities));
+				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
+						getItems(projects));
+				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
+						getItems(contexts));
+				data.putExtra(Constants.EXTRA_SEARCH, search.getText()
+						.toString());
 				setResult(Activity.RESULT_OK, data);
 				finish();
 			}
@@ -111,14 +121,14 @@ public class Filter extends TabActivity {
 		ArrayList<String> arr = new ArrayList<String>();
 		int size = adapter.getCount();
 		for (int i = 0; i < size; i++) {
-			if(adapter.isItemChecked(i)){
-				arr.add((String)adapter.getAdapter().getItem(i));
+			if (adapter.isItemChecked(i)) {
+				arr.add((String) adapter.getAdapter().getItem(i));
 			}
 		}
 		return arr;
 	}
 
-	private static void setSelected(ListView lv, ArrayList<String> selected){
+	private static void setSelected(ListView lv, ArrayList<String> selected) {
 		int count = lv.getCount();
 		for (int i = 0; i < count; i++) {
 			String str = (String) lv.getItemAtPosition(i);

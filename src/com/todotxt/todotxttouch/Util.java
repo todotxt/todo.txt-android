@@ -41,12 +41,12 @@ public class Util {
 
 	private Util() {
 	}
-	
-	public static boolean isEmpty(String in){
+
+	public static boolean isEmpty(String in) {
 		return in == null || in.length() == 0;
 	}
 
-	public static HttpParams getTimeoutHttpParams() {
+	public static HttpParams getTimeoutHttpParams() { 
 		HttpParams params = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
 		HttpConnectionParams.setSoTimeout(params, SOCKET_TIMEOUT);
@@ -63,7 +63,7 @@ public class Util {
 			}
 		}
 	}
-	
+
 	public static InputStream getInputStreamFromUrl(String url)
 			throws ClientProtocolException, IOException {
 		HttpGet request = new HttpGet(url);
@@ -144,7 +144,7 @@ public class Util {
 		Toast.makeText(cxt, msg, Toast.LENGTH_SHORT).show();
 	}
 
-	public interface OnMultiChoiceDialogListener{
+	public interface OnMultiChoiceDialogListener {
 		void onClick(boolean[] selected);
 	}
 
@@ -152,16 +152,16 @@ public class Util {
 			CharSequence[] keys, boolean[] values, Integer titleId,
 			Integer iconId, final OnMultiChoiceDialogListener listener) {
 		final boolean[] res;
-		if(values == null){
+		if (values == null) {
 			res = new boolean[keys.length];
-		}else{
+		} else {
 			res = values;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
-		if(iconId != null){
+		if (iconId != null) {
 			builder.setIcon(iconId);
 		}
-		if(titleId != null){
+		if (titleId != null) {
 			builder.setTitle(titleId);
 		}
 		builder.setMultiChoiceItems(keys, values,
@@ -210,23 +210,21 @@ public class Util {
 		builder.show();
 	}
 
-	public static boolean isDeviceWritable()
-	{
+	public static boolean isDeviceWritable() {
 		String sdState = Environment.getExternalStorageState();
-		if(Environment.MEDIA_MOUNTED.equals(sdState)){
+		if (Environment.MEDIA_MOUNTED.equals(sdState)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-	
-	public static boolean isDeviceReadable()
-	{
+
+	public static boolean isDeviceReadable() {
 		String sdState = Environment.getExternalStorageState();
-		if(Environment.MEDIA_MOUNTED.equals(sdState) ||
-				Environment.MEDIA_MOUNTED_READ_ONLY.equals(sdState)){
+		if (Environment.MEDIA_MOUNTED.equals(sdState)
+				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(sdState)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -267,7 +265,7 @@ public class Util {
 		builder.show();
 	}
 
-    public interface LoginDialogListener {
+	public interface LoginDialogListener {
 		void onClick(String username, String password);
 	}
 
@@ -307,8 +305,7 @@ public class Util {
 		builder.show();
 	}
 
-	public static void createParentDirectory(File dest)
-			throws TodoException {
+	public static void createParentDirectory(File dest) throws TodoException {
 		if (dest == null) {
 			throw new TodoException("createParentDirectory: dest is null");
 		}
@@ -333,14 +330,14 @@ public class Util {
 		return adapter;
 	}
 
-	public static void setBold(SpannableString ss, List<String> items){
+	public static void setBold(SpannableString ss, List<String> items) {
 		String data = ss.toString();
 		for (String item : items) {
 			int i = data.indexOf(item);
-			if(i != -1){
-				//ss.setSpan(what, start, end, flags);
-				ss.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), i, 
-						i+item.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			if (i != -1) {
+				// ss.setSpan(what, start, end, flags);
+				ss.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), i, i
+						+ item.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
 	}
