@@ -115,7 +115,7 @@ public class TaskHelper {
 	};
 
 	public static String toString(char prio) {
-		return prio >= 'A' && prio <= 'Z' ? "" + prio : "" + NONE;
+		return prio >= 'A' && prio <= 'Z' ? "" + prio : "";
 	}
 
 	public static List<Task> getByPrio(List<Task> items, char prio) {

@@ -15,24 +15,25 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -509,7 +510,7 @@ public class TodoTxtTouch extends ListActivity implements
 							m_tasks = TodoUtil.loadTasksFromStream(is);
 						} catch (Exception e) {
 							Log.w(TAG,
-									"Failed to fetch todo file! Initializing dropbox support! "
+									"Failed to fetch todo.txt file while initializing Dropbox support! "
 											+ e.getMessage());
 							if (!Constants.TODOFILE.exists()) {
 								Util.createParentDirectory(Constants.TODOFILE);
@@ -589,30 +590,33 @@ public class TodoTxtTouch extends ListActivity implements
 			Task task = items.get(position);
 			if (task != null) {
 				holder.taskid.setText(String.format("%02d", task.id + 1));
-				holder.taskprio.setText("(" + TaskHelper.toString(task.prio)
-						+ ")");
+				if (TaskHelper.toString(task.prio).equalsIgnoreCase("")) {
+					holder.taskprio.setText("   ");
+				} else {
+					holder.taskprio.setText("("
+							+ TaskHelper.toString(task.prio) + ")");
+				}
 				SpannableString ss = new SpannableString(task.text);
 				Util.setBold(ss, TaskHelper.getProjects(task.text));
 				Util.setBold(ss, TaskHelper.getContexts(task.text));
 				holder.tasktext.setText(ss);
 
+				Resources res = getResources();
 				switch (task.prio) {
 				case 'A':
-					holder.taskprio.setTextColor(0xFFFF0000);
-					// convertView.setBackgroundColor(0xFFFF0000);
+					holder.taskprio.setTextColor(res.getColor(R.color.gold));
 					break;
 				case 'B':
-					holder.taskprio.setTextColor(0xFF00FF00);
-					// convertView.setBackgroundColor(0xFF00FF00);
+					holder.taskprio.setTextColor(res.getColor(R.color.green));
 					break;
 				case 'C':
-					holder.taskprio.setTextColor(0xFF0000FF);
-					// convertView.setBackgroundColor(0xFF0000FF);
+					holder.taskprio.setTextColor(res.getColor(R.color.blue));
 					break;
 				default:
-					holder.taskprio.setTextColor(0xFF555555);
-					// convertView.setBackgroundColor(0xFF000000);
+					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
+				// hide ID unless it's highlighted for a cleaner interface
+				holder.taskid.setTextColor(res.getColor(R.color.black));
 			}
 			return convertView;
 		}
