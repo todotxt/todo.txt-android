@@ -6,23 +6,20 @@ import android.os.Environment;
 
 public class Constants {
 
-	public static final String CONSUMER_KEY = "24uvvbp09jcgkv0";
-	public static final String CONSUMER_SECRET = "arl24x8l1jgqy7p";
-	
 	public static final String PREF_FIRSTRUN = "firstrun";
 	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";
 	public static final String PREF_ACCESSTOKEN_SECRET = "accesstokensecret";
 
 	public static final String REMOTE_FILE = "/todo.txt";
 
-	public final static File TODOFILE = new File(Environment
-			.getExternalStorageDirectory(),
+	public final static File TODOFILE = new File(
+			Environment.getExternalStorageDirectory(),
 			"data/com.todotxt.todotxttouch/todo.txt");
-	
-	public final static File TODOFILETMP = new File(Environment
-			.getExternalStorageDirectory(),
+
+	public final static File TODOFILETMP = new File(
+			Environment.getExternalStorageDirectory(),
 			"data/com.todotxt.todotxttouch/tmp/todo.txt");
-	
+
 	public final static long INVALID_ID = -1;
 	public final static int INVALID_POSITION = -1;
 
