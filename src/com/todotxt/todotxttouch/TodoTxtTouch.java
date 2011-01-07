@@ -204,7 +204,7 @@ public class TodoTxtTouch extends ListActivity implements
 							} else {
 								Util.showToastLong(
 										TodoTxtTouch.this,
-										"Coult not delete task "
+										"Could not delete task "
 												+ TaskHelper.toFileFormat(task));
 							}
 							setFilteredTasks(true);
@@ -259,7 +259,7 @@ public class TodoTxtTouch extends ListActivity implements
 							} else {
 								Util.showToastLong(
 										TodoTxtTouch.this,
-										"Coult not complete task "
+										"Could not complete task "
 												+ TaskHelper.toFileFormat(task));
 							}
 							setFilteredTasks(true);
@@ -312,7 +312,7 @@ public class TodoTxtTouch extends ListActivity implements
 												+ TaskHelper.toFileFormat(task));
 							} else {
 								Util.showToastLong(TodoTxtTouch.this,
-										"Coult not prioritize task "
+										"Could not prioritize task "
 												+ TaskHelper.toFileFormat(task));
 							}
 							setFilteredTasks(true);

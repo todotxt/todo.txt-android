@@ -6,11 +6,11 @@
     <string name="add_task_failed">Could not add task</string>
     <string name="updated_task">Updated task</string>
     <string name="update_task_failed">Could not update task</string>
-    <string name="initialized_dropbox">Initialized dropbox support! Check Dropbox/Todo.txt/todo.txt.</string>
+    <string name="initialized_dropbox">Initialized Dropbox support! Check Dropbox/Todo.txt/todo.txt.</string>
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
     <string name="app_name">Todo.txt Touch</string>
-    <string name="main_no_items">No to-do\'s to display</string>
+    <string name="main_no_items">No tasks located in your Dropbox/Todo.txt/todo.txt file. Tap "Add Task" from the menu or copy your existing todo.txt file into Dropbox to get started.</string>
     <string name="set_preferences">Todo.txt Preferences</string>
     <string name="preferences">Preferences</string>
     <string name="sync">Sync</string>
@@ -32,5 +32,5 @@
     <!-- preferences -->
     <string name="PREFCLEAR_key">prefclear</string>
     <string name="PREFCLEAR_title">Logout</string>
-    <string name="PREFCLEAR_summary">Logout dropbox user</string>
+    <string name="PREFCLEAR_summary">Select to logout of Dropbox</string>
 </resources>
