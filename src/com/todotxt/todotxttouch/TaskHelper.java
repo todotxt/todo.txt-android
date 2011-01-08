@@ -31,7 +31,7 @@ public class TaskHelper {
 	private final static Pattern projectPattern = Pattern.compile("\\+(\\w+)");
 
 	private final static Pattern prependedDatePattern = Pattern
-			.compile("(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
+			.compile("^(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
 
 	public static Task createTask(long id, String line) {
 		// prio and text

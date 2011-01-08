@@ -33,8 +33,9 @@ public class DropboxUtil {
 	public static boolean updateTask(DropboxClient client, char prio,
 			String input, Task backup) {
 		if (client != null) {
-			Task t = TaskHelper.createTask(backup.id, input);
+			Task t = TaskHelper.createTask(backup.id, backup.text);
 			t.prio = prio;
+			t.text = input;
 			try {
 				ArrayList<Task> tasks = fetchTasks(client);
 				Task found = TaskHelper.find(tasks, backup);
@@ -46,10 +47,14 @@ public class DropboxUtil {
 							Constants.TODOFILETMP);
 					TodoUtil.writeToFile(tasks, Constants.TODOFILE);
 					return true;
+				} else {
+					Log.v(TAG, "Task not found, not updated");
 				}
 			} catch (Exception e) {
 				Log.e(TAG, e.getMessage(), e);
 			}
+		} else {
+			Log.v(TAG, "Task not updated, client is null");
 		}
 		return false;
 	}

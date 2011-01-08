@@ -222,7 +222,7 @@ public class TodoTxtTouch extends ListActivity implements
 					new AsyncTask<Void, Void, Boolean>() {
 						protected void onPreExecute() {
 							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Done",
+									TodoTxtTouch.this, "Marking Task Done",
 									"Please wait...", true);
 						}
 
@@ -238,10 +238,9 @@ public class TodoTxtTouch extends ListActivity implements
 											+ task.text;
 									DropboxClient client = m_app
 											.getClient(TodoTxtTouch.this);
-									if (client != null) {
-										return DropboxUtil.updateTask(client,
-												TaskHelper.NONE, text, task);
-									}
+									Log.v(TAG, "Completing task with this text: " + text);
+									return DropboxUtil.updateTask(client,
+											TaskHelper.NONE, text, task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -304,10 +303,8 @@ public class TodoTxtTouch extends ListActivity implements
 						protected void onPostExecute(Boolean result) {
 							m_ProgressDialog.dismiss();
 							if (result) {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Prioritized task "
-												+ task.text);
+								Util.showToastLong(TodoTxtTouch.this,
+										"Prioritized task " + task.text);
 							} else {
 								Util.showToastLong(TodoTxtTouch.this,
 										"Could not prioritize task "
