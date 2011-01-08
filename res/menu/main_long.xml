@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="@string/update" android:id="@+id/update" />
-	<item android:title="@string/delete" android:id="@+id/delete" />
 	<item android:title="@string/done" android:id="@+id/done" />
 	<item android:title="@string/priority" android:id="@+id/priority" />
+	<item android:title="@string/update" android:id="@+id/update" />
+	<item android:title="@string/delete" android:id="@+id/delete" />
 </menu>

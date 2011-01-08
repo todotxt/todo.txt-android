@@ -272,6 +272,7 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "priority");
 			final String[] prioArr = { "" + TaskHelper.NONE, "A", "B", "C" };
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Select priority");
 			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, final int which) {
