@@ -270,20 +270,17 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		} else if (menuid == R.id.priority) {
 			Log.v(TAG, "priority");
-			final String[] prioArr = new String['Z' - 'A' + 1];
-			prioArr[0] = "" + TaskHelper.NONE;
-			for (char c = 0; c < prioArr.length; c++) {
-				prioArr[1 + c] = "" + ('A' + c);
-			}
+			final String[] prioArr = { "" + TaskHelper.NONE, "A", "B", "C" };
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setSingleChoiceItems(prioArr, -1, new OnClickListener() {
+			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, final int which) {
 					final Task task = m_adapter.getItem(pos);
+					dialog.dismiss();
 					new AsyncTask<Void, Void, Boolean>() {
 						protected void onPreExecute() {
 							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Priority",
+									TodoTxtTouch.this, "Setting Priority",
 									"Please wait...", true);
 						}
 
@@ -309,7 +306,7 @@ public class TodoTxtTouch extends ListActivity implements
 								Util.showToastLong(
 										TodoTxtTouch.this,
 										"Prioritized task "
-												+ TaskHelper.toFileFormat(task));
+												+ task.text);
 							} else {
 								Util.showToastLong(TodoTxtTouch.this,
 										"Could not prioritize task "
@@ -320,6 +317,7 @@ public class TodoTxtTouch extends ListActivity implements
 					}.execute();
 				}
 			});
+			builder.show();
 		}
 		return super.onContextItemSelected(item);
 	}
