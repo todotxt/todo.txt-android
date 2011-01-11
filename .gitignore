@@ -8,3 +8,4 @@ build.xml
 local.properties
 bin/
 gen/
+res/values/dropbox.xml

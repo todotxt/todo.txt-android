@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<TextView android:id="@+id/taskid" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:padding="4dip"
-		android:textSize="10dip" />
-
 	<TextView android:id="@+id/taskprio" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:padding="4dip"
-		android:textStyle="bold" android:textSize="16dip" android:layout_below="@id/taskid" />
+		android:textStyle="bold" android:textSize="16dip" />
+
+	<TextView android:id="@+id/taskid" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:padding="4dip"
+		android:textSize="10dip" android:layout_below="@id/taskprio" />
 
 	<TextView android:id="@+id/tasktext" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:padding="4dip"

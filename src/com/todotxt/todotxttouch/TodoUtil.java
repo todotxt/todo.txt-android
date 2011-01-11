@@ -13,9 +13,9 @@ import java.util.List;
 import android.util.Log;
 
 public class TodoUtil {
-	
+
 	private final static String TAG = TodoUtil.class.getSimpleName();
-	
+
 	public static ArrayList<Task> loadTasksFromUrl(String url)
 			throws IOException {
 		InputStream is = Util.getInputStreamFromUrl(url);
@@ -44,13 +44,13 @@ public class TodoUtil {
 		return items;
 	}
 
-	public static ArrayList<Task> loadTasksFromFile()
-			throws IOException {
+	public static ArrayList<Task> loadTasksFromFile() throws IOException {
 		ArrayList<Task> items = new ArrayList<Task>();
 		BufferedReader in = null;
-		if(!Constants.TODOFILE.exists()){
-			Log.w(TAG, Constants.TODOFILE.getAbsolutePath()+" does not exists!");
-		}else{
+		if (!Constants.TODOFILE.exists()) {
+			Log.w(TAG, Constants.TODOFILE.getAbsolutePath()
+					+ " does not exists!");
+		} else {
 			InputStream is = new FileInputStream(Constants.TODOFILE);
 			try {
 				in = new BufferedReader(new InputStreamReader(is));
@@ -71,15 +71,14 @@ public class TodoUtil {
 		return items;
 	}
 
-	public static void writeToFile(List<Task> tasks, File file){
-		try{
-			if(!Util.isDeviceWritable()){
+	public static void writeToFile(List<Task> tasks, File file) {
+		try {
+			if (!Util.isDeviceWritable()) {
 				throw new IOException("Device Not Writable!");
 			}
 			Util.createParentDirectory(file);
 			FileWriter fw = new FileWriter(file);
-			for(int i = 0; i < tasks.size(); ++i)
-			{
+			for (int i = 0; i < tasks.size(); ++i) {
 				String fileFormat = TaskHelper.toFileFormat(tasks.get(i));
 				fw.write(fileFormat);
 				fw.write("\n");

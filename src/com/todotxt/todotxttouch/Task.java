@@ -16,9 +16,12 @@ public class Task implements Serializable {
 
 	public List<String> projects;
 
-	public Task(long id, char prio, String text) {
+	public String prepended_date = "";
+
+	public Task(long id, char prio, String prepended_date, String text) {
 		this.id = id;
 		this.prio = prio;
+		this.prepended_date = prepended_date;
 		this.text = text;
 		this.contexts = TaskHelper.getContexts(text);
 		this.projects = TaskHelper.getProjects(text);
@@ -31,14 +34,15 @@ public class Task implements Serializable {
 		sb.append("[prio=").append(prio).append("]");
 		sb.append("[text=").append(text).append("]");
 		sb.append("[deleted=").append(TaskHelper.isDeleted(this)).append("]");
-		sb.append("[completed=").append(TaskHelper.isCompleted(this)).append("]");
-		//contexts
+		sb.append("[completed=").append(TaskHelper.isCompleted(this))
+				.append("]");
+		// contexts
 		sb.append("[contexts:");
 		for (String cxt : contexts) {
 			sb.append("[context=").append(cxt).append("]");
 		}
 		sb.append("]");
-		//projects
+		// projects
 		sb.append("[projects:");
 		for (String prj : projects) {
 			sb.append("[project=").append(prj).append("]");

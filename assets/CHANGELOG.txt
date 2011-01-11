@@ -1,3 +1,10 @@
+0.0.4:
+- Require Dropbox account.
+- Not storing dropbox credentials.
+
+0.0.3:
+- ?
+
 0.0.2:
 - Dropbox authorization bug fixed.
 - Filter clear button.
