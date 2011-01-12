@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="libs/apache-mime4j-0.4.jar"/>
-	<classpathentry kind="lib" path="libs/dropbox-api-1.0-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="libs/httpmime-4.0-beta1.jar"/>
-	<classpathentry kind="lib" path="libs/signpost-commonshttp4-1.2-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="libs/signpost-core-1.2-SNAPSHOT.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="lib" path="libs/dropbox-client-1.0-SNAPSHOT.jar" sourcepath="C:/Users/tormod.haugen/Downloads/dropbox-client-java-BETA.tar/dropbox-client-java"/>
+	<classpathentry kind="lib" path="libs/signpost-commonshttp4-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/signpost-core-1.2.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/json_simple-1.1.jar"/>
+	<classpathentry kind="lib" path="libs/apache-mime4j-0.6.jar"/>
+	<classpathentry kind="lib" path="libs/httpmime-4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

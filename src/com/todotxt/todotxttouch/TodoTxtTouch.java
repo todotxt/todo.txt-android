@@ -1,7 +1,6 @@
 package com.todotxt.todotxttouch;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,8 +38,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.dropbox.client.DropboxClient;
-import com.dropbox.client.DropboxClientHelper;
+import com.dropbox.client.DropboxAPI;
+import com.dropbox.client.DropboxAPI.FileDownload;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
 public class TodoTxtTouch extends ListActivity implements
@@ -93,7 +92,7 @@ public class TodoTxtTouch extends ListActivity implements
 			Editor editor = m_app.m_prefs.edit();
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
-			populateFromExternal();
+//			populateFromExternal();
 		} else {
 			populateFromFile();
 		}
@@ -182,10 +181,9 @@ public class TodoTxtTouch extends ListActivity implements
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								DropboxClient client = m_app
-										.getClient(TodoTxtTouch.this);
-								if (client != null) {
-									return DropboxUtil.updateTask(client,
+								DropboxAPI api = m_app.getAPI();
+								if (api != null) {
+									return DropboxUtil.updateTask(api,
 											TaskHelper.NONE, "", task);
 								}
 							} catch (Exception e) {
@@ -236,8 +234,8 @@ public class TodoTxtTouch extends ListActivity implements
 											.format(new Date());
 									String text = TaskHelper.COMPLETED + format
 											+ task.text;
-									DropboxClient client = m_app
-											.getClient(TodoTxtTouch.this);
+									DropboxAPI client = m_app
+											.getAPI();
 									Log.v(TAG, "Completing task with this text: " + text);
 									return DropboxUtil.updateTask(client,
 											TaskHelper.NONE, text, task);
@@ -287,10 +285,10 @@ public class TodoTxtTouch extends ListActivity implements
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								DropboxClient client = m_app
-										.getClient(TodoTxtTouch.this);
-								if (client != null) {
-									return DropboxUtil.updateTask(client,
+								DropboxAPI api = m_app
+										.getAPI();
+								if (api != null) {
+									return DropboxUtil.updateTask(api,
 											prioArr[which].charAt(0),
 											task.text, task);
 								}
@@ -498,22 +496,19 @@ public class TodoTxtTouch extends ListActivity implements
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					DropboxClient client = m_app.getClient(TodoTxtTouch.this);
-					if (client != null) {
-						try {
-							InputStream is = DropboxClientHelper.getFileStream(
-									client, Constants.REMOTE_FILE);
-							m_tasks = TodoUtil.loadTasksFromStream(is);
-						} catch (Exception e) {
-							Log.w(TAG,
-									"Failed to fetch todo.txt file while initializing Dropbox support! "
-											+ e.getMessage());
-							if (!Constants.TODOFILE.exists()) {
+					TodoApplication app = (TodoApplication) getApplication();
+					DropboxAPI api = app.getAPI();
+					if(api != null){
+						try{
+							FileDownload file = api.getFileStream(Constants.DROPBOX_MODUS, Constants.REMOTE_FILE, null);
+							m_tasks = TodoUtil.loadTasksFromStream(file.is);
+						}catch(Exception e){
+							Log.w(TAG, "Failed to fetch todo file! Initializing dropbox support!"+e.getMessage());
+							if(!Constants.TODOFILE.exists()){
 								Util.createParentDirectory(Constants.TODOFILE);
 								Constants.TODOFILE.createNewFile();
 							}
-							DropboxClientHelper.putFile(client, "/",
-									Constants.TODOFILE);
+							api.putFile(Constants.DROPBOX_MODUS, Constants.PATH_TO_TODO_TXT, Constants.TODOFILE);
 							runOnUiThread(new Runnable() {
 								@Override
 								public void run() {

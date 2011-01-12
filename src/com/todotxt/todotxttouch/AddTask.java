@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-import com.dropbox.client.DropboxClient;
+import com.dropbox.client.DropboxAPI;
 
 public class AddTask extends Activity {
 
@@ -153,15 +153,15 @@ public class AddTask extends Activity {
 					protected Boolean doInBackground(Void... params) {
 						try {
 							TodoApplication app = (TodoApplication) getApplication();
-							DropboxClient client = app.getClient(AddTask.this);
-							if (client != null) {
+							DropboxAPI api = app.getAPI();
+							if (api != null) {
 								if (m_backup != null) {
 									Task updatedTask = TaskHelper.createTask(
 											m_backup.id, input);
-									return DropboxUtil.updateTask(client,
+									return DropboxUtil.updateTask(api,
 											updatedTask.prio, input, m_backup);
 								} else {
-									return DropboxUtil.addTask(client, input);
+									return DropboxUtil.addTask(api, input);
 								}
 							}
 						} catch (Exception e) {

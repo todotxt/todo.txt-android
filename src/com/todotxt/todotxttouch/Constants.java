@@ -9,6 +9,8 @@ public class Constants {
 	public static final String PREF_FIRSTRUN = "firstrun";
 	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";
 	public static final String PREF_ACCESSTOKEN_SECRET = "accesstokensecret";
+	public static final String DROPBOX_MODUS = "dropbox";
+	public static final String PATH_TO_TODO_TXT = "/";
 
 	public static final String REMOTE_FILE = "/todo.txt";
 
