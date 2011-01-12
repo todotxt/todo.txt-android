@@ -40,22 +40,20 @@ import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
-import com.dropbox.client.DropboxAPI.FileDownload;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
-public class TodoTxtTouch extends ListActivity implements
-		OnSharedPreferenceChangeListener {
+public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChangeListener {
 
-	private final static String TAG = TodoTxtTouch.class.getSimpleName();
+	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
 	private final static int SORT_PRIO = 0;
 	private final static int SORT_ID = 1;
 	private final static int SORT_TEXT = 2;
 
-	private ProgressDialog m_ProgressDialog = null;
-	private ArrayList<Task> m_tasks = new ArrayList<Task>();
+	ProgressDialog m_ProgressDialog = null;
+	ArrayList<Task> m_tasks = new ArrayList<Task>();
 	private TaskAdapter m_adapter;
-	private TodoApplication m_app;
+	TodoApplication m_app;
 
 	// filter variables
 	private ArrayList<String> m_prios = new ArrayList<String>();
@@ -101,9 +99,9 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 	}
 
-	private void login() {
+	void login() {
 		final DropboxAPI api = getAPI();
-		if ( api.isAuthenticated() ) {
+		if ( api.isAuthenticated() && !m_app.m_loggedIn ) {
 			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this, m_app.getConfig());
 			loginTask.execute();
 		} else {
@@ -132,7 +130,6 @@ public class TodoTxtTouch extends ListActivity implements
 							R.drawable.menu_sync);
 				}
 			});
-
 		}
 	}
 
@@ -465,14 +462,14 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 	}
 
-	private void clearFilter() {
+	void clearFilter() {
 		m_prios = new ArrayList<String>(); // Collections.emptyList();
 		m_contexts = new ArrayList<String>(); // Collections.emptyList();
 		m_projects = new ArrayList<String>(); // Collections.emptyList();
 		m_search = "";
 	}
 
-	private void setFilteredTasks(boolean reload) {
+	void setFilteredTasks(boolean reload) {
 		if (reload) {
 			try {
 				m_tasks = TodoUtil.loadTasksFromFile();
@@ -523,68 +520,11 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	void populateFromExternal() {
-		new AsyncTask<Void, Void, Boolean>() {
-			@Override
-			protected void onPreExecute() {
-				if ( !m_app.getAPI().isAuthenticated() ) {
-					login();
-				} else {
-				m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-						"Please wait...", "Retrieving todo.txt ...", true);
-				}
-			}
-
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				try {
-					TodoApplication app = (TodoApplication) getApplication();
-					DropboxAPI api = app.getAPI();
-					if(api.isAuthenticated()){
-						try{
-							FileDownload file = api.getFileStream(Constants.DROPBOX_MODUS, Constants.REMOTE_FILE, null);
-							m_tasks = TodoUtil.loadTasksFromStream(file.is);
-						}catch(Exception e){
-							Log.w(TAG, "Failed to fetch todo file! Initializing dropbox support!"+e.getMessage());
-							if(!Constants.TODOFILE.exists()){
-								Util.createParentDirectory(Constants.TODOFILE);
-								Constants.TODOFILE.createNewFile();
-							}
-							api.putFile(Constants.DROPBOX_MODUS, Constants.PATH_TO_TODO_TXT, Constants.TODOFILE);
-							runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									Util.showToastLong(TodoTxtTouch.this,
-											R.string.initialized_dropbox);
-								}
-							});
-						}
-					} else {
-						Log.w(TAG, "Could not get tasks!");
-						return false;
-					}
-					TodoUtil.writeToFile(m_tasks, Constants.TODOFILE);
-					return true;
-				} catch (Exception e) {
-					Log.e(TAG, e.getMessage(), e);
-					return false;
-				}
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				if ( m_ProgressDialog == null ) return;
-				m_ProgressDialog.dismiss();
-				clearFilter();
-				setFilteredTasks(false);
-				Log.d(TAG, "populateFromUrl size=" + m_tasks.size());
-				if (!result) {
-					Util.showToastLong(TodoTxtTouch.this, "Sync failed");
-				} else {
-					Util.showToastShort(TodoTxtTouch.this, m_tasks.size()
-							+ " items");
-				}
-			}
-		}.execute();
+		if ( m_app.m_loggedIn ) {
+			new DropboxFetchAsyncTask(this).execute();
+		} else {
+			login();
+		}
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> {
@@ -667,7 +607,22 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	public void setConfig(Config config) {
-		m_app.setConfig(config);		
+		m_app.setConfig(config);
+	}
+
+	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
+		Editor editor = m_app.m_prefs.edit();
+		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
+		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
+		editor.commit();
+	}
+
+	public void setLoggedIn(boolean b) {
+		m_app.m_loggedIn = b;
+	}
+
+	public void showToast(String string) {
+		Util.showToastLong(this, string);		
 	}
 
 }

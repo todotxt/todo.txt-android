@@ -31,18 +31,33 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>{
 		if ( !api.isAuthenticated() ) {
 			m_config = api.authenticate(m_config, m_username, m_password);
 			m_act.setConfig(m_config);
+			
+			if ( m_config.authStatus != DropboxAPI.STATUS_SUCCESS ) return m_config.authStatus;
 		}
 		
-		if ( m_config == null ) return 0;
-		return 1;
+		if ( !api.accountInfo().isError() ) {
+			return DropboxAPI.STATUS_SUCCESS;
+		} else {
+			return DropboxAPI.STATUS_FAILURE;
+		}
 	}
 
 	@Override
 	protected void onPostExecute(Integer result) {
 		super.onPostExecute(result);
-		Util.showToastLong(m_act, "Returned " + result);
-		m_act.populateFromExternal();
+		
+        if (result == DropboxAPI.STATUS_SUCCESS) {
+        	if (m_config != null && m_config.authStatus == DropboxAPI.STATUS_SUCCESS) {
+            	m_act.storeKeys(m_config.accessTokenKey, m_config.accessTokenSecret);
+            	m_act.setLoggedIn(true);
+            	m_act.showToast("Logged into Dropbox");
+            }
+        } else {
+        	if (result == DropboxAPI.STATUS_NETWORK_ERROR) {
+        		m_act.showToast("Network error: " + m_config.authDetail);
+        	} else {
+        		m_act.showToast("Unsuccessful login.");
+        	}
+        }
 	}
-
-	
 }
