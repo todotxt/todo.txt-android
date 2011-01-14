@@ -333,11 +333,18 @@ public class Util {
 	public static void setBold(SpannableString ss, List<String> items) {
 		String data = ss.toString();
 		for (String item : items) {
-			int i = data.indexOf(item);
+			int i = data.indexOf("@" + item);
 			if (i != -1) {
 				// ss.setSpan(what, start, end, flags);
-				ss.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), i, i
-						+ item.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				ss.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
+						i + 1, i + 1 + item.length(),
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			}
+			int j = data.indexOf("+" + item);
+			if (j != -1) {
+				ss.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),
+						j + 1, j + 1 + item.length(),
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
 	}
