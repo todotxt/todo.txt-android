@@ -55,9 +55,8 @@ public class AddTask extends Activity {
 		// priorities
 		Spinner priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
-		prioArr.add("Priorities");
-		prioArr.add("" + TaskHelper.NONE);
-		for (char c = 'A'; c <= 'Z'; c++) {
+		prioArr.add("Priority");
+		for (char c = 'A'; c <= 'D'; c++) {
 			prioArr.add("" + c);
 		}
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
@@ -74,7 +73,7 @@ public class AddTask extends Activity {
 					Task task = TaskHelper.createTask(-1, t);
 					task.prio = item.charAt(0);
 					if (Util.isEmpty(t) && task.prio != TaskHelper.NONE) {
-						task.text = ".";
+						task.text = " ";
 					}
 					text.setText(TaskHelper.toFileFormat(task));
 				}
@@ -88,7 +87,7 @@ public class AddTask extends Activity {
 		// projects
 		Spinner projects = (Spinner) findViewById(R.id.projects);
 		final ArrayList<String> projectsArr = TaskHelper.getProjects(tasks);
-		projectsArr.add(0, "Projects");
+		projectsArr.add(0, "Project");
 		projects.setAdapter(Util.newSpinnerAdapter(this, projectsArr));
 		projects.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -108,7 +107,7 @@ public class AddTask extends Activity {
 		// contexts
 		Spinner contexts = (Spinner) findViewById(R.id.contexts);
 		final ArrayList<String> contextsArr = TaskHelper.getContexts(tasks);
-		contextsArr.add(0, "Contexts");
+		contextsArr.add(0, "Context");
 		contexts.setAdapter(Util.newSpinnerAdapter(this, contextsArr));
 		contexts.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
