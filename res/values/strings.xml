@@ -18,7 +18,7 @@
 	<string name="add">Add</string>
 	<string name="addtask">Add Task</string>
     <string name="done">Mark Done</string>
-    <string name="priority">Set Priority</string>
+    <string name="priority">Prioritize</string>
 	<string name="update">Update</string>
 	<string name="delete">Delete</string>
     <string name="context">Context</string>

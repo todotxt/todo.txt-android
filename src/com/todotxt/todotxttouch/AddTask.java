@@ -89,7 +89,7 @@ public class AddTask extends Activity {
 		}
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
 		if (m_backup != null && m_backup.prio >= 'A') {
-			priorities.setSelection(2 + m_backup.prio - 'A');
+			priorities.setSelection(1 + m_backup.prio - 'A');
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -186,7 +186,8 @@ public class AddTask extends Activity {
 									Task updatedTask = TaskHelper.createTask(
 											m_backup.id, input);
 									return DropboxUtil.updateTask(api,
-											updatedTask.prio, input, m_backup);
+											updatedTask.prio, updatedTask.text,
+											m_backup);
 								} else {
 									return DropboxUtil.addTask(api, input);
 								}
