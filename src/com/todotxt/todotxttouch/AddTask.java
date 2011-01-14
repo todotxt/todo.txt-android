@@ -36,6 +36,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -70,6 +71,7 @@ public class AddTask extends Activity {
 
 		// text
 		final EditText text = (EditText) findViewById(R.id.taskText);
+		text.setGravity(Gravity.TOP);
 		Task task = (Task) getIntent().getSerializableExtra(
 				Constants.EXTRA_TASK);
 		if (task != null) {
