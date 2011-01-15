@@ -28,7 +28,13 @@ package com.todotxt.todotxttouch;
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 
@@ -36,6 +42,14 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private Config m_config;
 	private String m_username;
 	private String m_password;
+
+	public void setUsername(String username) {
+		m_username = username;
+	}
+
+	public void setPassword(String password) {
+		m_password = password;
+	}
 
 	public DropboxLoginAsyncTask(TodoTxtTouch act, Config config) {
 		m_act = act;
@@ -88,5 +102,32 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 				m_act.showToast("Unsuccessful login.");
 			}
 		}
+	}
+
+	public void showLoginDialog() {
+		LayoutInflater inflator = LayoutInflater.from(m_act);
+		View v = inflator.inflate(R.layout.logindialog, null);
+		final TextView usernameTV = (TextView) v.findViewById(R.id.username);
+		final TextView passwordTV = (TextView) v.findViewById(R.id.password);
+
+		AlertDialog.Builder b = new AlertDialog.Builder(m_act);
+		b.setView(v);
+		b.setTitle(R.string.dropbox_authentication);
+		b.setCancelable(true);
+		b.setPositiveButton(R.string.login_button, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String u = usernameTV.getText().toString();
+				String p = passwordTV.getText().toString();
+				if (u != null && u.length() > 0 && p != null && p.length() > 0) {
+					DropboxLoginAsyncTask.this.setUsername(u);
+					DropboxLoginAsyncTask.this.setPassword(p);
+					DropboxLoginAsyncTask.this.execute();
+				} else {
+					DropboxLoginAsyncTask.this.cancel(false);
+				}
+			}
+		});
+		b.show();
 	}
 }

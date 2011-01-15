@@ -142,38 +142,8 @@ public class TodoTxtTouch extends ListActivity implements
 					m_app.getConfig());
 			loginTask.execute();
 		} else {
-			TodoTxtTouch.this.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					Util.LoginDialogListener dialogListener = new Util.LoginDialogListener() {
-						@Override
-						public void onClick(String username, String password) {
-							try {
-								String consumerKey = getResources().getText(
-										R.string.dropbox_consumer_key)
-										.toString();
-								String consumerSecret = getResources().getText(
-										R.string.dropbox_consumer_secret)
-										.toString();
-								Log.i(TAG, "Using Dropbox key " + consumerKey
-										+ " and secret " + consumerSecret);
-
-								DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(
-										TodoTxtTouch.this, username, password,
-										m_app.getConfig());
-								loginTask.execute();
-							} catch (Exception e) {
-								Log.i(TAG,
-										"Could not create Dropbox client! Exception details: "
-												+ e.getLocalizedMessage());
-							}
-						}
-					};
-					Util.showLoginDialog(TodoTxtTouch.this,
-							R.string.dropbox_authentication, R.string.login,
-							"", dialogListener, R.drawable.menu_sync);
-				}
-			});
+			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this, m_app.getConfig());
+			loginTask.showLoginDialog();
 		}
 	}
 
