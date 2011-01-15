@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+	<EditTextPreference android:summary="@string/TODOTXTPATH_summary"
+		android:defaultValue="@string/TODOTXTPATH_defaultPath" android:title="@string/TODOTXTPATH_title"
+		android:key="@string/TODOTXTPATH_key" />
 	<CheckBoxPreference android:key="@string/PREFCLEAR_key"
-		android:title="@string/PREFCLEAR_title" 
-		android:summary="@string/PREFCLEAR_summary" />
-
+		android:title="@string/PREFCLEAR_title" android:summary="@string/PREFCLEAR_summary" />
 </PreferenceScreen>

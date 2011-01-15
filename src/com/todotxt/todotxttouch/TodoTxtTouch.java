@@ -262,8 +262,7 @@ public class TodoTxtTouch extends ListActivity implements
 							try {
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return DropboxUtil.updateTask(api,
-											TaskHelper.NONE, "", task);
+									return m_app.m_util.updateTask(TaskHelper.NONE, "", task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -313,12 +312,10 @@ public class TodoTxtTouch extends ListActivity implements
 											.format(new Date());
 									String text = TaskHelper.COMPLETED + format
 											+ task.text;
-									DropboxAPI client = m_app.getAPI();
 									Log.v(TAG,
 											"Completing task with this text: "
 													+ text);
-									return DropboxUtil.updateTask(client,
-											TaskHelper.NONE, text, task);
+									return m_app.m_util.updateTask(TaskHelper.NONE, text, task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -367,9 +364,7 @@ public class TodoTxtTouch extends ListActivity implements
 							try {
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return DropboxUtil.updateTask(api,
-											prioArr[which].charAt(0),
-											task.text, task);
+									return m_app.m_util.updateTask(prioArr[which].charAt(0), task.text, task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -565,7 +560,7 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	void populateFromExternal() {
-		if (m_app.m_loggedIn) {
+		if (m_app.m_loggedIn && getAPI().isAuthenticated()) {
 			new DropboxFetchAsyncTask(this).execute();
 		} else {
 			login();

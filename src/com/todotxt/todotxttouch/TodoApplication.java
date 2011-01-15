@@ -45,6 +45,7 @@ public class TodoApplication extends Application implements
 
 	public SharedPreferences m_prefs;
 	private DropboxAPI m_api = new DropboxAPI();
+	public DropboxUtil m_util;
 	private Config m_config;
 	public boolean m_loggedIn = false;
 
@@ -63,6 +64,7 @@ public class TodoApplication extends Application implements
 		}
 
 		authenticate();
+		m_util = new DropboxUtil(this);
 	}
 
 	private boolean authenticate() {
@@ -138,5 +140,13 @@ public class TodoApplication extends Application implements
 
 	public void setConfig(Config authenticate) {
 		m_config = authenticate;
+	}
+
+	public String getRemotePath() {
+		return m_prefs.getString("todotxtpath", getResources().getString(R.string.TODOTXTPATH_defaultPath));
+	}
+	
+	public String getRemoteFileAndPath() {
+		return getRemotePath() + "/" + Constants.REMOTE_FILE;
 	}
 }
