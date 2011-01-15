@@ -299,7 +299,7 @@ public class TodoTxtTouch extends ListActivity implements
 					new AsyncTask<Void, Void, Boolean>() {
 						protected void onPreExecute() {
 							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Marking Task Done",
+									TodoTxtTouch.this, "Marking Task Complete",
 									"Please wait...", true);
 						}
 

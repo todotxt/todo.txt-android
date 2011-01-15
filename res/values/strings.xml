@@ -17,7 +17,7 @@
     <string name="refresh">Refresh</string>
 	<string name="add">Add</string>
 	<string name="addtask">Add Task</string>
-    <string name="done">Mark Done</string>
+    <string name="done">Complete</string>
     <string name="priority">Prioritize</string>
 	<string name="update">Update</string>
 	<string name="delete">Delete</string>
@@ -28,7 +28,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="areyousure">Are you sure?</string>
-    <string name="tasktexthint">Type your task here. Start new project names with a + and contexts with @. For example:\n\nCall designer about logo file +WebSiteUpgrade @phone</string>
+    <string name="tasktexthint">Type your task here. Start new project names with + and contexts with @. For example:\n\nCall designer about logo file +WebSiteUpgrade @phone</string>
     <string name="search_summary">Enter text to search for.</string>
     <!-- preferences -->
     <string name="PREFCLEAR_key">prefclear</string>
