@@ -63,6 +63,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -98,8 +99,10 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		requestWindowFeature(Window.FEATURE_RIGHT_ICON);
 		setContentView(R.layout.main);
+		setFeatureDrawableResource(Window.FEATURE_RIGHT_ICON,
+				R.drawable.icon_crystal_clear_checkmark);
 
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
