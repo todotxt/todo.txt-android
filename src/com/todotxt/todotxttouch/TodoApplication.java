@@ -106,6 +106,8 @@ public class TodoApplication extends Application implements
 			Editor editor = prefs.edit();
 			editor.clear();
 			editor.commit();
+			getAPI().deauthenticate();
+			m_loggedIn = false;
 			Constants.TODOFILE.delete();
 			Constants.TODOFILETMP.delete();
 			Util.showToastShort(this, "Logged out!");
