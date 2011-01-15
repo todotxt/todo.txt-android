@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">Login</string>
-    <string name="dropbox_authentication">Dropbox Authentication</string>
     <string name="added_task">Added task</string>
     <string name="add_task_failed">Could not add task</string>
     <string name="updated_task">Updated task</string>
@@ -30,6 +28,11 @@
     <string name="areyousure">Are you sure?</string>
     <string name="tasktexthint">Type your task here. Start new project names with + and contexts with @. For example:\n\nCall designer about logo file +WebSiteUpgrade @phone</string>
     <string name="search_summary">Enter text to search for.</string>
+	<!--  login -->
+    <string name="dropbox_authentication">Dropbox Authentication</string>
+    <string name="username_label">Email Address</string>
+    <string name="password_label">Dropbox Password</string>
+    <string name="login_button">Login</string>
     <!-- preferences -->
     <string name="PREFCLEAR_key">prefclear</string>
     <string name="PREFCLEAR_title">Logout</string>
