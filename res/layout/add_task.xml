@@ -25,7 +25,7 @@
 	<Spinner android:id="@+id/priorities" android:layout_above="@id/projects"
 		android:layout_width="fill_parent" android:layout_height="wrap_content" />
 
-	<EditText android:id="@+id/taskText"
+	<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
 		android:layout_alignParentTop="true" android:layout_above="@id/priorities"
 		android:layout_width="fill_parent" android:layout_height="fill_parent" />
 

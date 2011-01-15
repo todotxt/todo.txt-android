@@ -1,3 +1,30 @@
+/**
+ *
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/TaskHelper.java
+ *
+ * Copyright (c) 2009-2011 mathias, Gina Trapani
+ *
+ * LICENSE:
+ *
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+ *
+ * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author mathias <mathias[at]ws7862[dot](none)>
+ * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
+ * @author mathias <mathias[at]x2[dot](none)>
+ * @license http://www.gnu.org/licenses/gpl.html
+ * @copyright 2009-2011 mathias, Gina Trapani
+ */
 package com.todotxt.todotxttouch;
 
 import java.text.SimpleDateFormat;

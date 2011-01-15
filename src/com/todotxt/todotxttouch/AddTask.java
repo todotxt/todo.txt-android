@@ -1,3 +1,31 @@
+/**
+ *
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/AddTask.java
+ *
+ * Copyright (c) 2009-2011 mathias, Gina Trapani, Tormod Haugen
+ *
+ * LICENSE:
+ *
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+ *
+ * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
+ * @author mathias <mathias[at]x2[dot](none)>
+ * @author Tormod Haugen <tormodh[at]gmail[dot]com>
+ * @author mathias <mathias[at]ws7862[dot](none)>
+ * @license http://www.gnu.org/licenses/gpl.html
+ * @copyright 2009-2011 mathias, Gina Trapani, Tormod Haugen
+ */
 package com.todotxt.todotxttouch;
 
 import java.io.IOException;
@@ -8,6 +36,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -42,6 +71,7 @@ public class AddTask extends Activity {
 
 		// text
 		final EditText text = (EditText) findViewById(R.id.taskText);
+		text.setGravity(Gravity.TOP);
 		Task task = (Task) getIntent().getSerializableExtra(
 				Constants.EXTRA_TASK);
 		if (task != null) {
@@ -61,7 +91,7 @@ public class AddTask extends Activity {
 		}
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
 		if (m_backup != null && m_backup.prio >= 'A') {
-			priorities.setSelection(2 + m_backup.prio - 'A');
+			priorities.setSelection(1 + m_backup.prio - 'A');
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -158,7 +188,8 @@ public class AddTask extends Activity {
 									Task updatedTask = TaskHelper.createTask(
 											m_backup.id, input);
 									return DropboxUtil.updateTask(api,
-											updatedTask.prio, input, m_backup);
+											updatedTask.prio, updatedTask.text,
+											m_backup);
 								} else {
 									return DropboxUtil.addTask(api, input);
 								}

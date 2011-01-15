@@ -1,3 +1,33 @@
+/**
+ *
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoTxtTouch.java
+ *
+ * Copyright (c) 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest
+ *
+ * LICENSE:
+ *
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+ *
+ * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
+ * @author mathias <mathias[at]x2[dot](none)>
+ * @author Stephen Henderson <me[at]steveh[dot]ca>
+ * @author mathias <mathias[at]ws7862[dot](none)>
+ * @author Tormod Haugen <tormodh[at]gmail[dot]com>
+ * @author shanest <ssshanest[at]gmail[dot]com>
+ * @license http://www.gnu.org/licenses/gpl.html
+ * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest
+ */
 package com.todotxt.todotxttouch;
 
 import java.io.IOException;
@@ -33,6 +63,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -67,8 +98,10 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		requestWindowFeature(Window.FEATURE_LEFT_ICON);
 		setContentView(R.layout.main);
+		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
+				R.drawable.icon_crystal_clear_checkmark);
 
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
@@ -89,7 +122,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			Editor editor = m_app.m_prefs.edit();
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
-			if ( getAPI().isAuthenticated() ) {
+			if (getAPI().isAuthenticated()) {
 				populateFromExternal();
 			} else {
 				login();
@@ -101,8 +134,9 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 
 	void login() {
 		final DropboxAPI api = getAPI();
-		if ( api.isAuthenticated() && !m_app.m_loggedIn ) {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this, m_app.getConfig());
+		if (api.isAuthenticated() && !m_app.m_loggedIn) {
+			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this,
+					m_app.getConfig());
 			loginTask.execute();
 		} else {
 			TodoTxtTouch.this.runOnUiThread(new Runnable() {
@@ -112,11 +146,18 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 						@Override
 						public void onClick(String username, String password) {
 							try {
-								String consumerKey = getResources().getText(R.string.dropbox_consumer_key).toString();
-								String consumerSecret = getResources().getText(R.string.dropbox_consumer_secret).toString();
-								Log.i(TAG, "Using Dropbox key " + consumerKey + " and secret " + consumerSecret);
-								
-								DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(TodoTxtTouch.this, username, password, m_app.getConfig());
+								String consumerKey = getResources().getText(
+										R.string.dropbox_consumer_key)
+										.toString();
+								String consumerSecret = getResources().getText(
+										R.string.dropbox_consumer_secret)
+										.toString();
+								Log.i(TAG, "Using Dropbox key " + consumerKey
+										+ " and secret " + consumerSecret);
+
+								DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(
+										TodoTxtTouch.this, username, password,
+										m_app.getConfig());
 								loginTask.execute();
 							} catch (Exception e) {
 								Log.i(TAG,
@@ -125,9 +166,9 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 							}
 						}
 					};
-					Util.showLoginDialog(TodoTxtTouch.this, R.string.dropbox_authentication,
-							R.string.login, "", dialogListener,
-							R.drawable.menu_sync);
+					Util.showLoginDialog(TodoTxtTouch.this,
+							R.string.dropbox_authentication, R.string.login,
+							"", dialogListener, R.drawable.menu_sync);
 				}
 			});
 		}
@@ -254,7 +295,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 					new AsyncTask<Void, Void, Boolean>() {
 						protected void onPreExecute() {
 							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Marking Task Done",
+									TodoTxtTouch.this, "Marking Task Complete",
 									"Please wait...", true);
 						}
 
@@ -268,9 +309,10 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 											.format(new Date());
 									String text = TaskHelper.COMPLETED + format
 											+ task.text;
-									DropboxAPI client = m_app
-											.getAPI();
-									Log.v(TAG, "Completing task with this text: " + text);
+									DropboxAPI client = m_app.getAPI();
+									Log.v(TAG,
+											"Completing task with this text: "
+													+ text);
 									return DropboxUtil.updateTask(client,
 											TaskHelper.NONE, text, task);
 								}
@@ -319,8 +361,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								DropboxAPI api = m_app
-										.getAPI();
+								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
 									return DropboxUtil.updateTask(api,
 											prioArr[which].charAt(0),
@@ -520,7 +561,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	}
 
 	void populateFromExternal() {
-		if ( m_app.m_loggedIn ) {
+		if (m_app.m_loggedIn) {
 			new DropboxFetchAsyncTask(this).execute();
 		} else {
 			login();
@@ -622,7 +663,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	}
 
 	public void showToast(String string) {
-		Util.showToastLong(this, string);		
+		Util.showToastLong(this, string);
 	}
 
 }
