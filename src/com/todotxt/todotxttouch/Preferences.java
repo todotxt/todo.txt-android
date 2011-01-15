@@ -26,7 +26,10 @@
  */
 package com.todotxt.todotxttouch;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 public class Preferences extends PreferenceActivity {
@@ -35,6 +38,16 @@ public class Preferences extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-	}
 
+		PackageInfo packageInfo;
+		try {
+			packageInfo = getPackageManager().getPackageInfo(getPackageName(),
+					0);
+			Preference versionPref = (Preference) findPreference("app_version");
+			versionPref.setSummary(packageInfo.versionName);
+
+		} catch (NameNotFoundException e) {
+			//e.printStackTrace();
+		}
+	}
 }

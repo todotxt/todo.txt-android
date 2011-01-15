@@ -78,7 +78,7 @@ public class DropboxFetchAsyncTask extends AsyncTask<Void, Void, Boolean> {
 		m_act.setFilteredTasks(false);
 		Log.d(TodoTxtTouch.TAG, "populateFromUrl size=" + m_act.m_tasks.size());
 		if (!result) {
-			Util.showToastLong(m_act, "Sync failed: " + (null==m_remoteFile?"bleh":m_remoteFile.httpReason));
+			Util.showToastLong(m_act, "Sync failed: " + (null==m_remoteFile?"Null remote file":m_remoteFile.httpReason));
 		} else {
 			Util.showToastShort(m_act, m_act.m_tasks.size() + " items");
 		}
