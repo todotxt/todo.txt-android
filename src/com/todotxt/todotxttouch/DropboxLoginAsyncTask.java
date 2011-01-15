@@ -25,16 +25,18 @@
  */
 package com.todotxt.todotxttouch;
 
-import com.dropbox.client.DropboxAPI;
-import com.dropbox.client.DropboxAPI.Config;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import com.dropbox.client.DropboxAPI;
+import com.dropbox.client.DropboxAPI.Config;
 
 public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 
@@ -109,6 +111,11 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		View v = inflator.inflate(R.layout.logindialog, null);
 		final TextView usernameTV = (TextView) v.findViewById(R.id.username);
 		final TextView passwordTV = (TextView) v.findViewById(R.id.password);
+
+		TextView mTextSample = (TextView) v.findViewById(R.id.register_hint);
+		mTextSample.setMovementMethod(LinkMovementMethod.getInstance());
+		String text = "No account? Create one at <a href=\"http://dropbox.com/m/register\">Dropbox</a>.";
+		mTextSample.setText(Html.fromHtml(text));
 
 		AlertDialog.Builder b = new AlertDialog.Builder(m_act);
 		b.setView(v);
