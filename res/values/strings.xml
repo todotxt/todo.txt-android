@@ -34,4 +34,8 @@
     <string name="PREFCLEAR_key">prefclear</string>
     <string name="PREFCLEAR_title">Logout</string>
     <string name="PREFCLEAR_summary">Select to logout of Dropbox</string>
+    <string name="TODOTXTPATH_key">todotxtpath</string>
+    <string name="TODOTXTPATH_title">Path to todo.txt</string>
+    <string name="TODOTXTPATH_summary">Specify where TodoTxtTouch should look for todo.txt</string>
+    <string name="TODOTXTPATH_defaultPath">/todo</string>
 </resources>

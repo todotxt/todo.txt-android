@@ -55,6 +55,8 @@ public class AddTask extends Activity {
 
 	private Task m_backup;
 
+	private TodoApplication m_app;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,6 +70,8 @@ public class AddTask extends Activity {
 			Log.e(TAG, e.getMessage(), e);
 			tasks = new ArrayList<Task>();
 		}
+		
+		m_app = (TodoApplication) getApplication();
 
 		// text
 		final EditText text = (EditText) findViewById(R.id.taskText);
@@ -187,11 +191,10 @@ public class AddTask extends Activity {
 								if (m_backup != null) {
 									Task updatedTask = TaskHelper.createTask(
 											m_backup.id, input);
-									return DropboxUtil.updateTask(api,
-											updatedTask.prio, updatedTask.text,
+									return m_app.m_util.updateTask(updatedTask.prio, updatedTask.text,
 											m_backup);
 								} else {
-									return DropboxUtil.addTask(api, input);
+									return m_app.m_util.addTask(input);
 								}
 							}
 						} catch (Exception e) {
