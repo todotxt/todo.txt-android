@@ -99,9 +99,9 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_RIGHT_ICON);
+		requestWindowFeature(Window.FEATURE_LEFT_ICON);
 		setContentView(R.layout.main);
-		setFeatureDrawableResource(Window.FEATURE_RIGHT_ICON,
+		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
 				R.drawable.icon_crystal_clear_checkmark);
 
 		m_app = (TodoApplication) getApplication();
