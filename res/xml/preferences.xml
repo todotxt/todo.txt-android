@@ -2,6 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<PreferenceCategory android:key="todotxt_settings"
 		android:title="@string/todotxt_settings_header">
+		<CheckBoxPreference android:key="@string/show_line_numbers_pref_key"
+			android:title="@string/show_line_numbers_pref_title" android:summary="@string/show_line_numbers_pref_summary" />
 		<CheckBoxPreference android:key="@string/prepend_date_pref_key"
 			android:title="@string/prepend_date_pref_title" android:summary="@string/prepend_date_pref_summary" />
 	</PreferenceCategory>

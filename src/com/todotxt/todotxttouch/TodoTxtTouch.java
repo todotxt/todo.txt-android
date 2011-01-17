@@ -607,9 +607,11 @@ public class TodoTxtTouch extends ListActivity implements
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
-				// hide ID unless it's highlighted for a cleaner interface
-				// @TODO if light theme is enabled, set white, else set black
-				holder.taskid.setTextColor(res.getColor(R.color.white));
+				// hide line numbers unless show preference is checked 
+				if (!m_app.m_prefs.getBoolean("showlinenumberspref", false)) {
+					holder.taskid.setTextColor(res.getColor(R.color.white));
+				}
+
 			}
 			return convertView;
 		}

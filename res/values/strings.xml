@@ -44,10 +44,15 @@
 	<string name="todotxt_settings_header">todo.txt</string>
 	<string name="about_settings_header">About</string>
 	<string name="software_version">Todo.txt Touch</string>
+
 	<string name="prepend_date_pref_key">todotxtprependdate</string>
 	<string name="prepend_date_pref_title">Date new tasks</string>
-	<string name="prepend_date_pref_summary">Automatically prepend today\'s date to new tasks.
+	<string name="prepend_date_pref_summary">
+		Automatically prepend today\'s date to new tasks.
 	</string>
+	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
+	<string name="show_line_numbers_pref_title">Show line numbers</string>
+	<string name="show_line_numbers_pref_summary">Display the line number of each task.</string>
 	<!-- login -->
 	<string name="dropbox_authentication">Log in to Dropbox</string>
 	<string name="username_label">Email Address:</string>
