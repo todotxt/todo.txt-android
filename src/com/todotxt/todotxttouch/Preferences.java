@@ -26,13 +26,22 @@
  */
 package com.todotxt.todotxttouch;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 
 public class Preferences extends PreferenceActivity {
+	private Preference aboutDialog;
+	private static final int ABOUT_DIALOG = 1;
+	private String version;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +54,51 @@ public class Preferences extends PreferenceActivity {
 					0);
 			Preference versionPref = (Preference) findPreference("app_version");
 			versionPref.setSummary("v" + packageInfo.versionName);
+			version = packageInfo.versionName;
 
 		} catch (NameNotFoundException e) {
 			// e.printStackTrace();
 		}
+		aboutDialog = findPreference("app_version");
+	}
+
+	@Override
+	public boolean onPreferenceTreeClick(PreferenceScreen screen,
+			Preference preference) {
+		if (preference == aboutDialog) {
+			showDialog(ABOUT_DIALOG);
+		}
+
+		return true;
+
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		if (id == ABOUT_DIALOG) {
+			AlertDialog.Builder aboutAlert = new AlertDialog.Builder(this);
+			aboutAlert.setTitle("Todo.txt Touch");
+			aboutAlert
+					.setMessage("Version "
+							+ version
+							+ "\nBy Gina Trapani &\nthe Todo.txt community\ntodotxt@yahoogroups.com");
+			aboutAlert.setIcon(R.drawable.icon_crystal_clear_checkmark);
+			aboutAlert.setPositiveButton("Homepage",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+							Intent i = new Intent(Intent.ACTION_VIEW);
+							i.setData(Uri.parse("http://todotxt.com"));
+							startActivity(i);
+						}
+					});
+			aboutAlert.setNegativeButton("Close",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+						}
+					});
+			return aboutAlert.show();
+		}
+		return null;
+
 	}
 }

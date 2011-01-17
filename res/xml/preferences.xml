@@ -18,7 +18,7 @@
 	</PreferenceCategory>
 	<PreferenceCategory android:key="about_settings_header"
 		android:title="@string/about_settings_header">
-		<EditTextPreference android:title="@string/software_version"
-			android:key="app_version" android:enabled="false" />
+		<Preference android:title="@string/software_version"
+			android:key="app_version" />
 	</PreferenceCategory>
 </PreferenceScreen>
