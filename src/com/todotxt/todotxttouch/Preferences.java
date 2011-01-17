@@ -44,10 +44,10 @@ public class Preferences extends PreferenceActivity {
 			packageInfo = getPackageManager().getPackageInfo(getPackageName(),
 					0);
 			Preference versionPref = (Preference) findPreference("app_version");
-			versionPref.setSummary(packageInfo.versionName);
+			versionPref.setSummary("v" + packageInfo.versionName);
 
 		} catch (NameNotFoundException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 }

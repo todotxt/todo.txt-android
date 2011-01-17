@@ -29,7 +29,9 @@
 package com.todotxt.todotxttouch;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -40,10 +42,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.dropbox.client.DropboxAPI;
 
@@ -70,7 +72,7 @@ public class AddTask extends Activity {
 			Log.e(TAG, e.getMessage(), e);
 			tasks = new ArrayList<Task>();
 		}
-		
+
 		m_app = (TodoApplication) getApplication();
 
 		// text
@@ -84,6 +86,11 @@ public class AddTask extends Activity {
 			setTitle(R.string.update);
 		} else {
 			setTitle(R.string.addtask);
+			if (m_app.m_prefs.getBoolean("todotxtprependdate", false)) {
+				Date d = new Date();
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+				text.setText(formatter.format(d) + " ");
+			}
 		}
 
 		// priorities
@@ -175,7 +182,9 @@ public class AddTask extends Activity {
 		addBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				final String input = text.getText().toString();
+				//strip line breaks
+				final String input = text.getText().toString()
+						.replaceAll("\\r\\n|\\r|\\n", " ");
 				new AsyncTask<Void, Void, Boolean>() {
 					protected void onPreExecute() {
 						m_ProgressDialog = ProgressDialog.show(AddTask.this,
@@ -191,7 +200,8 @@ public class AddTask extends Activity {
 								if (m_backup != null) {
 									Task updatedTask = TaskHelper.createTask(
 											m_backup.id, input);
-									return m_app.m_util.updateTask(updatedTask.prio, updatedTask.text,
+									return m_app.m_util.updateTask(
+											updatedTask.prio, updatedTask.text,
 											m_backup);
 								} else {
 									return m_app.m_util.addTask(input);
@@ -221,5 +231,4 @@ public class AddTask extends Activity {
 			}
 		});
 	}
-
 }

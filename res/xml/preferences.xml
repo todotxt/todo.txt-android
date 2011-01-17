@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<EditTextPreference android:title="@string/software_version" android:key="app_version"
-		android:enabled="false" />
+	<PreferenceCategory android:key="todotxt_settings"
+		android:title="@string/todotxt_settings_header">
+		<CheckBoxPreference android:key="@string/prepend_date_pref_key"
+			android:title="@string/prepend_date_pref_title" android:summary="@string/prepend_date_pref_summary" />
+	</PreferenceCategory>
+
 	<PreferenceCategory android:key="dropbox_settings"
-		android:title="@string/DROPBOX_settings">
+		android:title="@string/DROPBOX_settings_header">
 		<EditTextPreference android:summary="@string/TODOTXTPATH_summary"
 			android:defaultValue="@string/TODOTXTPATH_defaultPath" android:title="@string/TODOTXTPATH_title"
 			android:key="@string/TODOTXTPATH_key" />
 		<CheckBoxPreference android:key="@string/PREFCLEAR_key"
 			android:title="@string/PREFCLEAR_title" android:summary="@string/PREFCLEAR_summary" />
+	</PreferenceCategory>
+	<PreferenceCategory android:key="about_settings_header"
+		android:title="@string/about_settings_header">
+		<EditTextPreference android:title="@string/software_version"
+			android:key="app_version" android:enabled="false" />
 	</PreferenceCategory>
 </PreferenceScreen>
