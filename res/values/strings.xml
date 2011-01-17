@@ -32,9 +32,7 @@
 	</string>
 	<string name="search_summary">Enter text to search for.</string>
 	<!-- preferences -->
-	<string name="PREFCLEAR_key">prefclear</string>
-	<string name="PREFCLEAR_title">Log out</string>
-	<string name="PREFCLEAR_summary">Select to log out of Dropbox.</string>
+	<string name="unlink_dropbox">Unlink device from Dropbox</string>
 	<string name="TODOTXTPATH_key">todotxtpath</string>
 	<string name="TODOTXTPATH_title">File location</string>
 	<string name="TODOTXTPATH_summary">The Dropbox folder where todo.txt is stored.

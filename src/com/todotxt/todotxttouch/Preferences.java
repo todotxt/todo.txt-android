@@ -40,7 +40,9 @@ import android.preference.PreferenceScreen;
 
 public class Preferences extends PreferenceActivity {
 	private Preference aboutDialog;
+	private Preference logoutDialog;
 	private static final int ABOUT_DIALOG = 1;
+	private static final int LOGOUT_DIALOG = 2;
 	private String version;
 
 	@Override
@@ -60,6 +62,8 @@ public class Preferences extends PreferenceActivity {
 			// e.printStackTrace();
 		}
 		aboutDialog = findPreference("app_version");
+		logoutDialog = findPreference("logout_dropbox");
+		
 	}
 
 	@Override
@@ -67,6 +71,8 @@ public class Preferences extends PreferenceActivity {
 			Preference preference) {
 		if (preference == aboutDialog) {
 			showDialog(ABOUT_DIALOG);
+		} else if ( preference == logoutDialog) {
+			showDialog(LOGOUT_DIALOG);
 		}
 
 		return true;
@@ -97,6 +103,19 @@ public class Preferences extends PreferenceActivity {
 						}
 					});
 			return aboutAlert.show();
+		} else if ( id == LOGOUT_DIALOG) {
+			AlertDialog.Builder logoutAlert = new AlertDialog.Builder(this);
+			logoutAlert.setTitle("Are you sure?");
+			logoutAlert.setMessage("Are you sure you wish to unlink Todo.txt Touch from your Dropbox account for this device?");
+			logoutAlert.setPositiveButton("Unlink", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					((TodoApplication)getApplication()).unlinkDropbox();
+					Preferences.this.finish();
+				}
+			});
+			logoutAlert.setNegativeButton("Cancel", null);
+			return logoutAlert.show();
 		}
 		return null;
 
