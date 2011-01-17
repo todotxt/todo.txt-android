@@ -34,12 +34,10 @@ import com.dropbox.client.DropboxAPI.Config;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class TodoApplication extends Application implements
-		OnSharedPreferenceChangeListener {
+public class TodoApplication extends Application {
 
 	private final static String TAG = TodoApplication.class.getSimpleName();
 
@@ -54,7 +52,6 @@ public class TodoApplication extends Application implements
 		super.onCreate();
 
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		m_prefs.registerOnSharedPreferenceChangeListener(this);
 
 		String[] user_auth_keys = getAuthKeys();
 		if (user_auth_keys[0] == null || user_auth_keys[1] == null) {
@@ -98,22 +95,17 @@ public class TodoApplication extends Application implements
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
-		m_prefs.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-		if (getString(R.string.PREFCLEAR_key).equals(key)) {
-			Log.i(TAG, "Clearing current user data!");
-			Editor editor = prefs.edit();
-			editor.clear();
-			editor.commit();
-			getAPI().deauthenticate();
-			m_loggedIn = false;
-			Constants.TODOFILE.delete();
-			Constants.TODOFILETMP.delete();
-			Util.showToastShort(this, "Logged out!");
-		}
+	public void unlinkDropbox() {
+		Log.i(TAG, "Clearing current user data!");
+		Editor editor = m_prefs.edit();
+		editor.clear();
+		editor.commit();
+		getAPI().deauthenticate();
+		m_loggedIn = false;
+		Constants.TODOFILE.delete();
+		Constants.TODOFILETMP.delete();
 	}
 
 	protected Config getConfig() {
