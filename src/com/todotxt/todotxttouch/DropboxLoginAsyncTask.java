@@ -92,9 +92,9 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		if (result == DropboxAPI.STATUS_SUCCESS) {
 			if (m_config != null
 					&& m_config.authStatus == DropboxAPI.STATUS_SUCCESS) {
+				m_act.setLoggedIn(true);
 				m_act.storeKeys(m_config.accessTokenKey,
 						m_config.accessTokenSecret);
-				m_act.setLoggedIn(true);
 				m_act.showToast("Logged into Dropbox");
 			}
 		} else {
