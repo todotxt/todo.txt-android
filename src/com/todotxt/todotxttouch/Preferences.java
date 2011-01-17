@@ -43,6 +43,7 @@ public class Preferences extends PreferenceActivity {
 	private Preference logoutDialog;
 	private static final int ABOUT_DIALOG = 1;
 	private static final int LOGOUT_DIALOG = 2;
+	public static final int RESULT_SYNC_LIST = 2;
 	private String version;
 
 	@Override
@@ -111,6 +112,7 @@ public class Preferences extends PreferenceActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					((TodoApplication)getApplication()).unlinkDropbox();
+					Preferences.this.setResult(RESULT_SYNC_LIST);
 					Preferences.this.finish();
 				}
 			});

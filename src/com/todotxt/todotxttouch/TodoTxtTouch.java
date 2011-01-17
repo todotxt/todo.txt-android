@@ -81,6 +81,9 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	private final static int SORT_ID = 1;
 	private final static int SORT_TEXT = 2;
 
+	private final static int REQUEST_FILTER = 1;
+	private final static int REQUEST_PREFERENCES = 2;
+
 	ProgressDialog m_ProgressDialog = null;
 	ArrayList<Task> m_tasks = new ArrayList<Task>();
 	private TaskAdapter m_adapter;
@@ -378,7 +381,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		case R.id.preferences:
 			Intent settingsActivity = new Intent(getBaseContext(),
 					Preferences.class);
-			startActivity(settingsActivity);
+			startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
 			break;
 		case R.id.filter:
 			Intent i = new Intent(this, Filter.class);
@@ -398,7 +401,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 					m_contexts);
 			i.putExtra(Constants.EXTRA_SEARCH, m_search);
 
-			startActivityIfNeeded(i, 0);
+			startActivityIfNeeded(i, REQUEST_FILTER);
 			break;
 		case R.id.sort:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -424,12 +427,21 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + " i=" + data);
-		if (resultCode == Activity.RESULT_OK) {
-			m_prios = data.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
-			m_projects = data.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
-			m_contexts = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
-			m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
-			setFilteredTasks(false);
+		if (requestCode == REQUEST_FILTER) {
+			if (resultCode == Activity.RESULT_OK) {
+				m_prios = data
+						.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
+				m_projects = data
+						.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
+				m_contexts = data
+						.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
+				m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
+				setFilteredTasks(false);
+			}
+		} else if ( requestCode == REQUEST_PREFERENCES) {
+			if ( resultCode == Preferences.RESULT_SYNC_LIST) {
+				populateFromExternal();
+			}
 		}
 	}
 
