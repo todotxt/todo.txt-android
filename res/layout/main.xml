@@ -4,9 +4,10 @@
 	android:layout_height="fill_parent">
 
 	<ListView android:id="@+id/android:list" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" />
+		android:layout_height="fill_parent" style="@style/TodoTxtTouchLight" />
 	<TextView android:id="@+id/android:empty"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:text="@string/main_no_items" />
+		android:text="@string/main_no_items" style="@style/TodoTxtTouchLight"
+		android:gravity="center_vertical|center_horizontal" />
 
 </LinearLayout>

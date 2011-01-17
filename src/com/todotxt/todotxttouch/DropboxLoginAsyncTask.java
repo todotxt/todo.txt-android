@@ -25,16 +25,18 @@
  */
 package com.todotxt.todotxttouch;
 
-import com.dropbox.client.DropboxAPI;
-import com.dropbox.client.DropboxAPI.Config;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import com.dropbox.client.DropboxAPI;
+import com.dropbox.client.DropboxAPI.Config;
 
 public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 
@@ -46,6 +48,7 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public void setUsername(String username) {
 		m_username = username;
 	}
+
 	public void setPassword(String password) {
 		m_password = password;
 	}
@@ -108,7 +111,12 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		View v = inflator.inflate(R.layout.logindialog, null);
 		final TextView usernameTV = (TextView) v.findViewById(R.id.username);
 		final TextView passwordTV = (TextView) v.findViewById(R.id.password);
-		
+
+		TextView mTextSample = (TextView) v.findViewById(R.id.register_hint);
+		mTextSample.setMovementMethod(LinkMovementMethod.getInstance());
+		String text = "No account? Create one at <a href=\"http://dropbox.com/m/register\">Dropbox</a>.";
+		mTextSample.setText(Html.fromHtml(text));
+
 		AlertDialog.Builder b = new AlertDialog.Builder(m_act);
 		b.setView(v);
 		b.setTitle(R.string.dropbox_authentication);
@@ -118,7 +126,7 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 			public void onClick(DialogInterface dialog, int which) {
 				String u = usernameTV.getText().toString();
 				String p = passwordTV.getText().toString();
-				if ( u != null && u.length() > 0 && p != null && p.length() > 0 ) {
+				if (u != null && u.length() > 0 && p != null && p.length() > 0) {
 					DropboxLoginAsyncTask.this.setUsername(u);
 					DropboxLoginAsyncTask.this.setPassword(p);
 					DropboxLoginAsyncTask.this.execute();
@@ -129,5 +137,4 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		});
 		b.show();
 	}
-
 }

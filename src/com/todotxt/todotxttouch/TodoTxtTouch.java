@@ -139,7 +139,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 					m_app.getConfig());
 			loginTask.execute();
 		} else {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this, m_app.getConfig());
+			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this,
+					m_app.getConfig());
 			loginTask.showLoginDialog();
 		}
 	}
@@ -228,7 +229,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 							try {
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return m_app.m_util.updateTask(TaskHelper.NONE, "", task);
+									return m_app.m_util.updateTask(
+											TaskHelper.NONE, "", task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -281,7 +283,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 									Log.v(TAG,
 											"Completing task with this text: "
 													+ text);
-									return m_app.m_util.updateTask(TaskHelper.NONE, text, task);
+									return m_app.m_util.updateTask(
+											TaskHelper.NONE, text, task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -330,7 +333,9 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 							try {
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return m_app.m_util.updateTask(prioArr[which].charAt(0), task.text, task);
+									return m_app.m_util.updateTask(
+											prioArr[which].charAt(0),
+											task.text, task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -567,6 +572,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
+
 			Task task = items.get(position);
 			if (task != null) {
 				holder.taskid.setText(String.format("%02d", task.id + 1));
@@ -582,21 +588,26 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 				holder.tasktext.setText(ss);
 
 				Resources res = getResources();
+				holder.tasktext.setTextColor(res.getColor(R.color.black));
+
 				switch (task.prio) {
 				case 'A':
-					holder.taskprio.setTextColor(res.getColor(R.color.gold));
-					break;
-				case 'B':
 					holder.taskprio.setTextColor(res.getColor(R.color.green));
 					break;
-				case 'C':
+				case 'B':
 					holder.taskprio.setTextColor(res.getColor(R.color.blue));
+					break;
+				case 'C':
+					holder.taskprio.setTextColor(res.getColor(R.color.orange));
 					break;
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
-				// hide ID unless it's highlighted for a cleaner interface
-				holder.taskid.setTextColor(res.getColor(R.color.black));
+				// hide line numbers unless show preference is checked 
+				if (!m_app.m_prefs.getBoolean("showlinenumberspref", false)) {
+					holder.taskid.setTextColor(res.getColor(R.color.white));
+				}
+
 			}
 			return convertView;
 		}
