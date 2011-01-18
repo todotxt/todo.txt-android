@@ -64,7 +64,7 @@ public class Preferences extends PreferenceActivity {
 		}
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
-		
+
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class Preferences extends PreferenceActivity {
 			Preference preference) {
 		if (preference == aboutDialog) {
 			showDialog(ABOUT_DIALOG);
-		} else if ( preference == logoutDialog) {
+		} else if (preference == logoutDialog) {
 			showDialog(LOGOUT_DIALOG);
 		}
 
@@ -104,19 +104,21 @@ public class Preferences extends PreferenceActivity {
 						}
 					});
 			return aboutAlert.show();
-		} else if ( id == LOGOUT_DIALOG) {
+		} else if (id == LOGOUT_DIALOG) {
 			AlertDialog.Builder logoutAlert = new AlertDialog.Builder(this);
-			logoutAlert.setTitle("Are you sure?");
-			logoutAlert.setMessage("Are you sure you wish to unlink Todo.txt Touch from your Dropbox account for this device?");
-			logoutAlert.setPositiveButton("Unlink", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					((TodoApplication)getApplication()).unlinkDropbox();
-					Preferences.this.setResult(RESULT_SYNC_LIST);
-					Preferences.this.finish();
-				}
-			});
-			logoutAlert.setNegativeButton("Cancel", null);
+			logoutAlert.setTitle(R.string.areyousure);
+			logoutAlert.setMessage(R.string.dropbox_logout_explainer);
+			logoutAlert.setPositiveButton(R.string.dropbox_logout_pref_title,
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							((TodoApplication) getApplication())
+									.unlinkDropbox();
+							Preferences.this.setResult(RESULT_SYNC_LIST);
+							Preferences.this.finish();
+						}
+					});
+			logoutAlert.setNegativeButton(R.string.cancel, null);
 			return logoutAlert.show();
 		}
 		return null;
