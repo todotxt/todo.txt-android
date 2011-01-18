@@ -121,18 +121,28 @@ public class TodoTxtTouch extends ListActivity implements
 
 		getListView().setOnCreateContextMenuListener(this);
 
+		initializeTasks();
+	}
+
+	private void initializeTasks() {
 		boolean firstrun = m_app.m_prefs.getBoolean(Constants.PREF_FIRSTRUN,
 				true);
+
 		if (firstrun) {
 			Log.i(TAG, "Initializing app");
 			Editor editor = m_app.m_prefs.edit();
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
-			if (getAPI().isAuthenticated()) {
-				populateFromExternal();
-			} else {
-				login();
+			try {
+				if (!Constants.TODOFILE.exists()) {
+					Util.createParentDirectory(Constants.TODOFILE);
+					Constants.TODOFILE.createNewFile();
+				}
+			} catch (Exception e) {
+				Log.e(TAG, "Error creating local files", e);
 			}
+
+			populateFromExternal();
 		} else {
 			populateFromFile();
 		}
@@ -442,9 +452,9 @@ public class TodoTxtTouch extends ListActivity implements
 				m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
 				setFilteredTasks(false);
 			}
-		} else if ( requestCode == REQUEST_PREFERENCES) {
-			if ( resultCode == Preferences.RESULT_SYNC_LIST) {
-				populateFromExternal();
+		} else if (requestCode == REQUEST_PREFERENCES) {
+			if (resultCode == Preferences.RESULT_SYNC_LIST) {
+				initializeTasks();
 			}
 		}
 	}
@@ -619,7 +629,7 @@ public class TodoTxtTouch extends ListActivity implements
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
-				// hide line numbers unless show preference is checked 
+				// hide line numbers unless show preference is checked
 				if (!m_app.m_prefs.getBoolean("showlinenumberspref", false)) {
 					holder.taskid.setTextColor(res.getColor(R.color.white));
 				}

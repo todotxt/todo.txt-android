@@ -76,13 +76,14 @@ public class TodoApplication extends Application {
 				return true;
 		}
 		clearKeys();
-		m_loggedIn = false;
 		return false;
 	}
 
 	private void clearKeys() {
-		// TODO Auto-generated method stub
-
+		Editor editor = m_prefs.edit();
+		editor.clear();
+		editor.commit();
+		m_loggedIn = false;
 	}
 
 	private String[] getAuthKeys() {
@@ -99,11 +100,8 @@ public class TodoApplication extends Application {
 
 	public void unlinkDropbox() {
 		Log.i(TAG, "Clearing current user data!");
-		Editor editor = m_prefs.edit();
-		editor.clear();
-		editor.commit();
 		getAPI().deauthenticate();
-		m_loggedIn = false;
+		clearKeys();
 		Constants.TODOFILE.delete();
 		Constants.TODOFILETMP.delete();
 	}
@@ -135,9 +133,10 @@ public class TodoApplication extends Application {
 	}
 
 	public String getRemotePath() {
-		return m_prefs.getString("todotxtpath", getResources().getString(R.string.TODOTXTPATH_defaultPath));
+		return m_prefs.getString("todotxtpath",
+				getResources().getString(R.string.TODOTXTPATH_defaultPath));
 	}
-	
+
 	public String getRemoteFileAndPath() {
 		return getRemotePath() + "/" + Constants.REMOTE_FILE;
 	}

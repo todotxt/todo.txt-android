@@ -77,7 +77,7 @@ public class TodoUtil {
 		BufferedReader in = null;
 		if (!Constants.TODOFILE.exists()) {
 			Log.w(TAG, Constants.TODOFILE.getAbsolutePath()
-					+ " does not exists!");
+					+ " does not exist!");
 		} else {
 			InputStream is = new FileInputStream(Constants.TODOFILE);
 			try {
@@ -102,7 +102,7 @@ public class TodoUtil {
 	public static void writeToFile(List<Task> tasks, File file) {
 		try {
 			if (!Util.isDeviceWritable()) {
-				throw new IOException("Device Not Writable!");
+				throw new IOException("Device is not writable!");
 			}
 			Util.createParentDirectory(file);
 			FileWriter fw = new FileWriter(file);
