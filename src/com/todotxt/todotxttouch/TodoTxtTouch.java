@@ -73,7 +73,8 @@ import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 
-public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChangeListener {
+public class TodoTxtTouch extends ListActivity implements
+		OnSharedPreferenceChangeListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
@@ -109,7 +110,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 
-		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks, getLayoutInflater());
+		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks,
+				getLayoutInflater());
 
 		setListAdapter(this.m_adapter);
 
@@ -119,17 +121,29 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 
 		getListView().setOnCreateContextMenuListener(this);
 
-		boolean firstrun = m_app.m_prefs.getBoolean(Constants.PREF_FIRSTRUN, true);
+		initializeTasks();
+	}
+
+	private void initializeTasks() {
+		boolean firstrun = m_app.m_prefs.getBoolean(Constants.PREF_FIRSTRUN,
+				true);
+
 		if (firstrun) {
+
 			Log.i(TAG, "Initializing app");
 			Editor editor = m_app.m_prefs.edit();
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
-			if (getAPI().isAuthenticated()) {
-				populateFromExternal();
-			} else {
-				login();
+			try {
+				if (!Constants.TODOFILE.exists()) {
+					Util.createParentDirectory(Constants.TODOFILE);
+					Constants.TODOFILE.createNewFile();
+				}
+			} catch (Exception e) {
+				Log.e(TAG, "Error creating local files", e);
 			}
+
+			populateFromExternal();
 		} else {
 			populateFromFile();
 		}
@@ -161,7 +175,8 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 	}
 
 	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
 		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
 		if (Constants.PREF_ACCESSTOKEN_SECRET.equals(key)) {
 			Log.i(TAG, "New access token secret. Syncing!");
@@ -438,9 +453,9 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 				m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
 				setFilteredTasks(false);
 			}
-		} else if ( requestCode == REQUEST_PREFERENCES) {
-			if ( resultCode == Preferences.RESULT_SYNC_LIST) {
-				populateFromExternal();
+		} else if (requestCode == REQUEST_PREFERENCES) {
+			if (resultCode == Preferences.RESULT_SYNC_LIST) {
+				initializeTasks();
 			}
 		}
 	}
@@ -615,7 +630,7 @@ public class TodoTxtTouch extends ListActivity implements OnSharedPreferenceChan
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
-				// hide line numbers unless show preference is checked 
+				// hide line numbers unless show preference is checked
 				if (!m_app.m_prefs.getBoolean("showlinenumberspref", false)) {
 					holder.taskid.setTextColor(res.getColor(R.color.white));
 				}

@@ -53,16 +53,19 @@ public class DropboxFetchAsyncTask extends AsyncTask<Void, Void, Boolean> {
 	@Override
 	protected Boolean doInBackground(Void... params) {
 		try {
-			DropboxAPI api = ((TodoApplication) m_act.getApplication()).getAPI();
-			m_remoteFile = api.getFileStream(Constants.DROPBOX_MODUS, m_app.getRemoteFileAndPath(), null);
-			
-			if ( m_remoteFile.isError() )  {
-				if ( 404 == m_remoteFile.httpCode ) {
-					api.putFile(Constants.DROPBOX_MODUS, m_app.getRemotePath(), Constants.TODOFILE);
+			DropboxAPI api = ((TodoApplication) m_act.getApplication())
+					.getAPI();
+			m_remoteFile = api.getFileStream(Constants.DROPBOX_MODUS,
+					m_app.getRemoteFileAndPath(), null);
+
+			if (m_remoteFile.isError()) {
+				if (404 == m_remoteFile.httpCode) {
+					api.putFile(Constants.DROPBOX_MODUS, m_app.getRemotePath(),
+							Constants.TODOFILE);
 				}
 				return false;
 			}
-			
+
 			m_act.m_tasks = TodoUtil.loadTasksFromStream(m_remoteFile.is);
 			TodoUtil.writeToFile(m_act.m_tasks, Constants.TODOFILE);
 			return true;
@@ -78,7 +81,14 @@ public class DropboxFetchAsyncTask extends AsyncTask<Void, Void, Boolean> {
 		m_act.setFilteredTasks(false);
 		Log.d(TodoTxtTouch.TAG, "populateFromUrl size=" + m_act.m_tasks.size());
 		if (!result) {
-			Util.showToastLong(m_act, "Sync failed: " + (null==m_remoteFile?"Null remote file":m_remoteFile.httpReason));
+			if (null != m_remoteFile && 404 == m_remoteFile.httpCode) {
+				Util.showToastLong(m_act,
+						"Added: " + m_app.getRemoteFileAndPath());
+			} else {
+				Util.showToastLong(m_act, "Sync failed: "
+						+ (null == m_remoteFile ? "Null remote file"
+								: m_remoteFile.httpReason));
+			}
 		} else {
 			Util.showToastShort(m_act, m_act.m_tasks.size() + " items");
 		}

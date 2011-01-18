@@ -76,13 +76,14 @@ public class TodoApplication extends Application {
 				return true;
 		}
 		clearKeys();
-		m_loggedIn = false;
 		return false;
 	}
 
 	private void clearKeys() {
-		// TODO Auto-generated method stub
-
+		Editor editor = m_prefs.edit();
+		editor.clear();
+		editor.commit();
+		m_loggedIn = false;
 	}
 
 	private String[] getAuthKeys() {
@@ -99,29 +100,28 @@ public class TodoApplication extends Application {
 
 	public void unlinkDropbox() {
 		Log.i(TAG, "Clearing current user data!");
-		Editor editor = m_prefs.edit();
-		editor.clear();
-		editor.commit();
 		getAPI().deauthenticate();
-		m_loggedIn = false;
+		clearKeys();
 		Constants.TODOFILE.delete();
 		Constants.TODOFILETMP.delete();
 	}
-	
+
 	protected Config getConfig() {
-    	if (m_config == null) {
-			String consumerKey = getResources().getText(R.string.dropbox_consumer_key).toString();
-			String consumerSecret = getText(R.string.dropbox_consumer_secret).toString();
+		if (m_config == null) {
+			String consumerKey = getResources().getText(
+					R.string.dropbox_consumer_key).toString();
+			String consumerSecret = getText(R.string.dropbox_consumer_secret)
+					.toString();
 
-	    	m_config = m_api.getConfig(null, false);
-	    	m_config.consumerKey=consumerKey;
-	    	m_config.consumerSecret=consumerSecret;
-	    	m_config.server="api.dropbox.com";
-	    	m_config.contentServer="api-content.dropbox.com";
-	    	m_config.port=80;
+			m_config = m_api.getConfig(null, false);
+			m_config.consumerKey = consumerKey;
+			m_config.consumerSecret = consumerSecret;
+			m_config.server = "api.dropbox.com";
+			m_config.contentServer = "api-content.dropbox.com";
+			m_config.port = 80;
 
-    	}
-    	return m_config;
+		}
+		return m_config;
 	}
 
 	public DropboxAPI getAPI() {
@@ -133,9 +133,10 @@ public class TodoApplication extends Application {
 	}
 
 	public String getRemotePath() {
-		return m_prefs.getString("todotxtpath", getResources().getString(R.string.TODOTXTPATH_defaultPath));
+		return m_prefs.getString("todotxtpath",
+				getResources().getString(R.string.TODOTXTPATH_defaultPath));
 	}
-	
+
 	public String getRemoteFileAndPath() {
 		return getRemotePath() + "/" + Constants.REMOTE_FILE;
 	}
