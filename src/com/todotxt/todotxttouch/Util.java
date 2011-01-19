@@ -239,6 +239,16 @@ public class Util {
 		builder.show();
 	}
 
+	public static void showDeleteConfirmationDialog(Context cxt,
+			OnClickListener oklistener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+		builder.setTitle(R.string.delete_task_title);
+		builder.setMessage(R.string.delete_task_message);
+		builder.setPositiveButton(R.string.delete_task_confirm, oklistener);
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.show();
+	}
+
 	public static boolean isDeviceWritable() {
 		String sdState = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(sdState)) {
@@ -297,7 +307,7 @@ public class Util {
 	public interface LoginDialogListener {
 		void onClick(String username, String password);
 	}
-	
+
 	public static void createParentDirectory(File dest) throws TodoException {
 		if (dest == null) {
 			throw new TodoException("createParentDirectory: dest is null");

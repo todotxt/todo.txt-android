@@ -273,7 +273,7 @@ public class TodoTxtTouch extends ListActivity implements
 					}.execute();
 				}
 			};
-			Util.showConfirmationDialog(this, R.string.areyousure, listener);
+			Util.showDeleteConfirmationDialog(this, listener);
 		} else if (menuid == R.id.done) {
 			Log.v(TAG, "done");
 			OnClickListener listener = new OnClickListener() {
