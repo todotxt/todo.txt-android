@@ -109,7 +109,7 @@ public class TodoUtil {
 			for (int i = 0; i < tasks.size(); ++i) {
 				String fileFormat = TaskHelper.toFileFormat(tasks.get(i));
 				fw.write(fileFormat);
-				fw.write("\n");
+				fw.write("\r\n");
 			}
 			fw.close();
 		} catch (Exception e) {
