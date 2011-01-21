@@ -115,6 +115,12 @@ public class Preferences extends PreferenceActivity {
 							((TodoApplication) getApplication())
 									.unlinkDropbox();
 							Preferences.this.setResult(RESULT_SYNC_LIST);
+							
+							// produce a logout intent and broadcast it
+							Intent broadcastLogoutIntent = new Intent();
+							broadcastLogoutIntent.setAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
+							sendBroadcast(broadcastLogoutIntent);
+							
 							Preferences.this.finish();
 						}
 					});

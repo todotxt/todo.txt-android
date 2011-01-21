@@ -25,9 +25,12 @@
  */
 package com.todotxt.todotxttouch;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -40,7 +43,7 @@ import com.dropbox.client.DropboxAPI.Config;
 
 public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 
-	private TodoTxtTouch m_act;
+	private TodoApplication m_app;
 	private Config m_config;
 	private String m_username;
 	private String m_password;
@@ -53,14 +56,14 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		m_password = password;
 	}
 
-	public DropboxLoginAsyncTask(TodoTxtTouch act, Config config) {
-		m_act = act;
+	public DropboxLoginAsyncTask(TodoApplication act, Config config) {
+		m_app = act;
 		m_config = config;
 	}
 
-	public DropboxLoginAsyncTask(TodoTxtTouch act, String username,
+	public DropboxLoginAsyncTask(TodoApplication act, String username,
 			String password, Config config) {
-		m_act = act;
+		m_app = act;
 		m_config = config;
 		m_username = username;
 		m_password = password;
@@ -68,11 +71,11 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 
 	@Override
 	protected Integer doInBackground(Void... params) {
-		DropboxAPI api = m_act.getAPI();
+		DropboxAPI api = m_app.getAPI();
 
 		if (!api.isAuthenticated()) {
 			m_config = api.authenticate(m_config, m_username, m_password);
-			m_act.setConfig(m_config);
+			m_app.setConfig(m_config);
 
 			if (m_config.authStatus != DropboxAPI.STATUS_SUCCESS)
 				return m_config.authStatus;
@@ -92,22 +95,34 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		if (result == DropboxAPI.STATUS_SUCCESS) {
 			if (m_config != null
 					&& m_config.authStatus == DropboxAPI.STATUS_SUCCESS) {
-				m_act.setLoggedIn(true);
-				m_act.storeKeys(m_config.accessTokenKey,
+				m_app.m_loggedIn = true;
+				storeKeys(m_config.accessTokenKey,
 						m_config.accessTokenSecret);
-				m_act.showToast("Logged into Dropbox");
+				showToast("Logged into Dropbox");
+				Intent broadcastLoginIntent = new Intent();
+				broadcastLoginIntent.setAction("com.todotxt.todotxttouch.ACTION_LOGIN");
+				m_app.sendBroadcast(broadcastLoginIntent);
 			}
 		} else {
 			if (result == DropboxAPI.STATUS_NETWORK_ERROR) {
-				m_act.showToast("Network error: " + m_config.authDetail);
+				showToast("Network error: " + m_config.authDetail);
 			} else {
-				m_act.showToast("Unsuccessful login.");
+				showToast("Unsuccessful login.");
 			}
 		}
 	}
 
-	public void showLoginDialog() {
-		LayoutInflater inflator = LayoutInflater.from(m_act);
+	public void showToast(String string) {
+		Util.showToastLong(m_app, string);
+	}
+	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
+		Editor editor = m_app.m_prefs.edit();
+		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
+		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
+		editor.commit();
+	}
+	public void showLoginDialog(Activity act) {
+		LayoutInflater inflator = LayoutInflater.from(act);
 		View v = inflator.inflate(R.layout.logindialog, null);
 		final TextView usernameTV = (TextView) v.findViewById(R.id.username);
 		final TextView passwordTV = (TextView) v.findViewById(R.id.password);
@@ -117,7 +132,7 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		String text = "No account? Create one at <a href=\"http://dropbox.com/m/register\">Dropbox</a>.";
 		mTextSample.setText(Html.fromHtml(text));
 
-		AlertDialog.Builder b = new AlertDialog.Builder(m_act);
+		AlertDialog.Builder b = new AlertDialog.Builder(act);
 		b.setView(v);
 		b.setTitle(R.string.dropbox_authentication);
 		b.setCancelable(true);

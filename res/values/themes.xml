@@ -8,4 +8,12 @@
 		<item name="android:dividerHeight">1px</item>
 		<item name="android:cacheColorHint">#FFFFFF</item>
 	</style>
+	<style name="TodoTxtTouchDark" parent="android:Theme">
+		<item name="android:textColor">#FFFFFF</item>
+		<item name="android:background">#000000</item>
+		<item name="android:divider">#DBE9FF</item>
+		<item name="android:footerDividersEnabled">true</item>
+		<item name="android:dividerHeight">1px</item>
+		<item name="android:cacheColorHint">#000000</item>
+	</style>
 </resources>
