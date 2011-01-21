@@ -42,11 +42,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -84,6 +86,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 	private final static int REQUEST_FILTER = 1;
 	private final static int REQUEST_PREFERENCES = 2;
+	private final static int REQUEST_LOGIN = 3;
 
 	ProgressDialog m_ProgressDialog = null;
 	ArrayList<Task> m_tasks = new ArrayList<Task>();
@@ -98,7 +101,8 @@ public class TodoTxtTouch extends ListActivity implements
 
 	private int m_pos = Constants.INVALID_POSITION;
 	private int m_sort = SORT_PRIO;
-
+	private BroadcastReceiver m_broadcastReceiver;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,10 +113,23 @@ public class TodoTxtTouch extends ListActivity implements
 
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
-
 		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks,
 				getLayoutInflater());
-
+	
+		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen 
+		// and finish() current activity
+		IntentFilter intentFilter = new IntentFilter();
+	    intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
+	    m_broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+    			Intent i = new Intent(context, LoginScreen.class);
+    			startActivity(i);
+                finish();
+            }
+        };
+	    registerReceiver(m_broadcastReceiver, intentFilter);
+	    
 		setListAdapter(this.m_adapter);
 
 		// FIXME adapter implements Filterable?
@@ -148,16 +165,25 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 	}
 
+	void showLogin(){
+	//	Intent i = new Intent(getBaseContext(), LoginScreen.class);
+	//	startActivityForResult(i, REQUEST_LOGIN);
+		Intent settingsActivity = new Intent(getBaseContext(),
+				Preferences.class);
+		startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
+	}
+	
 	void login() {
+		
 		final DropboxAPI api = getAPI();
 		if (api.isAuthenticated() && !m_app.m_loggedIn) {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this,
+			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(m_app,
 					m_app.getConfig());
 			loginTask.execute();
 		} else {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(this,
+			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(m_app,
 					m_app.getConfig());
-			loginTask.showLoginDialog();
+			loginTask.showLoginDialog(this);
 		}
 	}
 
@@ -165,6 +191,7 @@ public class TodoTxtTouch extends ListActivity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		m_app.m_prefs.unregisterOnSharedPreferenceChangeListener(this);
+		unregisterReceiver(m_broadcastReceiver);
 	}
 
 	@Override
@@ -456,6 +483,8 @@ public class TodoTxtTouch extends ListActivity implements
 			if (resultCode == Preferences.RESULT_SYNC_LIST) {
 				initializeTasks();
 			}
+		} else if (requestCode == REQUEST_LOGIN) {
+	
 		}
 	}
 

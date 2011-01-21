@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/loginbackground"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:background="@drawable/login_background">
+
+<ImageView android:id="@+id/todos_img" 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+    android:layout_gravity="center_horizontal|bottom"
+	android:src="@drawable/login_todos_img" />
+	
+<LinearLayout
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+<ImageView
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:layout_gravity="center_horizontal"
+	android:src="@drawable/icon_crystal_clear_checkmark" />
+	
+<LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:layout_gravity="center_horizontal"
+	android:paddingBottom="15pt">
+	
+	<TextView android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Todo.txt"
+		android:textSize="12pt"
+		android:typeface="monospace"
+		android:textColor="@color/white"
+	/>
+	<TextView android:id="@+id/title_2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text=" Touch"
+		android:textSize="12pt"
+		android:typeface="serif"
+		android:textStyle="italic"
+	/>
+	</LinearLayout>
+	
+	<Button android:id="@+id/login"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+		android:textSize="10pt"
+		android:text="@string/login_screen_button" />
+</LinearLayout>
+</FrameLayout>
