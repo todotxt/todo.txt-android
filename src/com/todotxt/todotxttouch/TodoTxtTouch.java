@@ -357,7 +357,7 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		} else if (menuid == R.id.priority) {
 			Log.v(TAG, "priority");
-			final String[] prioArr = { "" + TaskHelper.NONE, "A", "B", "C" };
+			final String[] prioArr = { "" + TaskHelper.NONE, "A", "B", "C", "D" };
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Select priority");
 			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
