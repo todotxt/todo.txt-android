@@ -13,12 +13,11 @@
 		<EditTextPreference android:summary="@string/TODOTXTPATH_summary"
 			android:defaultValue="@string/TODOTXTPATH_defaultPath" android:title="@string/TODOTXTPATH_title"
 			android:key="@string/TODOTXTPATH_key" />
-		<Preference android:key="logout_dropbox"
-			android:title="@string/dropbox_logout_pref_title" android:summary="@string/dropbox_logout_pref_summary" />
+		<Preference android:key="logout_dropbox" android:title="@string/dropbox_logout_pref_title"
+			android:summary="@string/dropbox_logout_pref_summary" />
 	</PreferenceCategory>
 	<PreferenceCategory android:key="about_settings_header"
 		android:title="@string/about_settings_header">
-		<Preference android:title="@string/software_version"
-			android:key="app_version" />
+		<Preference android:title="@string/app_label" android:key="app_version" />
 	</PreferenceCategory>
 </PreferenceScreen>

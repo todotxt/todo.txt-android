@@ -42,6 +42,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -102,12 +103,14 @@ public class TodoTxtTouch extends ListActivity implements
 	private int m_pos = Constants.INVALID_POSITION;
 	private int m_sort = SORT_PRIO;
 	private BroadcastReceiver m_broadcastReceiver;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_LEFT_ICON);
+
 		setContentView(R.layout.main);
+
 		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
 				R.drawable.icon_crystal_clear_checkmark);
 
@@ -115,21 +118,21 @@ public class TodoTxtTouch extends ListActivity implements
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks,
 				getLayoutInflater());
-	
-		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen 
+
+		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
 		IntentFilter intentFilter = new IntentFilter();
-	    intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
-	    m_broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-    			Intent i = new Intent(context, LoginScreen.class);
-    			startActivity(i);
-                finish();
-            }
-        };
-	    registerReceiver(m_broadcastReceiver, intentFilter);
-	    
+		intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
+		m_broadcastReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Intent i = new Intent(context, LoginScreen.class);
+				startActivity(i);
+				finish();
+			}
+		};
+		registerReceiver(m_broadcastReceiver, intentFilter);
+
 		setListAdapter(this.m_adapter);
 
 		// FIXME adapter implements Filterable?
@@ -139,6 +142,16 @@ public class TodoTxtTouch extends ListActivity implements
 		getListView().setOnCreateContextMenuListener(this);
 
 		initializeTasks();
+
+		// Show search results
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			m_search = intent.getStringExtra(SearchManager.QUERY);
+			Log.v(TAG, "Searched for " + m_search);
+			// @TODO Fix this, the title setting doesn't work
+			getWindow().setTitle("Search results for: " + m_search);
+			setFilteredTasks(false);
+		}
 	}
 
 	private void initializeTasks() {
@@ -165,16 +178,16 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 	}
 
-	void showLogin(){
-	//	Intent i = new Intent(getBaseContext(), LoginScreen.class);
-	//	startActivityForResult(i, REQUEST_LOGIN);
+	void showLogin() {
+		// Intent i = new Intent(getBaseContext(), LoginScreen.class);
+		// startActivityForResult(i, REQUEST_LOGIN);
 		Intent settingsActivity = new Intent(getBaseContext(),
 				Preferences.class);
 		startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
 	}
-	
+
 	void login() {
-		
+
 		final DropboxAPI api = getAPI();
 		if (api.isAuthenticated() && !m_app.m_loggedIn) {
 			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(m_app,
@@ -484,7 +497,7 @@ public class TodoTxtTouch extends ListActivity implements
 				initializeTasks();
 			}
 		} else if (requestCode == REQUEST_LOGIN) {
-	
+
 		}
 	}
 

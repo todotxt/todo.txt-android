@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="app_label">Todo.txt Touch</string>
 	<string name="added_task">Added task</string>
 	<string name="add_task_failed">Could not add task</string>
 	<string name="updated_task">Updated task</string>
@@ -8,7 +9,6 @@
 		Dropbox/todo/todo.txt.</string>
 	<string name="sort">Sort</string>
 	<string name="filter">Filter</string>
-	<string name="app_name">Todo.txt Touch</string>
 	<string name="main_no_items">No tasks to display.</string>
 	<string name="set_preferences">Settings</string>
 	<string name="preferences">Settings</string>
@@ -44,7 +44,6 @@
 	<string name="DROPBOX_settings_header">Dropbox</string>
 	<string name="todotxt_settings_header">todo.txt</string>
 	<string name="about_settings_header">About</string>
-	<string name="software_version">Todo.txt Touch</string>
 
 	<string name="prepend_date_pref_key">todotxtprependdate</string>
 	<string name="prepend_date_pref_title">Date new tasks</string>
@@ -64,4 +63,6 @@
 	<string name="delete_task_title">Delete Task</string>
 	<string name="delete_task_message">This cannot be undone. Are you sure?</string>
 	<string name="delete_task_confirm">Delete</string>
+	<!-- search -->
+	<string name="search_hint">Search todo.txt</string>
 </resources>
