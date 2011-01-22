@@ -156,7 +156,7 @@ public class AddTask extends Activity {
 					int position, long id) {
 				if (position > 0) {
 					String item = contextsArr.get(position);
-					text.append("@" + item + " ");
+					text.append(" @" + item + " ");
 				}
 			}
 
