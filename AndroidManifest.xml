@@ -13,12 +13,17 @@
 		<supports-screens android:smallScreens="true"
 			android:normalScreens="true" android:largeScreens="true"
 			android:anyDensity="true" android:resizeable="true" />
-		<activity android:name=".TodoTxtTouch" android:label="@string/app_name">
+		
+		<activity android:name=".LoginScreen" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar"
+			android:screenOrientation="portrait" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		
+		<activity android:name=".TodoTxtTouch" android:label="@string/app_name" />
 		<activity android:name=".Filter" android:label="Filter" />
 		<activity android:name=".Preferences" android:label="@string/set_preferences" />
 		<activity android:name=".AddTask" android:label="@string/addtask" />

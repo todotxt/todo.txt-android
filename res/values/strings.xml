@@ -58,8 +58,8 @@
 	<string name="dropbox_authentication">Log in to Dropbox</string>
 	<string name="username_label">Email Address:</string>
 	<string name="password_label">Dropbox Password:</string>
-	<string name="login_screen_button">Log in</string>
-	<string name="login_button">Log in to Dropbox</string>
+	<string name="login_button">Log in</string>
+	<string name="login_screen_button">Log in to Dropbox</string>
 	<!-- delete -->
 	<string name="delete_task_title">Delete Task</string>
 	<string name="delete_task_message">This cannot be undone. Are you sure?</string>
