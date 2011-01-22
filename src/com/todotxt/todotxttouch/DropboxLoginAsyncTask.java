@@ -131,6 +131,7 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		mTextSample.setMovementMethod(LinkMovementMethod.getInstance());
 		String text = "No account? Create one at <a href=\"http://dropbox.com/m/register\">Dropbox</a>.";
 		mTextSample.setText(Html.fromHtml(text));
+		mTextSample.setFocusable(false);
 
 		AlertDialog.Builder b = new AlertDialog.Builder(act);
 		b.setView(v);
