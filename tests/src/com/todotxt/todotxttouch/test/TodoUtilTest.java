@@ -136,6 +136,24 @@ public class TodoUtilTest extends TestCase {
 		assertEquals("Wrong context", "phone", createdTask.contexts.get(0));
 	}
 	
+	/*
+	 * Ensure that a context can be properly parsed out from a string if it's at the start
+	 */
+	public void testCreateTaskWithContextAtStart() {
+		int expectedId = 1;
+		char expectedPriority = '-';
+		String expectedString = "@work Complete a simple programming task";
+		
+		Task createdTask = TaskHelper.createTask(expectedId, expectedString);
+		
+		assertEquals("ID's are equal", expectedId, createdTask.id);
+		assertEquals("Priorities are equal", expectedPriority, createdTask.prio);
+		assertEquals("Text is equal", expectedString, createdTask.text);
+		
+		assertEquals("Wrong number of contexts", 1, createdTask.contexts.size());
+		assertEquals("Wrong context", "work", createdTask.contexts.get(0));
+	}
+	
 	public void testCreateTaskDistinguishContextFromEmail() {
 		int expectedId = 1;
 		char expectedPriority = '-';
