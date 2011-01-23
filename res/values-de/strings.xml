@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_label">Todo.txt Touch</string>
+	<string name="added_task">Task hinzugefügt.</string>
+	<string name="add_task_failed">Konnte Task nicht hinzufügen.</string>
+	<string name="updated_task">Task aktualisiert.</string>
+	<string name="update_task_failed">Konnte Task nicht aktualisieren.</string>
+	<string name="initialized_dropbox">Dropbox Unterstützung eingerichtet! Siehe
+		Dropbox/todo/todo.txt.</string>
+	<string name="sort">Sortieren</string>
+	<string name="filter">Filtern</string>
+	<string name="main_no_items">Keine anzuzeigenden Tasks.</string>
+	<string name="set_preferences">Einstellungen</string>
+	<string name="preferences">Einstellungen</string>
+	<string name="sync">Sync</string>
+	<string name="refresh">Aktualisieren</string>
+	<string name="add">Hinzufügen</string>
+	<string name="addtask">Task hinzufügen</string>
+	<string name="done">Erledigt</string>
+	<string name="priority">Gewichten</string>
+	<string name="update">Akualisieren</string>
+	<string name="delete">Löschen</string>
+	<string name="context">Kontext</string>
+	<string name="project">Projekt</string>
+	<string name="tag">Tag</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Abbrechen</string>
+    <string name="clear">Löschen</string>
+	<string name="areyousure">Sind Sie sicher?</string>
+	<string name="tasktexthint">Task hier beschreiben. Neue Projekt Namen mit +
+		und Kontexte mit @. Zum Beispiel:\n\nArzt anrufen @fon +Gesundheit
+	</string>
+	<string name="search_summary">Zu suchenden Text eingeben.</string>
+	<!-- preferences -->
+	<string name="dropbox_logout_pref_title">Ausloggen</string>
+	<string name="dropbox_logout_pref_summary">Aus Dropbox ausloggen.</string>
+	<string name="dropbox_logout_explainer">Wollen Sie sich wirklich aus Dropbox ausloggen?
+	</string>
+	<string name="TODOTXTPATH_key">todotxtpath</string>
+	<string name="TODOTXTPATH_title">Ort der Datei</string>
+	<string name="TODOTXTPATH_summary">Der Dropbox Ordner in dem todo.txt gespeichert wird.
+	</string>
+	<string name="TODOTXTPATH_defaultPath">/todo</string>
+	<string name="DROPBOX_settings_header">Dropbox</string>
+	<string name="todotxt_settings_header">todo.txt</string>
+	<string name="about_settings_header">Über</string>
+
+	<string name="prepend_date_pref_key">todotxtprependdate</string>
+	<string name="prepend_date_pref_title">Neue Tasks mit Datum</string>
+	<string name="prepend_date_pref_summary">
+		Heutiges Datum automatisch neuen Tasks hinzufügen.
+	</string>
+	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
+	<string name="show_line_numbers_pref_title">Zeilennummern anzeigen.</string>
+	<string name="show_line_numbers_pref_summary">Zeige die Zeilennummern aller Tasks an.</string>
+	<!-- login -->
+	<string name="dropbox_authentication">In Dropbox einloggen</string>
+	<string name="username_label">Email Adresse:</string>
+	<string name="password_label">Dropbox Kennwort:</string>
+	<string name="login_button">Einloggen</string>
+	<string name="login_screen_button">In Dropbox einloggen</string>
+	<!-- delete -->
+	<string name="delete_task_title">Task löschen</string>
+	<string name="delete_task_message">Kann nicht rückgängig gemacht werden. Sind Sie sicher?</string>
+	<string name="delete_task_confirm">Löschen</string>
+	<!-- search -->
+	<string name="search_hint">todo.txt durchsuchen</string>
+	<!-- filter tabs -->
+	<string name="filter_tab_priorities">Gewichtung</string>
+	<string name="filter_tab_projects">Projekte</string>
+	<string name="filter_tab_contexts">Kontexte</string>
+	<string name="filter_tab_search">Schlüsselworte</string>
+	<!-- title bar changes -->
+	<string name="title_search_results">Suchergebnisse für: </string>
+	<string name="title_filter_applied">Angewendeter Filter: </string>
+</resources>
