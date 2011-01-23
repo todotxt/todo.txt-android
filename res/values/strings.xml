@@ -25,6 +25,7 @@
 	<string name="tag">Tag</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
 	<string name="areyousure">Are you sure?</string>
 	<string name="tasktexthint">Type your task here. Start new project names with +
 		and contexts with @. For example:\n\nCall doctor @phone +Health

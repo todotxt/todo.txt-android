@@ -5,29 +5,29 @@
 
 	<LinearLayout android:id="@+id/buttons"
 		android:orientation="horizontal"
-		android:layout_alignParentBottom="true" 
+		android:layout_alignParentBottom="true"
 		android:layout_width="fill_parent" android:layout_height="wrap_content">
 
 		<Button android:id="@+id/ok"
-				android:text="OK"
-				android:layout_weight="1"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-	
-		<Button android:id="@+id/cancel" 
-				android:text="Cancel"
+				android:text="@string/ok"
 				android:layout_weight="1"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
 
-		<Button android:id="@+id/clear" 
-				android:text="Clear"
+		<Button android:id="@+id/cancel"
+				android:text="@string/cancel"
+				android:layout_weight="1"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+
+		<Button android:id="@+id/clear"
+				android:text="@string/clear"
 				android:layout_weight="1"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
 
 	</LinearLayout>
-	
+
 	<LinearLayout android:id="@+id/priorities"
 		android:layout_above="@id/buttons"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
@@ -62,5 +62,5 @@
 			android:layout_height="fill_parent" />
 
 	</LinearLayout>
-	
+
 </RelativeLayout>
