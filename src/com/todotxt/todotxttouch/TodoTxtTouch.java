@@ -112,7 +112,7 @@ public class TodoTxtTouch extends ListActivity implements
 		setContentView(R.layout.main);
 
 		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
-				R.drawable.icon_crystal_clear_checkmark);
+				R.drawable.todotxt_touch_icon);
 
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
