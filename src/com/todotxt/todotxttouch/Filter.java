@@ -57,11 +57,17 @@ public class Filter extends TabActivity {
 
 		tabHost.addTab(tabHost.newTabSpec("Priorities")
 				.setIndicator("Priorities").setContent(R.id.priorities));
-		tabHost.addTab(tabHost.newTabSpec("Projects").setIndicator("Projects")
+		tabHost.addTab(tabHost
+				.newTabSpec(getString(R.string.filter_tab_projects))
+				.setIndicator(getString(R.string.filter_tab_projects))
 				.setContent(R.id.projects));
-		tabHost.addTab(tabHost.newTabSpec("Contexts").setIndicator("Contexts")
+		tabHost.addTab(tabHost
+				.newTabSpec(getString(R.string.filter_tab_contexts))
+				.setIndicator(getString(R.string.filter_tab_contexts))
 				.setContent(R.id.contexts));
-		tabHost.addTab(tabHost.newTabSpec("Search").setIndicator("Search")
+		tabHost.addTab(tabHost
+				.newTabSpec(getString(R.string.filter_tab_search))
+				.setIndicator(getString(R.string.filter_tab_search))
 				.setContent(R.id.search));
 
 		Intent data = getIntent();
