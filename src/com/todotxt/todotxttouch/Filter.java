@@ -46,6 +46,7 @@ import android.widget.TabHost;
 public class Filter extends TabActivity {
 
 	private final static String TAG = Filter.class.getSimpleName();
+	private static ArrayList<String> appliedFilters = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +56,10 @@ public class Filter extends TabActivity {
 		LayoutInflater.from(this).inflate(R.layout.filter,
 				tabHost.getTabContentView(), true);
 
-		tabHost.addTab(tabHost.newTabSpec("Priorities")
-				.setIndicator("Priorities").setContent(R.id.priorities));
+		tabHost.addTab(tabHost
+				.newTabSpec(getString(R.string.filter_tab_priorities))
+				.setIndicator(getString(R.string.filter_tab_priorities))
+				.setContent(R.id.priorities));
 		tabHost.addTab(tabHost
 				.newTabSpec(getString(R.string.filter_tab_projects))
 				.setIndicator(getString(R.string.filter_tab_projects))
@@ -115,13 +118,15 @@ public class Filter extends TabActivity {
 				Log.v(TAG, "onClick OK");
 				Intent data = new Intent();
 				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-						getItems(priorities));
+						getItems(priorities, "Priority"));
 				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-						getItems(projects));
+						getItems(projects, "Project"));
 				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-						getItems(contexts));
+						getItems(contexts, "Context"));
 				data.putExtra(Constants.EXTRA_SEARCH, search.getText()
 						.toString());
+				data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,
+						appliedFilters);
 				setResult(Activity.RESULT_OK, data);
 				finish();
 			}
@@ -142,6 +147,7 @@ public class Filter extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				Log.v(TAG, "onClick Clear");
+				appliedFilters = new ArrayList<String>();
 				setSelected(priorities, null);
 				setSelected(projects, null);
 				setSelected(contexts, null);
@@ -150,12 +156,18 @@ public class Filter extends TabActivity {
 		});
 	}
 
-	private static ArrayList<String> getItems(ListView adapter) {
+	private static ArrayList<String> getItems(ListView adapter, String type) {
 		ArrayList<String> arr = new ArrayList<String>();
 		int size = adapter.getCount();
 		for (int i = 0; i < size; i++) {
 			if (adapter.isItemChecked(i)) {
 				arr.add((String) adapter.getAdapter().getItem(i));
+				Log.v(TAG, " Adding "
+						+ (String) adapter.getAdapter().getItem(i)
+						+ " to applied filters.");
+				if (!appliedFilters.contains(type)) {
+					appliedFilters.add(type);
+				}
 			}
 		}
 		return arr;

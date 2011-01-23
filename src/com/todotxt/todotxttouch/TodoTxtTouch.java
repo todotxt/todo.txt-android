@@ -104,15 +104,19 @@ public class TodoTxtTouch extends ListActivity implements
 	private int m_sort = SORT_PRIO;
 	private BroadcastReceiver m_broadcastReceiver;
 
+	private ArrayList<String> m_filters = new ArrayList<String>();
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_LEFT_ICON);
+		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.main);
 
-		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,
-				R.drawable.todotxt_touch_icon);
+		if (customTitleSupported) {
+			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+					R.layout.title_bar);
+		}
 
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
@@ -148,8 +152,6 @@ public class TodoTxtTouch extends ListActivity implements
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			m_search = intent.getStringExtra(SearchManager.QUERY);
 			Log.v(TAG, "Searched for " + m_search);
-			// @TODO Fix this, the title setting doesn't work
-			getWindow().setTitle("Search results for: " + m_search);
 			setFilteredTasks(false);
 		}
 	}
@@ -490,6 +492,8 @@ public class TodoTxtTouch extends ListActivity implements
 				m_contexts = data
 						.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
 				m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
+				m_filters = data
+						.getStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS);
 				setFilteredTasks(false);
 			}
 		} else if (requestCode == REQUEST_PREFERENCES) {
@@ -583,6 +587,28 @@ public class TodoTxtTouch extends ListActivity implements
 				m_adapter.add(tasks.get(i));
 			}
 			m_adapter.notifyDataSetChanged();
+		}
+
+		final TextView titleText = (TextView) findViewById(R.id.title_text);
+		if (titleText != null) {
+			if (m_filters.size() > 0) {
+				String filterTitle = getString(R.string.title_filter_applied) + " ";
+				int count = m_filters.size();
+				for (int i = 0; i < count; i++) {
+					filterTitle += m_filters.get(i) + " ";
+				}
+				if (!Util.isEmpty(m_search)) {
+					filterTitle += "Keyword";
+				}
+				titleText.setText(filterTitle);
+			} else if (!Util.isEmpty(m_search)) {
+				if (titleText != null) {
+					titleText.setText(getString(R.string.title_search_results)
+							+ " " + m_search);
+				}
+			} else {
+				titleText.setText(getString(R.string.app_label));
+			}
 		}
 	}
 
