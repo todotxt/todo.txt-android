@@ -9,19 +9,13 @@
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content" 
     android:layout_gravity="center_horizontal|bottom"
-	android:src="@drawable/login_todos_img" />
+	android:src="@drawable/todotxt_touch_256" />
 	
 <LinearLayout
 	android:orientation="vertical" 
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	
-<ImageView
-	android:layout_width="wrap_content" 
-	android:layout_height="wrap_content" 
-	android:layout_gravity="center_horizontal"
-	android:src="@drawable/todotxt_touch_icon" />
-	
+
 <LinearLayout
 	android:orientation="horizontal"
 	android:layout_width="wrap_content"
@@ -36,6 +30,7 @@
 		android:textSize="12pt"
 		android:typeface="monospace"
 		android:textColor="@color/white"
+		android:paddingTop="15pt"
 	/>
 	<TextView android:id="@+id/title_2"
 		android:layout_width="wrap_content"
@@ -51,7 +46,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
-		android:textSize="10pt"
+		android:textSize="8pt"
 		android:text="@string/login_screen_button" />
 </LinearLayout>
 </FrameLayout>
