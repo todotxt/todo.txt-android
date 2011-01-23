@@ -89,7 +89,7 @@ public class Preferences extends PreferenceActivity {
 					.setMessage("Version "
 							+ version
 							+ "\nBy Gina Trapani &\nthe Todo.txt community\ntodotxt@yahoogroups.com");
-			aboutAlert.setIcon(R.drawable.icon_crystal_clear_checkmark);
+			aboutAlert.setIcon(R.drawable.todotxt_touch_icon);
 			aboutAlert.setPositiveButton("Homepage",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {

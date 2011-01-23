@@ -20,7 +20,7 @@
 	android:layout_width="wrap_content" 
 	android:layout_height="wrap_content" 
 	android:layout_gravity="center_horizontal"
-	android:src="@drawable/icon_crystal_clear_checkmark" />
+	android:src="@drawable/todotxt_touch_icon" />
 	
 <LinearLayout
 	android:orientation="horizontal"
