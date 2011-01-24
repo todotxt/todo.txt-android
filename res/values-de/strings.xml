@@ -52,7 +52,7 @@
 	</string>
 	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
 	<string name="show_line_numbers_pref_title">Zeilennummern anzeigen.</string>
-	<string name="show_line_numbers_pref_summary">Zeige die Zeilennummern jedes Tasks an.</string>
+	<string name="show_line_numbers_pref_summary">Zeige die Zeilennummern aller Tasks an.</string>
 	<!-- login -->
 	<string name="dropbox_authentication">In Dropbox einloggen</string>
 	<string name="username_label">Email Adresse:</string>
