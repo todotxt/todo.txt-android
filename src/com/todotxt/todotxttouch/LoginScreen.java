@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author Hrayr Artunyan <hrayr[at]Hrayr-Artunyans-MacBook-Pro[dot]local>
+ * @author Hrayr Artunyan <hrayr[dot]artunyan[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2011 Hrayr Artunyan
  */

@@ -46,6 +46,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
 
@@ -58,6 +59,8 @@ public class AddTask extends Activity {
 	private Task m_backup;
 
 	private TodoApplication m_app;
+	
+	private TextView titleBarLabel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,9 @@ public class AddTask extends Activity {
 		}
 
 		m_app = (TodoApplication) getApplication();
-
+		// title bar label
+		titleBarLabel = (TextView)findViewById(R.id.title_bar_label);
+		
 		// text
 		final EditText text = (EditText) findViewById(R.id.taskText);
 		text.setGravity(Gravity.TOP);
@@ -84,8 +89,11 @@ public class AddTask extends Activity {
 			m_backup = task;
 			text.setText(TaskHelper.toFileFormat(task));
 			setTitle(R.string.update);
+			titleBarLabel.setText(R.string.update);
 		} else {
 			setTitle(R.string.addtask);
+			titleBarLabel.setText(R.string.addtask);
+
 			if (m_app.m_prefs.getBoolean("todotxtprependdate", false)) {
 				Date d = new Date();
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

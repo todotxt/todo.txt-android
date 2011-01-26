@@ -7,8 +7,9 @@
 	<color name="orange">#E86850</color>
 	<color name="black">#000000</color>
 	<color name="white">#FFFFFF</color>
+    <color name="title_separator">#40ffffff</color>
+    <color name="subtitle_label">#FF666666</color>
 </resources>
-
 <!-- http://www.colorcombos.com/ 
 FFD800 gold
 587058 green
