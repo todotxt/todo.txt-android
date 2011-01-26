@@ -97,11 +97,11 @@ public class AddTask extends Activity {
 		Spinner priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add("Priority");
-		for (char c = 'A'; c <= 'D'; c++) {
+		for (char c = 'A'; c <= 'E'; c++) {
 			prioArr.add("" + c);
 		}
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
-		if (m_backup != null && m_backup.prio >= 'A') {
+		if (m_backup != null && m_backup.prio >= 'A' && m_backup.prio <= 'E') {
 			priorities.setSelection(1 + m_backup.prio - 'A');
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -182,7 +182,7 @@ public class AddTask extends Activity {
 		addBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//strip line breaks
+				// strip line breaks
 				final String input = text.getText().toString()
 						.replaceAll("\\r\\n|\\r|\\n", " ");
 				new AsyncTask<Void, Void, Boolean>() {
