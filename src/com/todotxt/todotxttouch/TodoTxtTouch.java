@@ -372,7 +372,8 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		} else if (menuid == R.id.priority) {
 			Log.v(TAG, "priority");
-			final String[] prioArr = { "" + TaskHelper.NONE, "A", "B", "C", "D" };
+			final String[] prioArr = { "" + TaskHelper.NONE, "A", "B", "C",
+					"D", "E" };
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Select priority");
 			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
@@ -592,7 +593,8 @@ public class TodoTxtTouch extends ListActivity implements
 		final TextView titleText = (TextView) findViewById(R.id.title_text);
 		if (titleText != null) {
 			if (m_filters.size() > 0) {
-				String filterTitle = getString(R.string.title_filter_applied) + " ";
+				String filterTitle = getString(R.string.title_filter_applied)
+						+ " ";
 				int count = m_filters.size();
 				for (int i = 0; i < count; i++) {
 					filterTitle += m_filters.get(i) + " ";
@@ -693,6 +695,12 @@ public class TodoTxtTouch extends ListActivity implements
 					break;
 				case 'C':
 					holder.taskprio.setTextColor(res.getColor(R.color.orange));
+					break;
+				case 'D':
+					holder.taskprio.setTextColor(res.getColor(R.color.red));
+					break;
+				case 'E':
+					holder.taskprio.setTextColor(res.getColor(R.color.black));
 					break;
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
