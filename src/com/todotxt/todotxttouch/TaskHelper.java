@@ -53,7 +53,8 @@ public class TaskHelper {
 	private final static Pattern prioPattern = Pattern
 			.compile("\\(([A-Z])\\) (.*)");
 
-	private final static Pattern contextPattern = Pattern.compile("(?:^|\\s)@(\\w+)");
+	private final static Pattern contextPattern = Pattern
+			.compile("(?:^|\\s)@(\\w+)");
 
 	private final static Pattern projectPattern = Pattern.compile("\\+(\\w+)");
 
@@ -76,8 +77,9 @@ public class TaskHelper {
 		Matcher match_prepended_date = prependedDatePattern.matcher(text);
 		if (match_prepended_date.find()) {
 			text = match_prepended_date.group(0).substring(11);
-//			Log.i(TAG, "Date " + match_prepended_date.group(0).substring(0, 10)
-//					+ " found in line " + text);
+			// Log.i(TAG, "Date " + match_prepended_date.group(0).substring(0,
+			// 10)
+			// + " found in line " + text);
 			prepended_date = match_prepended_date.group(0).substring(0, 10);
 		}
 		return new Task(id, prio, prepended_date, text.trim());
