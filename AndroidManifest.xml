@@ -21,11 +21,13 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".TodoTxtTouch" android:label="@string/app_label" />
-		<activity android:name=".Filter" android:label="Filter" />
+		<activity android:name=".Filter" android:label="Filter"
+			android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".Preferences" android:label="@string/set_preferences" />
-		<activity android:name=".AddTask" android:label="@string/addtask" />
-		<activity android:name=".TodoTxtTouch">
+		<activity android:name=".AddTask" android:label="@string/addtask"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".TodoTxtTouch"
+			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>
