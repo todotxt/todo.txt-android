@@ -113,7 +113,6 @@ public class Filter extends TabActivity {
 
 		Button ok = (Button) findViewById(R.id.ok);
 		ok.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				Log.v(TAG, "onClick OK");
 				Intent data = new Intent();
@@ -134,7 +133,6 @@ public class Filter extends TabActivity {
 
 		Button cancel = (Button) findViewById(R.id.cancel);
 		cancel.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				Log.v(TAG, "onClick Cancel");
 				setResult(Activity.RESULT_CANCELED);
@@ -144,7 +142,6 @@ public class Filter extends TabActivity {
 
 		Button clear = (Button) findViewById(R.id.clear);
 		clear.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				Log.v(TAG, "onClick Clear");
 				appliedFilters = new ArrayList<String>();

@@ -102,7 +102,6 @@ public class TaskHelper {
 	}
 
 	public static Comparator<Task> byId = new Comparator<Task>() {
-		@Override
 		public int compare(Task arg0, Task arg1) {
 			if (arg0 != null && arg1 != null) {
 				return Long.valueOf(arg0.id).compareTo(arg1.id);
@@ -112,7 +111,6 @@ public class TaskHelper {
 	};
 
 	public static Comparator<Task> byPrio = new Comparator<Task>() {
-		@Override
 		public int compare(Task arg0, Task arg1) {
 			if (arg0 != null && arg1 != null) {
 				if (arg0.prio == TaskHelper.NONE
@@ -130,7 +128,6 @@ public class TaskHelper {
 	};
 
 	public static Comparator<Task> byText = new Comparator<Task>() {
-		@Override
 		public int compare(Task arg0, Task arg1) {
 			try {
 				return arg0.text.compareTo(arg1.text);

@@ -138,7 +138,6 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 		b.setTitle(R.string.dropbox_authentication);
 		b.setCancelable(true);
 		b.setPositiveButton(R.string.login_button, new OnClickListener() {
-			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				String u = usernameTV.getText().toString();
 				String p = passwordTV.getText().toString();

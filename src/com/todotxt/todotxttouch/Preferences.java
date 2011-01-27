@@ -110,7 +110,6 @@ public class Preferences extends PreferenceActivity {
 			logoutAlert.setMessage(R.string.dropbox_logout_explainer);
 			logoutAlert.setPositiveButton(R.string.dropbox_logout_pref_title,
 					new DialogInterface.OnClickListener() {
-						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							((TodoApplication) getApplication())
 									.unlinkDropbox();

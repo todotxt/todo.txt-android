@@ -215,7 +215,6 @@ public class TodoTxtTouch extends ListActivity implements
 		setFilteredTasks(true);
 	}
 
-	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
@@ -273,7 +272,6 @@ public class TodoTxtTouch extends ListActivity implements
 		} else if (menuid == R.id.delete) {
 			Log.v(TAG, "delete");
 			OnClickListener listener = new OnClickListener() {
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					final Task task = m_adapter.getItem(pos);
 					new AsyncTask<Void, Void, Boolean>() {
@@ -319,7 +317,6 @@ public class TodoTxtTouch extends ListActivity implements
 		} else if (menuid == R.id.done) {
 			Log.v(TAG, "done");
 			OnClickListener listener = new OnClickListener() {
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					final Task task = m_adapter.getItem(pos);
 					new AsyncTask<Void, Void, Boolean>() {
@@ -376,7 +373,6 @@ public class TodoTxtTouch extends ListActivity implements
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Select priority");
 			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
-				@Override
 				public void onClick(DialogInterface dialog, final int which) {
 					final Task task = m_adapter.getItem(pos);
 					dialog.dismiss();
@@ -463,7 +459,6 @@ public class TodoTxtTouch extends ListActivity implements
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setSingleChoiceItems(R.array.sort, m_sort,
 					new OnClickListener() {
-						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							Log.v(TAG, "onClick " + which);
 							m_sort = which;
@@ -479,7 +474,6 @@ public class TodoTxtTouch extends ListActivity implements
 		return true;
 	}
 
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + " i=" + data);
@@ -521,7 +515,6 @@ public class TodoTxtTouch extends ListActivity implements
 			d = Util.createMultiChoiceDialog(this,
 					pStrs.toArray(new String[size]), values, null, null,
 					new OnMultiChoiceDialogListener() {
-						@Override
 						public void onClick(boolean[] selected) {
 							m_prios.clear();
 							for (int i = 0; i < selected.length; i++) {
@@ -534,7 +527,6 @@ public class TodoTxtTouch extends ListActivity implements
 						}
 					});
 			d.setOnCancelListener(new OnCancelListener() {
-				@Override
 				public void onCancel(DialogInterface dialog) {
 					removeDialog(R.id.priority);
 				}

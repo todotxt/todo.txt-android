@@ -105,7 +105,6 @@ public class AddTask extends Activity {
 			priorities.setSelection(1 + m_backup.prio - 'A');
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				if (position > 0) {
@@ -120,7 +119,6 @@ public class AddTask extends Activity {
 				}
 			}
 
-			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
@@ -131,7 +129,6 @@ public class AddTask extends Activity {
 		projectsArr.add(0, "Project");
 		projects.setAdapter(Util.newSpinnerAdapter(this, projectsArr));
 		projects.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				if (position > 0) {
@@ -140,7 +137,6 @@ public class AddTask extends Activity {
 				}
 			}
 
-			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
@@ -151,7 +147,6 @@ public class AddTask extends Activity {
 		contextsArr.add(0, "Context");
 		contexts.setAdapter(Util.newSpinnerAdapter(this, contextsArr));
 		contexts.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				if (position > 0) {
@@ -160,7 +155,6 @@ public class AddTask extends Activity {
 				}
 			}
 
-			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
@@ -168,7 +162,6 @@ public class AddTask extends Activity {
 		// cancel
 		Button cancel = (Button) findViewById(R.id.cancel);
 		cancel.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				finish();
 			}
@@ -180,7 +173,6 @@ public class AddTask extends Activity {
 			addBtn.setText(R.string.update);
 		}
 		addBtn.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				//strip line breaks
 				final String input = text.getText().toString()
