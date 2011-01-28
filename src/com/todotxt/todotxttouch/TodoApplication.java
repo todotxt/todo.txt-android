@@ -46,6 +46,7 @@ public class TodoApplication extends Application {
 	public DropboxUtil m_util;
 	private Config m_config;
 	public boolean m_loggedIn = false;
+	public boolean m_syncing = false;
 
 	@Override
 	public void onCreate() {

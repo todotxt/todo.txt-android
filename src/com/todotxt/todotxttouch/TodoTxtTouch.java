@@ -80,7 +80,11 @@ public class TodoTxtTouch extends ListActivity implements
 		OnSharedPreferenceChangeListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
-
+	
+	private final static String INTENT_ACTION_LOGOUT = "com.todotxt.todotxttouch.ACTION_LOGOUT";
+	private final static String INTENT_ASYNC_SUCCESS = "com.todotxt.todotxttouch.ASYNC_SUCCESS";
+	private final static String INTENT_ASYNC_FAILED = "com.todotxt.todotxttouch.ASYNC_FAILED";
+	
 	private final static int SORT_PRIO = 0;
 	private final static int SORT_ID = 1;
 	private final static int SORT_TEXT = 2;
@@ -109,15 +113,16 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		
+	//	final boolean customTitleSupported = requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 
 		setContentView(R.layout.main);
-
+/*
 		if (customTitleSupported) {
 			getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
 					R.layout.title_bar);
 		}
-
+		*/
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 		m_adapter = new TaskAdapter(this, R.layout.list_item, m_tasks,
@@ -126,13 +131,23 @@ public class TodoTxtTouch extends ListActivity implements
 		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
+		intentFilter.addAction(INTENT_ACTION_LOGOUT);
+		intentFilter.addAction(INTENT_ASYNC_SUCCESS);
+		intentFilter.addAction(INTENT_ASYNC_FAILED);
+
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Intent i = new Intent(context, LoginScreen.class);
-				startActivity(i);
-				finish();
+				if (intent.getAction().equalsIgnoreCase(INTENT_ACTION_LOGOUT)){
+					Intent i = new Intent(context, LoginScreen.class);
+					startActivity(i);
+					finish();
+				} else if (intent.getAction().equalsIgnoreCase(INTENT_ASYNC_SUCCESS) ||
+							intent.getAction().equalsIgnoreCase(INTENT_ASYNC_FAILED)){
+					
+					m_app.m_syncing=false;
+					updateRefreshStatus();
+				}	
 			}
 		};
 		registerReceiver(m_broadcastReceiver, intentFilter);
@@ -421,7 +436,7 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 		return super.onContextItemSelected(item);
 	}
-
+        
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
@@ -544,7 +559,21 @@ public class TodoTxtTouch extends ListActivity implements
 			return null;
 		}
 	}
+	
 
+	/** Handle "add task" action. */
+    public void onAddTaskClick(View v) {
+        startActivity(new Intent(this, AddTask.class));
+    }
+
+	/** Handle "sync" action. */
+    public void onSyncClick(View v) {
+		Log.v(TAG, "titlebar: sync");
+
+		m_app.m_syncing=true;
+		updateRefreshStatus();
+		populateFromExternal();
+	}
 	void clearFilter() {
 		m_prios = new ArrayList<String>(); // Collections.emptyList();
 		m_contexts = new ArrayList<String>(); // Collections.emptyList();
@@ -617,6 +646,14 @@ public class TodoTxtTouch extends ListActivity implements
 		m_pos = position;
 		openContextMenu(getListView());
 	}
+	
+
+    private void updateRefreshStatus() {
+        findViewById(R.id.btn_title_refresh).setVisibility(
+                m_app.m_syncing ? View.GONE : View.VISIBLE);
+        findViewById(R.id.title_refresh_progress).setVisibility(
+        		 m_app.m_syncing ? View.VISIBLE : View.GONE);
+    }
 
 	private void populateFromFile() {
 		Log.d(TAG, "populateFromFile");
@@ -626,6 +663,8 @@ public class TodoTxtTouch extends ListActivity implements
 
 	void populateFromExternal() {
 		if (m_app.m_loggedIn && getAPI().isAuthenticated()) {
+			m_app.m_syncing=true;
+			updateRefreshStatus();
 			new DropboxFetchAsyncTask(this).execute();
 		} else {
 			login();
