@@ -7,4 +7,6 @@
 	<color name="orange">#CD6600</color>
 	<color name="black">#000000</color>
 	<color name="white">#FFFFFF</color>
+	
+    <color name="title_separator">#40ffffff</color>
 </resources>

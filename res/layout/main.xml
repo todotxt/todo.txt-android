@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
+    android:id="@+id/home_root"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-
-	<ListView android:id="@+id/android:list" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" style="@style/TodoTxtTouchLight" />
-	<TextView android:id="@+id/android:empty"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:text="@string/main_no_items" style="@style/TodoTxtTouchLight"
-		android:gravity="center_vertical|center_horizontal" />
-
+   	
+    <LinearLayout
+		style="@style/TitleBar">
+		<ImageView style="@style/TitleBarLogo"
+			android:src="@drawable/title_logo" />	
+        <View style="@style/TitleBarSpring" />
+        <ImageView style="@style/TitleBarSeparator" />        
+        <ImageButton style="@style/TitleBarAction"
+            android:id="@+id/btn_title_refresh"
+            android:src="@drawable/ic_title_refresh"
+            android:onClick="onSyncClick" />
+            
+        <ProgressBar style="@style/TitleBarProgressIndicator"
+            android:id="@+id/title_refresh_progress"
+            android:visibility="gone" />
+        <ImageView style="@style/TitleBarSeparator" />
+        <ImageButton style="@style/TitleBarAction"
+            android:src="@drawable/ic_title_add" 
+			android:onClick="onAddTaskClick" />
+	</LinearLayout>
+	
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">	
+        <ListView 
+			android:id="@+id/android:list" 
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			style="@style/TodoTxtTouchLight" />
+			
+		<TextView 
+			android:id="@+id/android:empty"
+			android:layout_width="fill_parent" 
+			android:layout_height="fill_parent"
+			android:text="@string/main_no_items" 
+			style="@style/TodoTxtTouchLight"
+			android:gravity="center_vertical|center_horizontal" />
+	</LinearLayout>
 </LinearLayout>

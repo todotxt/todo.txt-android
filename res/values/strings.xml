@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 	<string name="app_label">Todo.txt Touch</string>
 	<string name="added_task">Added task</string>
 	<string name="add_task_failed">Could not add task</string>

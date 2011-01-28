@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/home_root"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+	
+    <LinearLayout
+        style="@style/TitleBar">
+         <ImageView style="@style/TitleBarLogo"
+            android:src="@drawable/title_logo" />
+        	
+        <View style="@style/TitleBarSpring" />
+
+        <ImageView style="@style/TitleBarSeparator" />
+        
+        <ImageButton style="@style/TitleBarAction"
+            android:id="@+id/btn_title_refresh"
+            android:src="@drawable/ic_title_refresh" />
+        <ProgressBar style="@style/TitleBarProgressIndicator"
+            android:id="@+id/title_refresh_progress"
+            android:visibility="gone" />
+
+        <ImageView style="@style/TitleBarSeparator" />
+        <ImageButton style="@style/TitleBarAction"
+            android:src="@drawable/ic_title_add" />
+	</LinearLayout>s
+	
+<RelativeLayout
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="wrap_content">
 
 	<LinearLayout android:id="@+id/buttons"
 		android:orientation="horizontal"
@@ -64,3 +92,4 @@
 	</LinearLayout>
 	
 </RelativeLayout>
+</LinearLayout>
