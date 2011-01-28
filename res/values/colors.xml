@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="red">#C73F17</color>
-	<color name="green">#347C17</color>
-	<color name="blue">#0000ff</color>
-	<color name="gold">#FFD700</color>
-	<color name="orange">#CD6600</color>
+	<color name="green">#587058</color>
+	<color name="blue">#587498</color>
+	<color name="gold">#FFD800</color>
+	<color name="orange">#E86850</color>
 	<color name="black">#000000</color>
 	<color name="white">#FFFFFF</color>
 </resources>
+
+<!-- http://www.colorcombos.com/ 
+FFD800 gold
+587058 green
+587498 blue
+E86850 orange
+ -->

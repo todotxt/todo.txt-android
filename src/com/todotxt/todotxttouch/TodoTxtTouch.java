@@ -697,7 +697,7 @@ public class TodoTxtTouch extends ListActivity implements
 					holder.taskprio.setTextColor(res.getColor(R.color.orange));
 					break;
 				case 'D':
-					holder.taskprio.setTextColor(res.getColor(R.color.red));
+					holder.taskprio.setTextColor(res.getColor(R.color.gold));
 					break;
 				case 'E':
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
