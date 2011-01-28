@@ -248,7 +248,19 @@ public class TodoTxtTouch extends ListActivity implements
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main_long, menu);
+		AdapterView.AdapterContextMenuInfo menuInfoAdap = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		final int pos;
+		if (m_pos != Constants.INVALID_POSITION) {
+			pos = m_pos;
+		} else {
+			pos = menuInfoAdap.position;
+		}
+		final Task task = m_adapter.getItem(pos);
+		if (task.text.startsWith(TaskHelper.COMPLETED)) {
+			inflater.inflate(R.menu.context_completed, menu);
+		} else {
+			inflater.inflate(R.menu.main_long, menu);
+		}
 	}
 
 	@Override
@@ -362,6 +374,57 @@ public class TodoTxtTouch extends ListActivity implements
 								Util.showToastLong(
 										TodoTxtTouch.this,
 										"Could not complete task "
+												+ TaskHelper.toFileFormat(task));
+							}
+							setFilteredTasks(true);
+						}
+					}.execute();
+				}
+			};
+			Util.showConfirmationDialog(this, R.string.areyousure, listener);
+		} else if (menuid == R.id.unComplete) {
+			Log.v(TAG, "undo Complete");
+			OnClickListener listener = new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					final Task task = m_adapter.getItem(pos);
+					new AsyncTask<Void, Void, Boolean>() {
+						protected void onPreExecute() {
+							m_ProgressDialog = ProgressDialog.show(
+									TodoTxtTouch.this, "Marking Task Not Complete",
+									"Please wait...", true);
+						}
+
+						@Override
+						protected Boolean doInBackground(Void... params) {
+							try {
+								if (!task.text.startsWith(TaskHelper.COMPLETED)) {
+									return true;
+								} else {
+									String text = task.text.substring(13);
+									Log.v(TAG,
+											"Marking as incomplete task with this text: "
+													+ text);
+									return m_app.m_util.updateTask(
+											TaskHelper.NONE, text, task);
+								}
+							} catch (Exception e) {
+								Log.e(TAG, e.getMessage(), e);
+							}
+							return false;
+						}
+
+						protected void onPostExecute(Boolean result) {
+							m_ProgressDialog.dismiss();
+							if (result) {
+								Util.showToastLong(
+										TodoTxtTouch.this,
+										"Task marked as not completed"
+												+ TaskHelper.toFileFormat(task));
+							} else {
+								Util.showToastLong(
+										TodoTxtTouch.this,
+										"Could not mark task as not completed"
 												+ TaskHelper.toFileFormat(task));
 							}
 							setFilteredTasks(true);
