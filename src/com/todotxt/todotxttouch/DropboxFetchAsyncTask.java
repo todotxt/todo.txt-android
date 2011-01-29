@@ -67,9 +67,11 @@ public class DropboxFetchAsyncTask extends AsyncTask<Void, Void, Boolean> {
 				}
 				return false;
 			}
-
 			m_act.m_tasks = TodoUtil.loadTasksFromStream(m_remoteFile.is);
-			TodoUtil.writeToFile(m_act.m_tasks, Constants.TODOFILE);
+			boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
+					"linebreakspref", true);
+			TodoUtil.writeToFile(m_act.m_tasks, Constants.TODOFILE,
+					useWindowsLineBreaks);
 			return true;
 		} catch (Exception e) {
 			m_app.m_syncing = false;
@@ -89,13 +91,15 @@ public class DropboxFetchAsyncTask extends AsyncTask<Void, Void, Boolean> {
 		if (!result) {
 			if (null != m_remoteFile && 404 == m_remoteFile.httpCode) {
 				Intent broadcastLoginIntent = new Intent();
-				broadcastLoginIntent.setAction("com.todotxt.todotxttouch.ASYNC_SUCCESS");
+				broadcastLoginIntent
+						.setAction("com.todotxt.todotxttouch.ASYNC_SUCCESS");
 				m_app.sendBroadcast(broadcastLoginIntent);
 				Util.showToastLong(m_act,
 						"Added: " + m_app.getRemoteFileAndPath());
 			} else {
 				Intent broadcastLoginIntent = new Intent();
-				broadcastLoginIntent.setAction("com.todotxt.todotxttouch.ASYNC_FAILED");
+				broadcastLoginIntent
+						.setAction("com.todotxt.todotxttouch.ASYNC_FAILED");
 				m_act.sendBroadcast(broadcastLoginIntent);
 				Util.showToastLong(m_act, "Sync failed: "
 						+ (null == m_remoteFile ? "Null remote file"
@@ -103,7 +107,8 @@ public class DropboxFetchAsyncTask extends AsyncTask<Void, Void, Boolean> {
 			}
 		} else {
 			Intent broadcastLoginIntent = new Intent();
-			broadcastLoginIntent.setAction("com.todotxt.todotxttouch.ASYNC_SUCCESS");
+			broadcastLoginIntent
+					.setAction("com.todotxt.todotxttouch.ASYNC_SUCCESS");
 			m_app.sendBroadcast(broadcastLoginIntent);
 			Util.showToastShort(m_act, m_act.m_tasks.size() + " items");
 		}

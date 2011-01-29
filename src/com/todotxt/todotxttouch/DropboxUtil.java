@@ -55,10 +55,14 @@ public class DropboxUtil {
 			tasks = fetchTasks(api);
 			Task task = TaskHelper.createTask(tasks.size(), input);
 			tasks.add(task);
-			TodoUtil.writeToFile(tasks, Constants.TODOFILETMP);
+			boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
+					"linebreakspref", true);
+			TodoUtil.writeToFile(tasks, Constants.TODOFILETMP,
+					useWindowsLineBreaks);
 			api.putFile(Constants.DROPBOX_MODUS, m_app.getRemotePath(),
 					Constants.TODOFILETMP);
-			TodoUtil.writeToFile(tasks, Constants.TODOFILE);
+			TodoUtil.writeToFile(tasks, Constants.TODOFILE,
+					useWindowsLineBreaks);
 			return true;
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage(), e);
@@ -77,10 +81,15 @@ public class DropboxUtil {
 			if (found != null) {
 				t.id = found.id;
 				TaskHelper.updateById(tasks, t);
-				TodoUtil.writeToFile(tasks, Constants.TODOFILETMP);
+				boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
+						"linebreakspref", true);
+
+				TodoUtil.writeToFile(tasks, Constants.TODOFILETMP,
+						useWindowsLineBreaks);
 				api.putFile(Constants.DROPBOX_MODUS, m_app.getRemotePath(),
 						Constants.TODOFILETMP);
-				TodoUtil.writeToFile(tasks, Constants.TODOFILE);
+				TodoUtil.writeToFile(tasks, Constants.TODOFILE,
+						useWindowsLineBreaks);
 				return true;
 			} else {
 				Log.v(TAG, "Task not found, not updated");

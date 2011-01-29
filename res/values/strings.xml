@@ -26,7 +26,7 @@
 	<string name="tag">Tag</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
-    <string name="clear">Clear</string>
+	<string name="clear">Clear</string>
 	<string name="areyousure">Are you sure?</string>
 	<string name="tasktexthint">Type your task here. Start new project names with +
 		and contexts with @. For example:\n\nCall doctor @phone +Health
@@ -54,6 +54,9 @@
 	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
 	<string name="show_line_numbers_pref_title">Show line numbers</string>
 	<string name="show_line_numbers_pref_summary">Display the line number of each task.</string>
+	<string name="line_breaks_pref_key">linebreakspref</string>
+	<string name="line_breaks_pref_title">Windows line breaks</string>
+	<string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
 	<!-- login -->
 	<string name="dropbox_authentication">Log in to Dropbox</string>
 	<string name="username_label">Email Address:</string>
