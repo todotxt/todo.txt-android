@@ -99,7 +99,8 @@ public class TodoUtil {
 		return items;
 	}
 
-	public static void writeToFile(List<Task> tasks, File file) {
+	public static void writeToFile(List<Task> tasks, File file,
+			boolean useWindowsBreaks) {
 		try {
 			if (!Util.isDeviceWritable()) {
 				throw new IOException("Device is not writable!");
@@ -109,7 +110,13 @@ public class TodoUtil {
 			for (int i = 0; i < tasks.size(); ++i) {
 				String fileFormat = TaskHelper.toFileFormat(tasks.get(i));
 				fw.write(fileFormat);
-				fw.write("\r\n");
+				if (useWindowsBreaks) {
+					// Log.v(TAG, "Using Windows line breaks");
+					fw.write("\r\n");
+				} else {
+					// Log.v(TAG, "NOT using Windows line breaks");
+					fw.write("\n");
+				}
 			}
 			fw.close();
 		} catch (Exception e) {
