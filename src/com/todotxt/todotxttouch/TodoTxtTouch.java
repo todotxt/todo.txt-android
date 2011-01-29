@@ -391,7 +391,7 @@ public class TodoTxtTouch extends ListActivity implements
 					new AsyncTask<Void, Void, Boolean>() {
 						protected void onPreExecute() {
 							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Marking Task Not Complete",
+									TodoTxtTouch.this, "Removing Complete Status",
 									"Please wait...", true);
 						}
 
@@ -419,13 +419,11 @@ public class TodoTxtTouch extends ListActivity implements
 							if (result) {
 								Util.showToastLong(
 										TodoTxtTouch.this,
-										"Task marked as not completed"
-												+ TaskHelper.toFileFormat(task));
+										"Task marked as not completed");
 							} else {
 								Util.showToastLong(
 										TodoTxtTouch.this,
-										"Could not mark task as not completed"
-												+ TaskHelper.toFileFormat(task));
+										"Could not mark task as not completed");
 							}
 							setFilteredTasks(true);
 						}
