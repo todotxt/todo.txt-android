@@ -66,9 +66,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -582,7 +582,11 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	void setFilteredTasks(boolean reload) {
+		Log.e(TAG, "setFilteredTasks");
+
 		if (reload) {
+			Log.e(TAG, "setFilteredTasks: true");
+
 			try {
 				m_tasks = TodoUtil.loadTasksFromFile();
 			} catch (IOException e) {
@@ -618,8 +622,11 @@ public class TodoTxtTouch extends ListActivity implements
 			m_adapter.notifyDataSetChanged();
 		}
 
-		final TextView titleText = (TextView) findViewById(R.id.title_text);
-		if (titleText != null) {
+		final TextView filterText = (TextView) findViewById(R.id.filter_text);
+		final LinearLayout subtitle_bar = (LinearLayout) findViewById(R.id.subtitle_bar);
+
+		filterText.setText("testing123");
+		if (filterText != null) {
 			if (m_filters.size() > 0) {
 				String filterTitle = getString(R.string.title_filter_applied) + " ";
 				int count = m_filters.size();
@@ -629,14 +636,18 @@ public class TodoTxtTouch extends ListActivity implements
 				if (!Util.isEmpty(m_search)) {
 					filterTitle += "Keyword";
 				}
-				titleText.setText(filterTitle);
+				subtitle_bar.setVisibility(View.VISIBLE);
+				filterText.setText(filterTitle);
+				
 			} else if (!Util.isEmpty(m_search)) {
-				if (titleText != null) {
-					titleText.setText(getString(R.string.title_search_results)
+				if (filterText != null) {
+					subtitle_bar.setVisibility(View.VISIBLE);
+					filterText.setText(getString(R.string.title_search_results)
 							+ " " + m_search);
 				}
 			} else {
-				titleText.setText(getString(R.string.app_label));
+				filterText.setText("");
+				subtitle_bar.setVisibility(View.GONE);
 			}
 		}
 	}

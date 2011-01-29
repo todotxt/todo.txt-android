@@ -24,11 +24,29 @@
             android:src="@drawable/ic_title_add" 
 			android:onClick="onAddTaskClick" />
 	</LinearLayout>
-	
+	<LinearLayout style="@style/SubTitleBar"
+		android:id="@+id/subtitle_bar">
+		<ImageView 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginLeft="5dip"
+			android:layout_marginRight="5dip"
+			android:src="@drawable/ic_subtitle_filter"/>
+			
+		<TextView
+			android:id="@+id/filter_text"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:textColor="@color/subtitle_label" />
+		</LinearLayout>
+		
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_weight="1">	
         <ListView 
 			android:id="@+id/android:list" 
