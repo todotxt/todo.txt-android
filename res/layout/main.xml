@@ -27,6 +27,7 @@
 	<LinearLayout style="@style/SubTitleBar"
 		android:id="@+id/subtitle_bar">
 		<ImageView 
+			android:id="@+id/subtitle_icon"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
