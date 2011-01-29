@@ -54,6 +54,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -68,6 +69,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -645,10 +647,8 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	void setFilteredTasks(boolean reload) {
-		Log.e(TAG, "setFilteredTasks");
 
 		if (reload) {
-			Log.e(TAG, "setFilteredTasks: true");
 
 			try {
 				m_tasks = TodoUtil.loadTasksFromFile();
@@ -687,8 +687,8 @@ public class TodoTxtTouch extends ListActivity implements
 
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
 		final LinearLayout subtitle_bar = (LinearLayout) findViewById(R.id.subtitle_bar);
-
-		filterText.setText("testing123");
+		final ImageView subtitle_icon = (ImageView) findViewById(R.id.subtitle_icon);
+		
 		if (filterText != null) {
 			if (m_filters.size() > 0) {
 				String filterTitle = getString(R.string.title_filter_applied)
@@ -700,14 +700,19 @@ public class TodoTxtTouch extends ListActivity implements
 				if (!Util.isEmpty(m_search)) {
 					filterTitle += "Keyword";
 				}
+				subtitle_icon.setImageResource(R.drawable.ic_subtitle_filter);
+
 				subtitle_bar.setVisibility(View.VISIBLE);
 				filterText.setText(filterTitle);
 
 			} else if (!Util.isEmpty(m_search)) {
 				if (filterText != null) {
-					subtitle_bar.setVisibility(View.VISIBLE);
+					
+					subtitle_icon.setImageResource(R.drawable.ic_subtitle_search);
 					filterText.setText(getString(R.string.title_search_results)
 							+ " " + m_search);
+
+					subtitle_bar.setVisibility(View.VISIBLE);
 				}
 			} else {
 				filterText.setText("");
