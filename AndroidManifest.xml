@@ -6,6 +6,7 @@
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 	<application android:name=".TodoApplication" android:icon="@drawable/todotxt_touch_icon"
 		android:label="@string/app_label" android:debuggable="true">
 		<supports-screens android:smallScreens="true"
@@ -24,8 +25,23 @@
 		<activity android:name=".Filter" android:label="Filter"
 			android:theme="@android:style/Theme.NoTitleBar" />
 		<activity android:name=".Preferences" android:label="@string/set_preferences" />
+		
 		<activity android:name=".AddTask" android:label="@string/addtask"
-			android:theme="@android:style/Theme.NoTitleBar" />
+			android:theme="@android:style/Theme.NoTitleBar" >
+			<intent-filter>
+			    <action android:name="android.intent.action.MAIN" />
+			</intent-filter>
+		</activity>
+		
+        <activity-alias android:name=".AddTaskShortcut"
+            android:targetActivity=".AddTask"
+            android:label="@string/shortcut_addtask_name">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+		
 		<activity android:name=".TodoTxtTouch"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>

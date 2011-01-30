@@ -35,8 +35,10 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -50,9 +52,12 @@ import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
 
+
 public class AddTask extends Activity {
 
 	private final static String TAG = AddTask.class.getSimpleName();
+	
+	private static final String EXTRA_KEY = "com.todotxt.todotxttouch.AddTask";
 
 	private ProgressDialog m_ProgressDialog = null;
 
@@ -75,7 +80,19 @@ public class AddTask extends Activity {
 			Log.e(TAG, e.getMessage(), e);
 			tasks = new ArrayList<Task>();
 		}
+		
 
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
+
+        // create shortcut and exit
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
+        	Log.d(TAG, "Setting up shortcut icon");
+            setupShortcut();
+            finish();
+            return;
+        }
+        
 		m_app = (TodoApplication) getApplication();
 		// title bar label
 		titleBarLabel = (TextView)findViewById(R.id.title_bar_label);
@@ -239,4 +256,20 @@ public class AddTask extends Activity {
 			}
 		});
 	}
+	
+	private void setupShortcut() {
+
+        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+        shortcutIntent.setClassName(this, this.getClass().getName());
+        shortcutIntent.putExtra(EXTRA_KEY, "ApiDemos Provided This Shortcut");
+
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_addtask_name));
+        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
+                this,  R.drawable.todotxt_touch_icon);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
+
+        setResult(RESULT_OK, intent);
+    }
 }
