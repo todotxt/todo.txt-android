@@ -77,4 +77,6 @@
 	<!-- title bar changes -->
 	<string name="title_search_results">Search results for: </string>
 	<string name="title_filter_applied">Filter applied: </string>
+	<!-- launcher shortcut -->
+	<string name="shortcut_addtask_name">Add Task</string>
 </resources>
