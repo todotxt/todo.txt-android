@@ -35,8 +35,10 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -53,7 +55,8 @@ import com.dropbox.client.DropboxAPI;
 public class AddTask extends Activity {
 
 	private final static String TAG = AddTask.class.getSimpleName();
-
+	
+	private final static String EXTRA_KEY = "com.todotxt.todotxttouch.AddTask";
 	private ProgressDialog m_ProgressDialog = null;
 
 	private Task m_backup;
@@ -74,6 +77,16 @@ public class AddTask extends Activity {
 		} catch (IOException e) {
 			Log.e(TAG, e.getMessage(), e);
 			tasks = new ArrayList<Task>();
+		}
+
+		final Intent intent = getIntent();
+		final String action = intent.getAction();
+		// create shortcut and exit
+		if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
+			Log.d(TAG, "Setting up shortcut icon");
+			setupShortcut();
+			finish();
+			return;
 		}
 
 		m_app = (TodoApplication) getApplication();
@@ -238,5 +251,18 @@ public class AddTask extends Activity {
 				}.execute();
 			}
 		});
+	}
+	private void setupShortcut() {	
+		Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+		shortcutIntent.setClassName(this, this.getClass().getName());
+
+		Intent intent = new Intent();
+		intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+		intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_addtask_name));
+		Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
+				this,  R.drawable.todotxt_touch_icon);
+		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
+		
+		setResult(RESULT_OK, intent);
 	}
 }
