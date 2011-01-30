@@ -496,7 +496,18 @@ public class TodoTxtTouch extends ListActivity implements
 				}
 			});
 			builder.show();
+		} else if (menuid == R.id.share) {
+			Log.v(TAG, "share");
+			final Task task = m_adapter.getItem(pos);
+			
+			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+			shareIntent.setType("text/plain");
+			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "todo.txt task");
+			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, task.text);
+
+			startActivity(Intent.createChooser(shareIntent, "Title for chooser"));
 		}
+
 		return super.onContextItemSelected(item);
 	}
 
