@@ -257,11 +257,12 @@ public class AddTask extends Activity {
 		});
 	}
 	
+	/**
+	 * Defines a launcher shortcut for AddTask activity
+	 */
 	private void setupShortcut() {
-
         Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
         shortcutIntent.setClassName(this, this.getClass().getName());
-        shortcutIntent.putExtra(EXTRA_KEY, "ApiDemos Provided This Shortcut");
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
