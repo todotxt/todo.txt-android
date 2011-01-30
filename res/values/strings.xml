@@ -20,6 +20,7 @@
 	<string name="priority">Prioritize</string>
 	<string name="update">Update</string>
 	<string name="delete">Delete</string>
+	<string name="share">Share</string>
 	<string name="unComplete">Undo Complete</string>
 	<string name="context">Context</string>
 	<string name="project">Project</string>
