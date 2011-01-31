@@ -54,7 +54,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -514,6 +513,9 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "onMenuItemSelected: sync");
 			populateFromExternal();
 			break;
+		case R.id.search:
+			onSearchRequested();
+			break;
 		case R.id.preferences:
 			Intent settingsActivity = new Intent(getBaseContext(),
 					Preferences.class);
@@ -688,7 +690,7 @@ public class TodoTxtTouch extends ListActivity implements
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
 		final LinearLayout subtitle_bar = (LinearLayout) findViewById(R.id.subtitle_bar);
 		final ImageView subtitle_icon = (ImageView) findViewById(R.id.subtitle_icon);
-		
+
 		if (filterText != null) {
 			if (m_filters.size() > 0) {
 				String filterTitle = getString(R.string.title_filter_applied)
@@ -707,8 +709,9 @@ public class TodoTxtTouch extends ListActivity implements
 
 			} else if (!Util.isEmpty(m_search)) {
 				if (filterText != null) {
-					
-					subtitle_icon.setImageResource(R.drawable.ic_subtitle_search);
+
+					subtitle_icon
+							.setImageResource(R.drawable.ic_subtitle_search);
 					filterText.setText(getString(R.string.title_search_results)
 							+ " " + m_search);
 
