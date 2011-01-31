@@ -56,7 +56,8 @@ public class TaskHelper {
 	private final static Pattern contextPattern = Pattern
 			.compile("(?:^|\\s)@(\\S*\\w)");
 
-	private final static Pattern projectPattern = Pattern.compile("\\+(\\S*\\w)");
+	private final static Pattern projectPattern = Pattern
+			.compile("\\+(\\S*\\w)");
 
 	private final static Pattern prependedDatePattern = Pattern
 			.compile("^(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
@@ -108,6 +109,16 @@ public class TaskHelper {
 		public int compare(Task arg0, Task arg1) {
 			if (arg0 != null && arg1 != null) {
 				return Long.valueOf(arg0.id).compareTo(arg1.id);
+			}
+			return -1;
+		}
+	};
+
+	public static Comparator<Task> byIdReverse = new Comparator<Task>() {
+		@Override
+		public int compare(Task arg0, Task arg1) {
+			if (arg0 != null && arg1 != null) {
+				return Long.valueOf(arg1.id).compareTo(arg0.id);
 			}
 			return -1;
 		}

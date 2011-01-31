@@ -88,7 +88,8 @@ public class TodoTxtTouch extends ListActivity implements
 
 	private final static int SORT_PRIO = 0;
 	private final static int SORT_ID = 1;
-	private final static int SORT_TEXT = 2;
+	private final static int SORT_ID_REVERSE = 2;
+	private final static int SORT_TEXT = 3;
 
 	private final static int REQUEST_FILTER = 1;
 	private final static int REQUEST_PREFERENCES = 2;
@@ -676,6 +677,8 @@ public class TodoTxtTouch extends ListActivity implements
 				Collections.sort(tasks, TaskHelper.byPrio);
 			} else if (m_sort == SORT_ID) {
 				Collections.sort(tasks, TaskHelper.byId);
+			} else if (m_sort == SORT_ID_REVERSE) {
+				Collections.sort(tasks, TaskHelper.byIdReverse);
 			} else if (m_sort == SORT_TEXT) {
 				Collections.sort(tasks, TaskHelper.byText);
 			}
