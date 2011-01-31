@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.todotxt.todotxttouch" android:versionName="0.1"
-	android:versionCode="14">
+	package="com.todotxt.todotxttouch" android:versionName="0.2"
+	android:versionCode="15">
 	<!-- java warning 'is lower than the project target API level' should be ok -->
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<uses-permission android:name="android.permission.INTERNET" />
