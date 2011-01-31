@@ -54,9 +54,9 @@ public class TaskHelper {
 			.compile("\\(([A-Z])\\) (.*)");
 
 	private final static Pattern contextPattern = Pattern
-			.compile("(?:^|\\s)@(\\w+)");
+			.compile("(?:^|\\s)@(\\S*\\w)");
 
-	private final static Pattern projectPattern = Pattern.compile("\\+(\\w+)");
+	private final static Pattern projectPattern = Pattern.compile("\\+(\\S*\\w)");
 
 	private final static Pattern prependedDatePattern = Pattern
 			.compile("^(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
