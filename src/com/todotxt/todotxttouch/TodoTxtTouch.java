@@ -349,58 +349,53 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showDeleteConfirmationDialog(this, listener);
 		} else if (menuid == R.id.done) {
 			Log.v(TAG, "done");
-			OnClickListener listener = new OnClickListener() {
+			
+			final Task task = m_adapter.getItem(pos);
+			new AsyncTask<Void, Void, Boolean>() {
+				protected void onPreExecute() {
+					m_ProgressDialog = ProgressDialog.show(
+							TodoTxtTouch.this, "Marking Task Complete",
+							"Please wait...", true);
+				}	
+
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					final Task task = m_adapter.getItem(pos);
-					new AsyncTask<Void, Void, Boolean>() {
-						protected void onPreExecute() {
-							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Marking Task Complete",
-									"Please wait...", true);
+				protected Boolean doInBackground(Void... params) {
+					try {
+						if (task.text.startsWith(TaskHelper.COMPLETED)) {
+							return true;
+						} else {
+							String format = TaskHelper.DATEFORMAT
+							.format(new Date());
+							String text = TaskHelper.COMPLETED + format
+							+ task.text;
+							Log.v(TAG,
+									"Completing task with this text: "
+									+ text);
+							return m_app.m_util.updateTask(
+									TaskHelper.NONE, text, task);
 						}
-
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								if (task.text.startsWith(TaskHelper.COMPLETED)) {
-									return true;
-								} else {
-									String format = TaskHelper.DATEFORMAT
-											.format(new Date());
-									String text = TaskHelper.COMPLETED + format
-											+ task.text;
-									Log.v(TAG,
-											"Completing task with this text: "
-													+ text);
-									return m_app.m_util.updateTask(
-											TaskHelper.NONE, text, task);
-								}
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-							}
-							return false;
-						}
-
-						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
-							if (result) {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Completed task "
-												+ TaskHelper.toFileFormat(task));
-							} else {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Could not complete task "
-												+ TaskHelper.toFileFormat(task));
-							}
-							setFilteredTasks(true);
-						}
-					}.execute();
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage(), e);
+					}
+					return false;
 				}
-			};
-			Util.showConfirmationDialog(this, R.string.areyousure, listener);
+
+				protected void onPostExecute(Boolean result) {
+					m_ProgressDialog.dismiss();
+					if (result) {
+						Util.showToastLong(
+								TodoTxtTouch.this,
+								"Completed task "
+								+ TaskHelper.toFileFormat(task));
+					} else {
+						Util.showToastLong(
+								TodoTxtTouch.this,
+								"Could not complete task "
+								+ TaskHelper.toFileFormat(task));
+					}
+					setFilteredTasks(true);
+				}
+			}.execute();
 		} else if (menuid == R.id.unComplete) {
 			Log.v(TAG, "undo Complete");
 			OnClickListener listener = new OnClickListener() {
