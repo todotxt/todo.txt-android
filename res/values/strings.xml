@@ -81,4 +81,6 @@
 	<string name="title_filter_applied">Filter applied: </string>
 	<!-- launcher shortcut -->
 	<string name="shortcut_addtask_name">Add Task</string>
+	<!--  share -->
+	<string name="share_addtask_name">Add to Todo.txt</string>
 </resources>
