@@ -40,6 +40,16 @@
 			</intent-filter>
 		</activity-alias>
 		
+		<activity-alias android:name=".AddTaskShare"
+			android:targetActivity=".AddTask"
+			android:label="@string/share_addtask_name">
+			<intent-filter>
+				<action android:name="android.intent.action.SEND" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="text/plain" />
+ 			</intent-filter>
+		</activity-alias>
+		
 		<activity android:name=".TodoTxtTouch"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
