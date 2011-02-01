@@ -64,6 +64,8 @@ public class AddTask extends Activity {
 
 	private TextView titleBarLabel;
 
+	private String share_text;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,11 +83,17 @@ public class AddTask extends Activity {
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
 		// create shortcut and exit
+		// create shortcut and exit
 		if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
 			Log.d(TAG, "Setting up shortcut icon");
 			setupShortcut();
 			finish();
 			return;
+		} else if (Intent.ACTION_SEND.equals(action)) {
+			Log.d(TAG, "Share");
+			share_text = (String) intent
+					.getCharSequenceExtra(Intent.EXTRA_TEXT);
+			Log.d(TAG, share_text);
 		}
 
 		m_app = (TodoApplication) getApplication();
@@ -95,6 +103,11 @@ public class AddTask extends Activity {
 		// text
 		final EditText text = (EditText) findViewById(R.id.taskText);
 		text.setGravity(Gravity.TOP);
+
+		if (share_text != null) {
+			text.setText(share_text);
+		}
+
 		Task task = (Task) getIntent().getSerializableExtra(
 				Constants.EXTRA_TASK);
 		if (task != null) {
