@@ -51,6 +51,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
+import com.todotxt.todotxttouch.task.Task;
 
 public class AddTask extends Activity {
 
@@ -99,7 +100,7 @@ public class AddTask extends Activity {
 				Constants.EXTRA_TASK);
 		if (task != null) {
 			m_backup = task;
-			text.setText(TaskHelper.toFileFormat(task));
+			text.setText(task.inFileFormat());
 			setTitle(R.string.update);
 			titleBarLabel.setText(R.string.update);
 		} else {
@@ -121,8 +122,8 @@ public class AddTask extends Activity {
 			prioArr.add("" + c);
 		}
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
-		if (m_backup != null && m_backup.prio >= 'A' && m_backup.prio <= 'E') {
-			priorities.setSelection(1 + m_backup.prio - 'A');
+		if (m_backup != null && m_backup.getPriority() >= 'A' && m_backup.getPriority() <= 'E') {
+			priorities.setSelection(1 + m_backup.getPriority() - 'A');
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -131,12 +132,12 @@ public class AddTask extends Activity {
 				if (position > 0) {
 					String item = prioArr.get(position);
 					String t = text.getText().toString();
-					Task task = TaskHelper.createTask(-1, t);
-					task.prio = item.charAt(0);
-					if (Util.isEmpty(t) && task.prio != TaskHelper.NONE) {
-						task.text = " ";
+					Task task = new Task(-1L, t);
+					task.setPriority(item.charAt(0));
+					if (Util.isEmpty(t) && task.getPriority() != Task.NO_PRIORITY) {
+						task.setText(" ");
 					}
-					text.setText(TaskHelper.toFileFormat(task));
+					text.setText(task.inFileFormat());
 				}
 			}
 
@@ -218,10 +219,9 @@ public class AddTask extends Activity {
 							DropboxAPI api = app.getAPI();
 							if (api != null) {
 								if (m_backup != null) {
-									Task updatedTask = TaskHelper.createTask(
-											m_backup.id, input);
+									Task updatedTask = new Task(m_backup.getId(), input);
 									return m_app.m_util.updateTask(
-											updatedTask.prio, updatedTask.text,
+											updatedTask.getPriority(), updatedTask.getText(),
 											m_backup);
 								} else {
 									return m_app.m_util.addTask(input);

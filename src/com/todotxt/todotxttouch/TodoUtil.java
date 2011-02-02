@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
+import com.todotxt.todotxttouch.task.Task;
 
 public class TodoUtil {
 
@@ -57,11 +58,11 @@ public class TodoUtil {
 		try {
 			in = new BufferedReader(new InputStreamReader(is));
 			String line;
-			int counter = 0;
+			long counter = 0L;
 			while ((line = in.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0) {
-					items.add(TaskHelper.createTask(counter, line));
+					items.add(new Task(counter, line));
 				}
 				counter++;
 			}
@@ -83,11 +84,11 @@ public class TodoUtil {
 			try {
 				in = new BufferedReader(new InputStreamReader(is));
 				String line;
-				int counter = 0;
+				long counter = 0L;
 				while ((line = in.readLine()) != null) {
 					line = line.trim();
 					if (line.length() > 0) {
-						items.add(TaskHelper.createTask(counter, line));
+						items.add(new Task(counter, line));
 					}
 					counter++;
 				}
@@ -108,7 +109,7 @@ public class TodoUtil {
 			Util.createParentDirectory(file);
 			FileWriter fw = new FileWriter(file);
 			for (int i = 0; i < tasks.size(); ++i) {
-				String fileFormat = TaskHelper.toFileFormat(tasks.get(i));
+				String fileFormat = tasks.get(i).inFileFormat();
 				fw.write(fileFormat);
 				if (useWindowsBreaks) {
 					// Log.v(TAG, "Using Windows line breaks");

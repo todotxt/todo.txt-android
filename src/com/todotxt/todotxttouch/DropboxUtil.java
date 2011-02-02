@@ -33,10 +33,7 @@ import android.util.Log;
 
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.FileDownload;
-import com.todotxt.todotxttouch.Constants;
-import com.todotxt.todotxttouch.Task;
-import com.todotxt.todotxttouch.TaskHelper;
-import com.todotxt.todotxttouch.TodoUtil;
+import com.todotxt.todotxttouch.task.Task;
 
 public class DropboxUtil {
 
@@ -53,7 +50,7 @@ public class DropboxUtil {
 		ArrayList<Task> tasks = null;
 		try {
 			tasks = fetchTasks(api);
-			Task task = TaskHelper.createTask(tasks.size(), input);
+			Task task = new Task(tasks.size(), input);
 			tasks.add(task);
 			boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
 					"linebreakspref", true);
@@ -72,14 +69,13 @@ public class DropboxUtil {
 
 	public boolean updateTask(char prio, String input, Task backup) {
 		DropboxAPI api = m_app.getAPI();
-		Task t = TaskHelper.createTask(backup.id, backup.text);
-		t.prio = prio;
-		t.text = input;
 		try {
 			ArrayList<Task> tasks = fetchTasks(api);
 			Task found = TaskHelper.find(tasks, backup);
 			if (found != null) {
-				t.id = found.id;
+                Task t = new Task(found.getId(), backup.getText());
+                t.setPriority(prio);
+                t.setText(input);
 				TaskHelper.updateById(tasks, t);
 				boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
 						"linebreakspref", true);
