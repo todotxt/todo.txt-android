@@ -77,6 +77,7 @@ import android.widget.TextView;
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
+import com.todotxt.todotxttouch.task.Task;
 
 public class TodoTxtTouch extends ListActivity implements
 		OnSharedPreferenceChangeListener {
@@ -290,7 +291,7 @@ public class TodoTxtTouch extends ListActivity implements
 			pos = menuInfoAdap.position;
 		}
 		final Task task = m_adapter.getItem(pos);
-		if (task.text.startsWith(TaskHelper.COMPLETED)) {
+		if (task.isCompleted()) {
 			inflater.inflate(R.menu.context_completed, menu);
 		} else {
 			inflater.inflate(R.menu.main_long, menu);
@@ -335,8 +336,8 @@ public class TodoTxtTouch extends ListActivity implements
 								Task task = (Task) params[1];
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return m_app.m_util.updateTask(
-											TaskHelper.NONE, "", task);
+									task.delete();
+									return m_app.m_util.updateTask(task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -348,15 +349,13 @@ public class TodoTxtTouch extends ListActivity implements
 							TodoTxtTouch.currentActivityPointer
 									.dismissProgressDialog(true);
 							if (result) {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Deleted task "
-												+ TaskHelper.toFileFormat(task));
+								Util.showToastLong(TodoTxtTouch.this,
+										"Deleted task " + task.inFileFormat());
 							} else {
 								Util.showToastLong(
 										TodoTxtTouch.this,
 										"Could not delete task "
-												+ TaskHelper.toFileFormat(task));
+												+ task.inFileFormat());
 							}
 						}
 					}.execute(m_app, task);
@@ -365,13 +364,13 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showDeleteConfirmationDialog(this, listener);
 		} else if (menuid == R.id.done) {
 			Log.v(TAG, "done");
+
 			final Task task = m_adapter.getItem(pos);
-			if (task.text.startsWith(TaskHelper.COMPLETED)) {
+			if (task.isCompleted()) {
 				Util.showToastLong(TodoTxtTouch.this, "Task already complete");
 			} else {
-				String format = TaskHelper.DATEFORMAT.format(new Date());
-				String text = TaskHelper.COMPLETED + format + task.text;
-				Log.v(TAG, "Completing task with this text: " + text);
+				task.markComplete(new Date());
+				Log.v(TAG, "Completing task with this text: " + task.getText());
 				new AsyncTask<Object, Void, Boolean>() {
 
 					protected void onPreExecute() {
@@ -384,9 +383,8 @@ public class TodoTxtTouch extends ListActivity implements
 						try {
 							TodoApplication m_app = (TodoApplication) params[0];
 							Task task = (Task) params[1];
-							String text = (String) params[2];
-							return m_app.m_util.updateTask(TaskHelper.NONE,
-									text, task);
+							task.markComplete(new Date());
+							return m_app.m_util.updateTask(task);
 
 						} catch (Exception e) {
 							Log.e(TAG, e.getMessage(), e);
@@ -398,18 +396,16 @@ public class TodoTxtTouch extends ListActivity implements
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
 						if (result) {
-							Util.showToastLong(
-									TodoTxtTouch.this,
-									"Completed task "
-											+ TaskHelper.toFileFormat(task));
+							Util.showToastLong(TodoTxtTouch.this,
+									"Completed task " + task.inFileFormat());
 						} else {
 							Util.showToastLong(
 									TodoTxtTouch.this,
 									"Could not complete task "
-											+ TaskHelper.toFileFormat(task));
+											+ task.inFileFormat());
 						}
 					}
-				}.execute(m_app, task, text);
+				}.execute(m_app, task);
 			}
 		} else if (menuid == R.id.unComplete) {
 			Log.v(TAG, "undo Complete");
@@ -417,11 +413,7 @@ public class TodoTxtTouch extends ListActivity implements
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					final Task task = m_adapter.getItem(pos);
-					String text = task.text.substring(13);
-					Log.v(TAG, "Marking as incomplete task with this text: "
-							+ text);
 					new AsyncTask<Object, Void, Boolean>() {
-
 						protected void onPreExecute() {
 							m_ProgressDialog = showProgressDialog("Marking Task Not Complete");
 						}
@@ -429,14 +421,17 @@ public class TodoTxtTouch extends ListActivity implements
 						@Override
 						protected Boolean doInBackground(Object... params) {
 							try {
-								if (!task.text.startsWith(TaskHelper.COMPLETED)) {
+								if (!task.isCompleted()) {
 									return true;
 								} else {
 									TodoApplication m_app = (TodoApplication) params[0];
 									Task task = (Task) params[1];
-									String text = (String) params[2];
-									return m_app.m_util.updateTask(
-											TaskHelper.NONE, text, task);
+									Log.i(TAG, "pre-mark incomplete{" + task
+											+ "}");
+									task.markIncomplete();
+									Log.i(TAG, "marked incomplete {" + task
+											+ "}");
+									return m_app.m_util.updateTask(task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -455,13 +450,13 @@ public class TodoTxtTouch extends ListActivity implements
 										"Could not mark task as not completed");
 							}
 						}
-					}.execute(m_app, task, text);
+					}.execute(m_app, task);
 				}
 			};
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		} else if (menuid == R.id.priority) {
 			Log.v(TAG, "priority");
-			final String[] prioArr = { "" + TaskHelper.NONE, "A", "B", "C",
+			final String[] prioArr = { "" + Task.NO_PRIORITY, "A", "B", "C",
 					"D", "E" };
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Select priority");
@@ -482,11 +477,10 @@ public class TodoTxtTouch extends ListActivity implements
 								Task task = (Task) params[1];
 								String[] prioArr = (String[]) params[2];
 								int which = (Integer) params[3];
+								task.setPriority(prioArr[which].charAt(0));
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return m_app.m_util.updateTask(
-											prioArr[which].charAt(0),
-											task.text, task);
+									return m_app.m_util.updateTask(task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -499,11 +493,12 @@ public class TodoTxtTouch extends ListActivity implements
 									.dismissProgressDialog(true);
 							if (result) {
 								Util.showToastLong(TodoTxtTouch.this,
-										"Prioritized task " + task.text);
+										"Prioritized task " + task.getText());
 							} else {
-								Util.showToastLong(TodoTxtTouch.this,
+								Util.showToastLong(
+										TodoTxtTouch.this,
 										"Could not prioritize task "
-												+ TaskHelper.toFileFormat(task));
+												+ task.inFileFormat());
 							}
 						}
 					}.execute(m_app, task, prioArr, which);
@@ -518,7 +513,8 @@ public class TodoTxtTouch extends ListActivity implements
 			shareIntent.setType("text/plain");
 			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 					"Todo.txt task");
-			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, task.text);
+			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+					task.getText());
 
 			startActivity(Intent.createChooser(shareIntent, "Share"));
 		}
@@ -817,7 +813,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 		@Override
 		public long getItemId(int position) {
-			return items.get(position).id;
+			return items.get(position).getId();
 		}
 
 		@Override
@@ -839,22 +835,23 @@ public class TodoTxtTouch extends ListActivity implements
 
 			Task task = items.get(position);
 			if (task != null) {
-				holder.taskid.setText(String.format("%02d", task.id + 1));
-				if (TaskHelper.toString(task.prio).equalsIgnoreCase("")) {
+				holder.taskid.setText(String.format("%02d", task.getId() + 1));
+				if (TaskHelper.toString(task.getPriority())
+						.equalsIgnoreCase("")) {
 					holder.taskprio.setText("   ");
 				} else {
 					holder.taskprio.setText("("
-							+ TaskHelper.toString(task.prio) + ")");
+							+ TaskHelper.toString(task.getPriority()) + ")");
 				}
-				SpannableString ss = new SpannableString(task.text);
-				Util.setGray(ss, TaskHelper.getProjects(task.text));
-				Util.setGray(ss, TaskHelper.getContexts(task.text));
+				SpannableString ss = new SpannableString(task.getText());
+				Util.setGray(ss, task.getProjects());
+				Util.setGray(ss, task.getContexts());
 				holder.tasktext.setText(ss);
 
 				Resources res = getResources();
 				holder.tasktext.setTextColor(res.getColor(R.color.black));
 
-				switch (task.prio) {
+				switch (task.getPriority()) {
 				case 'A':
 					holder.taskprio.setTextColor(res.getColor(R.color.green));
 					break;

@@ -96,11 +96,11 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 			if (m_config != null
 					&& m_config.authStatus == DropboxAPI.STATUS_SUCCESS) {
 				m_app.m_loggedIn = true;
-				storeKeys(m_config.accessTokenKey,
-						m_config.accessTokenSecret);
+				storeKeys(m_config.accessTokenKey, m_config.accessTokenSecret);
 				showToast("Logged into Dropbox");
 				Intent broadcastLoginIntent = new Intent();
-				broadcastLoginIntent.setAction("com.todotxt.todotxttouch.ACTION_LOGIN");
+				broadcastLoginIntent
+						.setAction("com.todotxt.todotxttouch.ACTION_LOGIN");
 				m_app.sendBroadcast(broadcastLoginIntent);
 			}
 		} else {
@@ -115,12 +115,14 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public void showToast(String string) {
 		Util.showToastLong(m_app, string);
 	}
+
 	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
 		Editor editor = m_app.m_prefs.edit();
 		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
 		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
 		editor.commit();
 	}
+
 	public void showLoginDialog(Activity act) {
 		LayoutInflater inflator = LayoutInflater.from(act);
 		View v = inflator.inflate(R.layout.logindialog, null);
