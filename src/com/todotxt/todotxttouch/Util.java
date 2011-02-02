@@ -62,7 +62,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Util {
-
+	
 	private static String TAG = Util.class.getSimpleName();
 
 	private static final int CONNECTION_TIMEOUT = 120000;
@@ -157,7 +157,7 @@ public class Util {
 			closeStream(os);
 		}
 	}
-
+	
 	public static void showToastLong(Context cxt, int resid) {
 		Toast.makeText(cxt, resid, Toast.LENGTH_LONG).show();
 	}

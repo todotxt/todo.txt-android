@@ -67,7 +67,7 @@ public class AddTask extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		setContentView(R.layout.add_task);
 
 		ArrayList<Task> tasks;
@@ -205,17 +205,21 @@ public class AddTask extends Activity {
 				// strip line breaks
 				final String input = text.getText().toString()
 						.replaceAll("\\r\\n|\\r|\\n", " ");
-				new AsyncTask<Void, Void, Boolean>() {
+				TodoApplication app = (TodoApplication) getApplication();
+				DropboxAPI api = app.getAPI();
+				new AsyncTask<Object, Void, Boolean>() {
 					protected void onPreExecute() {
 						m_ProgressDialog = ProgressDialog.show(AddTask.this,
 								getTitle(), "Please wait...", true);
 					}
 
 					@Override
-					protected Boolean doInBackground(Void... params) {
+					protected Boolean doInBackground(Object... params) {
 						try {
-							TodoApplication app = (TodoApplication) getApplication();
-							DropboxAPI api = app.getAPI();
+							DropboxAPI api = (DropboxAPI) params[0];
+							Task m_backup = (Task) params[1];
+							String input = (String) params[2];
+							TodoApplication m_app = (TodoApplication) params[3];
 							if (api != null) {
 								if (m_backup != null) {
 									Task updatedTask = TaskHelper.createTask(
@@ -235,7 +239,6 @@ public class AddTask extends Activity {
 					}
 
 					protected void onPostExecute(Boolean result) {
-						m_ProgressDialog.dismiss();
 						if (result) {
 							String res = m_backup != null ? getString(R.string.updated_task)
 									: getString(R.string.added_task);
@@ -245,9 +248,9 @@ public class AddTask extends Activity {
 							String res = m_backup != null ? getString(R.string.update_task_failed)
 									: getString(R.string.add_task_failed);
 							Util.showToastLong(AddTask.this, res);
-						}
+						} 
 					}
-				}.execute();
+				}.execute(api, m_backup, input, m_app);
 			}
 		});
 	}
@@ -265,5 +268,13 @@ public class AddTask extends Activity {
 		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 
 		setResult(RESULT_OK, intent);
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if(m_ProgressDialog != null) {
+			m_ProgressDialog.dismiss();
+		}
 	}
 }
