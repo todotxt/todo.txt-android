@@ -50,31 +50,31 @@ public class LoginScreen extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.login);
-		
+
 		m_app = (TodoApplication) getApplication();
-		
+
 		// supposed to help with the banding on the green background
 		findViewById(R.id.loginbackground).getBackground().setDither(true);
-		
+
 		IntentFilter intentFilter = new IntentFilter();
-	    intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGIN");
-	    m_broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-    			Intent i = new Intent(context, TodoTxtTouch.class);
-    			startActivity(i);
-                finish();
-            }
-        };
-	    registerReceiver(m_broadcastReceiver, intentFilter);
-	    
-		m_LoginButton = (Button)findViewById(R.id.login);
+		intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGIN");
+		m_broadcastReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Intent i = new Intent(context, TodoTxtTouch.class);
+				startActivity(i);
+				finish();
+			}
+		};
+		registerReceiver(m_broadcastReceiver, intentFilter);
+
+		m_LoginButton = (Button) findViewById(R.id.login);
 		m_LoginButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v){
+			public void onClick(View v) {
 				login();
 			}
 		});
-		
+
 		final DropboxAPI api = m_app.getAPI();
 		if (api.isAuthenticated() && m_app.m_loggedIn) {
 			Intent intent = new Intent(this, TodoTxtTouch.class);
@@ -82,13 +82,13 @@ public class LoginScreen extends Activity {
 			finish();
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(m_broadcastReceiver);
 	}
-	
+
 	void login() {
 		final DropboxAPI api = m_app.getAPI();
 		if (api.isAuthenticated() && !m_app.m_loggedIn) {

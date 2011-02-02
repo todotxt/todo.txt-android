@@ -51,6 +51,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
+import com.todotxt.todotxttouch.task.Task;
 
 public class AddTask extends Activity {
 
@@ -112,7 +113,7 @@ public class AddTask extends Activity {
 				Constants.EXTRA_TASK);
 		if (task != null) {
 			m_backup = task;
-			text.setText(TaskHelper.toFileFormat(task));
+			text.setText(task.inFileFormat());
 			setTitle(R.string.update);
 			titleBarLabel.setText(R.string.update);
 		} else {
@@ -134,8 +135,9 @@ public class AddTask extends Activity {
 			prioArr.add("" + c);
 		}
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
-		if (m_backup != null && m_backup.prio >= 'A' && m_backup.prio <= 'E') {
-			priorities.setSelection(1 + m_backup.prio - 'A');
+		if (m_backup != null && m_backup.getPriority() >= 'A'
+				&& m_backup.getPriority() <= 'E') {
+			priorities.setSelection(1 + m_backup.getPriority() - 'A');
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -144,12 +146,14 @@ public class AddTask extends Activity {
 				if (position > 0) {
 					String item = prioArr.get(position);
 					String t = text.getText().toString();
-					Task task = TaskHelper.createTask(-1, t);
-					task.prio = item.charAt(0);
-					if (Util.isEmpty(t) && task.prio != TaskHelper.NONE) {
-						task.text = " ";
+					Task task = new Task(-1L, t);
+
+					char priority = item.charAt(0);
+					if (Util.isEmpty(t) && priority != Task.NO_PRIORITY) {
+						task.update(" ");
+						task.setPriority(priority);
 					}
-					text.setText(TaskHelper.toFileFormat(task));
+					text.setText(task.inFileFormat());
 				}
 			}
 
@@ -230,16 +234,13 @@ public class AddTask extends Activity {
 					protected Boolean doInBackground(Object... params) {
 						try {
 							DropboxAPI api = (DropboxAPI) params[0];
-							Task m_backup = (Task) params[1];
+							Task task = (Task) params[1];
 							String input = (String) params[2];
 							TodoApplication m_app = (TodoApplication) params[3];
 							if (api != null) {
-								if (m_backup != null) {
-									Task updatedTask = TaskHelper.createTask(
-											m_backup.id, input);
-									return m_app.m_util.updateTask(
-											updatedTask.prio, updatedTask.text,
-											m_backup);
+								if (task != null) {
+									task.update(input);
+									return m_app.m_util.updateTask(task);
 								} else {
 									return m_app.m_util.addTask(input);
 								}
