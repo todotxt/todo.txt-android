@@ -42,9 +42,9 @@ public class Task implements Serializable {
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private long id;
-    private String rawText;
-
     private char priority;
+    private boolean deleted = false;
+    private boolean completed = false;
     private String text;
     private String prependedDate;
     private List<String> contexts;
@@ -52,23 +52,28 @@ public class Task implements Serializable {
 
     public Task(long id, String rawText) {
         this.id = id;
-        this.setRawText(rawText);
+        this.init(rawText);
     }
 
-    private void setRawText(String rawText) {
-        if(rawText==null) {
-            this.rawText = "";
-        }
-        else {
-            this.rawText = rawText;
-        }
+    public void update(String rawText) {
+        this.init(rawText);
+    }
 
-        TextSplitter splitter = new TextSplitter(this.rawText);
-        this.priority = splitter.getPriority();
-        this.text = splitter.getText();
-        this.prependedDate = splitter.getPrependedDate();
-        this.contexts = new ContextParser().parse(text);
-        this.projects = new ProjectParser().parse(text);
+    private void init(String rawText) {
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult splitResult = splitter.split(rawText);
+        this.priority = splitResult.priority;
+        this.text = splitResult.text;
+        this.prependedDate = splitResult.prependedDate;
+
+        this.contexts = ContextParser.getInstance().parse(text);
+        this.projects = ProjectParser.getInstance().parse(text);
+        this.deleted = Util.isEmpty(text);
+        this.completed = text.startsWith(COMPLETED);
+    }
+
+    public String getText() {
+        return text;
     }
 
     public long getId() {
@@ -81,16 +86,6 @@ public class Task implements Serializable {
 
     public char getPriority() {
         return priority;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-        this.contexts = new ContextParser().parse(text);
-        this.projects = new ProjectParser().parse(text);
-    }
-
-    public String getText() {
-        return text;
     }
 
     public List<String> getContexts() {
@@ -106,25 +101,28 @@ public class Task implements Serializable {
     }
 
     public boolean isDeleted() {
-        return Util.isEmpty(text);
+        return deleted;
     }
 
     public boolean isCompleted() {
-        return text.startsWith(COMPLETED);
+        return completed;
     }
 
     public void markComplete(Date date) {
-        if(!this.isCompleted()) {
+        if(!this.completed) {
             this.priority = Task.NO_PRIORITY;
             this.prependedDate = "";
             String formattedDate = new SimpleDateFormat(Task.DATE_FORMAT).format(date);
             this.text = Task.COMPLETED+formattedDate+" "+text;
+            this.deleted = false;
+            this.completed = true;
         }
     }
 
     public void markIncomplete() {
-        if(this.isCompleted()) {
+        if(this.completed) {
             this.text = this.text.substring(13);
+            this.completed = false;
         }
     }
 
@@ -145,12 +143,12 @@ public class Task implements Serializable {
     }
 
     public Task copy() {
-        return new Task(this.id, this.rawText);
+        return new Task(this.id, this.inFileFormat());
     }
 
     public void copyInto(Task destination) {
         destination.id = this.id;
-        destination.setRawText(this.rawText);
+        destination.init(this.inFileFormat());
     }
 
     @Override
@@ -179,9 +177,6 @@ public class Task implements Serializable {
         if(projects != null ? !projects.equals(task.projects) : task.projects != null) {
             return false;
         }
-        if(rawText != null ? !rawText.equals(task.rawText) : task.rawText != null) {
-            return false;
-        }
         if(text != null ? !text.equals(task.text) : task.text != null) {
             return false;
         }
@@ -192,7 +187,6 @@ public class Task implements Serializable {
     @Override
     public int hashCode() {
         int result = (int)(id ^ (id >>> 32));
-        result = 31 * result + (rawText != null ? rawText.hashCode() : 0);
         result = 31 * result + (int)priority;
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (prependedDate != null ? prependedDate.hashCode() : 0);

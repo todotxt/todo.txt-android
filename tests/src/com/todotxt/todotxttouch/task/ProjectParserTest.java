@@ -38,32 +38,32 @@ import java.util.List;
 public class ProjectParserTest extends TestCase {
     public void test_empty() {
         String input = "";
-        List<String> strings = new ProjectParser().parse(input);
+        List<String> strings = ProjectParser.getInstance().parse(input);
         assertEquals(Collections.<String>emptyList(), strings);
     }
 
     public void test_null() {
         String input = null;
-        List<String> strings = new ProjectParser().parse(input);
+        List<String> strings = ProjectParser.getInstance().parse(input);
         assertEquals(Collections.<String>emptyList(), strings);
     }
 
     public void test_withoutContext() {
         String input = "a simple string";
-        List<String> strings = new ProjectParser().parse(input);
+        List<String> strings = ProjectParser.getInstance().parse(input);
         assertEquals(Collections.<String>emptyList(), strings);
     }
 
     public void test_withContext() {
         String input = "a simple +string";
-        List<String> strings = new ProjectParser().parse(input);
+        List<String> strings = ProjectParser.getInstance().parse(input);
         assertEquals(1, strings.size());
         assertTrue(strings.contains("string"));
     }
 
     public void test_withMultipleContexts() {
         String input = "a simple +string +test";
-        List<String> strings = new ProjectParser().parse(input);
+        List<String> strings = ProjectParser.getInstance().parse(input);
         assertEquals(2, strings.size());
         assertTrue(strings.contains("string"));
         assertTrue(strings.contains("test"));
@@ -71,7 +71,7 @@ public class ProjectParserTest extends TestCase {
 
     public void test_withInterspersedContexts() {
         String input = "+more complex +case with a +string +test";
-        List<String> strings = new ProjectParser().parse(input);
+        List<String> strings = ProjectParser.getInstance().parse(input);
         assertEquals(4, strings.size());
         assertTrue(strings.contains("more"));
         assertTrue(strings.contains("case"));

@@ -41,6 +41,13 @@ import java.util.regex.Pattern;
  */
 class ContextParser {
     private final static Pattern CONTEXT_PATTERN = Pattern.compile("(?:^|\\s)@(\\S*\\w)");
+    private static final ContextParser INSTANCE = new ContextParser();
+
+    private ContextParser() {}
+
+    public static ContextParser getInstance() {
+        return INSTANCE;
+    }
 
     public List<String> parse(String inputText) {
         if(inputText==null) {

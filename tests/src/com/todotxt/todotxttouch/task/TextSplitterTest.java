@@ -33,50 +33,56 @@ import junit.framework.TestCase;
 public class TextSplitterTest extends TestCase {
     public void testSplit_empty() {
         String input = "";
-        TextSplitter splitter = new TextSplitter(input);
-        assertEquals(Task.NO_PRIORITY, splitter.getPriority());
-        assertEquals("", splitter.getPrependedDate());
-        assertEquals("", splitter.getText());
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals(Task.NO_PRIORITY, result.priority);
+        assertEquals("", result.prependedDate);
+        assertEquals("", result.text);
     }
 
     public void testSplit_null() {
         String input = null;
-        TextSplitter splitter = new TextSplitter(input);
-        assertEquals(Task.NO_PRIORITY, splitter.getPriority());
-        assertEquals("", splitter.getPrependedDate());
-        assertEquals("", splitter.getText());
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals(Task.NO_PRIORITY, result.priority);
+        assertEquals("", result.prependedDate);
+        assertEquals("", result.text);
     }
 
     public void testSplit_withPriority() {
         String input = "(A) test";
-        TextSplitter splitter = new TextSplitter(input);
-        assertEquals('A', splitter.getPriority());
-        assertEquals("", splitter.getPrependedDate());
-        assertEquals("test", splitter.getText());
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals('A', result.priority);
+        assertEquals("", result.prependedDate);
+        assertEquals("test", result.text);
     }
 
     public void testSplit_withPrependedDate() {
         String input = "2011-01-02 test";
-        TextSplitter splitter = new TextSplitter(input);
-        assertEquals(Task.NO_PRIORITY, splitter.getPriority());
-        assertEquals("2011-01-02", splitter.getPrependedDate());
-        assertEquals("test", splitter.getText());
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals(Task.NO_PRIORITY, result.priority);
+        assertEquals("2011-01-02", result.prependedDate);
+        assertEquals("test", result.text);
     }
 
     public void testSplit_withPriorityAndPrependedDate() {
         String input = "(A) 2011-01-02 test";
-        TextSplitter splitter = new TextSplitter(input);
-        assertEquals('A', splitter.getPriority());
-        assertEquals("2011-01-02", splitter.getPrependedDate());
-        assertEquals("test", splitter.getText());
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals('A', result.priority);
+        assertEquals("2011-01-02", result.prependedDate);
+        assertEquals("test", result.text);
     }
 
     //TODO what should be the output here?  Actual results seem wrong
     public void testSplit_outOfOrder() {
         String input = "2011-01-02 (A) test";
-        TextSplitter splitter = new TextSplitter(input);
-        assertEquals('A', splitter.getPriority());
-        assertEquals("", splitter.getPrependedDate());
-        assertEquals("test", splitter.getText());
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals('A', result.priority);
+        assertEquals("", result.prependedDate);
+        assertEquals("test", result.text);
     }
 }

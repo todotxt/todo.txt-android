@@ -53,6 +53,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withPriority() {
@@ -67,6 +68,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withPrependedDate() {
@@ -81,6 +83,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withPriorityAndPrependedDate() {
@@ -95,6 +98,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withContext() {
@@ -110,6 +114,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withMultipleContexts() {
@@ -127,6 +132,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withInterspersedContexts() {
@@ -144,6 +150,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withProject() {
@@ -159,6 +166,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withMultipleProjects() {
@@ -176,6 +184,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("associated"));
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_withInterspersedProjects() {
@@ -194,6 +203,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_complex() {
@@ -213,6 +223,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_email() {
@@ -228,6 +239,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_empty() {
@@ -242,6 +254,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertTrue(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testConstructor_null() {
@@ -256,6 +269,7 @@ public class TaskTest extends TestCase {
         assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertTrue(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals("", task.inFileFormat());
     }
 
     public void testConstructor_completedTask() {
@@ -275,6 +289,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertTrue(task.isCompleted());
+        assertEquals(input, task.inFileFormat());
     }
 
     public void testCopy() {
@@ -291,6 +306,8 @@ public class TaskTest extends TestCase {
         assertEquals(task1.isDeleted(), task2.isDeleted());
         assertEquals(task1.isCompleted(), task2.isCompleted());
         assertEquals(task1, task2);
+        assertEquals(input, task1.inFileFormat());
+        assertEquals(input, task2.inFileFormat());
     }
 
     public void testCopyInto() {
@@ -309,6 +326,8 @@ public class TaskTest extends TestCase {
         assertEquals(task1.isDeleted(), task2.isDeleted());
         assertEquals(task1.isCompleted(), task2.isCompleted());
         assertEquals(task1, task2);
+        assertEquals(input1, task1.inFileFormat());
+        assertEquals(input1, task2.inFileFormat());
     }
 
     public void testMarkComplete() throws Exception {
@@ -330,6 +349,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertTrue(task.isCompleted());
+        assertEquals("x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject", task.inFileFormat());
     }
 
     public void testMarkComplete_twice() throws Exception {
@@ -352,6 +372,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertTrue(task.isCompleted());
+        assertEquals("x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject", task.inFileFormat());
     }
 
     public void testMarkIncomplete() {
@@ -372,6 +393,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.inFileFormat());
     }
 
     public void testMarkIncomplete_twice() {
@@ -393,6 +415,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
+        assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.inFileFormat());
     }
 
 	public void testInFileFormat_simple() {
@@ -481,5 +504,158 @@ public class TaskTest extends TestCase {
         String input = null;
         Task task = new Task(1, input);
         assertEquals("", task.inFileFormat());
+    }
+
+    public void testSetPriority_noExisting() {
+        String input = "A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.setPriority('C');
+
+        assertEquals(1, task.getId());
+        assertEquals(input, task.getText());
+        assertEquals('C', task.getPriority());
+        assertEquals("", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals("(C) A Simple test with no curve balls", task.inFileFormat());
+    }
+
+    public void testSetPriority_noExistingWithPrependedDate() {
+        String input = "2011-11-01 A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.setPriority('B');
+
+        assertEquals(1, task.getId());
+        assertEquals("A Simple test with no curve balls", task.getText());
+        assertEquals('B', task.getPriority());
+        assertEquals("2011-11-01", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals("(B) 2011-11-01 A Simple test with no curve balls", task.inFileFormat());
+    }
+
+    public void testSetPriority_existing() {
+        String input = "(A) A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.setPriority('C');
+
+        assertEquals(1, task.getId());
+        assertEquals("A Simple test with no curve balls", task.getText());
+        assertEquals('C', task.getPriority());
+        assertEquals("", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals("(C) A Simple test with no curve balls", task.inFileFormat());
+    }
+
+    public void testSetPriority_existingWithPrependedDate() {
+        String input = "(A) 2011-11-01 A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.setPriority('C');
+
+        assertEquals(1, task.getId());
+        assertEquals("A Simple test with no curve balls", task.getText());
+        assertEquals('C', task.getPriority());
+        assertEquals("2011-11-01", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals("(C) 2011-11-01 A Simple test with no curve balls", task.inFileFormat());
+    }
+
+    public void testUpdate_simpleToSimple() {
+        String expectedResult = "Another simple test with no curve balls";
+        String input = "A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.update(expectedResult);
+
+        assertEquals(1, task.getId());
+        assertEquals(expectedResult, task.getText());
+        assertEquals(Task.NO_PRIORITY, task.getPriority());
+        assertEquals("", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inFileFormat());
+    }
+
+    public void testUpdate_simpleToWithContexts() {
+        String expectedResult = "Another simple @test with @contexts";
+        String input = "A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.update(expectedResult);
+
+        assertEquals(1, task.getId());
+        assertEquals(expectedResult, task.getText());
+        assertEquals(Task.NO_PRIORITY, task.getPriority());
+        assertEquals("", task.getPrependedDate());
+        assertEquals(2, task.getContexts().size());
+        assertTrue(task.getContexts().contains("test"));
+        assertTrue(task.getContexts().contains("contexts"));
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inFileFormat());
+    }
+
+    public void testUpdate_simpleToWithProjects() {
+        String expectedResult = "Another simple +test with +contexts";
+        String input = "A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.update(expectedResult);
+
+        assertEquals(1, task.getId());
+        assertEquals(expectedResult, task.getText());
+        assertEquals(Task.NO_PRIORITY, task.getPriority());
+        assertEquals("", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(2, task.getProjects().size());
+        assertTrue(task.getProjects().contains("test"));
+        assertTrue(task.getProjects().contains("contexts"));
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inFileFormat());
+    }
+
+    public void testUpdate_simpleToPriority() {
+        String expectedResult = "(A) Another simple test with a priority curve ball";
+        String input = "A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.update(expectedResult);
+
+        assertEquals(1, task.getId());
+        assertEquals("Another simple test with a priority curve ball", task.getText());
+        assertEquals('A', task.getPriority());
+        assertEquals("", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inFileFormat());
+    }
+
+    public void testSetText_simpleToPrependedDate() {
+        String expectedResult = "2011-10-01 Another simple test with a prepended date curve ball";
+        String input = "A Simple test with no curve balls";
+        Task task = new Task(1, input);
+        task.update(expectedResult);
+
+        assertEquals(1, task.getId());
+        assertEquals("Another simple test with a prepended date curve ball", task.getText());
+        assertEquals(Task.NO_PRIORITY, task.getPriority());
+        assertEquals("2011-10-01", task.getPrependedDate());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertFalse(task.isDeleted());
+        assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inFileFormat());
     }
 }

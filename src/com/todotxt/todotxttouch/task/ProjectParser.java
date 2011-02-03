@@ -41,6 +41,13 @@ import java.util.regex.Pattern;
  */
 class ProjectParser {
     private final static Pattern CONTEXT_PATTERN = Pattern.compile("\\+(\\S*\\w)");;
+    private static final ProjectParser INSTANCE = new ProjectParser();
+
+    private ProjectParser() {}
+
+    public static ProjectParser getInstance() {
+        return INSTANCE;
+    }
 
     public List<String> parse(String inputText) {
         if(inputText==null) {

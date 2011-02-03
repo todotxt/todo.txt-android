@@ -37,46 +37,50 @@ import java.util.regex.Pattern;
 class TextSplitter {
     private final static Pattern PRIORITY_PATTERN = Pattern.compile("\\(([A-Z])\\) (.*)");
     private final static Pattern PREPENDED_DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
-    private final char priority;
-    private final String text;
-    private final String prependedDate;
+    private final static TextSplitter INSTANCE = new TextSplitter();
 
-    public TextSplitter(String inputText) {
+    private TextSplitter() {}
+
+    public static TextSplitter getInstance() {
+        return INSTANCE;
+    }
+
+    static class SplitResult {
+        public final char priority;
+        public final String text;
+        public final String prependedDate;
+
+        private SplitResult(char priority, String text, String prependedDate) {
+            this.priority = priority;
+            this.text = text;
+            this.prependedDate = prependedDate;
+        }
+    }
+
+    public SplitResult split(String inputText) {
         if(inputText==null) {
-            inputText = "";
+            return new SplitResult(Task.NO_PRIORITY, "", "");
         }
 
         Matcher priorityMatcher = PRIORITY_PATTERN.matcher(inputText);
-        String tempText;
+        char priority;
+        String text;
         if(priorityMatcher.find()) {
             priority = priorityMatcher.group(1).charAt(0);
-            tempText = priorityMatcher.group(2);
+            text = priorityMatcher.group(2);
         }
         else {
             priority = Task.NO_PRIORITY;
-            tempText = inputText;
+            text = inputText;
         }
 
-		Matcher prependedDateMatcher = PREPENDED_DATE_PATTERN.matcher(tempText);
+		Matcher prependedDateMatcher = PREPENDED_DATE_PATTERN.matcher(text);
 		if (prependedDateMatcher.find()) {
-			this.text = prependedDateMatcher.group(0).substring(11);
-			this.prependedDate = prependedDateMatcher.group(0).substring(0, 10);
+			text = prependedDateMatcher.group(0).substring(11);
+            return new SplitResult(priority, text, prependedDateMatcher.group(0).substring(0, 10));
 		}
         else {
-            this.text = tempText;
-            this.prependedDate = "";
+            return new SplitResult(priority, text, "");
         }
-    }
-
-    public char getPriority() {
-        return priority;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getPrependedDate() {
-        return prependedDate;
     }
 }

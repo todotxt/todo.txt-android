@@ -133,9 +133,11 @@ public class AddTask extends Activity {
 					String item = prioArr.get(position);
 					String t = text.getText().toString();
 					Task task = new Task(-1L, t);
-					task.setPriority(item.charAt(0));
-					if (Util.isEmpty(t) && task.getPriority() != Task.NO_PRIORITY) {
-						task.setText(" ");
+
+                    char priority = item.charAt(0);
+					if (Util.isEmpty(t) && priority != Task.NO_PRIORITY) {
+						task.update(" ");
+                        task.setPriority(priority);
 					}
 					text.setText(task.inFileFormat());
 				}

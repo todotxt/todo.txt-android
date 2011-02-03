@@ -74,8 +74,8 @@ public class DropboxUtil {
 			Task found = TaskHelper.find(tasks, backup);
 			if (found != null) {
                 Task t = new Task(found.getId(), backup.getText());
+                t.update(input);
                 t.setPriority(prio);
-                t.setText(input);
 				TaskHelper.updateById(tasks, t);
 				boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
 						"linebreakspref", true);
