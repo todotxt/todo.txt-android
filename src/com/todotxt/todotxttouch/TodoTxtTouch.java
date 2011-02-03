@@ -365,62 +365,52 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showDeleteConfirmationDialog(this, listener);
 		} else if (menuid == R.id.done) {
 			Log.v(TAG, "done");
-			OnClickListener listener = new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					final Task task = m_adapter.getItem(pos);
-					if (task.text.startsWith(TaskHelper.COMPLETED)) {
-						Util.showToastLong(TodoTxtTouch.this,
-								"Task already complete");
-					} else {
-						String format = TaskHelper.DATEFORMAT
-								.format(new Date());
-						String text = TaskHelper.COMPLETED + format + task.text;
-						Log.v(TAG, "Completing task with this text: " + text);
-						new AsyncTask<Object, Void, Boolean>() {
+			final Task task = m_adapter.getItem(pos);
+			if (task.text.startsWith(TaskHelper.COMPLETED)) {
+				Util.showToastLong(TodoTxtTouch.this, "Task already complete");
+			} else {
+				String format = TaskHelper.DATEFORMAT.format(new Date());
+				String text = TaskHelper.COMPLETED + format + task.text;
+				Log.v(TAG, "Completing task with this text: " + text);
+				new AsyncTask<Object, Void, Boolean>() {
 
-							protected void onPreExecute() {
-								m_ProgressDialog = showProgressDialog("Marking Task Complete");
-							}
-
-							@Override
-							protected Boolean doInBackground(Object... params) {
-
-								try {
-									TodoApplication m_app = (TodoApplication) params[0];
-									Task task = (Task) params[1];
-									String text = (String) params[2];
-									return m_app.m_util.updateTask(
-											TaskHelper.NONE, text, task);
-
-								} catch (Exception e) {
-									Log.e(TAG, e.getMessage(), e);
-								}
-								return false;
-							}
-
-							protected void onPostExecute(Boolean result) {
-								TodoTxtTouch.currentActivityPointer
-										.dismissProgressDialog(true);
-								if (result) {
-									Util.showToastLong(
-											TodoTxtTouch.this,
-											"Completed task "
-													+ TaskHelper
-															.toFileFormat(task));
-								} else {
-									Util.showToastLong(
-											TodoTxtTouch.this,
-											"Could not complete task "
-													+ TaskHelper
-															.toFileFormat(task));
-								}
-							}
-						}.execute(m_app, task, text);
+					protected void onPreExecute() {
+						m_ProgressDialog = showProgressDialog("Marking Task Complete");
 					}
-				}
-			};
-			Util.showConfirmationDialog(this, R.string.areyousure, listener);
+
+					@Override
+					protected Boolean doInBackground(Object... params) {
+
+						try {
+							TodoApplication m_app = (TodoApplication) params[0];
+							Task task = (Task) params[1];
+							String text = (String) params[2];
+							return m_app.m_util.updateTask(TaskHelper.NONE,
+									text, task);
+
+						} catch (Exception e) {
+							Log.e(TAG, e.getMessage(), e);
+						}
+						return false;
+					}
+
+					protected void onPostExecute(Boolean result) {
+						TodoTxtTouch.currentActivityPointer
+								.dismissProgressDialog(true);
+						if (result) {
+							Util.showToastLong(
+									TodoTxtTouch.this,
+									"Completed task "
+											+ TaskHelper.toFileFormat(task));
+						} else {
+							Util.showToastLong(
+									TodoTxtTouch.this,
+									"Could not complete task "
+											+ TaskHelper.toFileFormat(task));
+						}
+					}
+				}.execute(m_app, task, text);
+			}
 		} else if (menuid == R.id.unComplete) {
 			Log.v(TAG, "undo Complete");
 			OnClickListener listener = new OnClickListener() {
