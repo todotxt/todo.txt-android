@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  * A utility class for splitting a string into smaller components; priority, prependedDate and the rest.
  */
 class TextSplitter {
-    private final static Pattern PRIORITY_PATTERN = Pattern.compile("\\(([A-Z])\\) (.*)");
+    private final static Pattern PRIORITY_PATTERN = Pattern.compile("^\\(([A-Z])\\) (.*)");
     private final static Pattern PREPENDED_DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
     private final static TextSplitter INSTANCE = new TextSplitter();
 

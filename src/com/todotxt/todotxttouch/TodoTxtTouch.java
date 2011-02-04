@@ -25,17 +25,11 @@
  * @author mathias <mathias[at]ws7862[dot](none)>
  * @author Tormod Haugen <tormodh[at]gmail[dot]com>
  * @author shanest <ssshanest[at]gmail[dot]com>
+ * @author Adam Zaloudek <AdamZaloudek[at]hotmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest
+ * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Adam Zaloudek
  */
 package com.todotxt.todotxttouch;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -72,11 +66,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
 import com.todotxt.todotxttouch.task.Task;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class TodoTxtTouch extends ListActivity implements
 		OnSharedPreferenceChangeListener {
@@ -96,7 +96,12 @@ public class TodoTxtTouch extends ListActivity implements
 	private final static int REQUEST_PREFERENCES = 2;
 	private final static int REQUEST_LOGIN = 3;
 
+	private static TodoTxtTouch currentActivityPointer = null;
+
 	ProgressDialog m_ProgressDialog = null;
+	String m_DialogText = "";
+	Boolean m_DialogActive = false;
+
 	ArrayList<Task> m_tasks = new ArrayList<Task>();
 	private TaskAdapter m_adapter;
 	TodoApplication m_app;
@@ -116,6 +121,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		currentActivityPointer = this;
 
 		// final boolean customTitleSupported =
 		// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -249,12 +255,20 @@ public class TodoTxtTouch extends ListActivity implements
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt("sort", m_sort);
+		outState.putBoolean("DialogActive", m_DialogActive);
+		outState.putString("DialogText", m_DialogText);
+		dismissProgressDialog(false);
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
 		super.onRestoreInstanceState(state);
 		m_sort = state.getInt("sort");
+		m_DialogActive = state.getBoolean("DialogActive");
+		m_DialogText = state.getString("DialogText");
+		if (m_DialogActive) {
+			showProgressDialog(m_DialogText);
+		}
 	}
 
 	@Override
@@ -308,20 +322,21 @@ public class TodoTxtTouch extends ListActivity implements
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					final Task task = m_adapter.getItem(pos);
-					new AsyncTask<Void, Void, Boolean>() {
+					new AsyncTask<Object, Void, Boolean>() {
+
 						protected void onPreExecute() {
-							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Delete",
-									"Please wait...", true);
+							m_ProgressDialog = showProgressDialog("Deleting");
 						}
 
 						@Override
-						protected Boolean doInBackground(Void... params) {
+						protected Boolean doInBackground(Object... params) {
 							try {
+								TodoApplication m_app = (TodoApplication) params[0];
+								Task task = (Task) params[1];
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return m_app.m_util.updateTask(
-											Task.NO_PRIORITY, "", task);
+                                    task.delete();
+									return m_app.m_util.updateTask(task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -330,7 +345,8 @@ public class TodoTxtTouch extends ListActivity implements
 						}
 
 						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
+							TodoTxtTouch.currentActivityPointer
+									.dismissProgressDialog(true);
 							if (result) {
 								Util.showToastLong(
 										TodoTxtTouch.this,
@@ -342,89 +358,79 @@ public class TodoTxtTouch extends ListActivity implements
 										"Could not delete task "
 												+ task.inFileFormat());
 							}
-							setFilteredTasks(true);
 						}
-					}.execute();
+					}.execute(m_app, task);
 				}
 			};
 			Util.showDeleteConfirmationDialog(this, listener);
 		} else if (menuid == R.id.done) {
 			Log.v(TAG, "done");
-			OnClickListener listener = new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					final Task task = m_adapter.getItem(pos);
-					new AsyncTask<Void, Void, Boolean>() {
-						protected void onPreExecute() {
-							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Marking Task Complete",
-									"Please wait...", true);
-						}
+			final Task task = m_adapter.getItem(pos);
+			if (task.isCompleted()) {
+				Util.showToastLong(TodoTxtTouch.this, "Task already complete");
+			} else {
+				Log.v(TAG, "Completing task with this text");
+				new AsyncTask<Object, Void, Boolean>() {
 
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								if (task.isCompleted()) {
-									return true;
-								} else {
-                                    task.markComplete(new Date());
-									Log.v(TAG,
-											"Completing task with this text: "
-													+ task.getText());
-									return m_app.m_util.updateTask(
-											Task.NO_PRIORITY, task.getText(), task);
-								}
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-							}
-							return false;
-						}
+					protected void onPreExecute() {
+						m_ProgressDialog = showProgressDialog("Marking Task Complete");
+					}
 
-						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
-							if (result) {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Completed task "
-												+ task.inFileFormat());
-							} else {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Could not complete task "
-												+ task.inFileFormat());
-							}
-							setFilteredTasks(true);
+					@Override
+					protected Boolean doInBackground(Object... params) {
+
+						try {
+							TodoApplication m_app = (TodoApplication) params[0];
+							Task task = (Task) params[1];
+                            task.markComplete(new Date());
+							return m_app.m_util.updateTask(task);
+
+						} catch (Exception e) {
+							Log.e(TAG, e.getMessage(), e);
 						}
-					}.execute();
-				}
-			};
-			Util.showConfirmationDialog(this, R.string.areyousure, listener);
+						return false;
+					}
+
+					protected void onPostExecute(Boolean result) {
+						TodoTxtTouch.currentActivityPointer
+								.dismissProgressDialog(true);
+						if (result) {
+							Util.showToastLong(
+									TodoTxtTouch.this,
+									"Completed task "
+											+ task.inFileFormat());
+						} else {
+							Util.showToastLong(
+									TodoTxtTouch.this,
+									"Could not complete task "
+											+ task.inFileFormat());
+						}
+					}
+				}.execute(m_app, task);
+			}
 		} else if (menuid == R.id.unComplete) {
 			Log.v(TAG, "undo Complete");
 			OnClickListener listener = new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					final Task task = m_adapter.getItem(pos);
-					new AsyncTask<Void, Void, Boolean>() {
+					new AsyncTask<Object, Void, Boolean>() {
 						protected void onPreExecute() {
-							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this,
-									"Removing Complete Status",
-									"Please wait...", true);
+							m_ProgressDialog = showProgressDialog("Marking Task Not Complete");
 						}
 
 						@Override
-						protected Boolean doInBackground(Void... params) {
+						protected Boolean doInBackground(Object... params) {
 							try {
 								if (!task.isCompleted()) {
 									return true;
 								} else {
-									task.markIncomplete();
-									Log.v(TAG,
-											"Marking as incomplete task with this text: "
-													+ task.getText());
-									return m_app.m_util.updateTask(
-											Task.NO_PRIORITY, task.getText(), task);
+									TodoApplication m_app = (TodoApplication) params[0];
+									Task task = (Task) params[1];
+                                    Log.i(TAG, "pre-mark incomplete{"+task+"}");
+                                    task.markIncomplete();
+                                    Log.i(TAG, "marked incomplete {" + task + "}");
+									return m_app.m_util.updateTask(task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -433,7 +439,8 @@ public class TodoTxtTouch extends ListActivity implements
 						}
 
 						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
+							TodoTxtTouch.currentActivityPointer
+									.dismissProgressDialog(true);
 							if (result) {
 								Util.showToastLong(TodoTxtTouch.this,
 										"Task marked as not completed");
@@ -441,9 +448,8 @@ public class TodoTxtTouch extends ListActivity implements
 								Util.showToastLong(TodoTxtTouch.this,
 										"Could not mark task as not completed");
 							}
-							setFilteredTasks(true);
 						}
-					}.execute();
+					}.execute(m_app, task);
 				}
 			};
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
@@ -458,21 +464,22 @@ public class TodoTxtTouch extends ListActivity implements
 				public void onClick(DialogInterface dialog, final int which) {
 					final Task task = m_adapter.getItem(pos);
 					dialog.dismiss();
-					new AsyncTask<Void, Void, Boolean>() {
+					new AsyncTask<Object, Void, Boolean>() {
 						protected void onPreExecute() {
-							m_ProgressDialog = ProgressDialog.show(
-									TodoTxtTouch.this, "Setting Priority",
-									"Please wait...", true);
+							m_ProgressDialog = showProgressDialog("Prioritizing Task");
 						}
 
 						@Override
-						protected Boolean doInBackground(Void... params) {
+						protected Boolean doInBackground(Object... params) {
 							try {
+								TodoApplication m_app = (TodoApplication) params[0];
+								Task task = (Task) params[1];
+								String[] prioArr = (String[]) params[2];
+								int which = (Integer) params[3];
+                                task.setPriority(prioArr[which].charAt(0));
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
-									return m_app.m_util.updateTask(
-											prioArr[which].charAt(0),
-											task.getText(), task);
+									return m_app.m_util.updateTask(task);
 								}
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
@@ -481,7 +488,8 @@ public class TodoTxtTouch extends ListActivity implements
 						}
 
 						protected void onPostExecute(Boolean result) {
-							m_ProgressDialog.dismiss();
+							TodoTxtTouch.currentActivityPointer
+									.dismissProgressDialog(true);
 							if (result) {
 								Util.showToastLong(TodoTxtTouch.this,
 										"Prioritized task " + task.getText());
@@ -490,13 +498,24 @@ public class TodoTxtTouch extends ListActivity implements
 										"Could not prioritize task "
 												+ task.inFileFormat());
 							}
-							setFilteredTasks(true);
 						}
-					}.execute();
+					}.execute(m_app, task, prioArr, which);
 				}
 			});
 			builder.show();
+		} else if (menuid == R.id.share) {
+			Log.v(TAG, "share");
+			final Task task = m_adapter.getItem(pos);
+
+			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+			shareIntent.setType("text/plain");
+			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+					"Todo.txt task");
+			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, task.getText());
+
+			startActivity(Intent.createChooser(shareIntent, "Share"));
 		}
+
 		return super.onContextItemSelected(item);
 	}
 
@@ -584,6 +603,26 @@ public class TodoTxtTouch extends ListActivity implements
 		} else if (requestCode == REQUEST_LOGIN) {
 
 		}
+	}
+
+	protected void dismissProgressDialog(Boolean reload) {
+		if (m_ProgressDialog != null) {
+			m_ProgressDialog.dismiss();
+			m_DialogActive = false;
+		}
+		if (reload) {
+			setFilteredTasks(reload);
+		}
+	}
+
+	protected ProgressDialog showProgressDialog(String message) {
+		if (m_ProgressDialog != null) {
+			dismissProgressDialog(false);
+		}
+		m_DialogText = message;
+		m_DialogActive = true;
+		return (m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
+				message, "Please wait...", true));
 	}
 
 	@Override

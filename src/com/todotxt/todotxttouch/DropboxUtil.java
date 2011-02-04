@@ -27,13 +27,12 @@
  */
 package com.todotxt.todotxttouch;
 
-import java.util.ArrayList;
-
 import android.util.Log;
-
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.FileDownload;
 import com.todotxt.todotxttouch.task.Task;
+
+import java.util.ArrayList;
 
 public class DropboxUtil {
 
@@ -67,19 +66,17 @@ public class DropboxUtil {
 		return false;
 	}
 
-	public boolean updateTask(char prio, String input, Task backup) {
+	public boolean updateTask(Task task) {
 		DropboxAPI api = m_app.getAPI();
 		try {
 			ArrayList<Task> tasks = fetchTasks(api);
-			Task found = TaskHelper.find(tasks, backup);
+			Task found = TaskHelper.find(tasks, task);
+            Log.i(TAG, "found task {"+found+"}");
 			if (found != null) {
-                Task t = new Task(found.getId(), backup.getText());
-                t.update(input);
-                t.setPriority(prio);
-				TaskHelper.updateById(tasks, t);
+                task.copyInto(found);
+                Log.i(TAG, "copied into found {"+found+"}");
 				boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
 						"linebreakspref", true);
-
 				TodoUtil.writeToFile(tasks, Constants.TODOFILETMP,
 						useWindowsLineBreaks);
 				api.putFile(Constants.DROPBOX_MODUS, m_app.getRemotePath(),

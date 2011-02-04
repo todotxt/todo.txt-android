@@ -27,18 +27,15 @@
  */
 package com.todotxt.todotxttouch;
 
-import java.text.SimpleDateFormat;
+import android.util.Log;
+import com.todotxt.todotxttouch.task.Task;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import android.util.Log;
-import com.todotxt.todotxttouch.task.Task;
 
 public class TaskHelper {
 	private final static String TAG = TaskHelper.class.getSimpleName();
@@ -206,26 +203,10 @@ public class TaskHelper {
 		return ret;
 	}
 
-	/**
-	 * @param tasks
-	 * @param task
-	 * @return old task or null
-	 */
-	public static Task updateById(List<Task> tasks, Task task) {
-		for (Task task2 : tasks) {
-			if (task.getId() == task2.getId()) {
-				Task backup = task2.copy();
-				task.copyInto(task2);
-				return backup;
-			}
-		}
-		return null;
-	}
-
 	public static Task find(List<Task> tasks, Task task) {
 		for (Task task2 : tasks) {
-			if (task2.getText().equals(task.getText()) && task2.getPriority() == task.getPriority()) {
-				return task2.copy();
+			if (task2.getText().equals(task.getOriginalText()) && task2.getPriority() == task.getOriginalPriority()) {
+				return task2;
 			}
 		}
 		return null;

@@ -76,13 +76,30 @@ public class TextSplitterTest extends TestCase {
         assertEquals("test", result.text);
     }
 
-    //TODO what should be the output here?  Actual results seem wrong
+    public void testSplit_dateInterspersedInText() {
+        String input = "Call Mom 2011-03-02";
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals(Task.NO_PRIORITY, result.priority);
+        assertEquals("", result.prependedDate);
+        assertEquals("Call Mom 2011-03-02", result.text);
+    }
+
+    public void testSplit_missingSpace() {
+        String input = "(A)2011-01-02 test";
+        TextSplitter splitter = TextSplitter.getInstance();
+        TextSplitter.SplitResult result = splitter.split(input);
+        assertEquals(Task.NO_PRIORITY, result.priority);
+        assertEquals("", result.prependedDate);
+        assertEquals("(A)2011-01-02 test", result.text);
+    }
+
     public void testSplit_outOfOrder() {
         String input = "2011-01-02 (A) test";
         TextSplitter splitter = TextSplitter.getInstance();
         TextSplitter.SplitResult result = splitter.split(input);
-        assertEquals('A', result.priority);
-        assertEquals("", result.prependedDate);
-        assertEquals("test", result.text);
+        assertEquals(Task.NO_PRIORITY, result.priority);
+        assertEquals("2011-01-02", result.prependedDate);
+        assertEquals("(A) test", result.text);
     }
 }

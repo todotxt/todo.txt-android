@@ -40,6 +40,9 @@ public class Task implements Serializable {
     public static final char NO_PRIORITY = '-';
     private static final String COMPLETED = "x ";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private final String originalText;
+    private final char originalPriority;
+
 
     private long id;
     private char priority;
@@ -53,6 +56,8 @@ public class Task implements Serializable {
     public Task(long id, String rawText) {
         this.id = id;
         this.init(rawText);
+        this.originalPriority = priority;
+        this.originalText = text;
     }
 
     public void update(String rawText) {
@@ -69,7 +74,15 @@ public class Task implements Serializable {
         this.contexts = ContextParser.getInstance().parse(text);
         this.projects = ProjectParser.getInstance().parse(text);
         this.deleted = Util.isEmpty(text);
-        this.completed = text.startsWith(COMPLETED);
+        this.completed = text.toLowerCase().startsWith(COMPLETED);
+    }
+
+    public char getOriginalPriority() {
+        return originalPriority;
+    }
+
+    public String getOriginalText() {
+        return originalText;
     }
 
     public String getText() {
@@ -111,9 +124,9 @@ public class Task implements Serializable {
     public void markComplete(Date date) {
         if(!this.completed) {
             this.priority = Task.NO_PRIORITY;
-            this.prependedDate = "";
             String formattedDate = new SimpleDateFormat(Task.DATE_FORMAT).format(date);
-            this.text = Task.COMPLETED+formattedDate+" "+text;
+            this.text = Task.COMPLETED+formattedDate+" "+prependedDate+" "+text;
+            this.prependedDate = "";
             this.deleted = false;
             this.completed = true;
         }
@@ -126,24 +139,22 @@ public class Task implements Serializable {
         }
     }
 
+    public void delete() {
+        this.update("");
+    }
+
     public String inFileFormat() {
         StringBuilder sb = new StringBuilder();
         if(!this.isCompleted()) {
             if(this.priority >= 'A' && this.priority <= 'Z') {
-                sb.append("(");
-                sb.append(this.priority);
-                sb.append(") ");
+                sb.append("(").append(this.priority).append(") ");
             }
-            if(!this.prependedDate.equalsIgnoreCase("")) {
-                sb.append(this.prependedDate + " ");
+            if(!Util.isEmpty(this.prependedDate)) {
+                sb.append(this.prependedDate).append(" ");
             }
         }
         sb.append(this.text);
         return sb.toString();
-    }
-
-    public Task copy() {
-        return new Task(this.id, this.inFileFormat());
     }
 
     public void copyInto(Task destination) {
@@ -162,22 +173,28 @@ public class Task implements Serializable {
 
         Task task = (Task)o;
 
+        if(completed != task.completed) {
+            return false;
+        }
+        if(deleted != task.deleted) {
+            return false;
+        }
         if(id != task.id) {
             return false;
         }
         if(priority != task.priority) {
             return false;
         }
-        if(contexts != null ? !contexts.equals(task.contexts) : task.contexts != null) {
+        if(!contexts.equals(task.contexts)) {
             return false;
         }
-        if(prependedDate != null ? !prependedDate.equals(task.prependedDate) : task.prependedDate != null) {
+        if(!prependedDate.equals(task.prependedDate)) {
             return false;
         }
-        if(projects != null ? !projects.equals(task.projects) : task.projects != null) {
+        if(!projects.equals(task.projects)) {
             return false;
         }
-        if(text != null ? !text.equals(task.text) : task.text != null) {
+        if(!text.equals(task.text)) {
             return false;
         }
 
@@ -188,10 +205,12 @@ public class Task implements Serializable {
     public int hashCode() {
         int result = (int)(id ^ (id >>> 32));
         result = 31 * result + (int)priority;
-        result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (prependedDate != null ? prependedDate.hashCode() : 0);
-        result = 31 * result + (contexts != null ? contexts.hashCode() : 0);
-        result = 31 * result + (projects != null ? projects.hashCode() : 0);
+        result = 31 * result + (deleted ? 1 : 0);
+        result = 31 * result + (completed ? 1 : 0);
+        result = 31 * result + text.hashCode();
+        result = 31 * result + prependedDate.hashCode();
+        result = 31 * result + contexts.hashCode();
+        result = 31 * result + projects.hashCode();
         return result;
     }
 
