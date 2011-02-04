@@ -4,4 +4,5 @@
 	<item android:title="@string/priority" android:id="@+id/priority" />
 	<item android:title="@string/update" android:id="@+id/update" />
 	<item android:title="@string/delete" android:id="@+id/delete" />
+	<item android:title="@string/share" android:id="@+id/share" />
 </menu>
