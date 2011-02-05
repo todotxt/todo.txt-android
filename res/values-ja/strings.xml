@@ -17,9 +17,9 @@
 	<string name="refresh">更新</string>
 	<string name="add">追加</string>
 	<string name="addtask">追加</string>
-	<string name="done">完了</string>
-	<string name="priority">優先度</string>
-	<string name="update">更新</string>
+	<string name="done">完了にする</string>
+	<string name="priority">優先度を変更</string>
+	<string name="update">編集</string>
 	<string name="delete">削除</string>
 	<string name="share">共有</string>
 	<string name="unComplete">完了の取り消し</string>
