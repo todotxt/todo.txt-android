@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
- * 
+ *
  * A JUnit based test class for the TextSplitter class
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
@@ -38,6 +38,8 @@ public class TextSplitterTest extends TestCase {
 		assertEquals(Task.NO_PRIORITY, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
 
 	public void testSplit_null() {
@@ -47,6 +49,8 @@ public class TextSplitterTest extends TestCase {
 		assertEquals(Task.NO_PRIORITY, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
 
 	public void testSplit_withPriority() {
@@ -56,6 +60,8 @@ public class TextSplitterTest extends TestCase {
 		assertEquals('A', result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("test", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
 
 	public void testSplit_withPrependedDate() {
@@ -65,6 +71,8 @@ public class TextSplitterTest extends TestCase {
 		assertEquals(Task.NO_PRIORITY, result.priority);
 		assertEquals("2011-01-02", result.prependedDate);
 		assertEquals("test", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
 
 	public void testSplit_withPriorityAndPrependedDate() {
@@ -74,6 +82,8 @@ public class TextSplitterTest extends TestCase {
 		assertEquals('A', result.priority);
 		assertEquals("2011-01-02", result.prependedDate);
 		assertEquals("test", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
 
 	public void testSplit_dateInterspersedInText() {
@@ -83,6 +93,8 @@ public class TextSplitterTest extends TestCase {
 		assertEquals(Task.NO_PRIORITY, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("Call Mom 2011-03-02", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
 
 	public void testSplit_missingSpace() {
@@ -92,6 +104,8 @@ public class TextSplitterTest extends TestCase {
 		assertEquals(Task.NO_PRIORITY, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("(A)2011-01-02 test", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
 
 	public void testSplit_outOfOrder() {
@@ -101,5 +115,29 @@ public class TextSplitterTest extends TestCase {
 		assertEquals(Task.NO_PRIORITY, result.priority);
 		assertEquals("2011-01-02", result.prependedDate);
 		assertEquals("(A) test", result.text);
+        assertFalse(result.completed);
+        assertEquals("", result.completedDate);
 	}
+
+    public void testSplit_completed() {
+		String input = "x 2011-01-02 test 123";
+		TextSplitter splitter = TextSplitter.getInstance();
+		TextSplitter.SplitResult result = splitter.split(input);
+		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals("", result.prependedDate);
+		assertEquals("test 123", result.text);
+        assertTrue(result.completed);
+        assertEquals("2011-01-02", result.completedDate);
+    }
+
+    public void testSplit_completedWithPrependedDate() {
+		String input = "x 2011-01-02 2011-01-01 test 123";
+		TextSplitter splitter = TextSplitter.getInstance();
+		TextSplitter.SplitResult result = splitter.split(input);
+		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals("2011-01-01", result.prependedDate);
+		assertEquals("test 123", result.text);
+        assertTrue(result.completed);
+        assertEquals("2011-01-02", result.completedDate);
+    }
 }
