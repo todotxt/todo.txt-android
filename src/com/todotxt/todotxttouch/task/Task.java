@@ -27,12 +27,12 @@
  */
 package com.todotxt.todotxttouch.task;
 
-import com.todotxt.todotxttouch.Util;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import com.todotxt.todotxttouch.Util;
 
 @SuppressWarnings("serial")
 public class Task implements Serializable {
@@ -47,6 +47,7 @@ public class Task implements Serializable {
 	private boolean deleted = false;
 	private boolean completed = false;
 	private String text;
+	private String completionDate;
 	private String prependedDate;
 	private List<String> contexts;
 	private List<String> projects;
@@ -68,11 +69,12 @@ public class Task implements Serializable {
 		this.priority = splitResult.priority;
 		this.text = splitResult.text;
 		this.prependedDate = splitResult.prependedDate;
+		this.completed = splitResult.completed;
+		this.completionDate = splitResult.completedDate;
 
 		this.contexts = ContextParser.getInstance().parse(text);
 		this.projects = ProjectParser.getInstance().parse(text);
 		this.deleted = Util.isEmpty(text);
-		this.completed = text.toLowerCase().startsWith(COMPLETED);
 	}
 
 	public char getOriginalPriority() {
@@ -119,14 +121,15 @@ public class Task implements Serializable {
 		return completed;
 	}
 
+	public String getCompletionDate() {
+		return completionDate;
+	}
+
 	public void markComplete(Date date) {
 		if (!this.completed) {
 			this.priority = Task.NO_PRIORITY;
-			String formattedDate = new SimpleDateFormat(Task.DATE_FORMAT)
+			this.completionDate = new SimpleDateFormat(Task.DATE_FORMAT)
 					.format(date);
-			this.text = Task.COMPLETED + formattedDate + " " + prependedDate
-					+ " " + text;
-			this.prependedDate = "";
 			this.deleted = false;
 			this.completed = true;
 		}
@@ -134,7 +137,7 @@ public class Task implements Serializable {
 
 	public void markIncomplete() {
 		if (this.completed) {
-			this.text = this.text.substring(13);
+			this.completionDate = "";
 			this.completed = false;
 		}
 	}
@@ -143,9 +146,27 @@ public class Task implements Serializable {
 		this.update("");
 	}
 
+	// TODO need a better solution (TaskFormatter?) here
+	public String inScreenFormat() {
+		StringBuilder sb = new StringBuilder();
+		if (this.completed) {
+			sb.append(COMPLETED).append(this.completionDate).append(" ");
+			if (!Util.isEmpty(this.prependedDate)) {
+				sb.append(this.prependedDate).append(" ");
+			}
+		}
+		sb.append(this.text);
+		return sb.toString();
+	}
+
 	public String inFileFormat() {
 		StringBuilder sb = new StringBuilder();
-		if (!this.isCompleted()) {
+		if (this.completed) {
+			sb.append(COMPLETED).append(this.completionDate).append(" ");
+			if (!Util.isEmpty(this.prependedDate)) {
+				sb.append(this.prependedDate).append(" ");
+			}
+		} else {
 			if (this.priority >= 'A' && this.priority <= 'Z') {
 				sb.append("(").append(this.priority).append(") ");
 			}

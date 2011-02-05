@@ -77,6 +77,7 @@ import android.widget.TextView;
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
+import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.Task;
 
 public class TodoTxtTouch extends ListActivity implements
@@ -87,11 +88,6 @@ public class TodoTxtTouch extends ListActivity implements
 	private final static String INTENT_ACTION_LOGOUT = "com.todotxt.todotxttouch.ACTION_LOGOUT";
 	private final static String INTENT_ASYNC_SUCCESS = "com.todotxt.todotxttouch.ASYNC_SUCCESS";
 	private final static String INTENT_ASYNC_FAILED = "com.todotxt.todotxttouch.ASYNC_FAILED";
-
-	private final static int SORT_PRIO = 0;
-	private final static int SORT_ID = 1;
-	private final static int SORT_ID_REVERSE = 2;
-	private final static int SORT_TEXT = 3;
 
 	private final static int REQUEST_FILTER = 1;
 	private final static int REQUEST_PREFERENCES = 2;
@@ -114,7 +110,7 @@ public class TodoTxtTouch extends ListActivity implements
 	private String m_search;
 
 	private int m_pos = Constants.INVALID_POSITION;
-	private int m_sort = SORT_PRIO;
+	private Sort sort = Sort.PRIORITY_DESC;
 	private BroadcastReceiver m_broadcastReceiver;
 
 	private ArrayList<String> m_filters = new ArrayList<String>();
@@ -255,7 +251,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putInt("sort", m_sort);
+		outState.putInt("sort", sort.getId());
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
 		dismissProgressDialog(false);
@@ -264,7 +260,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
 		super.onRestoreInstanceState(state);
-		m_sort = state.getInt("sort");
+		sort = Sort.getById(state.getInt("sort"));
 		m_DialogActive = state.getBoolean("DialogActive");
 		m_DialogText = state.getString("DialogText");
 		if (m_DialogActive) {
@@ -564,12 +560,12 @@ public class TodoTxtTouch extends ListActivity implements
 			break;
 		case R.id.sort:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setSingleChoiceItems(R.array.sort, m_sort,
+			builder.setSingleChoiceItems(R.array.sort, sort.getId(),
 					new OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							Log.v(TAG, "onClick " + which);
-							m_sort = which;
+							sort = Sort.getById(which);
 							dialog.dismiss();
 							setFilteredTasks(false);
 						}
@@ -713,15 +709,7 @@ public class TodoTxtTouch extends ListActivity implements
 			tasks = TaskHelper.getByTextIgnoreCase(tasks, m_search);
 		}
 		if (tasks != null) {
-			if (m_sort == SORT_PRIO) {
-				Collections.sort(tasks, TaskHelper.byPrio);
-			} else if (m_sort == SORT_ID) {
-				Collections.sort(tasks, TaskHelper.byId);
-			} else if (m_sort == SORT_ID_REVERSE) {
-				Collections.sort(tasks, TaskHelper.byIdReverse);
-			} else if (m_sort == SORT_TEXT) {
-				Collections.sort(tasks, TaskHelper.byText);
-			}
+			Collections.sort(tasks, sort.getComparator());
 			m_adapter.clear();
 			int size = tasks.size();
 			for (int i = 0; i < size; i++) {
@@ -843,7 +831,7 @@ public class TodoTxtTouch extends ListActivity implements
 					holder.taskprio.setText("("
 							+ TaskHelper.toString(task.getPriority()) + ")");
 				}
-				SpannableString ss = new SpannableString(task.getText());
+				SpannableString ss = new SpannableString(task.inScreenFormat());
 				Util.setGray(ss, task.getProjects());
 				Util.setGray(ss, task.getContexts());
 				holder.tasktext.setText(ss);
