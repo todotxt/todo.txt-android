@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="app_label">Todo.txt</string>
+	<string name="added_task">追加されました</string>
+	<string name="add_task_failed">追加に失敗しました</string>
+	<string name="updated_task">更新されました</string>
+	<string name="update_task_failed">更新に失敗しました</string>
+	<string name="initialized_dropbox">Initialized Dropbox support! Check
+		Dropbox/todo/todo.txt.</string>
+	<string name="sort">並び替え</string>
+	<string name="filter">フィルター</string>
+	<string name="main_no_items">タスクがありません。</string>
+	<string name="set_preferences">設定</string>
+	<string name="preferences">設定</string>
+	<string name="sync">同期</string>
+	<string name="search">検索</string>
+	<string name="refresh">更新</string>
+	<string name="add">追加</string>
+	<string name="addtask">追加</string>
+	<string name="done">完了</string>
+	<string name="priority">優先度</string>
+	<string name="update">更新</string>
+	<string name="delete">削除</string>
+	<string name="share">共有</string>
+	<string name="unComplete">完了の取り消し</string>
+	<string name="context">コンテキスト</string>
+	<string name="project">プロジェクト</string>
+	<string name="tag">タグ</string>
+	<string name="ok">OK</string>
+	<string name="cancel">キャンセル</string>
+	<string name="clear">クリア</string>
+	<string name="areyousure">本当によろしいですか？</string>
+	<string name="tasktexthint">ここにタスクを入力してください。新しいプロジェクトやコンテキストを追加するには + と @ を使います。\n\n例:医者を呼ぶ @phone +Health
+	</string>
+	<string name="search_summary">検索する文字列を入力してください</string>
+	<!-- preferences -->
+	<string name="dropbox_logout_pref_title">ログアウト</string>
+	<string name="dropbox_logout_pref_summary">Dropbox からログアウトします。</string>
+	<string name="dropbox_logout_explainer">本当に Dropbox からログアウトしてよろしいですか?</string>
+	<string name="TODOTXTPATH_key">todotxtpath</string>
+	<string name="TODOTXTPATH_title">ファイルの場所</string>
+	<string name="TODOTXTPATH_summary">todo.txt ファイルを置く Dropbox 上のフォルダを指定します。</string>
+	<string name="TODOTXTPATH_defaultPath">/todo</string>
+	<string name="DROPBOX_settings_header">Dropbox</string>
+	<string name="todotxt_settings_header">todo.txt</string>
+	<string name="about_settings_header">About</string>
+
+	<string name="prepend_date_pref_key">todotxtprependdate</string>
+	<string name="prepend_date_pref_title">日付を追加</string>
+	<string name="prepend_date_pref_summary">タスクを追加するときに自動で今日の日付をセットします。</string>
+	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
+	<string name="show_line_numbers_pref_title">行番号を表示</string>
+	<string name="show_line_numbers_pref_summary">それぞれのタスクの行番号を表示します。</string>
+	<string name="line_breaks_pref_key">linebreakspref</string>
+	<string name="line_breaks_pref_title">Windows用改行コード</string>
+	<string name="line_breaks_pref_summary">テキストファイルの改行コードをWindows用に設定します。</string>
+	<!-- login -->
+	<string name="dropbox_authentication">Dropbox ログイン</string>
+	<string name="username_label">メールアドレス:</string>
+	<string name="password_label">パスワード:</string>
+	<string name="login_button">ログイン</string>
+	<string name="login_screen_button">Dropbox にログイン</string>
+	<!-- delete -->
+	<string name="delete_task_title">削除</string>
+	<string name="delete_task_message">削除すると元には戻せません。本当によろしいですか？</string>
+	<string name="delete_task_confirm">削除</string>
+	<!-- search -->
+	<string name="search_hint">Search todo.txt</string>
+	<!-- filter tabs -->
+	<string name="filter_tab_priorities">優先度</string>
+	<string name="filter_tab_projects">プロジェクト</string>
+	<string name="filter_tab_contexts">コンテキスト</string>
+	<string name="filter_tab_search">キーワード</string>
+	<!-- title bar changes -->
+	<string name="title_search_results">検索結果: </string>
+	<string name="title_filter_applied">フィルター結果: </string>
+	<!-- launcher shortcut -->
+	<string name="shortcut_addtask_name">追加</string>
+	<!--  share -->
+	<string name="share_addtask_name">Add to Todo.txt</string>
+<string name="dropbox_consumer_key">gdb3yesuszz3bk8</string>
+<string name="dropbox_consumer_secret">6np5yqalilylpc0</string>
+</resources>
