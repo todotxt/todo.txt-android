@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
- * 
+ *
  * A JUnit based test class for the Task class
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
@@ -51,6 +51,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withPriority() {
@@ -69,6 +70,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withPrependedDate() {
@@ -87,6 +89,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withPriorityAndPrependedDate() {
@@ -105,6 +108,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withContext() {
@@ -123,6 +127,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withMultipleContexts() {
@@ -145,6 +150,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withInterspersedContexts() {
@@ -165,6 +171,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withProject() {
@@ -183,6 +190,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withMultipleProjects() {
@@ -205,6 +213,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_withInterspersedProjects() {
@@ -228,6 +237,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_complex() {
@@ -254,6 +264,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_email() {
@@ -272,6 +283,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_empty() {
@@ -289,6 +301,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_null() {
@@ -305,6 +318,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals("", task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testConstructor_completedTask() {
@@ -312,8 +326,8 @@ public class TaskTest extends TestCase {
 		Task task = new Task(1, input);
 
 		assertEquals(1, task.getId());
-		assertEquals(input, task.getOriginalText());
-		assertEquals(input, task.getText());
+		assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.getOriginalText());
+		assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.getText());
 		assertEquals(Task.NO_PRIORITY, task.getOriginalPriority());
 		assertEquals(Task.NO_PRIORITY, task.getPriority());
 		assertEquals("", task.getPrependedDate());
@@ -327,6 +341,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
 		assertEquals(input, task.inFileFormat());
+        assertEquals("2011-02-28", task.getCompletionDate());
 	}
 
 	public void testConstructor_completedTask_upperCase() {
@@ -334,8 +349,8 @@ public class TaskTest extends TestCase {
 		Task task = new Task(1, input);
 
 		assertEquals(1, task.getId());
-		assertEquals(input, task.getOriginalText());
-		assertEquals(input, task.getText());
+		assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.getOriginalText());
+		assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.getText());
 		assertEquals(Task.NO_PRIORITY, task.getOriginalPriority());
 		assertEquals(Task.NO_PRIORITY, task.getPriority());
 		assertEquals("", task.getPrependedDate());
@@ -348,7 +363,8 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
-		assertEquals(input, task.inFileFormat());
+		assertEquals("x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject", task.inFileFormat());
+        assertEquals("2011-02-28", task.getCompletionDate());
 	}
 
 	public void testCopyInto() {
@@ -377,6 +393,8 @@ public class TaskTest extends TestCase {
 		assertEquals(task1, task2);
 		assertEquals(input1, task1.inFileFormat());
 		assertEquals(input1, task2.inFileFormat());
+        assertEquals("", task1.getCompletionDate());
+        assertEquals(task1.getCompletionDate(), task2.getCompletionDate());
 	}
 
 	public void testMarkComplete() throws Exception {
@@ -390,11 +408,11 @@ public class TaskTest extends TestCase {
 				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.getOriginalText());
 		assertEquals(
-				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.getText());
 		assertEquals('D', task.getOriginalPriority());
 		assertEquals(Task.NO_PRIORITY, task.getPriority());
-		assertEquals("", task.getPrependedDate());
+		assertEquals("2011-12-01", task.getPrependedDate());
 		assertEquals(3, task.getContexts().size());
 		assertTrue(task.getContexts().contains("complex"));
 		assertTrue(task.getContexts().contains("multiple"));
@@ -407,6 +425,7 @@ public class TaskTest extends TestCase {
 		assertEquals(
 				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
+        assertEquals("2011-02-28", task.getCompletionDate());
 	}
 
 	public void testMarkComplete_twice() throws Exception {
@@ -421,11 +440,11 @@ public class TaskTest extends TestCase {
 				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.getOriginalText());
 		assertEquals(
-				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.getText());
 		assertEquals('D', task.getOriginalPriority());
 		assertEquals(Task.NO_PRIORITY, task.getPriority());
-		assertEquals("", task.getPrependedDate());
+		assertEquals("2011-12-01", task.getPrependedDate());
 		assertEquals(3, task.getContexts().size());
 		assertTrue(task.getContexts().contains("complex"));
 		assertTrue(task.getContexts().contains("multiple"));
@@ -438,6 +457,7 @@ public class TaskTest extends TestCase {
 		assertEquals(
 				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
+        assertEquals("2011-02-28", task.getCompletionDate());
 	}
 
 	public void testMarkIncomplete() {
@@ -447,7 +467,7 @@ public class TaskTest extends TestCase {
 		task.markIncomplete();
 		assertEquals(1, task.getId());
 		assertEquals(
-				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.getOriginalText());
 		assertEquals(
 				"A @complex test +with @multiple projects and @contexts +myproject",
@@ -467,6 +487,7 @@ public class TaskTest extends TestCase {
 		assertEquals(
 				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testMarkIncomplete_twice() {
@@ -477,7 +498,7 @@ public class TaskTest extends TestCase {
 		task.markIncomplete();
 		assertEquals(1, task.getId());
 		assertEquals(
-				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.getOriginalText());
 		assertEquals(
 				"A @complex test +with @multiple projects and @contexts +myproject",
@@ -497,7 +518,39 @@ public class TaskTest extends TestCase {
 		assertEquals(
 				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
+
+    public void testMarkIncomplete_withPrependedDate() {
+		String input = "x 2011-02-28 2011-02-17 A @complex test +with @multiple projects and @contexts +myproject";
+		Task task = new Task(1, input);
+
+		task.markIncomplete();
+		task.markIncomplete();
+		assertEquals(1, task.getId());
+		assertEquals(
+				"A @complex test +with @multiple projects and @contexts +myproject",
+				task.getOriginalText());
+		assertEquals(
+				"A @complex test +with @multiple projects and @contexts +myproject",
+				task.getText());
+		assertEquals(Task.NO_PRIORITY, task.getOriginalPriority());
+		assertEquals(Task.NO_PRIORITY, task.getPriority());
+		assertEquals("2011-02-17", task.getPrependedDate());
+		assertEquals(3, task.getContexts().size());
+		assertTrue(task.getContexts().contains("complex"));
+		assertTrue(task.getContexts().contains("multiple"));
+		assertTrue(task.getContexts().contains("contexts"));
+		assertEquals(2, task.getProjects().size());
+		assertTrue(task.getProjects().contains("with"));
+		assertTrue(task.getProjects().contains("myproject"));
+		assertFalse(task.isDeleted());
+		assertFalse(task.isCompleted());
+		assertEquals(
+				"2011-02-17 A @complex test +with @multiple projects and @contexts +myproject",
+				task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
+    }
 
 	public void testDelete_simple() {
 		String input = "(D) 2011-12-01 A @complex test with @multiple projects and @contexts myproject";
@@ -517,6 +570,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals("", task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testDelete_twice() {
@@ -538,6 +592,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals("", task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testInFileFormat_simple() {
@@ -645,6 +700,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isCompleted());
 		assertEquals("(C) A Simple test with no curve balls",
 				task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testSetPriority_noExistingWithPrependedDate() {
@@ -665,6 +721,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isCompleted());
 		assertEquals("(B) 2011-11-01 A Simple test with no curve balls",
 				task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testSetPriority_existing() {
@@ -685,6 +742,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isCompleted());
 		assertEquals("(C) A Simple test with no curve balls",
 				task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testSetPriority_existingWithPrependedDate() {
@@ -705,6 +763,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isCompleted());
 		assertEquals("(C) 2011-11-01 A Simple test with no curve balls",
 				task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testUpdate_simpleToSimple() {
@@ -724,6 +783,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(expectedResult, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testUpdate_simpleToWithContexts() {
@@ -745,6 +805,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(expectedResult, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testUpdate_simpleToWithProjects() {
@@ -766,6 +827,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(expectedResult, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testUpdate_simpleToPriority() {
@@ -786,6 +848,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(expectedResult, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 
 	public void testSetText_simpleToPrependedDate() {
@@ -806,5 +869,6 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(expectedResult, task.inFileFormat());
+        assertEquals("", task.getCompletionDate());
 	}
 }
