@@ -22,7 +22,7 @@
  * TextSplitter
  * A utility class for splitting a string into smaller components; priority,
  * prependedDate and the rest.
- * 
+ *
  * @author mathias <mathias[at]x2[dot](none)>
  * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
@@ -35,10 +35,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class TextSplitter {
+	private final static Pattern COMPLETED_PATTERN = Pattern
+			.compile("^([X,x] )(.*)");
+
 	private final static Pattern PRIORITY_PATTERN = Pattern
 			.compile("^\\(([A-Z])\\) (.*)");
-	private final static Pattern PREPENDED_DATE_PATTERN = Pattern
-			.compile("^(\\d{4})-(\\d{2})-(\\d{2}) (.*)");
+
+	private final static Pattern COMPLETED_PREPENDED_DATES_PATTERN = Pattern
+			.compile("^(\\d{4}-\\d{2}-\\d{2}) (\\d{4}-\\d{2}-\\d{2}) (.*)");
+
+	private final static Pattern SINGLE_DATE_PATTERN = Pattern
+			.compile("^(\\d{4}-\\d{2}-\\d{2}) (.*)");
+
 	private final static TextSplitter INSTANCE = new TextSplitter();
 
 	private TextSplitter() {
@@ -52,37 +60,70 @@ class TextSplitter {
 		public final char priority;
 		public final String text;
 		public final String prependedDate;
+		public final boolean completed;
+		public final String completedDate;
 
-		private SplitResult(char priority, String text, String prependedDate) {
+		private SplitResult(char priority, String text, String prependedDate,
+				boolean completed, String completedDate) {
 			this.priority = priority;
 			this.text = text;
 			this.prependedDate = prependedDate;
+			this.completed = completed;
+			this.completedDate = completedDate;
 		}
 	}
 
 	public SplitResult split(String inputText) {
 		if (inputText == null) {
-			return new SplitResult(Task.NO_PRIORITY, "", "");
+			return new SplitResult(Task.NO_PRIORITY, "", "", false, "");
 		}
 
-		Matcher priorityMatcher = PRIORITY_PATTERN.matcher(inputText);
-		char priority;
+		Matcher completedMatcher = COMPLETED_PATTERN.matcher(inputText);
+		boolean completed;
 		String text;
-		if (priorityMatcher.find()) {
-			priority = priorityMatcher.group(1).charAt(0);
-			text = priorityMatcher.group(2);
+		if (completedMatcher.find()) {
+			completed = true;
+			text = completedMatcher.group(2);
 		} else {
-			priority = Task.NO_PRIORITY;
+			completed = false;
 			text = inputText;
 		}
 
-		Matcher prependedDateMatcher = PREPENDED_DATE_PATTERN.matcher(text);
-		if (prependedDateMatcher.find()) {
-			text = prependedDateMatcher.group(0).substring(11);
-			return new SplitResult(priority, text, prependedDateMatcher
-					.group(0).substring(0, 10));
-		} else {
-			return new SplitResult(priority, text, "");
+		char priority = Task.NO_PRIORITY;
+		if (!completed) {
+			Matcher priorityMatcher = PRIORITY_PATTERN.matcher(text);
+			if (priorityMatcher.find()) {
+				priority = priorityMatcher.group(1).charAt(0);
+				text = priorityMatcher.group(2);
+			}
 		}
+
+		String completedDate = "";
+		String prependedDate = "";
+		if (completed) {
+			Matcher completedAndPrependedDatesMatcher = COMPLETED_PREPENDED_DATES_PATTERN
+					.matcher(text);
+			if (completedAndPrependedDatesMatcher.find()) {
+				completedDate = completedAndPrependedDatesMatcher.group(1);
+				prependedDate = completedAndPrependedDatesMatcher.group(2);
+				text = completedAndPrependedDatesMatcher.group(3);
+			} else {
+				Matcher completionDateMatcher = SINGLE_DATE_PATTERN
+						.matcher(text);
+				if (completionDateMatcher.find()) {
+					completedDate = completionDateMatcher.group(1);
+					text = completionDateMatcher.group(2);
+				}
+			}
+		} else {
+			Matcher prependedDateMatcher = SINGLE_DATE_PATTERN.matcher(text);
+			if (prependedDateMatcher.find()) {
+				text = prependedDateMatcher.group(2);
+				prependedDate = prependedDateMatcher.group(1);
+			}
+		}
+
+		return new SplitResult(priority, text, prependedDate, completed,
+				completedDate);
 	}
 }

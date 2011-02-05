@@ -29,67 +29,13 @@ package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import android.util.Log;
-
 import com.todotxt.todotxttouch.task.Task;
 
 public class TaskHelper {
-	private final static String TAG = TaskHelper.class.getSimpleName();
-
-	public static Comparator<Task> byId = new Comparator<Task>() {
-		@Override
-		public int compare(Task arg0, Task arg1) {
-			if (arg0 != null && arg1 != null) {
-				return Long.valueOf(arg0.getId()).compareTo(arg1.getId());
-			}
-			return -1;
-		}
-	};
-
-	public static Comparator<Task> byIdReverse = new Comparator<Task>() {
-		@Override
-		public int compare(Task arg0, Task arg1) {
-			if (arg0 != null && arg1 != null) {
-				return Long.valueOf(arg1.getId()).compareTo(arg0.getId());
-			}
-			return -1;
-		}
-	};
-
-	public static Comparator<Task> byPrio = new Comparator<Task>() {
-		@Override
-		public int compare(Task arg0, Task arg1) {
-			if (arg0 != null && arg1 != null) {
-				if (arg0.getPriority() == Task.NO_PRIORITY
-						|| arg1.getPriority() == Task.NO_PRIORITY) {
-					// Put prio NONE last.
-					return new Character(arg1.getPriority())
-							.compareTo(new Character(arg0.getPriority()));
-				} else {
-					return new Character(arg0.getPriority())
-							.compareTo(new Character(arg1.getPriority()));
-				}
-			}
-			return -1;
-		}
-	};
-
-	public static Comparator<Task> byText = new Comparator<Task>() {
-		@Override
-		public int compare(Task arg0, Task arg1) {
-			try {
-				return arg0.getText().compareTo(arg1.getText());
-			} catch (Exception e) {
-				Log.e(TAG, e.getMessage(), e);
-			}
-			return -1;
-		}
-	};
 
 	public static String toString(char prio) {
 		return prio >= 'A' && prio <= 'Z' ? "" + prio : "";
