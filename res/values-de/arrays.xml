@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="sort">
-        <item>Gewichtung</item>
-        <item>Id</item>
-        <item>Text (A-Z)</item>
-    </string-array>
+	<string-array name="sort">
+		<item>Gewichtung</item>
+		<item>ID Ascending</item> <!-- TODO: Add correct translation here -->
+		<item>ID Descending</item> <!-- TODO: Add correct translation here -->
+		<item>Text (A-Z)</item> <!-- TODO: Add correct translation here -->
+	</string-array>
 
 </resources>
