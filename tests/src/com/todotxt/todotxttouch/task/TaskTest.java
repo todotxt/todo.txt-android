@@ -90,7 +90,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
-        assertEquals(input, task.inScreenFormat());
+        assertEquals("A priority test with no curve balls", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -110,7 +110,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
-        assertEquals("2011-11-28 A priority test with no curve balls", task.inScreenFormat());
+        assertEquals("A priority test with no curve balls", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -273,7 +273,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
-        assertEquals("2011-12-01 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
+        assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -407,8 +407,8 @@ public class TaskTest extends TestCase {
 		assertEquals(task1.isDeleted(), task2.isDeleted());
 		assertEquals(task1.isCompleted(), task2.isCompleted());
 		assertEquals(task1, task2);
-        assertEquals("2011-12-01 A @complex test with @multiple projects and @contexts myproject", task1.inScreenFormat());
-        assertEquals("2011-12-01 A @complex test with @multiple projects and @contexts myproject", task2.inScreenFormat());
+        assertEquals("A @complex test with @multiple projects and @contexts myproject", task1.inScreenFormat());
+        assertEquals("A @complex test with @multiple projects and @contexts myproject", task2.inScreenFormat());
 		assertEquals(input1, task1.inFileFormat());
 		assertEquals(input1, task2.inFileFormat());
         assertEquals("", task1.getCompletionDate());
@@ -568,7 +568,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
-        assertEquals("2011-02-17 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
+        assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(
 				"2011-02-17 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
@@ -745,7 +745,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
-        assertEquals("2011-11-01 A Simple test with no curve balls", task.inScreenFormat());
+        assertEquals("A Simple test with no curve balls", task.inScreenFormat());
 		assertEquals("(B) 2011-11-01 A Simple test with no curve balls",
 				task.inFileFormat());
         assertEquals("", task.getCompletionDate());
@@ -789,7 +789,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
-        assertEquals("2011-11-01 A Simple test with no curve balls", task.inScreenFormat());
+        assertEquals("A Simple test with no curve balls", task.inScreenFormat());
 		assertEquals("(C) 2011-11-01 A Simple test with no curve balls",
 				task.inFileFormat());
         assertEquals("", task.getCompletionDate());
@@ -901,7 +901,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
-        assertEquals(expectedResult, task.inScreenFormat());
+        assertEquals("Another simple test with a prepended date curve ball", task.inScreenFormat());
 		assertEquals(expectedResult, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
