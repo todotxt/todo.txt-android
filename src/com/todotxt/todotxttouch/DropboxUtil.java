@@ -50,7 +50,9 @@ public class DropboxUtil {
 		ArrayList<Task> tasks = null;
 		try {
 			tasks = fetchTasks(api);
-			Task task = new Task(tasks.size(), input);
+			Task task = new Task(tasks.size(), input, m_app.m_prefs.getBoolean(
+					"todotxtprependdate", false));
+
 			tasks.add(task);
 			boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
 					"linebreakspref", true);
