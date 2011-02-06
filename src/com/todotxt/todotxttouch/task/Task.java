@@ -52,18 +52,22 @@ public class Task implements Serializable {
 	private List<String> contexts;
 	private List<String> projects;
 
-	public Task(long id, String rawText) {
+	public Task(long id, String rawText, boolean prependCurrentDate) {
 		this.id = id;
-		this.init(rawText);
+		this.init(rawText, prependCurrentDate);
 		this.originalPriority = priority;
 		this.originalText = text;
+	}
+
+	public Task(long id, String rawText) {
+		this(id, rawText, false);
 	}
 
 	public void update(String rawText) {
 		this.init(rawText);
 	}
 
-	private void init(String rawText) {
+	private void init(String rawText, boolean prependCurrentDate) {
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult splitResult = splitter.split(rawText);
 		this.priority = splitResult.priority;
@@ -75,6 +79,16 @@ public class Task implements Serializable {
 		this.contexts = ContextParser.getInstance().parse(text);
 		this.projects = ProjectParser.getInstance().parse(text);
 		this.deleted = Util.isEmpty(text);
+
+		if (prependCurrentDate) {
+			Date d = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			this.prependedDate = formatter.format(d);
+		}
+	}
+
+	private void init(String rawText) {
+		this.init(rawText, false);
 	}
 
 	public char getOriginalPriority() {

@@ -29,9 +29,7 @@
 package com.todotxt.todotxttouch;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -119,12 +117,6 @@ public class AddTask extends Activity {
 		} else {
 			setTitle(R.string.addtask);
 			titleBarLabel.setText(R.string.addtask);
-
-			if (m_app.m_prefs.getBoolean("todotxtprependdate", false)) {
-				Date d = new Date();
-				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-				text.setText(formatter.format(d) + " ");
-			}
 		}
 
 		// priorities
@@ -222,6 +214,7 @@ public class AddTask extends Activity {
 				// strip line breaks
 				final String input = text.getText().toString()
 						.replaceAll("\\r\\n|\\r|\\n", " ");
+
 				TodoApplication app = (TodoApplication) getApplication();
 				DropboxAPI api = app.getAPI();
 				new AsyncTask<Object, Void, Boolean>() {
