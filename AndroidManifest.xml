@@ -27,7 +27,7 @@
 		<activity android:name=".Preferences" android:label="@string/set_preferences" />
 		<activity android:name=".AddTask" android:label="@string/addtask"
 			android:theme="@android:style/Theme.NoTitleBar"
-			android:configChanges="orientation|keyboardHidden">
+			android:configChanges="orientation|keyboardHidden" android:windowSoftInputMode="adjustResize">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 			</intent-filter>

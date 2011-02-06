@@ -1,57 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/home_root"
-	android:orientation="vertical" 
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:id="@+id/home_root" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-   <LinearLayout
-       style="@style/TitleBar">
-        <ImageView style="@style/TitleBarLogo"
-           android:src="@drawable/title_logo" />
-        
-       <View style="@style/TitleBarSpring" />
-		<TextView 
-			android:id="@+id/title_bar_label"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
-			android:gravity="bottom"
-			android:layout_marginRight="10dip"
-			android:textColor="@color/white"
-			android:textStyle="italic|bold"
-			android:text="New Task" />
-       	
+	<LinearLayout style="@style/TitleBar">
+		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" />
+		<View style="@style/TitleBarSpring" />
+		<TextView android:id="@+id/title_bar_label"
+			android:layout_width="wrap_content" android:layout_height="fill_parent"
+			android:gravity="bottom" android:layout_marginRight="10dip"
+			android:textColor="@color/white" android:textStyle="italic|bold"
+			android:text="New 
+		Task" />
 	</LinearLayout>
-	<RelativeLayout
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent">
-	
-		<LinearLayout android:id="@+id/buttons"
-			android:orientation="horizontal" android:layout_alignParentBottom="true"
-			android:layout_width="fill_parent" android:layout_height="wrap_content">
-	
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:stretchColumns="1">
+		<TableRow>
+			<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
+				android:layout_alignParentTop="true" android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:layout_span="3" />
+		</TableRow>
+		<TableRow android:layout_width="fill_parent">
+			<Spinner android:id="@+id/priorities" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+			<Spinner android:id="@+id/projects" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+			<Spinner android:id="@+id/contexts" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+		</TableRow>
+		<TableRow>
 			<Button android:id="@+id/addTask" android:layout_weight="1"
 				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:text="@string/add" />
-	
-			<Button android:id="@+id/cancel" android:layout_weight="1"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:text="@string/cancel" />
-	
-		</LinearLayout>
-	
-		<Spinner android:id="@+id/contexts" android:layout_above="@id/buttons"
-			android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	
-		<Spinner android:id="@+id/projects" android:layout_above="@id/contexts"
-			android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	
-		<Spinner android:id="@+id/priorities" android:layout_above="@id/projects"
-			android:layout_width="fill_parent" android:layout_height="wrap_content" />
-	
-		<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
-			android:layout_alignParentTop="true" android:layout_above="@id/priorities"
-			android:layout_width="fill_parent" android:layout_height="fill_parent" />
-	
-	</RelativeLayout>
+				android:text="@string/add" android:layout_span="2" />
+
+			<Button android:id="@+id/cancel" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="@string/cancel" />
+		</TableRow>
+		<TableRow>
+			<TextView android:id="@+id/add_task_help_text" android:text="@string/add_task_help"
+				android:layout_height="wrap_content" android:layout_width="fill_parent"
+				android:layout_marginRight="20dip" android:gravity="fill_horizontal"
+				android:textColor="@color/white" android:layout_span="3" />
+		</TableRow>
+	</TableLayout>
 </LinearLayout>
