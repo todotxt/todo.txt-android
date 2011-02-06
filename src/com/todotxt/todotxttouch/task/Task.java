@@ -154,11 +154,6 @@ public class Task implements Serializable {
                 sb.append(this.prependedDate).append(" ");
             }
         }
-        else {
-            if(!Util.isEmpty(this.prependedDate)) {
-                sb.append(this.prependedDate).append(" ");
-            }
-        }
         sb.append(this.text);
         return sb.toString();
     }
