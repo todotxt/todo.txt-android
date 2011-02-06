@@ -145,6 +145,24 @@ public class Task implements Serializable {
         this.update("");
     }
 
+    //TODO need a better solution (TaskFormatter?) here
+    public String inScreenFormat() {
+        StringBuilder sb = new StringBuilder();
+        if(this.completed) {
+            sb.append(COMPLETED).append(this.completionDate).append(" ");
+            if(!Util.isEmpty(this.prependedDate)) {
+                sb.append(this.prependedDate).append(" ");
+            }
+        }
+        else {
+            if(!Util.isEmpty(this.prependedDate)) {
+                sb.append(this.prependedDate).append(" ");
+            }
+        }
+        sb.append(this.text);
+        return sb.toString();
+    }
+
     public String inFileFormat() {
         StringBuilder sb = new StringBuilder();
         if(this.completed) {

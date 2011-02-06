@@ -50,6 +50,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -69,6 +70,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("A priority test with no curve balls", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -88,6 +90,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -107,6 +110,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("2011-11-28 A priority test with no curve balls", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -126,6 +130,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -149,6 +154,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -170,6 +176,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -189,6 +196,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -212,6 +220,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("associated"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -236,6 +245,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -263,6 +273,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("2011-12-01 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -282,6 +293,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(input, task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -300,6 +312,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -317,6 +330,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("", task.inScreenFormat());
 		assertEquals("", task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -340,6 +354,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
+        assertEquals("x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
         assertEquals("2011-02-28", task.getCompletionDate());
 	}
@@ -363,6 +378,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
+        assertEquals("x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals("x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject", task.inFileFormat());
         assertEquals("2011-02-28", task.getCompletionDate());
 	}
@@ -391,6 +407,8 @@ public class TaskTest extends TestCase {
 		assertEquals(task1.isDeleted(), task2.isDeleted());
 		assertEquals(task1.isCompleted(), task2.isCompleted());
 		assertEquals(task1, task2);
+        assertEquals("2011-12-01 A @complex test with @multiple projects and @contexts myproject", task1.inScreenFormat());
+        assertEquals("2011-12-01 A @complex test with @multiple projects and @contexts myproject", task2.inScreenFormat());
 		assertEquals(input1, task1.inFileFormat());
 		assertEquals(input1, task2.inFileFormat());
         assertEquals("", task1.getCompletionDate());
@@ -422,6 +440,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
+        assertEquals("x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(
 				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
@@ -454,6 +473,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
+        assertEquals("x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(
 				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
@@ -484,6 +504,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(
 				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
@@ -515,6 +536,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(
 				"A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
@@ -546,6 +568,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("myproject"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("2011-02-17 A @complex test +with @multiple projects and @contexts +myproject", task.inScreenFormat());
 		assertEquals(
 				"2011-02-17 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inFileFormat());
@@ -569,6 +592,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("", task.inScreenFormat());
 		assertEquals("", task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -591,6 +615,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("", task.inScreenFormat());
 		assertEquals("", task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -698,6 +723,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("A Simple test with no curve balls", task.inScreenFormat());
 		assertEquals("(C) A Simple test with no curve balls",
 				task.inFileFormat());
         assertEquals("", task.getCompletionDate());
@@ -719,6 +745,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("2011-11-01 A Simple test with no curve balls", task.inScreenFormat());
 		assertEquals("(B) 2011-11-01 A Simple test with no curve balls",
 				task.inFileFormat());
         assertEquals("", task.getCompletionDate());
@@ -740,6 +767,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("A Simple test with no curve balls", task.inScreenFormat());
 		assertEquals("(C) A Simple test with no curve balls",
 				task.inFileFormat());
         assertEquals("", task.getCompletionDate());
@@ -761,6 +789,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("2011-11-01 A Simple test with no curve balls", task.inScreenFormat());
 		assertEquals("(C) 2011-11-01 A Simple test with no curve balls",
 				task.inFileFormat());
         assertEquals("", task.getCompletionDate());
@@ -782,6 +811,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inScreenFormat());
 		assertEquals(expectedResult, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -804,6 +834,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inScreenFormat());
 		assertEquals(expectedResult, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -826,6 +857,7 @@ public class TaskTest extends TestCase {
 		assertTrue(task.getProjects().contains("projects"));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inScreenFormat());
 		assertEquals(expectedResult, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -847,6 +879,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals("Another simple test with a priority curve ball", task.inScreenFormat());
 		assertEquals(expectedResult, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
@@ -868,6 +901,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
+        assertEquals(expectedResult, task.inScreenFormat());
 		assertEquals(expectedResult, task.inFileFormat());
         assertEquals("", task.getCompletionDate());
 	}
