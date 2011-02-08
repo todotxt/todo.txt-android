@@ -64,7 +64,11 @@ public class AddTask extends Activity {
 	private TextView titleBarLabel;
 
 	private String share_text;
-
+	
+	private Spinner priorities;
+	private Spinner contexts;
+	private Spinner projects;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -120,7 +124,7 @@ public class AddTask extends Activity {
 		}
 
 		// priorities
-		Spinner priorities = (Spinner) findViewById(R.id.priorities);
+		priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add("Priority");
 		for (char c = 'A'; c <= 'E'; c++) {
@@ -135,6 +139,7 @@ public class AddTask extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
+	//			Log.d(TAG, "position");
 				if (position > 0) {
 					String item = prioArr.get(position);
 					String t = text.getText().toString();
@@ -155,7 +160,7 @@ public class AddTask extends Activity {
 		});
 
 		// projects
-		Spinner projects = (Spinner) findViewById(R.id.projects);
+		projects = (Spinner) findViewById(R.id.projects);
 		final ArrayList<String> projectsArr = TaskHelper.getProjects(tasks);
 		projectsArr.add(0, "Project");
 		projects.setAdapter(Util.newSpinnerAdapter(this, projectsArr));
@@ -175,7 +180,7 @@ public class AddTask extends Activity {
 		});
 
 		// contexts
-		Spinner contexts = (Spinner) findViewById(R.id.contexts);
+		contexts = (Spinner) findViewById(R.id.contexts);
 		final ArrayList<String> contextsArr = TaskHelper.getContexts(tasks);
 		contextsArr.add(0, "Context");
 		contexts.setAdapter(Util.newSpinnerAdapter(this, contextsArr));
@@ -193,7 +198,7 @@ public class AddTask extends Activity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-
+		
 		// cancel
 		Button cancel = (Button) findViewById(R.id.cancel);
 		cancel.setOnClickListener(new OnClickListener() {
@@ -283,5 +288,26 @@ public class AddTask extends Activity {
 		if (m_ProgressDialog != null) {
 			m_ProgressDialog.dismiss();
 		}
+	}
+	
+	/** Handle priority spinner **/
+	public void onPriorityClick(View v) {
+		priorities.performClick();
+	}
+	
+	/** Handle project spinner **/
+	public void onProjectClick(View v) {
+		projects.performClick();
+	}
+	
+	/** Handle context spinner **/
+	public void onContextClick(View v) {
+		contexts.performClick();
+	}
+	
+	/** Handle help message **/
+	public void onHelpClick(View v) {
+		Intent intent = new Intent(v.getContext(), HelpActivity.class);
+		startActivity(intent);
 	}
 }
