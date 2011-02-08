@@ -77,8 +77,10 @@ import android.widget.TextView;
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Util.OnMultiChoiceDialogListener;
+import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.Task;
+import com.todotxt.todotxttouch.util.Strings;
 
 public class TodoTxtTouch extends ListActivity implements
 		OnSharedPreferenceChangeListener {
@@ -452,8 +454,7 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		} else if (menuid == R.id.priority) {
 			Log.v(TAG, "priority");
-			final String[] prioArr = { "" + Task.NO_PRIORITY, "A", "B", "C",
-					"D", "E" };
+			final String[] prioArr = Priority.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Select priority");
 			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
@@ -473,7 +474,7 @@ public class TodoTxtTouch extends ListActivity implements
 								Task task = (Task) params[1];
 								String[] prioArr = (String[]) params[2];
 								int which = (Integer) params[3];
-								task.setPriority(prioArr[which].charAt(0));
+								task.setPriority(Priority.toPriority(prioArr[which].charAt(0)));
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
 									return m_app.m_util.updateTask(task);
@@ -705,7 +706,7 @@ public class TodoTxtTouch extends ListActivity implements
 		if (m_projects.size() > 0) {
 			tasks = TaskHelper.getByProject(tasks, m_projects);
 		}
-		if (!Util.isEmpty(m_search)) {
+		if (!Strings.isEmptyOrNull(m_search)) {
 			tasks = TaskHelper.getByTextIgnoreCase(tasks, m_search);
 		}
 		if (tasks != null) {
@@ -730,7 +731,7 @@ public class TodoTxtTouch extends ListActivity implements
 				for (int i = 0; i < count; i++) {
 					filterTitle += m_filters.get(i) + " ";
 				}
-				if (!Util.isEmpty(m_search)) {
+				if (!Strings.isEmptyOrNull(m_search)) {
 					filterTitle += "Keyword";
 				}
 				subtitle_icon.setImageResource(R.drawable.ic_subtitle_filter);
@@ -738,7 +739,7 @@ public class TodoTxtTouch extends ListActivity implements
 				subtitle_bar.setVisibility(View.VISIBLE);
 				filterText.setText(filterTitle);
 
-			} else if (!Util.isEmpty(m_search)) {
+			} else if (!Strings.isEmptyOrNull(m_search)) {
 				if (filterText != null) {
 
 					subtitle_icon
@@ -824,12 +825,10 @@ public class TodoTxtTouch extends ListActivity implements
 			Task task = items.get(position);
 			if (task != null) {
 				holder.taskid.setText(String.format("%02d", task.getId() + 1));
-				if (TaskHelper.toString(task.getPriority())
-						.equalsIgnoreCase("")) {
+				if (task.getPriority() == Priority.NONE) {
 					holder.taskprio.setText("   ");
 				} else {
-					holder.taskprio.setText("("
-							+ TaskHelper.toString(task.getPriority()) + ")");
+					holder.taskprio.setText(task.getPriority().inFileFormat());
 				}
 				SpannableString ss = new SpannableString(task.inScreenFormat());
 				Util.setGray(ss, task.getProjects());
@@ -840,20 +839,17 @@ public class TodoTxtTouch extends ListActivity implements
 				holder.tasktext.setTextColor(res.getColor(R.color.black));
 
 				switch (task.getPriority()) {
-				case 'A':
+				case A:
 					holder.taskprio.setTextColor(res.getColor(R.color.green));
 					break;
-				case 'B':
+				case B:
 					holder.taskprio.setTextColor(res.getColor(R.color.blue));
 					break;
-				case 'C':
+				case C:
 					holder.taskprio.setTextColor(res.getColor(R.color.orange));
 					break;
-				case 'D':
+				case D:
 					holder.taskprio.setTextColor(res.getColor(R.color.gold));
-					break;
-				case 'E':
-					holder.taskprio.setTextColor(res.getColor(R.color.black));
 					break;
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));

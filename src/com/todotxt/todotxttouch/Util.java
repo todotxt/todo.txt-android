@@ -72,11 +72,7 @@ public class Util {
 	private Util() {
 	}
 
-	public static boolean isEmpty(String in) {
-		return in == null || in.length() == 0;
-	}
-
-	public static HttpParams getTimeoutHttpParams() {
+    public static HttpParams getTimeoutHttpParams() {
 		HttpParams params = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
 		HttpConnectionParams.setSoTimeout(params, SOCKET_TIMEOUT);

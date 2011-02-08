@@ -49,7 +49,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
+import com.todotxt.todotxttouch.task.Priority;
+import com.todotxt.todotxttouch.task.PriorityTextSplitter;
 import com.todotxt.todotxttouch.task.Task;
+import com.todotxt.todotxttouch.util.CursorPositionCalculator;
+import com.todotxt.todotxttouch.util.Strings;
 
 public class AddTask extends Activity {
 
@@ -64,11 +68,11 @@ public class AddTask extends Activity {
 	private TextView titleBarLabel;
 
 	private String share_text;
-	
+
 	private Spinner priorities;
 	private Spinner contexts;
 	private Spinner projects;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -104,18 +108,18 @@ public class AddTask extends Activity {
 		titleBarLabel = (TextView) findViewById(R.id.title_bar_label);
 
 		// text
-		final EditText text = (EditText) findViewById(R.id.taskText);
-		text.setGravity(Gravity.TOP);
+		final EditText textInputField = (EditText) findViewById(R.id.taskText);
+		textInputField.setGravity(Gravity.TOP);
 
 		if (share_text != null) {
-			text.setText(share_text);
+			textInputField.setText(share_text);
 		}
 
 		Task task = (Task) getIntent().getSerializableExtra(
 				Constants.EXTRA_TASK);
 		if (task != null) {
 			m_backup = task;
-			text.setText(task.inFileFormat());
+			textInputField.setText(task.inFileFormat());
 			setTitle(R.string.update);
 			titleBarLabel.setText(R.string.update);
 		} else {
@@ -123,35 +127,33 @@ public class AddTask extends Activity {
 			titleBarLabel.setText(R.string.addtask);
 		}
 
+        textInputField.setSelection(textInputField.getText().toString().length());
+
 		// priorities
 		priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add("Priority");
-		for (char c = 'A'; c <= 'E'; c++) {
-			prioArr.add("" + c);
-		}
+        prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
-		if (m_backup != null && m_backup.getPriority() >= 'A'
-				&& m_backup.getPriority() <= 'E') {
-			priorities.setSelection(1 + m_backup.getPriority() - 'A');
+		if (m_backup != null) {
+            int index = prioArr.indexOf(m_backup.getPriority().getCode());
+			priorities.setSelection(index < 0 ? 0 : index);
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
-	//			Log.d(TAG, "position");
-				if (position > 0) {
+                int cursorPosition = textInputField.getSelectionStart();
+                String currentText = textInputField.getText().toString();
+                Priority priority = Priority.NONE;
+                if (position > 0) {
 					String item = prioArr.get(position);
-					String t = text.getText().toString();
-					Task task = new Task(-1L, t);
-
-					char priority = item.charAt(0);
-					if (Util.isEmpty(t) && priority != Task.NO_PRIORITY) {
-						task.update(" ");
-						task.setPriority(priority);
-					}
-					text.setText(task.inFileFormat());
+					char p = item.charAt(0);
+                    priority = Priority.toPriority(p);
 				}
+                String text = PriorityTextSplitter.getInstance().split(currentText).text;
+                textInputField.setText(Strings.insertPadded(text, 0, priority.inFileFormat()));
+                textInputField.setSelection(CursorPositionCalculator.calculate(cursorPosition, currentText, textInputField.getText().toString()));
 			}
 
 			@Override
@@ -169,9 +171,13 @@ public class AddTask extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				if (position > 0) {
-					String item = projectsArr.get(position);
-					text.append("+" + item + " ");
+                    int cursorPosition = textInputField.getSelectionStart();
+                    String currentText = textInputField.getText().toString();
+                    String item = "+"+projectsArr.get(position);
+                    textInputField.setText(Strings.insertPadded(currentText, cursorPosition, item));
+                    textInputField.setSelection(CursorPositionCalculator.calculate(cursorPosition, currentText, textInputField.getText().toString()));
 				}
+                projects.setSelection(0);
 			}
 
 			@Override
@@ -189,16 +195,20 @@ public class AddTask extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				if (position > 0) {
-					String item = contextsArr.get(position);
-					text.append(" @" + item + " ");
+                    int cursorPosition = textInputField.getSelectionStart();
+                    String currentText = textInputField.getText().toString();
+                    String item = "@"+contextsArr.get(position);
+                    textInputField.setText(Strings.insertPadded(currentText, cursorPosition, item));
+                    textInputField.setSelection(CursorPositionCalculator.calculate(cursorPosition, currentText, textInputField.getText().toString()));
 				}
+                contexts.setSelection(0);
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-		
+
 		// cancel
 		Button cancel = (Button) findViewById(R.id.cancel);
 		cancel.setOnClickListener(new OnClickListener() {
@@ -217,7 +227,7 @@ public class AddTask extends Activity {
 			@Override
 			public void onClick(View v) {
 				// strip line breaks
-				final String input = text.getText().toString()
+				final String input = textInputField.getText().toString()
 						.replaceAll("\\r\\n|\\r|\\n", " ");
 
 				TodoApplication app = (TodoApplication) getApplication();
@@ -289,22 +299,22 @@ public class AddTask extends Activity {
 			m_ProgressDialog.dismiss();
 		}
 	}
-	
+
 	/** Handle priority spinner **/
 	public void onPriorityClick(View v) {
 		priorities.performClick();
 	}
-	
+
 	/** Handle project spinner **/
 	public void onProjectClick(View v) {
 		projects.performClick();
 	}
-	
+
 	/** Handle context spinner **/
 	public void onContextClick(View v) {
 		contexts.performClick();
 	}
-	
+
 	/** Handle help message **/
 	public void onHelpClick(View v) {
 		Intent intent = new Intent(v.getContext(), HelpActivity.class);

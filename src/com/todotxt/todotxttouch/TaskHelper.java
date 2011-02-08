@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
 
 public class TaskHelper {
@@ -41,10 +42,10 @@ public class TaskHelper {
 		return prio >= 'A' && prio <= 'Z' ? "" + prio : "";
 	}
 
-	public static List<Task> getByPrio(List<Task> items, char prio) {
+	public static List<Task> getByPrio(List<Task> items, Priority priority) {
 		List<Task> res = new ArrayList<Task>();
 		for (Task item : items) {
-			if (item.getPriority() == prio) {
+			if (item.getPriority() == priority) {
 				res.add(item);
 			}
 		}
@@ -123,7 +124,7 @@ public class TaskHelper {
 	public static ArrayList<String> getPrios(List<Task> items) {
 		Set<String> res = new HashSet<String>();
 		for (Task item : items) {
-			res.add(toString(item.getPriority()));
+			res.add(item.getPriority().toString());
 		}
 		ArrayList<String> ret = new ArrayList<String>(res);
 		Collections.sort(ret);

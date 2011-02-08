@@ -38,9 +38,6 @@ class TextSplitter {
 	private final static Pattern COMPLETED_PATTERN = Pattern
 			.compile("^([X,x] )(.*)");
 
-	private final static Pattern PRIORITY_PATTERN = Pattern
-			.compile("^\\(([A-Z])\\) (.*)");
-
 	private final static Pattern COMPLETED_PREPENDED_DATES_PATTERN = Pattern
 			.compile("^(\\d{4}-\\d{2}-\\d{2}) (\\d{4}-\\d{2}-\\d{2}) (.*)");
 
@@ -57,13 +54,13 @@ class TextSplitter {
 	}
 
 	static class SplitResult {
-		public final char priority;
+		public final Priority priority;
 		public final String text;
 		public final String prependedDate;
 		public final boolean completed;
 		public final String completedDate;
 
-		private SplitResult(char priority, String text, String prependedDate,
+		private SplitResult(Priority priority, String text, String prependedDate,
 				boolean completed, String completedDate) {
 			this.priority = priority;
 			this.text = text;
@@ -75,7 +72,7 @@ class TextSplitter {
 
 	public SplitResult split(String inputText) {
 		if (inputText == null) {
-			return new SplitResult(Task.NO_PRIORITY, "", "", false, "");
+			return new SplitResult(Priority.NONE, "", "", false, "");
 		}
 
 		Matcher completedMatcher = COMPLETED_PATTERN.matcher(inputText);
@@ -89,14 +86,13 @@ class TextSplitter {
 			text = inputText;
 		}
 
-		char priority = Task.NO_PRIORITY;
-		if (!completed) {
-			Matcher priorityMatcher = PRIORITY_PATTERN.matcher(text);
-			if (priorityMatcher.find()) {
-				priority = priorityMatcher.group(1).charAt(0);
-				text = priorityMatcher.group(2);
-			}
-		}
+        Priority priority = Priority.NONE;
+        if(!completed) {
+            PriorityTextSplitter.PrioritySplitResult prioritySplitResult =
+                    PriorityTextSplitter.getInstance().split(text);
+            priority = prioritySplitResult.priority;
+            text = prioritySplitResult.text;
+        }
 
 		String completedDate = "";
 		String prependedDate = "";
