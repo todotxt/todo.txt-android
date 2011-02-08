@@ -80,7 +80,8 @@ You should have received a copy of the GNU General Public License along with Tod
 				<data android:mimeType="text/plain" />
 			</intent-filter>
 		</activity-alias>
-
+		<activity android:name=".HelpActivity"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
 		<activity android:name=".TodoTxtTouch" android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
