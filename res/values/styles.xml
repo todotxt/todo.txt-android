@@ -62,7 +62,15 @@ You should have received a copy of the GNU General Public License along with Tod
         <item name="android:layout_marginBottom">0dip</item>
         <item name="android:background">@drawable/title_bar_separator</item>
     </style>
-
+	<style name="TitleBarLabel">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_marginRight">10dip</item>
+		<item name="android:gravity">bottom</item>"
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textStyle">italic|bold</item>
+	</style>
+	
     <style name="TitleBarLogo">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">fill_parent</item>
@@ -74,11 +82,94 @@ You should have received a copy of the GNU General Public License along with Tod
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_weight">1</item>
     </style>
+   
 	<style name="SubTitleBar">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/subtitle_height</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/subtitle_background</item>
-        <item name="android:visibility">gone</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">@dimen/subtitle_height</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:background">@drawable/subtitle_background</item>
+		<item name="android:visibility">gone</item>
+	</style>
+	
+	<style name="ActionBar">
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:layout_height">@dimen/actionbar_height</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:background">@drawable/actionbar_background</item>
+		<item name="android:visibility">gone</item>
+	</style>
+
+	<style name="ActionBarButtonSet">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:background">@drawable/actionbar_button_set</item>
+		<item name="android:layout_margin">3dip</item>
+	</style>
+
+	<style name="ActionBarSeparator">
+		<item name="android:layout_width">1px</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_marginTop">3dip</item>
+		<item name="android:layout_marginBottom">3dip</item>
+		<item name="android:background">@drawable/actionbar_separator</item>
+	</style>
+  
+	<style name="ActionBarSeparatorWhite">
+		<item name="android:layout_width">1px</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_marginTop">3dip</item>
+		<item name="android:layout_marginBottom">3dip</item>
+		<item name="android:background">@drawable/actionbar_separator_white</item>
+	</style>
+   
+	<style name="ActionBarButton">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:background">@drawable/actionbar_button</item>
+		<item name="android:paddingTop">2dip</item>
+		<item name="android:paddingBottom">2dip</item>
+		<item name="android:paddingLeft">7dip</item>
+		<item name="android:paddingRight">7dip</item>
+		<item name="android:layout_margin">3dip</item>
+	</style>
+		
+	<style name="ActionBarLeftButton">
+	<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:background">@drawable/actionbar_left_button</item>
+		<item name="android:paddingTop">2dip</item>
+		<item name="android:paddingBottom">2dip</item>
+		<item name="android:paddingLeft">7dip</item>
+		<item name="android:paddingRight">7dip</item> 
+		<item name="android:drawablePadding">4dip</item>
+	</style>
+	
+	<style name="ActionBarCenterButton">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:background">@drawable/actionbar_center_button</item>
+		<item name="android:paddingTop">2dip</item>
+		<item name="android:paddingBottom">2dip</item>
+		<item name="android:paddingLeft">7dip</item>
+		<item name="android:paddingRight">7dip</item>
+		<item name="android:drawablePadding">4dip</item>
+	</style>
+	
+	<style name="ActionBarRightButton">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:background">@drawable/actionbar_right_button</item>
+		<item name="android:paddingTop">2dip</item>
+		<item name="android:paddingBottom">2dip</item>
+		<item name="android:paddingLeft">7dip</item>
+		<item name="android:paddingRight">7dip</item>
+		<item name="android:drawablePadding">4dip</item> 
+	</style>
+	
+	<style name="HorizontalRule">
+		<item name="android:layout_height">1px</item>
+		<item name="android:layout_width">fill_parent</item>
+		<item name="android:background">@drawable/horizontal_rule</item>
 	</style>
 </resources>

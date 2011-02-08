@@ -117,6 +117,15 @@ You should have received a copy of the GNU General Public License along with Tod
 	<!-- title bar changes -->
 	<string name="title_search_results">Search results for: </string>
 	<string name="title_filter_applied">Filter applied: </string>
+	<string name="add_task_priority_btn">Priority</string>
+	<string name="add_task_context_btn">Context</string>
+	<string name="add_task_project_btn">Project</string>
+	<string name="add_task_help_btn">Help</string>
+	
+	<string name="priority_prompt">Priority</string>
+	<string name="project_prompt">Project</string>
+	<string name="context_prompt">Context</string>
+	
 	<!-- launcher shortcut -->
 	<string name="shortcut_addtask_name">Add Task</string>
 	<!-- share -->

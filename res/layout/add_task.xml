@@ -31,47 +31,91 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/home_root" android:orientation="vertical"
-	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:background="@color/white">
 
 	<LinearLayout style="@style/TitleBar">
 		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" />
 		<View style="@style/TitleBarSpring" />
-		<TextView android:id="@+id/title_bar_label"
-			android:layout_width="wrap_content" android:layout_height="fill_parent"
-			android:gravity="bottom" android:layout_marginRight="10dip"
-			android:textColor="@color/white" android:textStyle="italic|bold"
-			android:text="New 
-		Task" />
+		<TextView style="@style/TitleBarLabel" android:id="@+id/title_bar_label"
+			android:text="New Task" />
 	</LinearLayout>
-	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:stretchColumns="1">
-		<TableRow>
-			<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
-				android:layout_alignParentTop="true" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:layout_span="3" />
-		</TableRow>
-		<TableRow android:layout_width="fill_parent">
-			<Spinner android:id="@+id/priorities" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<Spinner android:id="@+id/projects" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-			<Spinner android:id="@+id/contexts" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-		</TableRow>
-		<TableRow>
-			<Button android:id="@+id/addTask" android:layout_weight="1"
-				android:layout_width="fill_parent" android:layout_height="wrap_content"
-				android:text="@string/add" android:layout_span="2" />
+	
+	<LinearLayout style="@style/ActionBar"
+		android:id="@+id/subtitle_bar"
+		android:visibility="visible">
+		<LinearLayout style="@style/ActionBarButtonSet"
+			android:scrollbars="horizontal">
+			<Button style="@style/ActionBarLeftButton"
+				android:id="@+id/priority_btn"				
+				android:text="@string/add_task_priority_btn"
+				android:onClick="onPriorityClick"
+				android:drawableRight="@drawable/ic_actionbar_drop" />
+	        <ImageView style="@style/ActionBarSeparator" />
+	       	<ImageView style="@style/ActionBarSeparatorWhite" />
+			<Button style="@style/ActionBarCenterButton"
+				android:id="@+id/project_btn"
+				android:text="@string/add_task_project_btn"
+				android:onClick="onProjectClick"
+				android:drawableRight="@drawable/ic_actionbar_drop" />
+        	<ImageView style="@style/ActionBarSeparator" />
+        	<ImageView style="@style/ActionBarSeparatorWhite" />
+			<Button style="@style/ActionBarRightButton"
+				android:id="@+id/context_btn"
+				android:text="@string/add_task_context_btn"
+				android:onClick="onContextClick" 
+				android:drawableRight="@drawable/ic_actionbar_drop" />
+		</LinearLayout>
+		<View style="@style/TitleBarSpring" />
+		<Button style="@style/ActionBarButton"
+			android:id="@+id/help_btn"
+			android:text="@string/add_task_help_btn" 
+			android:onClick="onHelpClick"/>
+	</LinearLayout>
+	<ImageView style="@style/HorizontalRule" />
 
-			<Button android:id="@+id/cancel" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:text="@string/cancel" />
-		</TableRow>
-		<TableRow>
-			<TextView android:id="@+id/add_task_help_text" android:text="@string/add_task_help"
-				android:layout_height="wrap_content" android:layout_width="fill_parent"
-				android:layout_marginRight="20dip" android:gravity="fill_horizontal"
-				android:textColor="@color/white" android:layout_span="3" />
-		</TableRow>
-	</TableLayout>
+	<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
+		android:layout_alignParentTop="true" android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:background="@color/white"
+		android:padding="5dip" />
+	
+
+	<LinearLayout android:orientation="horizontal" 
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:background="@color/grey"
+		android:visibility="invisible">
+		<Spinner android:id="@+id/priorities" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:prompt="@string/priority_prompt"/>
+		<Spinner android:id="@+id/projects" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:prompt="@string/project_prompt" />
+		<Spinner android:id="@+id/contexts" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:prompt="@string/context_prompt" />
+	</LinearLayout>
+	
+	<ImageView style="@style/HorizontalRule" />
+	
+	<LinearLayout android:orientation="horizontal" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/actionbar_dark_background"
+		android:padding="3dip">
+		
+		<Button android:id="@+id/addTask" 
+			android:layout_weight="1"
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:text="@string/add" />
+	
+		<Button android:id="@+id/cancel" 
+			android:layout_weight="1"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			android:text="@string/cancel" />
+	</LinearLayout>
 </LinearLayout>
