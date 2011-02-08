@@ -35,7 +35,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("", result.text);
 		assertFalse(result.completed);
@@ -46,7 +46,7 @@ public class TextSplitterTest extends TestCase {
 		String input = null;
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("", result.text);
 		assertFalse(result.completed);
@@ -57,7 +57,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "(A) test";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals('A', result.priority);
+		assertEquals(Priority.A, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("test", result.text);
 		assertFalse(result.completed);
@@ -68,7 +68,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "2011-01-02 test";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("2011-01-02", result.prependedDate);
 		assertEquals("test", result.text);
 		assertFalse(result.completed);
@@ -79,7 +79,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "(A) 2011-01-02 test";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals('A', result.priority);
+		assertEquals(Priority.A, result.priority);
 		assertEquals("2011-01-02", result.prependedDate);
 		assertEquals("test", result.text);
 		assertFalse(result.completed);
@@ -90,7 +90,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "Call Mom 2011-03-02";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("Call Mom 2011-03-02", result.text);
 		assertFalse(result.completed);
@@ -101,7 +101,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "(A)2011-01-02 test";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("(A)2011-01-02 test", result.text);
 		assertFalse(result.completed);
@@ -112,7 +112,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "2011-01-02 (A) test";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("2011-01-02", result.prependedDate);
 		assertEquals("(A) test", result.text);
 		assertFalse(result.completed);
@@ -123,7 +123,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "x 2011-01-02 test 123";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("", result.prependedDate);
 		assertEquals("test 123", result.text);
 		assertTrue(result.completed);
@@ -134,7 +134,7 @@ public class TextSplitterTest extends TestCase {
 		String input = "x 2011-01-02 2011-01-01 test 123";
 		TextSplitter splitter = TextSplitter.getInstance();
 		TextSplitter.SplitResult result = splitter.split(input);
-		assertEquals(Task.NO_PRIORITY, result.priority);
+		assertEquals(Priority.NONE, result.priority);
 		assertEquals("2011-01-01", result.prependedDate);
 		assertEquals("test 123", result.text);
 		assertTrue(result.completed);

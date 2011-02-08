@@ -28,6 +28,7 @@
 package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.util.Log;
 
@@ -50,8 +51,9 @@ public class DropboxUtil {
 		ArrayList<Task> tasks = null;
 		try {
 			tasks = fetchTasks(api);
-			Task task = new Task(tasks.size(), input, m_app.m_prefs.getBoolean(
-					"todotxtprependdate", false));
+            boolean shouldPrependDate = m_app.m_prefs.getBoolean(
+					"todotxtprependdate", false);
+			Task task = new Task(tasks.size(), input, (shouldPrependDate ? new Date() : null));
 
 			tasks.add(task);
 			boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(

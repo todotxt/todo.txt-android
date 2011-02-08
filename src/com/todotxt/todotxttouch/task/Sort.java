@@ -31,7 +31,7 @@ import java.util.Comparator;
 
 /**
  * Holds Task Sorting options and their associated comparators
- * 
+ *
  * @author Tim Barlotta
  */
 public enum Sort {
@@ -69,22 +69,22 @@ public enum Sort {
 				}
 			}
 
-			if (t1.getPriority() == Task.NO_PRIORITY
-					&& t2.getPriority() == Task.NO_PRIORITY) {
+			if (t1.getPriority() == Priority.NONE
+					&& t2.getPriority() == Priority.NONE) {
 				return Sort.ID_ASC.getComparator().compare(t1, t2);
 			}
 
-			if (t1.getPriority() == Task.NO_PRIORITY
-					|| t2.getPriority() == Task.NO_PRIORITY) {
-				if (t1.getPriority() == Task.NO_PRIORITY) {
+			if (t1.getPriority() == Priority.NONE
+					|| t2.getPriority() == Priority.NONE) {
+				if (t1.getPriority() == Priority.NONE) {
 					return 1;
 				} else {
 					return -1;
 				}
 			}
 
-			int result = new Character(t1.getPriority())
-					.compareTo(new Character(t2.getPriority()));
+			int result = t1.getPriority()
+					.compareTo(t2.getPriority());
 			if (result == 0) {
 				result = Sort.ID_ASC.getComparator().compare(t1, t2);
 			}
@@ -185,7 +185,7 @@ public enum Sort {
 	/**
 	 * Retrieves the sort selection by its id, default to PRIORITY_DESC if no
 	 * matching sort is found
-	 * 
+	 *
 	 * @param id
 	 *            the sort id to lookup
 	 * @return the matching sort or PRIORITY_DESC if no match is found
