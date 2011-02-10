@@ -105,6 +105,4 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="shortcut_addtask_name">追加</string>
 	<!--  share -->
 	<string name="share_addtask_name">Add to Todo.txt</string>
-<string name="dropbox_consumer_key">gdb3yesuszz3bk8</string>
-<string name="dropbox_consumer_secret">6np5yqalilylpc0</string>
 </resources>
