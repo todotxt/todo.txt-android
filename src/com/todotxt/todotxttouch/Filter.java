@@ -117,6 +117,8 @@ public class Filter extends TabActivity {
 			public void onClick(View v) {
 				Log.v(TAG, "onClick OK");
 				Intent data = new Intent();
+				Log.v(TAG, "Clearing all filter types.");
+				appliedFilters = new ArrayList<String>();
 				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
 						getItems(priorities, "Priority"));
 				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
@@ -167,6 +169,7 @@ public class Filter extends TabActivity {
 						+ " to applied filters.");
 				if (!appliedFilters.contains(type)) {
 					appliedFilters.add(type);
+					Log.v(TAG, " Adding " + type + " to applied filter types.");
 				}
 			}
 		}

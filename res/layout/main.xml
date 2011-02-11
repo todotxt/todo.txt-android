@@ -32,7 +32,8 @@ You should have received a copy of the GNU General Public License along with Tod
     android:id="@+id/home_root"
 	android:orientation="vertical" 
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	android:layout_height="fill_parent"
+	android:background="@color/white">
    	
     <LinearLayout
 		style="@style/TitleBar">
@@ -53,25 +54,43 @@ You should have received a copy of the GNU General Public License along with Tod
             android:src="@drawable/ic_title_add" 
 			android:onClick="onAddTaskClick" />
 	</LinearLayout>
-	<LinearLayout style="@style/SubTitleBar"
-		android:id="@+id/subtitle_bar">
+
+	<LinearLayout style="@style/ActionBar"
+		android:id="@+id/actionbar"
+		android:visibility="gone">
+		
 		<ImageView 
-			android:id="@+id/subtitle_icon"
+			android:id="@+id/actionbar_icon"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
 			android:layout_marginLeft="5dip"
 			android:layout_marginRight="5dip"
-			android:src="@drawable/ic_subtitle_filter"/>
+			android:src="@drawable/ic_actionbar_filter"/>
 			
 		<TextView
 			android:id="@+id/filter_text"
-			android:layout_width="fill_parent"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical"
-			android:textColor="@color/subtitle_label" />
-		</LinearLayout>
+			android:textColor="@color/actionbar_label" />
+		<View style="@style/TitleBarSpring" />
 		
+		<LinearLayout style="@style/ActionBarButtonSet"
+			android:scrollbars="horizontal">
+		
+			<Button style="@style/ActionBarLeftButton"
+				android:text="Refine"
+				android:onClick="onRefineClick" />
+	        <ImageView style="@style/ActionBarSeparator" />
+	       	<ImageView style="@style/ActionBarSeparatorWhite" />
+			<Button style="@style/ActionBarRightButton"
+				android:text="Clear"
+				android:onClick="onClearClick" />
+		</LinearLayout>		
+	</LinearLayout>
+	<ImageView style="@style/HorizontalRule" />
+	
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
