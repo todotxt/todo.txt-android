@@ -37,10 +37,10 @@ You should have received a copy of the GNU General Public License along with Tod
 	<color name="white">#FFFFFF</color>
 	<color name="grey">#888888</color>
     <color name="title_separator">#40ffffff</color>
-    <color name="subtitle_label">#FF666666</color>
     <color name="black_trans">#bb000000</color>
     
     <!--  action bar colors -->
+    <color name="actionbar_label">#FF666666</color>
     <color name="actionbar_btn_default_light">#FFFFFFFF</color>
     <color name="actionbar_btn_default_dark">#FFCCCCCC</color>
     <color name="actionbar_btn_default_stroke">#FFBBBBBB</color>

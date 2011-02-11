@@ -115,8 +115,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="filter_tab_contexts">Contexts</string>
 	<string name="filter_tab_search">Keywords</string>
 	<!-- title bar changes -->
-	<string name="title_search_results">Search results for: </string>
-	<string name="title_filter_applied">Filter applied: </string>
+	<string name="title_search_results">Search term: </string>
+	<string name="title_filter_applied">Filtered by: </string>
 	<string name="add_task_priority_btn">Priority</string>
 	<string name="add_task_context_btn">Context</string>
 	<string name="add_task_project_btn">Project</string>
