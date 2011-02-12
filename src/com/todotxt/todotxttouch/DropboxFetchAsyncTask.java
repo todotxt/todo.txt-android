@@ -69,7 +69,7 @@ public class DropboxFetchAsyncTask extends AsyncTask<Void, Void, Boolean> {
 			}
 			m_act.m_tasks = TodoUtil.loadTasksFromStream(m_remoteFile.is);
 			boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
-					"linebreakspref", true);
+					"linebreakspref", false);
 			TodoUtil.writeToFile(m_act.m_tasks, Constants.TODOFILE,
 					useWindowsLineBreaks);
 			return true;
