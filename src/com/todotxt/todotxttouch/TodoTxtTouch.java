@@ -257,6 +257,13 @@ public class TodoTxtTouch extends ListActivity implements
 		outState.putInt("sort", sort.getId());
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
+
+		outState.putStringArrayList("m_prios", m_prios);
+		outState.putStringArrayList("m_contexts", m_contexts);
+		outState.putStringArrayList("m_projects", m_projects);
+		outState.putStringArrayList("m_filters", m_filters);
+		outState.putString("m_search", m_search);
+
 		dismissProgressDialog(false);
 	}
 
@@ -269,6 +276,13 @@ public class TodoTxtTouch extends ListActivity implements
 		if (m_DialogActive) {
 			showProgressDialog(m_DialogText);
 		}
+
+		m_prios = state.getStringArrayList("m_prios");
+		m_contexts = state.getStringArrayList("m_contexts");
+		m_projects = state.getStringArrayList("m_projects");
+		m_filters = state.getStringArrayList("m_filters");
+		m_search = state.getString("m_search");
+		setFilteredTasks(false);
 	}
 
 	@Override
@@ -693,7 +707,6 @@ public class TodoTxtTouch extends ListActivity implements
 	void setFilteredTasks(boolean reload) {
 
 		if (reload) {
-
 			try {
 				m_tasks = TodoUtil.loadTasksFromFile();
 			} catch (IOException e) {
