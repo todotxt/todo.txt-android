@@ -23,24 +23,24 @@ You should have received a copy of the GNU General Public License along with Tod
 
 @author Gina Trapani <ginatrapani[at]gmail[dot]com>
 @author mathias <mathias[at]ws7862[dot](none)>
-@author mathias <mathias[at]x2[dot](none)>
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2011 Gina Trapani, mathias
  -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<TextView android:id="@+id/taskid" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:gravity="bottom"
+		android:textSize="10dip" android:layout_alignBaseline="@+id/taskprio"
+		android:textColor="@color/grey" android:paddingLeft="4dip" />
+
 	<TextView android:id="@+id/taskprio" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:padding="4dip"
-		android:textStyle="bold" android:textSize="16dip" />
-
-	<TextView android:id="@+id/taskid" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:padding="4dip"
-		android:textSize="10dip" android:layout_below="@id/taskprio"
-		android:textColor="@color/black" />
+		android:textSize="16dip" android:textStyle="bold"
+		android:layout_toRightOf="@id/taskid" />
 
 	<TextView android:id="@+id/tasktext" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:padding="4dip"
-		android:layout_toRightOf="@id/taskprio" android:textSize="16dip" />
+		android:textSize="16dip" android:layout_toRightOf="@id/taskprio" />
 
 </RelativeLayout>

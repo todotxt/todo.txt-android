@@ -55,6 +55,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -831,7 +832,8 @@ public class TodoTxtTouch extends ListActivity implements
 				if (task.getPriority() == Priority.NONE) {
 					holder.taskprio.setText("   ");
 				} else {
-					holder.taskprio.setText(task.getPriority().inFileFormat());
+					holder.taskprio
+							.setText(task.getPriority().inScreenFormat());
 				}
 				SpannableString ss = new SpannableString(task.inScreenFormat());
 				Util.setGray(ss, task.getProjects());
@@ -857,11 +859,21 @@ public class TodoTxtTouch extends ListActivity implements
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
-				// hide line numbers unless show preference is checked
-				if (!m_app.m_prefs.getBoolean("showlinenumberspref", false)) {
-					holder.taskid.setTextColor(res.getColor(R.color.white));
+				if (task.isCompleted()) {
+					Log.v(TAG, "Striking through " + task.getText());
+					holder.tasktext.setPaintFlags(holder.tasktext
+							.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+				} else {
+					holder.tasktext.setPaintFlags(holder.tasktext
+							.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 				}
 
+				// hide line numbers unless show preference is checked
+				if (!m_app.m_prefs.getBoolean("showlinenumberspref", false)) {
+					holder.taskid.setVisibility(View.GONE);
+				} else {
+					holder.taskid.setVisibility(View.VISIBLE);
+				}
 			}
 			return convertView;
 		}
