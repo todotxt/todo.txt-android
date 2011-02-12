@@ -766,7 +766,7 @@ public class TodoTxtTouch extends ListActivity implements
 				m_app.m_syncing ? View.GONE : View.VISIBLE);
 		findViewById(R.id.title_refresh_progress).setVisibility(
 				m_app.m_syncing ? View.VISIBLE : View.GONE);
-		findViewById(R.id.subtitle_bar).setVisibility(View.GONE);
+		findViewById(R.id.actionbar).setVisibility(View.GONE);
 
 	}
 
