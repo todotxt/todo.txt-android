@@ -79,7 +79,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_height="wrap_content"
 		android:layout_weight="1"
 		android:background="@color/white"
-		android:padding="5dip" />
+		android:padding="5dip" android:capitalize="sentences" />
 	
 
 	<LinearLayout android:orientation="horizontal" 
