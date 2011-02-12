@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Sort.java
  *
- * Copyright (c) 2011 mathias, Gina Trapani, Tim Barlotta
+ * Copyright (c) 2011 Tim Barlotta
  *
  * LICENSE:
  *
@@ -18,22 +18,18 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
+ * 
+ * Sort
+ * Holds Task Sorting options and their associated comparators
  *
- * @author mathias <mathias[at]ws7862[dot](none)>
- * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2011 mathias, Gina Trapani, Tim Barlotta
+ * @copyright 2011 Tim Barlotta
  */
 package com.todotxt.todotxttouch.task;
 
 import java.util.Comparator;
 
-/**
- * Holds Task Sorting options and their associated comparators
- *
- * @author Tim Barlotta
- */
 public enum Sort {
 	/**
 	 * Priority descending sort should result in Tasks in the following order
@@ -83,8 +79,7 @@ public enum Sort {
 				}
 			}
 
-			int result = t1.getPriority()
-					.compareTo(t2.getPriority());
+			int result = t1.getPriority().compareTo(t2.getPriority());
 			if (result == 0) {
 				result = Sort.ID_ASC.getComparator().compare(t1, t2);
 			}
@@ -185,7 +180,7 @@ public enum Sort {
 	/**
 	 * Retrieves the sort selection by its id, default to PRIORITY_DESC if no
 	 * matching sort is found
-	 *
+	 * 
 	 * @param id
 	 *            the sort id to lookup
 	 * @return the matching sort or PRIORITY_DESC if no match is found

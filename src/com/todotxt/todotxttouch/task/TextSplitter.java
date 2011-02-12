@@ -60,8 +60,8 @@ class TextSplitter {
 		public final boolean completed;
 		public final String completedDate;
 
-		private SplitResult(Priority priority, String text, String prependedDate,
-				boolean completed, String completedDate) {
+		private SplitResult(Priority priority, String text,
+				String prependedDate, boolean completed, String completedDate) {
 			this.priority = priority;
 			this.text = text;
 			this.prependedDate = prependedDate;
@@ -86,13 +86,13 @@ class TextSplitter {
 			text = inputText;
 		}
 
-        Priority priority = Priority.NONE;
-        if(!completed) {
-            PriorityTextSplitter.PrioritySplitResult prioritySplitResult =
-                    PriorityTextSplitter.getInstance().split(text);
-            priority = prioritySplitResult.priority;
-            text = prioritySplitResult.text;
-        }
+		Priority priority = Priority.NONE;
+		if (!completed) {
+			PriorityTextSplitter.PrioritySplitResult prioritySplitResult = PriorityTextSplitter
+					.getInstance().split(text);
+			priority = prioritySplitResult.priority;
+			text = prioritySplitResult.text;
+		}
 
 		String completedDate = "";
 		String prependedDate = "";

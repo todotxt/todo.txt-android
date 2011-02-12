@@ -79,7 +79,8 @@ public class Task implements Serializable {
 		this.projects = ProjectParser.getInstance().parse(text);
 		this.deleted = Strings.isEmptyOrNull(text);
 
-		if (defaultPrependedDate!=null && Strings.isEmptyOrNull(prependedDate)) {
+		if (defaultPrependedDate != null
+				&& Strings.isEmptyOrNull(prependedDate)) {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			this.prependedDate = formatter.format(defaultPrependedDate);
 		}
@@ -175,9 +176,9 @@ public class Task implements Serializable {
 				sb.append(this.prependedDate).append(" ");
 			}
 		} else {
-            if(priority!=Priority.NONE) {
-			    sb.append(priority.inFileFormat()).append(" ");
-            }
+			if (priority != Priority.NONE) {
+				sb.append(priority.inFileFormat()).append(" ");
+			}
 			if (!Strings.isEmptyOrNull(this.prependedDate)) {
 				sb.append(this.prependedDate).append(" ");
 			}

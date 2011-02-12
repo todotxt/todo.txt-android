@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Task.java
+ * Todo.txt Touch tests/src/com/todotxt/todotxttouch/task/PriorityTextSplitter.java
  *
  * Copyright (c) 2011 Tim Barlotta
  *
@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
+ * PriorityTextSplitter
+ * A JUnit based test class for the PriorityTextSplitter class
+ * 
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2011 Tim Barlotta
@@ -27,11 +30,6 @@ package com.todotxt.todotxttouch.task;
 
 import junit.framework.TestCase;
 
-/**
- * A junit based test class for the PriorityTextSplitter class
- *
- * @author Tim Barlotta
- */
 public class PriorityTextSplitterTest extends TestCase {
 	public void testSplit_empty() {
 		String input = "";

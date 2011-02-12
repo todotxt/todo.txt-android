@@ -1,8 +1,8 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Task.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/task/PriorityTextSplitter.java
  *
- * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * Copyright (c) 2011 Tim Barlotta
  *
  * LICENSE:
  *
@@ -18,6 +18,9 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
+ * 
+ * PriorityTextSplitter.java
+ * Class for splitting a string into a Priority and everything else
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
@@ -28,16 +31,11 @@ package com.todotxt.todotxttouch.task;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Class for splitting a string into a Priority and everything else
- *
- * @author Tim Barlotta
- */
 public class PriorityTextSplitter {
 	private final static Pattern PRIORITY_PATTERN = Pattern
 			.compile("^\\(([A-Z])\\) (.*)");
 
-    private final static PriorityTextSplitter INSTANCE = new PriorityTextSplitter();
+	private final static PriorityTextSplitter INSTANCE = new PriorityTextSplitter();
 
 	private PriorityTextSplitter() {
 	}
@@ -46,26 +44,26 @@ public class PriorityTextSplitter {
 		return INSTANCE;
 	}
 
-    public static class PrioritySplitResult {
-        public final Priority priority;
-        public final String text;
+	public static class PrioritySplitResult {
+		public final Priority priority;
+		public final String text;
 
-        public PrioritySplitResult(Priority priority, String text) {
-            this.priority = priority;
-            this.text = text;
-        }
-    }
+		public PrioritySplitResult(Priority priority, String text) {
+			this.priority = priority;
+			this.text = text;
+		}
+	}
 
-    public PrioritySplitResult split(String text) {
-        if(text==null) {
-            return new PrioritySplitResult(Priority.NONE, "");
-        }
+	public PrioritySplitResult split(String text) {
+		if (text == null) {
+			return new PrioritySplitResult(Priority.NONE, "");
+		}
 		Priority priority = Priority.NONE;
-        Matcher priorityMatcher = PRIORITY_PATTERN.matcher(text);
-        if (priorityMatcher.find()) {
-            priority = Priority.toPriority(priorityMatcher.group(1).charAt(0));
-            text = priorityMatcher.group(2);
-        }
-        return new PrioritySplitResult(priority, text);
-    }
+		Matcher priorityMatcher = PRIORITY_PATTERN.matcher(text);
+		if (priorityMatcher.find()) {
+			priority = Priority.toPriority(priorityMatcher.group(1).charAt(0));
+			text = priorityMatcher.group(2);
+		}
+		return new PrioritySplitResult(priority, text);
+	}
 }

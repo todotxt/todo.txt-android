@@ -454,7 +454,9 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showConfirmationDialog(this, R.string.areyousure, listener);
 		} else if (menuid == R.id.priority) {
 			Log.v(TAG, "priority");
-			final String[] prioArr = Priority.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);;
+			final String[] prioArr = Priority.rangeInCode(Priority.NONE,
+					Priority.E).toArray(new String[0]);
+			;
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Select priority");
 			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
@@ -474,7 +476,8 @@ public class TodoTxtTouch extends ListActivity implements
 								Task task = (Task) params[1];
 								String[] prioArr = (String[]) params[2];
 								int which = (Integer) params[3];
-								task.setPriority(Priority.toPriority(prioArr[which].charAt(0)));
+								task.setPriority(Priority
+										.toPriority(prioArr[which].charAt(0)));
 								DropboxAPI api = m_app.getAPI();
 								if (api != null) {
 									return m_app.m_util.updateTask(task);
