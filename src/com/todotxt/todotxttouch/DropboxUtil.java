@@ -57,7 +57,7 @@ public class DropboxUtil {
 
 			tasks.add(task);
 			boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
-					"linebreakspref", true);
+					"linebreakspref", false);
 			TodoUtil.writeToFile(tasks, Constants.TODOFILETMP,
 					useWindowsLineBreaks);
 			api.putFile(Constants.DROPBOX_MODUS, m_app.getRemotePath(),
@@ -81,7 +81,7 @@ public class DropboxUtil {
 				task.copyInto(found);
 				Log.i(TAG, "copied into found {" + found + "}");
 				boolean useWindowsLineBreaks = m_app.m_prefs.getBoolean(
-						"linebreakspref", true);
+						"linebreakspref", false);
 
 				TodoUtil.writeToFile(tasks, Constants.TODOFILETMP,
 						useWindowsLineBreaks);
