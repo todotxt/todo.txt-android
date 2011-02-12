@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Task.java
+ * Todo.txt Touch tests/src/com/todotxt/todotxttouch/util/StringsTest.java
  *
  * Copyright (c) 2011 Tim Barlotta
  *
@@ -18,6 +18,9 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
+ * 
+ * StringsTest
+ * A JUnit based test class for the Strings class
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
@@ -27,81 +30,77 @@ package com.todotxt.todotxttouch.util;
 
 import junit.framework.TestCase;
 
-/**
- * A junit based test class for the Strings class
- *
- * @author Tim Barlotta
- */
 public class StringsTest extends TestCase {
-    public void testIsEmptyOrNull_null() {
-        assertTrue(Strings.isEmptyOrNull(null));
-    }
+	public void testIsEmptyOrNull_null() {
+		assertTrue(Strings.isEmptyOrNull(null));
+	}
 
-    public void testIsEmptyOrNull_emptyString() {
-        assertTrue(Strings.isEmptyOrNull(""));
-    }
+	public void testIsEmptyOrNull_emptyString() {
+		assertTrue(Strings.isEmptyOrNull(""));
+	}
 
-    public void testIsEmptyOrNull_nonEmpty() {
-        assertFalse(Strings.isEmptyOrNull("qwerty"));
-    }
+	public void testIsEmptyOrNull_nonEmpty() {
+		assertFalse(Strings.isEmptyOrNull("qwerty"));
+	}
 
-    public void testIsEmptyOrNull_singleSpace() {
-        assertFalse(Strings.isEmptyOrNull(" "));
-    }
+	public void testIsEmptyOrNull_singleSpace() {
+		assertFalse(Strings.isEmptyOrNull(" "));
+	}
 
-    public void testInsertPadded_null() {
-        assertEquals("thistest", Strings.insertPadded("thistest", 4, null));
-    }
+	public void testInsertPadded_null() {
+		assertEquals("thistest", Strings.insertPadded("thistest", 4, null));
+	}
 
-    public void testInsertPadded_blank() {
-        assertEquals("thistest", Strings.insertPadded("thistest", 4, ""));
-    }
+	public void testInsertPadded_blank() {
+		assertEquals("thistest", Strings.insertPadded("thistest", 4, ""));
+	}
 
-    public void testInsertPadded_invalidInsertionPoint_toosmall() {
-        try {
-            assertEquals("thistest", Strings.insertPadded("thistest", -1, "is"));
-            fail("Exception not thrown");
-        }
-        catch(IndexOutOfBoundsException e) {
-            //success
-        }
-    }
+	public void testInsertPadded_invalidInsertionPoint_toosmall() {
+		try {
+			assertEquals("thistest", Strings.insertPadded("thistest", -1, "is"));
+			fail("Exception not thrown");
+		} catch (IndexOutOfBoundsException e) {
+			// success
+		}
+	}
 
-    public void testInsertPadded_invalidInsertionPoint_toolarge() {
-        try {
-            assertEquals("thistest", Strings.insertPadded("thistest", 99, "is"));
-            fail("Exception not thrown");
-        }
-        catch(IndexOutOfBoundsException e) {
-            //success
-        }
-    }
+	public void testInsertPadded_invalidInsertionPoint_toolarge() {
+		try {
+			assertEquals("thistest", Strings.insertPadded("thistest", 99, "is"));
+			fail("Exception not thrown");
+		} catch (IndexOutOfBoundsException e) {
+			// success
+		}
+	}
 
-    public void testInsertPadded_simple() {
-        assertEquals("this is test", Strings.insertPadded("thistest", 4, "is"));
-    }
+	public void testInsertPadded_simple() {
+		assertEquals("this is test", Strings.insertPadded("thistest", 4, "is"));
+	}
 
-    public void testInsertPadded_simpleBegin() {
-        assertEquals("is thistest", Strings.insertPadded("thistest", 0, "is"));
-    }
+	public void testInsertPadded_simpleBegin() {
+		assertEquals("is thistest", Strings.insertPadded("thistest", 0, "is"));
+	}
 
-    public void testInsertPadded_simpleEnd() {
-        assertEquals("thistest is ", Strings.insertPadded("thistest", 8, "is"));
-    }
+	public void testInsertPadded_simpleEnd() {
+		assertEquals("thistest is ", Strings.insertPadded("thistest", 8, "is"));
+	}
 
-    public void testInsertPadded_prepadded() {
-        assertEquals("this is test", Strings.insertPadded("this test", 4, "is"));
-    }
+	public void testInsertPadded_prepadded() {
+		assertEquals("this is test", Strings.insertPadded("this test", 4, "is"));
+	}
 
-    public void testInsertPadded_prepaddedBegin() {
-        assertEquals("is this test", Strings.insertPadded(" this test", 0, "is"));
-    }
+	public void testInsertPadded_prepaddedBegin() {
+		assertEquals("is this test",
+				Strings.insertPadded(" this test", 0, "is"));
+	}
 
-    public void testInsertPadded_prepaddedEnd1() {
-        assertEquals("this test is ", Strings.insertPadded("this test ", 9, "is"));
-    }
+	public void testInsertPadded_prepaddedEnd1() {
+		assertEquals("this test is ",
+				Strings.insertPadded("this test ", 9, "is"));
+	}
 
-    public void testInsertPadded_prepaddedEnd2() {
-        assertEquals("this test is ", Strings.insertPadded("this test ", 10, "is"));
-    }
+	public void testInsertPadded_prepaddedEnd2() {
+		assertEquals("this test is ",
+				Strings.insertPadded("this test ", 10, "is"));
+	}
 }

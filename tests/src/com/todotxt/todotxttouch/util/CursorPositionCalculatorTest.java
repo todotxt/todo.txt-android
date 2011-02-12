@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Task.java
+ * Todo.txt Touch tests/src/com/todotxt/todotxttouch/util/CursorPositionCalculator.java
  *
  * Copyright (c) 2011 Tim Barlotta
  *
@@ -18,6 +18,9 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
+ * 
+ * CursorPositionCalculatorTest
+ * A JUnit based test class for the CursorPositionCalculator class
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
@@ -27,37 +30,35 @@ package com.todotxt.todotxttouch.util;
 
 import junit.framework.TestCase;
 
-/**
- * A junit based test class for the CursorPositionCalculator class
- *
- * @author Tim Barlotta
- */
 public class CursorPositionCalculatorTest extends TestCase {
-    public void testCalculate_nullPrior() {
-        assertEquals(7, CursorPositionCalculator.calculate(0, null, "123test"));
-    }
+	public void testCalculate_nullPrior() {
+		assertEquals(7, CursorPositionCalculator.calculate(0, null, "123test"));
+	}
 
-    public void testCalculate_nullNew() {
-        assertEquals(0, CursorPositionCalculator.calculate(0, "test", null));
-    }
+	public void testCalculate_nullNew() {
+		assertEquals(0, CursorPositionCalculator.calculate(0, "test", null));
+	}
 
-    public void testCalculate_simpleBegin() {
-        assertEquals(3, CursorPositionCalculator.calculate(0, "test", "123test"));
-    }
+	public void testCalculate_simpleBegin() {
+		assertEquals(3,
+				CursorPositionCalculator.calculate(0, "test", "123test"));
+	}
 
-    public void testCalculate_simpleEnd() {
-        assertEquals(7, CursorPositionCalculator.calculate(4, "test", "test123"));
-    }
+	public void testCalculate_simpleEnd() {
+		assertEquals(7,
+				CursorPositionCalculator.calculate(4, "test", "test123"));
+	}
 
-    public void testCalculate_emptyPrior() {
-        assertEquals(7, CursorPositionCalculator.calculate(0, "", "123test"));
-    }
+	public void testCalculate_emptyPrior() {
+		assertEquals(7, CursorPositionCalculator.calculate(0, "", "123test"));
+	}
 
-    public void testCalculate_emptyNew() {
-        assertEquals(0, CursorPositionCalculator.calculate(0, "test", ""));
-    }
+	public void testCalculate_emptyNew() {
+		assertEquals(0, CursorPositionCalculator.calculate(0, "test", ""));
+	}
 
-    public void testCalculate_nonsense1() {
-        assertEquals(7, CursorPositionCalculator.calculate(99, "test", "test123"));
-    }
+	public void testCalculate_nonsense1() {
+		assertEquals(7,
+				CursorPositionCalculator.calculate(99, "test", "test123"));
+	}
 }

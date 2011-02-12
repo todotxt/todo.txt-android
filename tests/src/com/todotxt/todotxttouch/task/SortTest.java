@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/test/SortTest.java
+ * Todo.txt Touch tests/src/com/todotxt/todotxttouch/task/SortTest.java
  *
  * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta
  *
@@ -18,7 +18,10 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
- *
+ * 
+ * SortTest
+ * A JUnit based test class for testing the Sort class
+ *  
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2011 Tim Barlotta
@@ -31,11 +34,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * A junit based test class for testing the Sort class
- * 
- * @author Tim Barlotta
- */
 public class SortTest extends TestCase {
 	private List<Task> unsortedTasks = new ArrayList<Task>();
 

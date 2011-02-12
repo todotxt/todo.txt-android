@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/tests/src/com/todotxt/todotxttouch/test/TaskTest.java
+ * Todo.txt Touch /tests/src/com/todotxt/todotxttouch/task/TaskTest.java
  *
  * Copyright (c) 2009-2011 Stephen Henderson
  *
@@ -55,9 +55,9 @@ public class TaskTest extends TestCase {
 		assertEquals("", task.getCompletionDate());
 	}
 
-    public void testConstructor_simple_prependDate() throws Exception {
+	public void testConstructor_simple_prependDate() throws Exception {
 		String input = "A Simple test with no curve balls";
-        Date date = new SimpleDateFormat("yyyyMMdd").parse("20110228");
+		Date date = new SimpleDateFormat("yyyyMMdd").parse("20110228");
 		Task task = new Task(1, input, date);
 
 		assertEquals(1, task.getId());
@@ -71,9 +71,10 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inScreenFormat());
-		assertEquals("2011-02-28 A Simple test with no curve balls", task.inFileFormat());
+		assertEquals("2011-02-28 A Simple test with no curve balls",
+				task.inFileFormat());
 		assertEquals("", task.getCompletionDate());
-    }
+	}
 
 	public void testConstructor_withPriority() {
 		String input = "(A) A priority test with no curve balls";
@@ -117,7 +118,8 @@ public class TaskTest extends TestCase {
 		assertEquals("", task.getCompletionDate());
 	}
 
-	public void testConstructor_withPrependedDate_prependDate() throws Exception {
+	public void testConstructor_withPrependedDate_prependDate()
+			throws Exception {
 		String input = "2011-11-28 A priority test with no curve balls";
 		Date date = new SimpleDateFormat("yyyyMMdd").parse("20110228");
 		Task task = new Task(1, input, date);
@@ -444,17 +446,17 @@ public class TaskTest extends TestCase {
 		assertEquals("2011-02-28", task.getCompletionDate());
 	}
 
-    public void testEqualsAndHashCode_simple() {
-        String input = "(D) 2011-12-01 A @complex test with @multiple projects and @contexts myproject";
-        Task task1 = new Task(1, input);
-        Task task2 = new Task(1, input);
+	public void testEqualsAndHashCode_simple() {
+		String input = "(D) 2011-12-01 A @complex test with @multiple projects and @contexts myproject";
+		Task task1 = new Task(1, input);
+		Task task2 = new Task(1, input);
 
-        assertTrue(task1.equals(task1));
-        assertTrue(task2.equals(task2));
-        assertTrue(task1.equals(task2));
-        assertTrue(task2.equals(task1));
-        assertEquals(task1.hashCode(), task2.hashCode());
-    }
+		assertTrue(task1.equals(task1));
+		assertTrue(task2.equals(task2));
+		assertTrue(task1.equals(task2));
+		assertTrue(task2.equals(task1));
+		assertEquals(task1.hashCode(), task2.hashCode());
+	}
 
 	public void testCopyInto() {
 		String input1 = "(D) 2011-12-01 A @complex test with @multiple projects and @contexts myproject";

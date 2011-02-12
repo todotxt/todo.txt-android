@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/tests/src/com/todotxt/todotxttouch/test/TodoTxtTouchTest.java
+ * Todo.txt Touch /tests/src/com/todotxt/todotxttouch/test/TodoTxtTouchTest.java
  *
  * Copyright (c) 2009-2011 Stephen Henderson
  *

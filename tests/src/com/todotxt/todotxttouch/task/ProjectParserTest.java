@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/test/ProjectParserTest.java
+ * Todo.txt Touch tests/src/com/todotxt/todotxttouch/task/ProjectParserTest.java
  *
  * Copyright (c) 2009-2011 Stephen Henderson, Tim Barlotta
  *
