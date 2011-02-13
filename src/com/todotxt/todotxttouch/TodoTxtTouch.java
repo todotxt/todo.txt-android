@@ -253,7 +253,6 @@ public class TodoTxtTouch extends ListActivity implements
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
 		outState.putInt("sort", sort.getId());
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
@@ -265,6 +264,7 @@ public class TodoTxtTouch extends ListActivity implements
 		outState.putString("m_search", m_search);
 
 		dismissProgressDialog(false);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -687,11 +687,13 @@ public class TodoTxtTouch extends ListActivity implements
 
 	/** Handle clear filter click **/
 	public void onClearClick(View v) {
-		/* TODO not the best way to do this */
-		clearFilter();
-		setFilteredTasks(false);
-		if (m_search != "") {
+		// End current activity if it's search results
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			finish();
+		} else { // otherwise just clear the filter in the current activity
+			clearFilter();
+			setFilteredTasks(false);
 		}
 	}
 
