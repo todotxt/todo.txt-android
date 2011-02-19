@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
+import com.todotxt.todotxttouch.util.Util;
 
 public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 
@@ -59,14 +60,6 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public DropboxLoginAsyncTask(TodoApplication act, Config config) {
 		m_app = act;
 		m_config = config;
-	}
-
-	public DropboxLoginAsyncTask(TodoApplication act, String username,
-			String password, Config config) {
-		m_app = act;
-		m_config = config;
-		m_username = username;
-		m_password = password;
 	}
 
 	@Override
@@ -145,11 +138,11 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> {
 				String u = usernameTV.getText().toString();
 				String p = passwordTV.getText().toString();
 				if (u != null && u.length() > 0 && p != null && p.length() > 0) {
-					DropboxLoginAsyncTask.this.setUsername(u);
-					DropboxLoginAsyncTask.this.setPassword(p);
-					DropboxLoginAsyncTask.this.execute();
+					setUsername(u);
+					setPassword(p);
+					execute();
 				} else {
-					DropboxLoginAsyncTask.this.cancel(false);
+					cancel(false);
 				}
 			}
 		});

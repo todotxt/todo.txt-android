@@ -31,26 +31,27 @@ import java.util.List;
 
 /**
  * A junit based test class for the Priority class
- * 
+ *
  * @author Tim Barlotta
  */
 public class PriorityTest extends TestCase {
 	public void testAccessors_simple() {
 		assertEquals("A", Priority.A.getCode());
-		assertEquals("A", Priority.A.inScreenFormat());
+        assertEquals("A", Priority.A.inListFormat());
+		assertEquals("A", Priority.A.inDetailFormat());
 		assertEquals("(A)", Priority.A.inFileFormat());
 	}
 
 	public void testToPriority_A() {
-		assertSame(Priority.A, Priority.toPriority('A'));
+		assertSame(Priority.A, Priority.toPriority("A"));
 	}
 
 	public void testToPriority_Z() {
-		assertSame(Priority.Z, Priority.toPriority('Z'));
+		assertSame(Priority.Z, Priority.toPriority("Z"));
 	}
 
 	public void testToPriority_invalid() {
-		assertEquals(Priority.NONE, Priority.toPriority('9'));
+		assertEquals(Priority.NONE, Priority.toPriority("9"));
 	}
 
 	public void testRange_EK() {

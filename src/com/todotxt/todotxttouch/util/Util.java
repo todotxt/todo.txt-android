@@ -27,7 +27,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2011 mathias, Gina Trapani, Stephen Henderson, Tormod Haugen
  */
-package com.todotxt.todotxttouch;
+package com.todotxt.todotxttouch.util;
 
 import java.io.Closeable;
 import java.io.File;
@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.todotxt.todotxttouch.R;
+import com.todotxt.todotxttouch.TodoException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;

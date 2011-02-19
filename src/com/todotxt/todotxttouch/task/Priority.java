@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
- * 
+ *
  * Priority
  * Values representing a Task's priority and associated utility methods
  *
@@ -32,82 +32,125 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum Priority {
-	NONE("-", "", ""), A("A", "A", "(A)"), B("B", "B", "(B)"), C("C", "C",
-			"(C)"), D("D", "D", "(D)"), E("E", "E", "(E)"), F("F", "F", "(F)"), G(
-			"G", "G", "(G)"), H("H", "H", "(H)"), I("I", "I", "(I)"), J("J",
-			"J", "(J)"), K("K", "K", "(K)"), L("L", "L", "(L)"), M("M", "M",
-			"(M)"), N("N", "N", "(N)"), O("O", "O", "(O)"), P("P", "P", "(P)"), Q(
-			"Q", "Q", "(Q)"), R("R", "R", "(R)"), S("S", "S", "(S)"), T("T",
-			"T", "(T)"), U("U", "U", "(U)"), V("V", "V", "(V)"), W("W", "W",
-			"(W)"), X("X", "X", "(X)"), Y("Y", "Y", "(Y)"), Z("Z", "Z", "(Z)");
+    NONE("-", " ", "", ""),
+    A("A", "A", "A", "(A)"),
+    B("B", "B", "B", "(B)"),
+    C("C", "C", "C", "(C)"),
+    D("D", "D", "D", "(D)"),
+    E("E", "E", "E", "(E)"),
+    F("F", "F", "F", "(F)"),
+    G("G", "G", "G", "(G)"),
+    H("H", "H", "H", "(H)"),
+    I("I", "I", "I", "(I)"),
+    J("J", "J", "J", "(J)"),
+    K("K", "K", "K", "(K)"),
+    L("L", "L", "L", "(L)"),
+    M("M", "M", "M", "(M)"),
+    N("N", "N", "N", "(N)"),
+    O("O", "O", "O", "(O)"),
+    P("P", "P", "P", "(P)"),
+    Q("Q", "Q", "Q", "(Q)"),
+    R("R", "R", "R", "(R)"),
+    S("S", "S", "S", "(S)"),
+    T("T", "T", "T", "(T)"),
+    U("U", "U", "U", "(U)"),
+    V("V", "V", "V", "(V)"),
+    W("W", "W", "W", "(W)"),
+    X("X", "X", "X", "(X)"),
+    Y("Y", "Y", "Y", "(Y)"),
+    Z("Z", "Z", "Z", "(Z)");
 
-	private final String code;
-	private final String screenFormat;
-	private final String fileFormat;
+    private final String code;
+    private final String listFormat;
+    private final String detailFormat;
+    private final String fileFormat;
 
-	private Priority(String code, String screenFormat, String fileFormat) {
-		this.code = code;
-		this.screenFormat = screenFormat;
-		this.fileFormat = fileFormat;
-	}
+    private Priority(String code, String listFormat, String detailFormat, String fileFormat) {
+        this.code = code;
+        this.listFormat = listFormat;
+        this.detailFormat = detailFormat;
+        this.fileFormat = fileFormat;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String inScreenFormat() {
-		return screenFormat;
-	}
+    public String inListFormat() {
+        return listFormat;
+    }
 
-	public String inFileFormat() {
-		return fileFormat;
-	}
+    public String inDetailFormat() {
+        return detailFormat;
+    }
 
-	private static Priority[] reverseValues() {
-		Priority[] values = Priority.values();
-		Priority[] reversed = new Priority[values.length];
-		for (int i = 0; i < values.length; i++) {
-			int index = values.length - 1 - i;
-			reversed[index] = values[i];
-		}
-		return reversed;
-	}
+    public String inFileFormat() {
+        return fileFormat;
+    }
 
-	public static List<Priority> range(Priority p1, Priority p2) {
-		ArrayList<Priority> priorities = new ArrayList<Priority>();
-		boolean add = false;
+    private static Priority[] reverseValues() {
+        Priority[] values = Priority.values();
+        Priority[] reversed = new Priority[values.length];
+        for(int i = 0; i < values.length; i++) {
+            int index = values.length - 1 - i;
+            reversed[index] = values[i];
+        }
+        return reversed;
+    }
 
-		for (Priority p : (p1.ordinal() < p2.ordinal() ? Priority.values()
-				: Priority.reverseValues())) {
-			if (p == p1) {
-				add = true;
-			}
-			if (add) {
-				priorities.add(p);
-			}
-			if (p == p2) {
-				break;
-			}
-		}
-		return priorities;
-	}
+    public static List<Priority> range(Priority p1, Priority p2) {
+        ArrayList<Priority> priorities = new ArrayList<Priority>();
+        boolean add = false;
 
-	public static List<String> rangeInCode(Priority p1, Priority p2) {
-		List<Priority> priorities = Priority.range(p1, p2);
-		List<String> result = new ArrayList<String>(priorities.size());
-		for (Priority p : priorities) {
-			result.add(p.getCode());
-		}
-		return result;
-	}
+        for(Priority p : (p1.ordinal() < p2.ordinal() ? Priority.values() : Priority.reverseValues())) {
+            if(p == p1) {
+                add = true;
+            }
+            if(add) {
+                priorities.add(p);
+            }
+            if(p == p2) {
+                break;
+            }
+        }
+        return priorities;
+    }
 
-	public static Priority toPriority(char c) {
-		String s = Character.toString(c).toUpperCase();
-		for (Priority p : Priority.values()) {
-			if (p.code.equals(s)) {
-				return p;
-			}
-		}
-		return NONE;
-	}
+    public static List<String> rangeInCode(Priority p1, Priority p2) {
+        List<Priority> priorities = Priority.range(p1, p2);
+        List<String> result = new ArrayList<String>(priorities.size());
+        for(Priority p : priorities) {
+            result.add(p.getCode());
+        }
+        return result;
+    }
+
+    public static ArrayList<String> inCode(List<Priority> priorities) {
+        ArrayList<String> strings = new ArrayList<String>();
+        for(Priority p : priorities) {
+            strings.add(p.getCode());
+        }
+        return strings;
+    }
+
+    public static ArrayList<Priority> toPriority(List<String> codes) {
+        ArrayList<Priority> priorities = new ArrayList<Priority>();
+        for(String code : codes) {
+            priorities.add(Priority.toPriority(code));
+        }
+        return priorities;
+    }
+
+    public static Priority toPriority(String s) {
+        if(s==null) {
+            return NONE;
+        }
+
+        for(Priority p : Priority.values()) {
+            if(p.code.equals(s.toUpperCase())) {
+                return p;
+            }
+        }
+        return NONE;
+    }
 }
