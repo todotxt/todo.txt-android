@@ -36,6 +36,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import com.todotxt.todotxttouch.task.TaskBag;
+import com.todotxt.todotxttouch.task.TaskBagFactory;
 
 public class TodoApplication extends Application {
 
@@ -43,10 +45,11 @@ public class TodoApplication extends Application {
 
 	public SharedPreferences m_prefs;
 	private DropboxAPI m_api = new DropboxAPI();
-	public DropboxUtil m_util;
 	private Config m_config;
 	public boolean m_loggedIn = false;
 	public boolean m_syncing = false;
+
+    private TaskBag taskBag;
 
 	@Override
 	public void onCreate() {
@@ -62,7 +65,7 @@ public class TodoApplication extends Application {
 		}
 
 		authenticate();
-		m_util = new DropboxUtil(this);
+        this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs, getResources().getString(R.string.TODOTXTPATH_defaultPath));
 	}
 
 	private boolean authenticate() {
@@ -103,8 +106,7 @@ public class TodoApplication extends Application {
 		Log.i(TAG, "Clearing current user data!");
 		getAPI().deauthenticate();
 		clearKeys();
-		Constants.TODOFILE.delete();
-		Constants.TODOFILETMP.delete();
+        taskBag.disconnectFromRemote();
 	}
 
 	protected Config getConfig() {
@@ -125,20 +127,15 @@ public class TodoApplication extends Application {
 		return m_config;
 	}
 
+    public TaskBag getTaskBag() {
+        return taskBag;
+    }
+
 	public DropboxAPI getAPI() {
 		return m_api;
 	}
 
 	public void setConfig(Config authenticate) {
 		m_config = authenticate;
-	}
-
-	public String getRemotePath() {
-		return m_prefs.getString("todotxtpath",
-				getResources().getString(R.string.TODOTXTPATH_defaultPath));
-	}
-
-	public String getRemoteFileAndPath() {
-		return getRemotePath() + "/" + Constants.REMOTE_FILE;
 	}
 }

@@ -1,8 +1,8 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoException.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/task/LocalTaskRepository.java
  *
- * Copyright (c) 2009-2011 mathias
+ * Copyright (c) 2011 Tim Barlotta
  *
  * LICENSE:
  *
@@ -19,22 +19,26 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author mathias <mathias[at]x2[dot](none)>
+ * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias
+ * @copyright 2011 Tim Barlotta
  */
-package com.todotxt.todotxttouch;
 
-public class TodoException extends RuntimeException {
+package com.todotxt.todotxttouch.task;
 
-	private static final long serialVersionUID = 2160630991596963352L;
+import java.util.ArrayList;
 
-	public TodoException(String msg) {
-		super(msg);
-	}
+/**
+ * A repository for tasks working at the local data store level
+ * 
+ * @author Tim Barlotta
+ */
+interface LocalTaskRepository {
+	void init();
 
-	public TodoException(String msg, Throwable t) {
-		super(msg, t);
-	}
+	void purge();
 
+	ArrayList<Task> load();
+
+	void store(ArrayList<Task> tasks);
 }

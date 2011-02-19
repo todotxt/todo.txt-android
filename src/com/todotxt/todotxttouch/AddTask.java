@@ -28,7 +28,6 @@
  */
 package com.todotxt.todotxttouch;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -48,12 +47,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.dropbox.client.DropboxAPI;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.PriorityTextSplitter;
 import com.todotxt.todotxttouch.task.Task;
+import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.CursorPositionCalculator;
 import com.todotxt.todotxttouch.util.Strings;
+import com.todotxt.todotxttouch.util.Util;
 
 public class AddTask extends Activity {
 
@@ -64,6 +64,7 @@ public class AddTask extends Activity {
 	private Task m_backup;
 
 	private TodoApplication m_app;
+    private TaskBag taskBag;
 
 	private TextView titleBarLabel;
 
@@ -79,13 +80,8 @@ public class AddTask extends Activity {
 
 		setContentView(R.layout.add_task);
 
-		ArrayList<Task> tasks;
-		try {
-			tasks = TodoUtil.loadTasksFromFile();
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-			tasks = new ArrayList<Task>();
-		}
+		m_app = (TodoApplication) getApplication();
+        taskBag = m_app.getTaskBag();
 
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
@@ -103,7 +99,7 @@ public class AddTask extends Activity {
 			Log.d(TAG, share_text);
 		}
 
-		m_app = (TodoApplication) getApplication();
+
 		// title bar label
 		titleBarLabel = (TextView) findViewById(R.id.title_bar_label);
 
@@ -148,8 +144,7 @@ public class AddTask extends Activity {
                 Priority priority = Priority.NONE;
                 if (position > 0) {
 					String item = prioArr.get(position);
-					char p = item.charAt(0);
-                    priority = Priority.toPriority(p);
+                    priority = Priority.toPriority(item);
 				}
                 String text = PriorityTextSplitter.getInstance().split(currentText).text;
                 textInputField.setText(Strings.insertPadded(text, 0, priority.inFileFormat()));
@@ -163,7 +158,7 @@ public class AddTask extends Activity {
 
 		// projects
 		projects = (Spinner) findViewById(R.id.projects);
-		final ArrayList<String> projectsArr = TaskHelper.getProjects(tasks);
+		final ArrayList<String> projectsArr = taskBag.getProjects();
 		projectsArr.add(0, "Project");
 		projects.setAdapter(Util.newSpinnerAdapter(this, projectsArr));
 		projects.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -187,7 +182,7 @@ public class AddTask extends Activity {
 
 		// contexts
 		contexts = (Spinner) findViewById(R.id.contexts);
-		final ArrayList<String> contextsArr = TaskHelper.getContexts(tasks);
+		final ArrayList<String> contextsArr = taskBag.getContexts();
 		contextsArr.add(0, "Context");
 		contexts.setAdapter(Util.newSpinnerAdapter(this, contextsArr));
 		contexts.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -230,8 +225,6 @@ public class AddTask extends Activity {
 				final String input = textInputField.getText().toString()
 						.replaceAll("\\r\\n|\\r|\\n", " ");
 
-				TodoApplication app = (TodoApplication) getApplication();
-				DropboxAPI api = app.getAPI();
 				new AsyncTask<Object, Void, Boolean>() {
 					protected void onPreExecute() {
 						m_ProgressDialog = ProgressDialog.show(AddTask.this,
@@ -241,23 +234,20 @@ public class AddTask extends Activity {
 					@Override
 					protected Boolean doInBackground(Object... params) {
 						try {
-							DropboxAPI api = (DropboxAPI) params[0];
-							Task task = (Task) params[1];
-							String input = (String) params[2];
-							TodoApplication m_app = (TodoApplication) params[3];
-							if (api != null) {
-								if (task != null) {
-									task.update(input);
-									return m_app.m_util.updateTask(task);
-								} else {
-									return m_app.m_util.addTask(input);
-								}
-							}
+							Task task = (Task) params[0];
+							String input = (String) params[1];
+                            if (task != null) {
+                                task.update(input);
+                                taskBag.update(task);
+                            } else {
+                                taskBag.addAsTask(input);
+                            }
+                            return true;
 						} catch (Exception e) {
 							Log.e(TAG,
 									"input: " + input + " - " + e.getMessage());
+                            return false;
 						}
-						return false;
 					}
 
 					protected void onPostExecute(Boolean result) {
@@ -272,7 +262,7 @@ public class AddTask extends Activity {
 							Util.showToastLong(AddTask.this, res);
 						}
 					}
-				}.execute(api, m_backup, input, m_app);
+				}.execute(m_backup, input);
 			}
 		});
 	}

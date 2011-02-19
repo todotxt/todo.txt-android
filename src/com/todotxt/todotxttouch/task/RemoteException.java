@@ -1,8 +1,8 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoException.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/task/RemoteException.java
  *
- * Copyright (c) 2009-2011 mathias
+ * Copyright (c) 2011 Tim Barlotta
  *
  * LICENSE:
  *
@@ -19,22 +19,25 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author mathias <mathias[at]x2[dot](none)>
+ * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias
+ * @copyright 2011 Tim Barlotta
  */
-package com.todotxt.todotxttouch;
 
-public class TodoException extends RuntimeException {
+package com.todotxt.todotxttouch.task;
 
-	private static final long serialVersionUID = 2160630991596963352L;
-
-	public TodoException(String msg) {
-		super(msg);
+/**
+ * Indicates an error when working with a remote task store
+ * 
+ * @author Tim Barlotta
+ */
+@SuppressWarnings("serial")
+public class RemoteException extends RuntimeException {
+	public RemoteException(String message) {
+		super(message);
 	}
 
-	public TodoException(String msg, Throwable t) {
-		super(msg, t);
+	public RemoteException(String message, Throwable cause) {
+		super(message, cause);
 	}
-
 }

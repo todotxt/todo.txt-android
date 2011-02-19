@@ -1,8 +1,8 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoException.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/task/OrFilter.java
  *
- * Copyright (c) 2009-2011 mathias
+ * Copyright (c) 2011 Tim Barlotta
  *
  * LICENSE:
  *
@@ -19,22 +19,41 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author mathias <mathias[at]x2[dot](none)>
+ * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias
+ * @copyright 2011 Tim Barlotta
  */
-package com.todotxt.todotxttouch;
 
-public class TodoException extends RuntimeException {
+package com.todotxt.todotxttouch.task;
 
-	private static final long serialVersionUID = 2160630991596963352L;
+import java.util.ArrayList;
 
-	public TodoException(String msg) {
-		super(msg);
+/**
+ * A composite filter. At least one subfilters must be true for this filter to
+ * be true. Returns true when there are no subfilters.
+ * 
+ * @author Tim Barlotta
+ */
+class OrFilter implements Filter<Task> {
+	private ArrayList<Filter<Task>> filters = new ArrayList<Filter<Task>>();
+
+	public void addFilter(Filter<Task> filter) {
+		if (filter != null) {
+			filters.add(filter);
+		}
 	}
 
-	public TodoException(String msg, Throwable t) {
-		super(msg, t);
-	}
+	@Override
+	public boolean apply(Task input) {
+		if (filters.size() <= 0) {
+			return true;
+		}
 
+		for (Filter<Task> f : filters) {
+			if (f.apply(input)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -1,8 +1,8 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoUtil.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/task/TaskIo.java
  *
- * Copyright (c) 2009-2011 mathias, Gina Trapani, Stephen Henderson
+ * Copyright (c) 2011 Tim Barlotta
  *
  * LICENSE:
  *
@@ -19,14 +19,15 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author mathias <mathias[at]x2[dot](none)>
- * @author mathias <mathias[at]ws7862[dot](none)>
- * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
- * @author Stephen Henderson <me[at]steveh[dot]ca>
+ * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias, Gina Trapani, Stephen Henderson
+ * @copyright 2011 Tim Barlotta
  */
-package com.todotxt.todotxttouch;
+
+package com.todotxt.todotxttouch.task;
+
+import android.util.Log;
+import com.todotxt.todotxttouch.util.Util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,18 +39,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-import com.todotxt.todotxttouch.task.Task;
-
-public class TodoUtil {
-
-	private final static String TAG = TodoUtil.class.getSimpleName();
-
-	public static ArrayList<Task> loadTasksFromUrl(String url)
-			throws IOException {
-		InputStream is = Util.getInputStreamFromUrl(url);
-		return loadTasksFromStream(is);
-	}
+/**
+ * A utility class for performing Task level I/O
+ * 
+ * @author Tim Barlotta
+ */
+class TaskIo {
+	private final static String TAG = TaskIo.class.getSimpleName();
 
 	public static ArrayList<Task> loadTasksFromStream(InputStream is)
 			throws IOException {
@@ -73,14 +69,14 @@ public class TodoUtil {
 		return items;
 	}
 
-	public static ArrayList<Task> loadTasksFromFile() throws IOException {
+	public static ArrayList<Task> loadTasksFromFile(File file)
+			throws IOException {
 		ArrayList<Task> items = new ArrayList<Task>();
 		BufferedReader in = null;
-		if (!Constants.TODOFILE.exists()) {
-			Log.w(TAG, Constants.TODOFILE.getAbsolutePath()
-					+ " does not exist!");
+		if (!file.exists()) {
+			Log.w(TAG, file.getAbsolutePath() + " does not exist!");
 		} else {
-			InputStream is = new FileInputStream(Constants.TODOFILE);
+			InputStream is = new FileInputStream(file);
 			try {
 				in = new BufferedReader(new InputStreamReader(is));
 				String line;

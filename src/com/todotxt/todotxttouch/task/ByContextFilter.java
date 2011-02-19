@@ -1,0 +1,64 @@
+/**
+ *
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/task/ByContextFilter.java
+ *
+ * Copyright (c) 2011 Tim Barlotta
+ *
+ * LICENSE:
+ *
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+ *
+ * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @license http://www.gnu.org/licenses/gpl.html
+ * @copyright 2011 Tim Barlotta
+ */
+
+package com.todotxt.todotxttouch.task;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * A filter that matches Tasks containing the specified contexts
+ * 
+ * @author Tim Barlotta
+ */
+class ByContextFilter implements Filter<Task> {
+	private ArrayList<String> contexts = new ArrayList<String>();
+
+	public ByContextFilter(List<String> contexts) {
+		if (contexts != null) {
+			this.contexts.addAll(contexts);
+		}
+	}
+
+	@Override
+	public boolean apply(Task input) {
+		if (contexts.size() == 0) {
+			return true;
+		}
+
+		for (String c : input.getContexts()) {
+			if (contexts.contains(c)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
+	ArrayList<String> getContexts() {
+		return contexts;
+	}
+}

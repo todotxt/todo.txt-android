@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
- * 
+ *
  * PriorityTextSplitter.java
  * Class for splitting a string into a Priority and everything else
  *
@@ -61,7 +61,7 @@ public class PriorityTextSplitter {
 		Priority priority = Priority.NONE;
 		Matcher priorityMatcher = PRIORITY_PATTERN.matcher(text);
 		if (priorityMatcher.find()) {
-			priority = Priority.toPriority(priorityMatcher.group(1).charAt(0));
+			priority = Priority.toPriority(priorityMatcher.group(1));
 			text = priorityMatcher.group(2);
 		}
 		return new PrioritySplitResult(priority, text);
