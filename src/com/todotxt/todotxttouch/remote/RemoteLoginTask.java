@@ -1,8 +1,8 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/RemoteException.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/RemoteLoginTask.java
  *
- * Copyright (c) 2011 Tim Barlotta
+ * Copyright (c) 2011 Tormod Haugen
  *
  * LICENSE:
  *
@@ -19,27 +19,16 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Tormod Haugen <tormodh[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2011 Tim Barlotta
+ * @copyright 2011 Tormod Haugen
  */
+package com.todotxt.todotxttouch.remote;
 
-package com.todotxt.todotxttouch.task;
+import android.app.Activity;
 
-import java.io.File;
-import java.util.ArrayList;
+public interface RemoteLoginTask {
 
-/**
- * API for interacting with a remote task store
- * 
- * @author Tim Barlotta
- */
-interface RemoteTaskRepository {
-	void init(File withLocalFile);
+	public void showLoginDialog(Activity act);
 
-	void purge();
-
-	ArrayList<Task> load();
-
-	void store(ArrayList<Task> tasks);
 }

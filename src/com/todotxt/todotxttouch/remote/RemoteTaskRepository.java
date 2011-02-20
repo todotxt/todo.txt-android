@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/TaskBag.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/RemoteException.java
  *
  * Copyright (c) 2011 Tim Barlotta
  *
@@ -24,54 +24,24 @@
  * @copyright 2011 Tim Barlotta
  */
 
-package com.todotxt.todotxttouch.task;
+package com.todotxt.todotxttouch.remote;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+
+import com.todotxt.todotxttouch.task.Task;
 
 /**
- * Interface for interacting with the tasks in aggregate
+ * API for interacting with a remote task store
  * 
  * @author Tim Barlotta
  */
-public interface TaskBag {
-	void reload();
+public interface RemoteTaskRepository {
+	void init(File withLocalFile);
 
-	void addAsTask(String input);
+	void purge();
 
-	void update(Task task);
+	ArrayList<Task> load();
 
-	void delete(Task task);
-
-	List<Task> getTasks();
-
-	List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator);
-
-	int size();
-
-	ArrayList<String> getProjects();
-
-	ArrayList<String> getContexts();
-
-	ArrayList<Priority> getPriorities();
-
-	/* REMOTE APIs */
-	void initRemote();
-
-	void disconnectFromRemote();
-
-	// FUTURE make this syncWithRemote()
-	
-	/**
-	 * Push tasks in localRepository into remoteRepository
-	 */
-	void pushToRemote();
-
-	/**
-	 * Pulls tasks from remoteRepository, stores in localRepository
-	 */
-	void pullFromRemote();
-
-	/* END REMOTE APIs */
+	void store(ArrayList<Task> tasks);
 }

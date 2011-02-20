@@ -44,7 +44,7 @@ import java.util.List;
  * 
  * @author Tim Barlotta
  */
-class TaskIo {
+public class TaskIo {
 	private final static String TAG = TaskIo.class.getSimpleName();
 
 	public static ArrayList<Task> loadTasksFromStream(InputStream is)
