@@ -801,7 +801,7 @@ public class TodoTxtTouch extends ListActivity implements
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			Task task = taskBag.getTasks().get(position);
+			Task task = m_adapter.getItem(position);// taskBag.getTasks().get(position);
 			if (task != null) {
 				holder.taskid.setText(String.format("%02d", task.getId() + 1));
 				holder.taskprio.setText(task.getPriority().inListFormat());
