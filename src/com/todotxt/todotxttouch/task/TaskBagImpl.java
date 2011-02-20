@@ -34,6 +34,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
+
 /**
  * Implementation of the TaskBag interface
  * 

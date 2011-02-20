@@ -28,10 +28,6 @@
  */
 package com.todotxt.todotxttouch;
 
-import java.io.File;
-
-import android.os.Environment;
-
 public class Constants {
 
 	public static final String PREF_FIRSTRUN = "firstrun";

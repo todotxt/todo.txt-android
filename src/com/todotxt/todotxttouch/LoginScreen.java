@@ -35,7 +35,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.dropbox.client.DropboxAPI;
+import com.todotxt.todotxttouch.remote.RemoteLoginTask;
+import com.todotxt.todotxttouch.remote.RemoteClient;
+import com.todotxt.todotxttouch.remote.dropbox.DropboxLoginAsyncTask;
 
 public class LoginScreen extends Activity {
 
@@ -75,12 +77,16 @@ public class LoginScreen extends Activity {
 			}
 		});
 
-		final DropboxAPI api = m_app.getAPI();
-		if (api.isAuthenticated() && m_app.m_loggedIn) {
-			Intent intent = new Intent(this, TodoTxtTouch.class);
-			startActivity(intent);
-			finish();
+		final RemoteClient remoteClient = m_app.getRemoteClient();
+		if (remoteClient.isAuthenticated()) {
+			switchToTodolist();
 		}
+	}
+
+	private void switchToTodolist() {
+		Intent intent = new Intent(this, TodoTxtTouch.class);
+		startActivity(intent);
+		finish();
 	}
 
 	@Override
@@ -90,15 +96,15 @@ public class LoginScreen extends Activity {
 	}
 
 	void login() {
-		final DropboxAPI api = m_app.getAPI();
-		if (api.isAuthenticated() && !m_app.m_loggedIn) {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(m_app,
-					m_app.getConfig());
-			loginTask.execute();
-		} else {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(m_app,
-					m_app.getConfig());
-			loginTask.showLoginDialog(this);
+		final RemoteClient client = m_app.getRemoteClient();
+		
+		if (client.isLoggedIn()) {
+			if ( m_app.authenticate() ) {
+				switchToTodolist();
+			}
 		}
+
+		RemoteLoginTask loginTask = new DropboxLoginAsyncTask(m_app);
+		loginTask.showLoginDialog(this);
 	}
 }

@@ -73,9 +73,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.dropbox.client.DropboxAPI;
-import com.dropbox.client.DropboxAPI.Config;
-import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 import com.todotxt.todotxttouch.task.FilterFactory;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
@@ -83,6 +80,7 @@ import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
+import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 
 public class TodoTxtTouch extends ListActivity implements
 		OnSharedPreferenceChangeListener {
@@ -99,7 +97,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 	private static TodoTxtTouch currentActivityPointer = null;
 
-    private TaskBag taskBag;
+	private TaskBag taskBag;
 	ProgressDialog m_ProgressDialog = null;
 	String m_DialogText = "";
 	Boolean m_DialogActive = false;
@@ -135,9 +133,9 @@ public class TodoTxtTouch extends ListActivity implements
 		 */
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
-        this.taskBag = m_app.getTaskBag();
-		m_adapter = new TaskAdapter(this, R.layout.list_item, taskBag.getTasks(),
-				getLayoutInflater());
+		this.taskBag = m_app.getTaskBag();
+		m_adapter = new TaskAdapter(this, R.layout.list_item,
+				taskBag.getTasks(), getLayoutInflater());
 
 		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
@@ -190,34 +188,12 @@ public class TodoTxtTouch extends ListActivity implements
 
 		if (firstrun) {
 			Log.i(TAG, "Initializing app");
-            taskBag.pullFromRemote();
+			taskBag.pullFromRemote();
 			Editor editor = m_app.m_prefs.edit();
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
 		} else {
 			taskBag.reload();
-		}
-	}
-
-	void showLogin() {
-		// Intent i = new Intent(getBaseContext(), LoginScreen.class);
-		// startActivityForResult(i, REQUEST_LOGIN);
-		Intent settingsActivity = new Intent(getBaseContext(),
-				Preferences.class);
-		startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
-	}
-
-	void login() {
-
-		final DropboxAPI api = getAPI();
-		if (api.isAuthenticated() && !m_app.m_loggedIn) {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(m_app,
-					m_app.getConfig());
-			loginTask.execute();
-		} else {
-			DropboxLoginAsyncTask loginTask = new DropboxLoginAsyncTask(m_app,
-					m_app.getConfig());
-			loginTask.showLoginDialog(this);
 		}
 	}
 
@@ -338,11 +314,11 @@ public class TodoTxtTouch extends ListActivity implements
 						@Override
 						protected Boolean doInBackground(Object... params) {
 							try {
-                                taskBag.delete((Task) params[0]);
-                                return true;
+								taskBag.delete((Task) params[0]);
+								return true;
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
-                                return false;
+								return false;
 							}
 						}
 
@@ -384,10 +360,10 @@ public class TodoTxtTouch extends ListActivity implements
 							Task task = (Task) params[0];
 							task.markComplete(new Date());
 							taskBag.update(task);
-                            return true;
+							return true;
 						} catch (Exception e) {
 							Log.e(TAG, e.getMessage(), e);
-                            return false;
+							return false;
 						}
 					}
 
@@ -420,13 +396,13 @@ public class TodoTxtTouch extends ListActivity implements
 						@Override
 						protected Boolean doInBackground(Object... params) {
 							try {
-                                Task task = (Task) params[0];
-                                task.markIncomplete();
-                                taskBag.update(task);
-                                return true;
+								Task task = (Task) params[0];
+								task.markIncomplete();
+								taskBag.update(task);
+								return true;
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
-                                return false;
+								return false;
 							}
 						}
 
@@ -467,12 +443,13 @@ public class TodoTxtTouch extends ListActivity implements
 								Task task = (Task) params[0];
 								String[] prioArr = (String[]) params[1];
 								int which = (Integer) params[2];
-								task.setPriority(Priority.toPriority(prioArr[which]));
-                                taskBag.update(task);
-                                return true;
+								task.setPriority(Priority
+										.toPriority(prioArr[which]));
+								taskBag.update(task);
+								return true;
 							} catch (Exception e) {
 								Log.e(TAG, e.getMessage(), e);
-                                return false;
+								return false;
 							}
 						}
 
@@ -686,10 +663,12 @@ public class TodoTxtTouch extends ListActivity implements
 				Log.e(TAG, e.getMessage(), e);
 			}
 		}
-	    m_adapter.clear();
-        for(Task task : taskBag.getTasks(FilterFactory.generateAndFilter(m_prios, m_contexts, m_projects, m_search, false), sort.getComparator())) {
-            m_adapter.add(task);
-        }
+		m_adapter.clear();
+		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
+				m_prios, m_contexts, m_projects, m_search, false), sort
+				.getComparator())) {
+			m_adapter.add(task);
+		}
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
 		final LinearLayout actionbar = (LinearLayout) findViewById(R.id.actionbar);
 		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
@@ -742,32 +721,63 @@ public class TodoTxtTouch extends ListActivity implements
 
 	}
 
+	/**
+	 * TODO: This needs to be nicer
+	 */
 	void populateFromExternal() {
-		if (m_app.m_loggedIn && getAPI().isAuthenticated()) {
+		if (m_app.getRemoteClient().isAuthenticated()) {
 			m_app.m_syncing = true;
 			updateRefreshStatus();
-			new DropboxFetchAsyncTask(this).execute();
+
+			new AsyncTask<Void, Void, Boolean>() {
+
+				@Override
+				protected Boolean doInBackground(Void... params) {
+					try {
+						Log.d(TAG, "start taskBag.pullFromRemote");
+						taskBag.pullFromRemote();
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage());
+						return false;
+					}
+					return true;
+				}
+
+				@Override
+				protected void onPostExecute(Boolean result) {
+					Log.d(TAG, "post taskBag.pullFromRemote");
+					if (result) {
+						Log.d(TAG, "taskBag.pullFromRemote done");
+						setFilteredTasks(false);
+						m_app.m_syncing = false;
+						updateRefreshStatus();
+					}
+					super.onPostExecute(result);
+				}
+
+			}.execute();
 		} else {
-			login();
+			Log.e(TAG, "NOT AUTHENTICATED!");
+			showToast("NOT AUTHENTICATED!");
 		}
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> {
-        private List<Task> items;
+		private List<Task> items;
 		private LayoutInflater m_inflater;
 
 		public TaskAdapter(Context context, int textViewResourceId,
 				List<Task> tasks, LayoutInflater inflater) {
 			super(context, textViewResourceId, tasks);
-            this.items = tasks;
+			this.items = tasks;
 			this.m_inflater = inflater;
 		}
 
-        @Override
-        public void clear() {
-            super.clear();
-            items.clear();
-        }
+		@Override
+		public void clear() {
+			super.clear();
+			items.clear();
+		}
 
 		@Override
 		public long getItemId(int position) {
@@ -794,7 +804,7 @@ public class TodoTxtTouch extends ListActivity implements
 			Task task = taskBag.getTasks().get(position);
 			if (task != null) {
 				holder.taskid.setText(String.format("%02d", task.getId() + 1));
-			    holder.taskprio.setText(task.getPriority().inListFormat());
+				holder.taskprio.setText(task.getPriority().inListFormat());
 				SpannableString ss = new SpannableString(task.inScreenFormat());
 				Util.setGray(ss, task.getProjects());
 				Util.setGray(ss, task.getContexts());
@@ -845,23 +855,11 @@ public class TodoTxtTouch extends ListActivity implements
 		private TextView tasktext;
 	}
 
-	public DropboxAPI getAPI() {
-		return m_app.getAPI();
-	}
-
-	public void setConfig(Config config) {
-		m_app.setConfig(config);
-	}
-
 	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
 		Editor editor = m_app.m_prefs.edit();
 		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
 		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
 		editor.commit();
-	}
-
-	public void setLoggedIn(boolean b) {
-		m_app.m_loggedIn = b;
 	}
 
 	public void showToast(String string) {
@@ -878,7 +876,8 @@ public class TodoTxtTouch extends ListActivity implements
 		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
 				taskBag.getContexts());
 
-		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED, Priority.inCode(m_prios));
+		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED,
+				Priority.inCode(m_prios));
 		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED, m_projects);
 		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_contexts);
 		i.putExtra(Constants.EXTRA_SEARCH, m_search);

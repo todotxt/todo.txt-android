@@ -113,7 +113,7 @@ public class Preferences extends PreferenceActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							((TodoApplication) getApplication())
-									.unlinkDropbox();
+									.unlinkRemoteClient();
 							Preferences.this.setResult(RESULT_SYNC_LIST);
 
 							// produce a logout intent and broadcast it
