@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/RemoteException.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/RemoteException.java
  *
  * Copyright (c) 2011 Tim Barlotta
  *
@@ -24,7 +24,7 @@
  * @copyright 2011 Tim Barlotta
  */
 
-package com.todotxt.todotxttouch.task;
+package com.todotxt.todotxttouch.remote;
 
 /**
  * Indicates an error when working with a remote task store
