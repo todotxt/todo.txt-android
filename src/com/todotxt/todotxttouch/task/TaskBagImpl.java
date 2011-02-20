@@ -34,6 +34,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
+
 /**
  * Implementation of the TaskBag interface
  * 
@@ -99,8 +101,8 @@ class TaskBagImpl implements TaskBag {
 			Task task = new Task(tasks.size(), input,
 					(preferences.shouldPrependDate ? new Date() : null));
 			tasks.add(task);
-			pushToRemote();
 			localRepository.store(tasks);
+			pushToRemote();
 		} catch (Exception e) {
 			throw new TaskPersistException("An error occurred while adding {"
 					+ input + "}", e);
@@ -161,7 +163,8 @@ class TaskBagImpl implements TaskBag {
 
 	@Override
 	public void pushToRemote() {
-		remoteTaskRepository.store(tasks);
+		ArrayList<Task> localTasks = localRepository.load();
+		remoteTaskRepository.store(localTasks);
 	}
 
 	@Override

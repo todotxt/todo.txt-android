@@ -28,14 +28,13 @@
  */
 package com.todotxt.todotxttouch;
 
-import com.dropbox.client.DropboxAPI;
-import com.dropbox.client.DropboxAPI.Config;
-
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.todotxt.todotxttouch.remote.RemoteClient;
+import com.todotxt.todotxttouch.remote.dropbox.DropboxSyncClient;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 
@@ -44,12 +43,12 @@ public class TodoApplication extends Application {
 	private final static String TAG = TodoApplication.class.getSimpleName();
 
 	public SharedPreferences m_prefs;
-	private DropboxAPI m_api = new DropboxAPI();
-	private Config m_config;
-	public boolean m_loggedIn = false;
+
+	private RemoteClient remoteClient;
+
 	public boolean m_syncing = false;
 
-    private TaskBag taskBag;
+	private TaskBag taskBag;
 
 	@Override
 	public void onCreate() {
@@ -57,44 +56,16 @@ public class TodoApplication extends Application {
 
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		String[] user_auth_keys = getAuthKeys();
-		if (user_auth_keys[0] == null || user_auth_keys[1] == null) {
-			m_loggedIn = false;
-		} else {
-			m_loggedIn = true;
-		}
+		remoteClient = new DropboxSyncClient(this);
 
 		authenticate();
-        this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs, getResources().getString(R.string.TODOTXTPATH_defaultPath));
+
+		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs, getResources()
+				.getString(R.string.TODOTXTPATH_defaultPath));
 	}
 
-	private boolean authenticate() {
-		if (m_config == null)
-			m_config = getConfig();
-
-		String[] user_auth_keys = getAuthKeys();
-		if (user_auth_keys[0] != null && user_auth_keys[1] != null) {
-			m_config = m_api.authenticateToken(user_auth_keys[0],
-					user_auth_keys[1], m_config);
-			if (m_config != null)
-				return true;
-		}
-		clearKeys();
-		return false;
-	}
-
-	private void clearKeys() {
-		Editor editor = m_prefs.edit();
-		editor.clear();
-		editor.commit();
-		m_loggedIn = false;
-	}
-
-	private String[] getAuthKeys() {
-		String[] keys = { null, null };
-		keys[0] = m_prefs.getString(Constants.PREF_ACCESSTOKEN_KEY, null);
-		keys[1] = m_prefs.getString(Constants.PREF_ACCESSTOKEN_SECRET, null);
-		return keys;
+	public boolean authenticate() {
+		return remoteClient.authenticate();
 	}
 
 	@Override
@@ -102,40 +73,18 @@ public class TodoApplication extends Application {
 		super.onTerminate();
 	}
 
-	public void unlinkDropbox() {
+	public void unlinkRemoteClient() {
 		Log.i(TAG, "Clearing current user data!");
-		getAPI().deauthenticate();
-		clearKeys();
-        taskBag.disconnectFromRemote();
+		remoteClient.deauthenticate();
+		taskBag.disconnectFromRemote();
 	}
 
-	protected Config getConfig() {
-		if (m_config == null) {
-			String consumerKey = getResources().getText(
-					R.string.dropbox_consumer_key).toString();
-			String consumerSecret = getText(R.string.dropbox_consumer_secret)
-					.toString();
-
-			m_config = m_api.getConfig(null, false);
-			m_config.consumerKey = consumerKey;
-			m_config.consumerSecret = consumerSecret;
-			m_config.server = "api.dropbox.com";
-			m_config.contentServer = "api-content.dropbox.com";
-			m_config.port = 80;
-
-		}
-		return m_config;
+	public TaskBag getTaskBag() {
+		return taskBag;
 	}
 
-    public TaskBag getTaskBag() {
-        return taskBag;
-    }
-
-	public DropboxAPI getAPI() {
-		return m_api;
+	public RemoteClient getRemoteClient() {
+		return remoteClient;
 	}
 
-	public void setConfig(Config authenticate) {
-		m_config = authenticate;
-	}
 }
