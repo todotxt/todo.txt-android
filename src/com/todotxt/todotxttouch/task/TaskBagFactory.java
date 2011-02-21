@@ -32,20 +32,14 @@ import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
 
 /**
  * A factory for creating TaskBags
- * 
+ *
  * @author Tim Barlotta
  */
 public class TaskBagFactory {
 	public static TaskBag getTaskBag(TodoApplication application,
-			SharedPreferences preferences, String defaultTodoTxtPath) {
-		TaskBagImpl.Preferences taskBagPreferences = new TaskBagImpl.Preferences.Builder(
-				preferences.getString("todotxtpath", defaultTodoTxtPath))
-				.useWindowsLineBreaks(
-						preferences.getBoolean("linebreakspref", false))
-				.shouldPrependDate(
-						preferences.getBoolean("todotxtprependdate", false))
-				.workOffline(preferences.getBoolean("workoffline", false))
-				.build();
+			SharedPreferences sharedPreferences, String defaultTodoTxtPath) {
+		TaskBagImpl.Preferences taskBagPreferences = new TaskBagImpl.Preferences(
+                sharedPreferences, defaultTodoTxtPath);
 
 		LocalFileTaskRepository localFileTaskRepository = new LocalFileTaskRepository(
 				taskBagPreferences);
