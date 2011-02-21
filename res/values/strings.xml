@@ -24,11 +24,9 @@ You should have received a copy of the GNU General Public License along with Tod
 @author Gina Trapani <ginatrapani[at]gmail[dot]com>
 @author Tormod Haugen <tormodh[at]gmail[dot]com>
 @author mathias <mathias[at]x2[dot](none)>
-@author mathias <mathias[at]ws7862[dot](none)>
 @author Hrayr Artunyan <hrayr[dot]artunyan[at]gmail[dot]com>
 @author Stephen Henderson <me[at]steveh[dot]ca>
 @author Mirko Friedenhagen <mirko-lists[at]friedenhagen[dot]de>
-@author Hrayr Artunyan <hrayr[at]Hrayr-Artunyans-MacBook-Pro[dot]local>
 @author AdamZaloudek <AdamZaloudek[at]hotmail[dot]com>
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2011 Gina Trapani, mathias, Tormod Haugen, Hrayr Artunyan, Stephen Henderson, Mirko Friedenhagen, AdamZaloudek
@@ -74,7 +72,8 @@ You should have received a copy of the GNU General Public License along with Tod
 		<b>Contexts</b>
 		(where you will complete a task) start with an @ sign, like @phone or
 		@GroceryStore.\n\n
-		A task can include any number of projects or contexts.
+		A task can include any number of projects or
+		contexts.
 	</string>
 	<string name="search_summary">Enter text to search for.</string>
 	<!-- preferences -->
@@ -102,6 +101,9 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="line_breaks_pref_key">linebreakspref</string>
 	<string name="line_breaks_pref_title">Windows line breaks</string>
 	<string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
+	<string name="work_offline_pref_key">workofflinepref</string>
+	<string name="work_offline_pref_title">Work offline</string>
+	<string name="work_offline_pref_summary">Never sync to Dropbox.</string>
 	<!-- login -->
 	<string name="dropbox_authentication">Log in to Dropbox</string>
 	<string name="username_label">Email Address:</string>

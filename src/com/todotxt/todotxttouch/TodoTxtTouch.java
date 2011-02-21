@@ -78,6 +78,7 @@ import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
+import com.todotxt.todotxttouch.task.TaskBagImpl;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
@@ -218,6 +219,18 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.i(TAG, "New access token secret. Syncing!");
 			populateFromExternal();
 		}
+		// TODO update taskBag preferences values here
+		TaskBagImpl.Preferences taskBagPreferences = new TaskBagImpl.Preferences.Builder(
+				sharedPreferences.getString("todotxtpath", "/todo"))
+				.useWindowsLineBreaks(
+						sharedPreferences.getBoolean("linebreakspref", false))
+				.shouldPrependDate(
+						sharedPreferences.getBoolean("todotxtprependdate",
+								false))
+				.workOffline(sharedPreferences.getBoolean("workoffline", false))
+				.build();
+		this.taskBag.updatePreferences(taskBagPreferences);
+
 	}
 
 	@Override

@@ -44,6 +44,8 @@ public interface TaskBag {
 
 	void delete(Task task);
 
+	void updatePreferences(TaskBagImpl.Preferences preferences);
+
 	List<Task> getTasks();
 
 	List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator);
@@ -62,7 +64,7 @@ public interface TaskBag {
 	void disconnectFromRemote();
 
 	// FUTURE make this syncWithRemote()
-	
+
 	/**
 	 * Push tasks in localRepository into remoteRepository
 	 */

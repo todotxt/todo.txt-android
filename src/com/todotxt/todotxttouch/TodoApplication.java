@@ -60,6 +60,10 @@ public class TodoApplication extends Application {
 
 		authenticate();
 
+		Log.v(TAG,
+				"Work offline set to : "
+						+ m_prefs.getBoolean("workofflinepref", false));
+
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs, getResources()
 				.getString(R.string.TODOTXTPATH_defaultPath));
 	}

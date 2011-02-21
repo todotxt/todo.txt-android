@@ -41,9 +41,9 @@ import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
  * 
  * @author Tim Barlotta
  */
-class TaskBagImpl implements TaskBag {
+public class TaskBagImpl implements TaskBag {
 	private static final String TAG = TaskBagImpl.class.getSimpleName();
-	private final Preferences preferences;
+	private Preferences preferences;
 	private final LocalTaskRepository localRepository;
 	private final RemoteTaskRepository remoteTaskRepository;
 	private ArrayList<Task> tasks = new ArrayList<Task>();
@@ -54,6 +54,10 @@ class TaskBagImpl implements TaskBag {
 		this.preferences = preferences;
 		this.localRepository = localRepository;
 		this.remoteTaskRepository = remoteTaskRepository;
+	}
+
+	public void updatePreferences(TaskBagImpl.Preferences preferences) {
+		this.preferences = preferences;
 	}
 
 	@Override
@@ -163,14 +167,18 @@ class TaskBagImpl implements TaskBag {
 
 	@Override
 	public void pushToRemote() {
-		ArrayList<Task> localTasks = localRepository.load();
-		remoteTaskRepository.store(localTasks);
+		if (!this.preferences.workOffline) {
+			ArrayList<Task> localTasks = localRepository.load();
+			remoteTaskRepository.store(localTasks);
+		}
 	}
 
 	@Override
 	public void pullFromRemote() {
-		this.tasks = remoteTaskRepository.load();
-		localRepository.store(tasks);
+		if (!this.preferences.workOffline) {
+			this.tasks = remoteTaskRepository.load();
+			localRepository.store(tasks);
+		}
 	}
 
 	@Override
@@ -224,17 +232,20 @@ class TaskBagImpl implements TaskBag {
 		final String todoFileDirectory;
 		final boolean shouldPrependDate;
 		final boolean useWindowsLineBreaks;
+		final boolean workOffline;
 
 		private Preferences(Builder builder) {
 			this.todoFileDirectory = builder.todoFileDirectory;
 			this.shouldPrependDate = builder.shouldPrependDate;
 			this.useWindowsLineBreaks = builder.useWindowsLineBreaks;
+			this.workOffline = builder.workOffline;
 		}
 
 		public static class Builder {
 			private String todoFileDirectory;
 			private boolean shouldPrependDate = false;
 			private boolean useWindowsLineBreaks = false;
+			private boolean workOffline = false;
 
 			public Builder(String todoFileDirectory) {
 				this.todoFileDirectory = todoFileDirectory;
@@ -261,6 +272,18 @@ class TaskBagImpl implements TaskBag {
 			 */
 			public Builder useWindowsLineBreaks(boolean useWindowsLineBreaks) {
 				this.useWindowsLineBreaks = useWindowsLineBreaks;
+				return this;
+			}
+
+			/**
+			 * Sets the workOffline value in the builder
+			 * 
+			 * @param workOffline
+			 *            the value to set
+			 * @return this builder
+			 */
+			public Builder workOffline(boolean workOffline) {
+				this.workOffline = workOffline;
 				return this;
 			}
 
