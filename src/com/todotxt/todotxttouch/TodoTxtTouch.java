@@ -217,6 +217,9 @@ public class TodoTxtTouch extends ListActivity implements
 		if (Constants.PREF_ACCESSTOKEN_SECRET.equals(key)) {
 			Log.i(TAG, "New access token secret. Syncing!");
 			populateFromExternal();
+		} else if ("workofflinepref".equals(key)) {
+			Log.i(TAG, "Switched online/offline mode. Push local changes if necessary.");
+			taskBag.pushToRemote();
 		}
 	}
 

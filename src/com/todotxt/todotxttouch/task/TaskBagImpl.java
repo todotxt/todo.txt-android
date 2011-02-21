@@ -160,9 +160,6 @@ class TaskBagImpl implements TaskBag {
 
 	@Override
 	public void disconnectFromRemote() {
-		// TODO remove local purge, for now application doesn't function without
-		// logging into dropbox
-		localRepository.purge();
 		remoteTaskRepository.purge();
 	}
 
