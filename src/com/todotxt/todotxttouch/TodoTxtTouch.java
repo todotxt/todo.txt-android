@@ -22,7 +22,6 @@
  * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
  * @author mathias <mathias[at]x2[dot](none)>
  * @author Stephen Henderson <me[at]steveh[dot]ca>
- * @author mathias <mathias[at]ws7862[dot](none)>
  * @author Tormod Haugen <tormodh[at]gmail[dot]com>
  * @author shanest <ssshanest[at]gmail[dot]com>
  * @author Adam Zaloudek <AdamZaloudek[at]hotmail[dot]com>
@@ -101,6 +100,7 @@ public class TodoTxtTouch extends ListActivity implements
 	ProgressDialog m_ProgressDialog = null;
 	String m_DialogText = "";
 	Boolean m_DialogActive = false;
+	Menu options_menu;
 
 	private TaskAdapter m_adapter;
 	TodoApplication m_app;
@@ -223,8 +223,10 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 		if (sharedPreferences.getBoolean("workofflinepref", false)) {
 			findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
+			this.options_menu.findItem(R.id.sync).setVisible(false);
 		} else {
 			findViewById(R.id.btn_title_refresh).setVisibility(View.VISIBLE);
+			this.options_menu.findItem(R.id.sync).setVisible(true);
 		}
 	}
 
@@ -266,6 +268,12 @@ public class TodoTxtTouch extends ListActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+		this.options_menu = menu;
+		if (this.m_app.m_prefs.getBoolean("workofflinepref", false)) {
+			menu.findItem(R.id.sync).setVisible(false);
+		} else {
+			menu.findItem(R.id.sync).setVisible(true);
+		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
