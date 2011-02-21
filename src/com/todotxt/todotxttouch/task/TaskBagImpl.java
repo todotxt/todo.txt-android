@@ -250,7 +250,7 @@ class TaskBagImpl implements TaskBag {
         }
 
         public boolean isWorkOfflineEnabled() {
-            return sharedPreferences.getBoolean("workoffline", false);
+            return sharedPreferences.getBoolean("workofflinepref", false);
         }
 	}
 }

@@ -55,10 +55,9 @@ public interface RemoteClient {
 	public boolean isLoggedIn();
 
 	/**
-	 * Get the remote task repository in order to pull/push tasks remotely
-	 * 
+	 * Get a login task that can display and handle a login dialog
 	 * @return
 	 */
-	public RemoteTaskRepository getRemoteTaskRepository();
+	public RemoteLoginTask getLoginTask();
 
 }

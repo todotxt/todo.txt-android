@@ -28,6 +28,7 @@ package com.todotxt.todotxttouch.task;
 
 import android.content.SharedPreferences;
 import com.todotxt.todotxttouch.TodoApplication;
+import com.todotxt.todotxttouch.remote.RemoteFactory;
 import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
 
 /**
@@ -43,8 +44,7 @@ public class TaskBagFactory {
 
 		LocalFileTaskRepository localFileTaskRepository = new LocalFileTaskRepository(
 				taskBagPreferences);
-		RemoteTaskRepository remoteTaskRepository = application
-				.getRemoteClient().getRemoteTaskRepository();
+		RemoteTaskRepository remoteTaskRepository = RemoteFactory.getRemoteTaskRepository(application);
 
 		return new TaskBagImpl(taskBagPreferences, localFileTaskRepository,
 				remoteTaskRepository);

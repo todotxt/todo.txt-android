@@ -28,13 +28,8 @@
  */
 package com.todotxt.todotxttouch.remote.dropbox;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import com.dropbox.client.DropboxAPI;
@@ -42,16 +37,9 @@ import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
-import com.todotxt.todotxttouch.remote.RemoteException;
-import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
 import com.todotxt.todotxttouch.remote.RemoteClient;
-import com.todotxt.todotxttouch.task.Task;
-import com.todotxt.todotxttouch.task.TaskIo;
 
-public class DropboxSyncClient implements RemoteClient, RemoteTaskRepository {
-	private static final File TODO_TXT_TMP_FILE = new File(
-			Environment.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/tmp/todo.txt");
+public class DropboxRemoteClient implements RemoteClient {
 	private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";
 
 	private DropboxAPI api = new DropboxAPI();
@@ -61,7 +49,7 @@ public class DropboxSyncClient implements RemoteClient, RemoteTaskRepository {
 
 	private SharedPreferences preferences;
 
-	public DropboxSyncClient(TodoApplication todoApplication) {
+	public DropboxRemoteClient(TodoApplication todoApplication) {
 		app = todoApplication;
 		preferences = PreferenceManager.getDefaultSharedPreferences(app);
 	}
@@ -178,70 +166,17 @@ public class DropboxSyncClient implements RemoteClient, RemoteTaskRepository {
 		return api;
 	}
 
-	private String getRemotePathAndFilename() {
-		return getRemotePath() + "/" + TODO_TXT_REMOTE_FILE_NAME;
+	public DropboxLoginAsyncTask getLoginTask() {
+		return new DropboxLoginAsyncTask(app);
 	}
 
-	private String getRemotePath() {
+	String getRemotePath() {
 		return preferences.getString("todotxtpath", app.getResources()
 				.getString(R.string.TODOTXTPATH_defaultPath));
 	}
 
-	@Override
-	public RemoteTaskRepository getRemoteTaskRepository() {
-		return this;
+	String getRemotePathAndFilename() {
+		return getRemotePath() + "/" + TODO_TXT_REMOTE_FILE_NAME;
 	}
-
-	// RemoteTaskRepository
-
-	@Override
-	public void init(File withLocalFile) {
-		if (withLocalFile == null) {
-			store(new ArrayList<Task>());
-		} else {
-			try {
-				api.putFile(Constants.DROPBOX_MODUS, getRemotePath(),
-						withLocalFile);
-			} catch (Exception e) {
-				throw new RemoteException("error creating dropbox file", e);
-			}
-		}
-	}
-
-	@Override
-	public void purge() {
-		TODO_TXT_TMP_FILE.delete();
-	}
-
-	@Override
-	public ArrayList<Task> load() {
-		try {
-			DropboxAPI.FileDownload file = api.getFileStream(
-					Constants.DROPBOX_MODUS, getRemotePathAndFilename(), null);
-			if (file.isError()) {
-				if (404 == file.httpCode) {
-					init(null);
-					return new ArrayList<Task>();
-				} else {
-					throw new DropboxFileRemoteException(
-							"Error loading from dropbox", file);
-				}
-			}
-
-			return TaskIo.loadTasksFromStream(file.is);
-		} catch (IOException e) {
-			throw new RemoteException("I/O error trying to load from dropbox",
-					e);
-		}
-	}
-
-	@Override
-	public void store(ArrayList<Task> tasks) {
-		boolean useWindowsLineBreaks = preferences.getBoolean("linebreakspref",
-				false);
-
-		TaskIo.writeToFile(tasks, TODO_TXT_TMP_FILE, useWindowsLineBreaks);
-		api.putFile(Constants.DROPBOX_MODUS, getRemotePath(), TODO_TXT_TMP_FILE);
-	}
-
+	
 }

@@ -29,6 +29,7 @@ package com.todotxt.todotxttouch.task;
 import android.os.Environment;
 import android.util.Log;
 import com.todotxt.todotxttouch.TodoException;
+import com.todotxt.todotxttouch.util.TaskIo;
 import com.todotxt.todotxttouch.util.Util;
 
 import java.io.File;

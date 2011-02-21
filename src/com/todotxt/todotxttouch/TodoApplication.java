@@ -34,7 +34,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.todotxt.todotxttouch.remote.RemoteClient;
-import com.todotxt.todotxttouch.remote.dropbox.DropboxSyncClient;
+import com.todotxt.todotxttouch.remote.RemoteFactory;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 
@@ -56,7 +56,7 @@ public class TodoApplication extends Application {
 
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-		remoteClient = new DropboxSyncClient(this);
+		remoteClient = RemoteFactory.getRemoteClient(this);
 
 		authenticate();
 
