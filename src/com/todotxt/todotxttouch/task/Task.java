@@ -28,14 +28,22 @@
 package com.todotxt.todotxttouch.task;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import android.util.Log;
+
+import com.todotxt.todotxttouch.TodoTxtTouch;
+import com.todotxt.todotxttouch.util.RelativeDate;
 import com.todotxt.todotxttouch.util.Strings;
 
 @SuppressWarnings("serial")
 public class Task implements Serializable {
+
+	final static String TAG = TodoTxtTouch.class.getSimpleName();
+
 	private static final String COMPLETED = "x ";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	private final String originalText;
@@ -48,6 +56,7 @@ public class Task implements Serializable {
 	private String text;
 	private String completionDate;
 	private String prependedDate;
+	private String relativeAge = "";
 	private List<String> contexts;
 	private List<String> projects;
 
@@ -80,9 +89,19 @@ public class Task implements Serializable {
 		this.deleted = Strings.isEmptyOrNull(text);
 
 		if (defaultPrependedDate != null
-				&& Strings.isEmptyOrNull(prependedDate)) {
+				&& Strings.isEmptyOrNull(this.prependedDate)) {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			this.prependedDate = formatter.format(defaultPrependedDate);
+		}
+		if (!Strings.isEmptyOrNull(this.prependedDate)) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Log.v(TAG, "Prepended date is " + this.prependedDate);
+			try {
+				Date d = sdf.parse(this.prependedDate);
+				this.relativeAge = RelativeDate.getRelativeDate(d);
+			} catch (ParseException e) {
+				// e.printStackTrace();
+			}
 		}
 	}
 
@@ -120,6 +139,10 @@ public class Task implements Serializable {
 
 	public String getPrependedDate() {
 		return prependedDate;
+	}
+
+	public String getRelativeAge() {
+		return relativeAge;
 	}
 
 	public boolean isDeleted() {

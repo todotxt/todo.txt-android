@@ -812,6 +812,9 @@ public class TodoTxtTouch extends ListActivity implements
 						.findViewById(R.id.taskprio);
 				holder.tasktext = (TextView) convertView
 						.findViewById(R.id.tasktext);
+				holder.taskage = (TextView) convertView
+						.findViewById(R.id.taskage);
+
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
@@ -860,6 +863,22 @@ public class TodoTxtTouch extends ListActivity implements
 				} else {
 					holder.taskid.setVisibility(View.VISIBLE);
 				}
+
+				if (m_app.m_prefs.getBoolean("show_task_age_pref", false)) {
+					if (!task.isCompleted()
+							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
+						Log.v(TAG,
+								task.getPrependedDate() + " is "
+										+ task.getRelativeAge());
+						holder.taskage.setText(task.getRelativeAge());
+						holder.taskage.setVisibility(View.VISIBLE);
+					} else {
+						holder.tasktext.setPadding(
+								holder.tasktext.getPaddingLeft(),
+								holder.tasktext.getPaddingTop(),
+								holder.tasktext.getPaddingRight(), 4);
+					}
+				}
 			}
 			return convertView;
 		}
@@ -869,6 +888,7 @@ public class TodoTxtTouch extends ListActivity implements
 		private TextView taskid;
 		private TextView taskprio;
 		private TextView tasktext;
+		private TextView taskage;
 	}
 
 	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
