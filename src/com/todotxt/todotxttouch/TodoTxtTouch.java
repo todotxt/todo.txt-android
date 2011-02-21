@@ -878,6 +878,11 @@ public class TodoTxtTouch extends ListActivity implements
 								holder.tasktext.getPaddingTop(),
 								holder.tasktext.getPaddingRight(), 4);
 					}
+				} else {
+					holder.tasktext.setPadding(
+							holder.tasktext.getPaddingLeft(),
+							holder.tasktext.getPaddingTop(),
+							holder.tasktext.getPaddingRight(), 4);
 				}
 			}
 			return convertView;
