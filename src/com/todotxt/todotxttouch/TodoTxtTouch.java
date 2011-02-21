@@ -122,15 +122,8 @@ public class TodoTxtTouch extends ListActivity implements
 		super.onCreate(savedInstanceState);
 		currentActivityPointer = this;
 
-		// final boolean customTitleSupported =
-		// requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-
 		setContentView(R.layout.main);
-		/*
-		 * if (customTitleSupported) {
-		 * getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-		 * R.layout.title_bar); }
-		 */
+
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 		this.taskBag = m_app.getTaskBag();
@@ -180,6 +173,12 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "Searched for " + m_search);
 			setFilteredTasks(false);
 		}
+
+		if (this.m_app.m_prefs.getBoolean("workofflinepref", false)) {
+			findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
+		} else {
+			findViewById(R.id.btn_title_refresh).setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void initializeTasks() {
@@ -218,8 +217,14 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.i(TAG, "New access token secret. Syncing!");
 			populateFromExternal();
 		} else if ("workofflinepref".equals(key)) {
-			Log.i(TAG, "Switched online/offline mode. Push local changes if necessary.");
+			Log.i(TAG,
+					"Switched online/offline mode. Push local changes if necessary.");
 			taskBag.pushToRemote();
+		}
+		if (sharedPreferences.getBoolean("workofflinepref", false)) {
+			findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
+		} else {
+			findViewById(R.id.btn_title_refresh).setVisibility(View.VISIBLE);
 		}
 	}
 

@@ -64,7 +64,7 @@ public class AddTask extends Activity {
 	private Task m_backup;
 
 	private TodoApplication m_app;
-    private TaskBag taskBag;
+	private TaskBag taskBag;
 
 	private TextView titleBarLabel;
 
@@ -81,7 +81,7 @@ public class AddTask extends Activity {
 		setContentView(R.layout.add_task);
 
 		m_app = (TodoApplication) getApplication();
-        taskBag = m_app.getTaskBag();
+		taskBag = m_app.getTaskBag();
 
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
@@ -98,7 +98,6 @@ public class AddTask extends Activity {
 					.getCharSequenceExtra(Intent.EXTRA_TEXT);
 			Log.d(TAG, share_text);
 		}
-
 
 		// title bar label
 		titleBarLabel = (TextView) findViewById(R.id.title_bar_label);
@@ -123,32 +122,37 @@ public class AddTask extends Activity {
 			titleBarLabel.setText(R.string.addtask);
 		}
 
-        textInputField.setSelection(textInputField.getText().toString().length());
+		textInputField.setSelection(textInputField.getText().toString()
+				.length());
 
 		// priorities
 		priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add("Priority");
-        prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
+		prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
 		if (m_backup != null) {
-            int index = prioArr.indexOf(m_backup.getPriority().getCode());
+			int index = prioArr.indexOf(m_backup.getPriority().getCode());
 			priorities.setSelection(index < 0 ? 0 : index);
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
-                int cursorPosition = textInputField.getSelectionStart();
-                String currentText = textInputField.getText().toString();
-                Priority priority = Priority.NONE;
-                if (position > 0) {
+				int cursorPosition = textInputField.getSelectionStart();
+				String currentText = textInputField.getText().toString();
+				Priority priority = Priority.NONE;
+				if (position > 0) {
 					String item = prioArr.get(position);
-                    priority = Priority.toPriority(item);
+					priority = Priority.toPriority(item);
 				}
-                String text = PriorityTextSplitter.getInstance().split(currentText).text;
-                textInputField.setText(Strings.insertPadded(text, 0, priority.inFileFormat()));
-                textInputField.setSelection(CursorPositionCalculator.calculate(cursorPosition, currentText, textInputField.getText().toString()));
+				String text = PriorityTextSplitter.getInstance().split(
+						currentText).text;
+				textInputField.setText(Strings.insertPadded(text, 0,
+						priority.inFileFormat()));
+				textInputField.setSelection(CursorPositionCalculator.calculate(
+						cursorPosition, currentText, textInputField.getText()
+								.toString()));
 			}
 
 			@Override
@@ -166,13 +170,16 @@ public class AddTask extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				if (position > 0) {
-                    int cursorPosition = textInputField.getSelectionStart();
-                    String currentText = textInputField.getText().toString();
-                    String item = "+"+projectsArr.get(position);
-                    textInputField.setText(Strings.insertPadded(currentText, cursorPosition, item));
-                    textInputField.setSelection(CursorPositionCalculator.calculate(cursorPosition, currentText, textInputField.getText().toString()));
+					int cursorPosition = textInputField.getSelectionStart();
+					String currentText = textInputField.getText().toString();
+					String item = "+" + projectsArr.get(position);
+					textInputField.setText(Strings.insertPadded(currentText,
+							cursorPosition, item));
+					textInputField.setSelection(CursorPositionCalculator
+							.calculate(cursorPosition, currentText,
+									textInputField.getText().toString()));
 				}
-                projects.setSelection(0);
+				projects.setSelection(0);
 			}
 
 			@Override
@@ -190,13 +197,16 @@ public class AddTask extends Activity {
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int position, long id) {
 				if (position > 0) {
-                    int cursorPosition = textInputField.getSelectionStart();
-                    String currentText = textInputField.getText().toString();
-                    String item = "@"+contextsArr.get(position);
-                    textInputField.setText(Strings.insertPadded(currentText, cursorPosition, item));
-                    textInputField.setSelection(CursorPositionCalculator.calculate(cursorPosition, currentText, textInputField.getText().toString()));
+					int cursorPosition = textInputField.getSelectionStart();
+					String currentText = textInputField.getText().toString();
+					String item = "@" + contextsArr.get(position);
+					textInputField.setText(Strings.insertPadded(currentText,
+							cursorPosition, item));
+					textInputField.setSelection(CursorPositionCalculator
+							.calculate(cursorPosition, currentText,
+									textInputField.getText().toString()));
 				}
-                contexts.setSelection(0);
+				contexts.setSelection(0);
 			}
 
 			@Override
@@ -236,17 +246,17 @@ public class AddTask extends Activity {
 						try {
 							Task task = (Task) params[0];
 							String input = (String) params[1];
-                            if (task != null) {
-                                task.update(input);
-                                taskBag.update(task);
-                            } else {
-                                taskBag.addAsTask(input);
-                            }
-                            return true;
+							if (task != null) {
+								task.update(input);
+								taskBag.update(task);
+							} else {
+								taskBag.addAsTask(input);
+							}
+							return true;
 						} catch (Exception e) {
 							Log.e(TAG,
 									"input: " + input + " - " + e.getMessage());
-                            return false;
+							return false;
 						}
 					}
 
@@ -261,6 +271,7 @@ public class AddTask extends Activity {
 									: getString(R.string.add_task_failed);
 							Util.showToastLong(AddTask.this, res);
 						}
+						m_ProgressDialog.dismiss();
 					}
 				}.execute(m_backup, input);
 			}

@@ -30,15 +30,20 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 
 public class Preferences extends PreferenceActivity {
+	final static String TAG = Preferences.class.getSimpleName();
+
 	private Preference aboutDialog;
 	private Preference logoutDialog;
 	private static final int ABOUT_DIALOG = 1;
@@ -64,7 +69,26 @@ public class Preferences extends PreferenceActivity {
 		}
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
+		setOnlineOfflinePrefs();
+	}
 
+	private void setOnlineOfflinePrefs() {
+		SharedPreferences appPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		if (appPreferences.getBoolean("workofflinepref", false)) {
+			findPreference("todotxtpath").setEnabled(false);
+			findPreference("logout_dropbox").setEnabled(false);
+			Log.v(TAG, "Work offline is checked, disabling online settings");
+		} else {
+			findPreference("todotxtpath").setEnabled(true);
+			findPreference("logout_dropbox").setEnabled(true);
+			Log.v(TAG, "Work offline is not checked, enabling online settings");
+		}
+	}
+
+	protected void onResume() {
+		super.onResume();
+		setOnlineOfflinePrefs();
 	}
 
 	@Override
@@ -75,9 +99,8 @@ public class Preferences extends PreferenceActivity {
 		} else if (preference == logoutDialog) {
 			showDialog(LOGOUT_DIALOG);
 		}
-
+		setOnlineOfflinePrefs();
 		return true;
-
 	}
 
 	@Override

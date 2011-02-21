@@ -103,7 +103,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
 	<string name="work_offline_pref_key">workofflinepref</string>
 	<string name="work_offline_pref_title">Work offline</string>
-	<string name="work_offline_pref_summary">Never sync to Dropbox.</string>
+	<string name="work_offline_pref_summary">Don\'t sync to Dropbox.</string>
 	<!-- login -->
 	<string name="dropbox_authentication">Log in to Dropbox</string>
 	<string name="username_label">Email Address:</string>
