@@ -33,8 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import android.util.Log;
-
 import com.todotxt.todotxttouch.TodoTxtTouch;
 import com.todotxt.todotxttouch.util.RelativeDate;
 import com.todotxt.todotxttouch.util.Strings;
@@ -95,7 +93,7 @@ public class Task implements Serializable {
 		}
 		if (!Strings.isEmptyOrNull(this.prependedDate)) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Log.v(TAG, "Prepended date is " + this.prependedDate);
+			// Log.v(TAG, "Prepended date is " + this.prependedDate);
 			try {
 				Date d = sdf.parse(this.prependedDate);
 				this.relativeAge = RelativeDate.getRelativeDate(d);

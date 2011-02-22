@@ -39,7 +39,7 @@ import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
 
 /**
  * Implementation of the TaskBag interface
- *
+ * 
  * @author Tim Barlotta
  */
 class TaskBagImpl implements TaskBag {
@@ -165,7 +165,12 @@ class TaskBagImpl implements TaskBag {
 
 	@Override
 	public void pushToRemote() {
-		if (!this.preferences.isWorkOfflineEnabled()) {
+		pushToRemote(false);
+	}
+
+	@Override
+	public void pushToRemote(boolean overridePreference) {
+		if (!this.preferences.isWorkOfflineEnabled() || overridePreference) {
 			ArrayList<Task> localTasks = localRepository.load();
 			remoteTaskRepository.store(localTasks);
 		}
@@ -226,28 +231,30 @@ class TaskBagImpl implements TaskBag {
 	}
 
 	public static class Preferences {
-        private final String defaultTodoFileDirectory;
+		private final String defaultTodoFileDirectory;
 		private final SharedPreferences sharedPreferences;
 
-		public Preferences(SharedPreferences sharedPreferences, String defaultTodoFileDirectory) {
+		public Preferences(SharedPreferences sharedPreferences,
+				String defaultTodoFileDirectory) {
 			this.sharedPreferences = sharedPreferences;
-            this.defaultTodoFileDirectory = defaultTodoFileDirectory;
+			this.defaultTodoFileDirectory = defaultTodoFileDirectory;
 		}
 
-        public String getTodoTextPath() {
-            return sharedPreferences.getString("todotxtpath", defaultTodoFileDirectory);
-        }
+		public String getTodoTextPath() {
+			return sharedPreferences.getString("todotxtpath",
+					defaultTodoFileDirectory);
+		}
 
-        public boolean isUseWindowsLineBreaksEnabled() {
-            return sharedPreferences.getBoolean("linebreakspref", false);
-        }
+		public boolean isUseWindowsLineBreaksEnabled() {
+			return sharedPreferences.getBoolean("linebreakspref", false);
+		}
 
-        public boolean isPrependDateEnabled() {
-            return sharedPreferences.getBoolean("todotxtprependdate", false);
-        }
+		public boolean isPrependDateEnabled() {
+			return sharedPreferences.getBoolean("todotxtprependdate", false);
+		}
 
-        public boolean isWorkOfflineEnabled() {
-            return sharedPreferences.getBoolean("workofflinepref", false);
-        }
+		public boolean isWorkOfflineEnabled() {
+			return sharedPreferences.getBoolean("workofflinepref", false);
+		}
 	}
 }

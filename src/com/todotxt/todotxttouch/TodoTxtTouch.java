@@ -149,8 +149,9 @@ public class TodoTxtTouch extends ListActivity implements
 						|| intent.getAction().equalsIgnoreCase(
 								INTENT_ASYNC_FAILED)) {
 
-					m_app.m_syncing = false;
-					updateRefreshStatus();
+					m_app.m_pulling = false;
+					m_app.m_pushing = false;
+					updateSyncUI();
 				}
 			}
 		};
@@ -176,7 +177,9 @@ public class TodoTxtTouch extends ListActivity implements
 
 		if (this.m_app.m_prefs.getBoolean("workofflinepref", false)) {
 			findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
+			findViewById(R.id.btn_title_upload).setVisibility(View.VISIBLE);
 		} else {
+			findViewById(R.id.btn_title_upload).setVisibility(View.GONE);
 			findViewById(R.id.btn_title_refresh).setVisibility(View.VISIBLE);
 		}
 	}
@@ -219,14 +222,18 @@ public class TodoTxtTouch extends ListActivity implements
 		} else if ("workofflinepref".equals(key)) {
 			if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
 				findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
+				findViewById(R.id.btn_title_upload).setVisibility(View.VISIBLE);
 				this.options_menu.findItem(R.id.sync).setVisible(false);
+				this.options_menu.findItem(R.id.upload).setVisible(true);
 			} else {
 				Log.i(TAG, "Switched online mode, must push local changes.");
 				showToast(getString(R.string.back_online_sync));
 				backgroundPushToRemote();
 				findViewById(R.id.btn_title_refresh)
 						.setVisibility(View.VISIBLE);
+				findViewById(R.id.btn_title_upload).setVisibility(View.GONE);
 				this.options_menu.findItem(R.id.sync).setVisible(true);
+				this.options_menu.findItem(R.id.upload).setVisible(false);
 			}
 		}
 	}
@@ -272,8 +279,10 @@ public class TodoTxtTouch extends ListActivity implements
 		this.options_menu = menu;
 		if (this.m_app.m_prefs.getBoolean("workofflinepref", false)) {
 			menu.findItem(R.id.sync).setVisible(false);
+			menu.findItem(R.id.upload).setVisible(true);
 		} else {
 			menu.findItem(R.id.sync).setVisible(true);
+			menu.findItem(R.id.upload).setVisible(false);
 		}
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -516,6 +525,10 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "onMenuItemSelected: sync");
 			backgroundPullFromRemote();
 			break;
+		case R.id.upload:
+			Log.v(TAG, "onMenuItemSelected: upload");
+			backgroundPushToRemote();
+			break;
 		case R.id.search:
 			onSearchRequested();
 			break;
@@ -638,13 +651,20 @@ public class TodoTxtTouch extends ListActivity implements
 		startActivity(new Intent(this, AddTask.class));
 	}
 
-	/** Handle "sync" action. */
+	/** Handle "refresh/download" action. */
 	public void onSyncClick(View v) {
 		Log.v(TAG, "titlebar: sync");
-
-		m_app.m_syncing = true;
-		updateRefreshStatus();
+		m_app.m_pulling = true;
+		updateSyncUI();
 		backgroundPullFromRemote();
+	}
+
+	/** Handle "upload" action. */
+	public void onUploadClick(View v) {
+		Log.v(TAG, "titlebar: upload");
+		m_app.m_pushing = true;
+		updateSyncUI();
+		backgroundPushToRemote();
 	}
 
 	/** Handle refine filter click **/
@@ -729,13 +749,19 @@ public class TodoTxtTouch extends ListActivity implements
 		openContextMenu(getListView());
 	}
 
-	private void updateRefreshStatus() {
-		findViewById(R.id.btn_title_refresh).setVisibility(
-				m_app.m_syncing ? View.GONE : View.VISIBLE);
-		findViewById(R.id.title_refresh_progress).setVisibility(
-				m_app.m_syncing ? View.VISIBLE : View.GONE);
-		findViewById(R.id.actionbar).setVisibility(View.GONE);
+	private void updateSyncUI() {
+		if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
+			findViewById(R.id.btn_title_upload).setVisibility(
+					m_app.m_pushing ? View.GONE : View.VISIBLE);
+		} else {
+			findViewById(R.id.btn_title_refresh).setVisibility(
+					m_app.m_pulling ? View.GONE : View.VISIBLE);
+		}
 
+		findViewById(R.id.title_refresh_progress).setVisibility(
+				m_app.m_pulling || m_app.m_pushing ? View.VISIBLE : View.GONE);
+
+		findViewById(R.id.actionbar).setVisibility(View.GONE);
 	}
 
 	/**
@@ -743,8 +769,8 @@ public class TodoTxtTouch extends ListActivity implements
 	 */
 	void backgroundPullFromRemote() {
 		if (m_app.getRemoteClient().isAuthenticated()) {
-			m_app.m_syncing = true;
-			updateRefreshStatus();
+			m_app.m_pulling = true;
+			updateSyncUI();
 
 			new AsyncTask<Void, Void, Boolean>() {
 
@@ -766,8 +792,8 @@ public class TodoTxtTouch extends ListActivity implements
 					if (result) {
 						Log.d(TAG, "taskBag.pullFromRemote done");
 						setFilteredTasks(false);
-						m_app.m_syncing = false;
-						updateRefreshStatus();
+						m_app.m_pulling = false;
+						updateSyncUI();
 					}
 					super.onPostExecute(result);
 				}
@@ -784,13 +810,17 @@ public class TodoTxtTouch extends ListActivity implements
 	 */
 	void backgroundPushToRemote() {
 		if (m_app.getRemoteClient().isAuthenticated()) {
+			m_app.m_pushing = true;
+			m_app.m_pulling = false;
+			updateSyncUI();
+
 			new AsyncTask<Void, Void, Boolean>() {
 
 				@Override
 				protected Boolean doInBackground(Void... params) {
 					try {
 						Log.d(TAG, "start taskBag.pushToRemote");
-						taskBag.pushToRemote();
+						taskBag.pushToRemote(true);
 					} catch (Exception e) {
 						Log.e(TAG, e.getMessage());
 						return false;
@@ -803,6 +833,9 @@ public class TodoTxtTouch extends ListActivity implements
 					Log.d(TAG, "post taskBag.pushToremote");
 					if (result) {
 						Log.d(TAG, "taskBag.pushToRemote done");
+						m_app.m_pushing = false;
+						m_app.m_pulling = false;
+						updateSyncUI();
 					}
 					super.onPostExecute(result);
 				}
@@ -903,9 +936,9 @@ public class TodoTxtTouch extends ListActivity implements
 				if (m_app.m_prefs.getBoolean("show_task_age_pref", false)) {
 					if (!task.isCompleted()
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
-						Log.v(TAG,
-								task.getPrependedDate() + " is "
-										+ task.getRelativeAge());
+						// Log.v(TAG,
+						// task.getPrependedDate() + " is "
+						// + task.getRelativeAge());
 						holder.taskage.setText(task.getRelativeAge());
 						holder.taskage.setVisibility(View.VISIBLE);
 					} else {

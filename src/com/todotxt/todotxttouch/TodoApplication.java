@@ -46,7 +46,8 @@ public class TodoApplication extends Application {
 
 	private RemoteClient remoteClient;
 
-	public boolean m_syncing = false;
+	public boolean m_pulling = false;
+	public boolean m_pushing = false;
 
 	private TaskBag taskBag;
 

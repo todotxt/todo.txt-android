@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * Interface for interacting with the tasks in aggregate
- *
+ * 
  * @author Tim Barlotta
  */
 public interface TaskBag {
@@ -64,9 +64,16 @@ public interface TaskBag {
 	// FUTURE make this syncWithRemote()
 
 	/**
-	 * Push tasks in localRepository into remoteRepository
+	 * Push tasks in localRepository into remoteRepository if you're not working
+	 * offline
 	 */
 	void pushToRemote();
+
+	/**
+	 * Force-push tasks in localRepository into remoteRepository disregarding
+	 * Work Offline status
+	 */
+	void pushToRemote(boolean overridePreference);
 
 	/**
 	 * Pulls tasks from remoteRepository, stores in localRepository

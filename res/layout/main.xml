@@ -29,86 +29,64 @@ You should have received a copy of the GNU General Public License along with Tod
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/home_root"
-	android:orientation="vertical" 
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
+	android:id="@+id/home_root" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:background="@color/white">
-   	
-    <LinearLayout
-		style="@style/TitleBar">
-		<ImageView style="@style/TitleBarLogo"
-			android:src="@drawable/title_logo" />	
-        <View style="@style/TitleBarSpring" />
-        <ImageView style="@style/TitleBarSeparator" />        
-        <ImageButton style="@style/TitleBarAction"
-            android:id="@+id/btn_title_refresh"
-            android:src="@drawable/ic_title_sync"
-            android:onClick="onSyncClick" />
-            
-        <ProgressBar style="@style/TitleBarProgressIndicator"
-            android:id="@+id/title_refresh_progress"
-            android:visibility="gone" />
-        <ImageView style="@style/TitleBarSeparator" />
-        <ImageButton style="@style/TitleBarAction"
-            android:src="@drawable/ic_title_add" 
+
+	<LinearLayout style="@style/TitleBar">
+		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" />
+		<View style="@style/TitleBarSpring" />
+		<ImageView style="@style/TitleBarSeparator" />
+		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_upload"
+			android:src="@drawable/gd_action_bar_export_normal" android:onClick="onUploadClick"
+			android:visibility="gone" />
+
+		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_refresh"
+			android:src="@drawable/ic_title_sync" android:onClick="onSyncClick" />
+
+		<ProgressBar style="@style/TitleBarProgressIndicator"
+			android:id="@+id/title_refresh_progress" android:visibility="gone" />
+		<ImageView style="@style/TitleBarSeparator" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/ic_title_add"
 			android:onClick="onAddTaskClick" />
 	</LinearLayout>
 
-	<LinearLayout style="@style/ActionBar"
-		android:id="@+id/actionbar"
+	<LinearLayout style="@style/ActionBar" android:id="@+id/actionbar"
 		android:visibility="gone">
-		
-		<ImageView 
-			android:id="@+id/actionbar_icon"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
-			android:layout_marginLeft="5dip"
-			android:layout_marginRight="5dip"
-			android:src="@drawable/ic_actionbar_filter"/>
-			
-		<TextView
-			android:id="@+id/filter_text"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center_vertical"
+
+		<ImageView android:id="@+id/actionbar_icon"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical" android:layout_marginLeft="5dip"
+			android:layout_marginRight="5dip" android:src="@drawable/ic_actionbar_filter" />
+
+		<TextView android:id="@+id/filter_text" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="center_vertical"
 			android:textColor="@color/actionbar_label" />
 		<View style="@style/TitleBarSpring" />
-		
+
 		<LinearLayout style="@style/ActionBarButtonSet"
 			android:scrollbars="horizontal">
-		
-			<Button style="@style/ActionBarLeftButton"
-				android:text="Refine"
+
+			<Button style="@style/ActionBarLeftButton" android:text="Refine"
 				android:onClick="onRefineClick" />
-	        <ImageView style="@style/ActionBarSeparator" />
-	       	<ImageView style="@style/ActionBarSeparatorWhite" />
-			<Button style="@style/ActionBarRightButton"
-				android:text="Clear"
+			<ImageView style="@style/ActionBarSeparator" />
+			<ImageView style="@style/ActionBarSeparatorWhite" />
+			<Button style="@style/ActionBarRightButton" android:text="Clear"
 				android:onClick="onClearClick" />
-		</LinearLayout>		
+		</LinearLayout>
 	</LinearLayout>
 	<ImageView style="@style/HorizontalRule" />
-	
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_weight="1">	
-        <ListView 
-			android:id="@+id/android:list" 
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" 
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:background="@color/white" android:layout_weight="1">
+		<ListView android:id="@+id/android:list"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			style="@style/TodoTxtTouchLight" />
-			
-		<TextView 
-			android:id="@+id/android:empty"
-			android:layout_width="fill_parent" 
-			android:layout_height="fill_parent"
-			android:text="@string/main_no_items" 
-			style="@style/TodoTxtTouchLight"
+
+		<TextView android:id="@+id/android:empty"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:text="@string/main_no_items" style="@style/TodoTxtTouchLight"
 			android:gravity="center_vertical|center_horizontal" />
 	</LinearLayout>
 </LinearLayout>
