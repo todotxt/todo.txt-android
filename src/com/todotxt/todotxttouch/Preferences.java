@@ -87,17 +87,15 @@ public class Preferences extends PreferenceActivity {
 	protected Dialog onCreateDialog(int id) {
 		if (id == ABOUT_DIALOG) {
 			AlertDialog.Builder aboutAlert = new AlertDialog.Builder(this);
-			aboutAlert.setTitle("Todo.txt Touch");
-			aboutAlert
-					.setMessage("Version "
-							+ version
-							+ "\nBy Gina Trapani &\nthe Todo.txt community\ntodotxt@yahoogroups.com");
+			aboutAlert.setTitle("Todo.txt Touch v" + version);
+			aboutAlert.setMessage("by Gina Trapani &\nthe Todo.txt community");
 			aboutAlert.setIcon(R.drawable.todotxt_touch_icon);
-			aboutAlert.setPositiveButton("Homepage",
+			aboutAlert.setPositiveButton("Follow us",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							Intent i = new Intent(Intent.ACTION_VIEW);
-							i.setData(Uri.parse("http://todotxt.com"));
+							i.setData(Uri
+									.parse("http://twitter.com/todotxtapps"));
 							startActivity(i);
 						}
 					});

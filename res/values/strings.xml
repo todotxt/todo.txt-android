@@ -93,7 +93,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="prepend_date_pref_key">todotxtprependdate</string>
 	<string name="prepend_date_pref_title">Date new tasks</string>
 	<string name="prepend_date_pref_summary">
-		Automatically prepend today\'s date to new tasks.
+		Automatically add creation date to new tasks.
 	</string>
 	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
 	<string name="show_line_numbers_pref_title">Show line numbers</string>
