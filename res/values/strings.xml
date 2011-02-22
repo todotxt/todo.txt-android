@@ -40,6 +40,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="update_task_failed">Could not update task</string>
 	<string name="initialized_dropbox">Initialized Dropbox support! Check
 		Dropbox/todo/todo.txt.</string>
+	<string name="back_online_sync">Back online! Saving changes to Dropbox...</string>
 	<string name="sort">Sort</string>
 	<string name="filter">Filter</string>
 	<string name="main_no_items">No tasks to display.</string>

@@ -215,18 +215,19 @@ public class TodoTxtTouch extends ListActivity implements
 		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
 		if (Constants.PREF_ACCESSTOKEN_SECRET.equals(key)) {
 			Log.i(TAG, "New access token secret. Syncing!");
-			populateFromExternal();
+			backgroundPullFromRemote();
 		} else if ("workofflinepref".equals(key)) {
-			Log.i(TAG,
-					"Switched online/offline mode. Push local changes if necessary.");
-			taskBag.pushToRemote();
-		}
-		if (sharedPreferences.getBoolean("workofflinepref", false)) {
-			findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
-			this.options_menu.findItem(R.id.sync).setVisible(false);
-		} else {
-			findViewById(R.id.btn_title_refresh).setVisibility(View.VISIBLE);
-			this.options_menu.findItem(R.id.sync).setVisible(true);
+			if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
+				findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
+				this.options_menu.findItem(R.id.sync).setVisible(false);
+			} else {
+				Log.i(TAG, "Switched online mode, must push local changes.");
+				showToast(getString(R.string.back_online_sync));
+				backgroundPushToRemote();
+				findViewById(R.id.btn_title_refresh)
+						.setVisibility(View.VISIBLE);
+				this.options_menu.findItem(R.id.sync).setVisible(true);
+			}
 		}
 	}
 
@@ -513,7 +514,7 @@ public class TodoTxtTouch extends ListActivity implements
 			break;
 		case R.id.sync:
 			Log.v(TAG, "onMenuItemSelected: sync");
-			populateFromExternal();
+			backgroundPullFromRemote();
 			break;
 		case R.id.search:
 			onSearchRequested();
@@ -643,7 +644,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 		m_app.m_syncing = true;
 		updateRefreshStatus();
-		populateFromExternal();
+		backgroundPullFromRemote();
 	}
 
 	/** Handle refine filter click **/
@@ -740,7 +741,7 @@ public class TodoTxtTouch extends ListActivity implements
 	/**
 	 * TODO: This needs to be nicer
 	 */
-	void populateFromExternal() {
+	void backgroundPullFromRemote() {
 		if (m_app.getRemoteClient().isAuthenticated()) {
 			m_app.m_syncing = true;
 			updateRefreshStatus();
@@ -767,6 +768,41 @@ public class TodoTxtTouch extends ListActivity implements
 						setFilteredTasks(false);
 						m_app.m_syncing = false;
 						updateRefreshStatus();
+					}
+					super.onPostExecute(result);
+				}
+
+			}.execute();
+		} else {
+			Log.e(TAG, "NOT AUTHENTICATED!");
+			showToast("NOT AUTHENTICATED!");
+		}
+	}
+
+	/**
+	 * TODO: This needs to be nicer
+	 */
+	void backgroundPushToRemote() {
+		if (m_app.getRemoteClient().isAuthenticated()) {
+			new AsyncTask<Void, Void, Boolean>() {
+
+				@Override
+				protected Boolean doInBackground(Void... params) {
+					try {
+						Log.d(TAG, "start taskBag.pushToRemote");
+						taskBag.pushToRemote();
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage());
+						return false;
+					}
+					return true;
+				}
+
+				@Override
+				protected void onPostExecute(Boolean result) {
+					Log.d(TAG, "post taskBag.pushToremote");
+					if (result) {
+						Log.d(TAG, "taskBag.pushToRemote done");
 					}
 					super.onPostExecute(result);
 				}
