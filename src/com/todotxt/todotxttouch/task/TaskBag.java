@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * Interface for interacting with the tasks in aggregate
- * 
+ *
  * @author Tim Barlotta
  */
 public interface TaskBag {
@@ -57,12 +57,7 @@ public interface TaskBag {
 	ArrayList<Priority> getPriorities();
 
 	/* REMOTE APIs */
-	void initRemote();
-
-	void disconnectFromRemote();
-
 	// FUTURE make this syncWithRemote()
-
 	/**
 	 * Push tasks in localRepository into remoteRepository if you're not working
 	 * offline

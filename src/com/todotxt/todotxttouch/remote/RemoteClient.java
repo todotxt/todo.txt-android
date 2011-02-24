@@ -25,39 +25,55 @@
  */
 package com.todotxt.todotxttouch.remote;
 
+import java.io.File;
+
 public interface RemoteClient {
+
+    Client getClient();
 
 	/**
 	 * Attempts to authenticate with remote api
-	 * 
+	 *
 	 * @return true if successful
 	 */
-	public boolean authenticate();
+	boolean authenticate();
 
 	/**
 	 * Attempts to deauthenticate with remote api
 	 */
-	public void deauthenticate();
+	void deauthenticate();
 
 	/**
 	 * Check to see if we are authenticated with remote api
-	 * 
+	 *
 	 * @return true if authenticated
 	 */
-	public boolean isAuthenticated();
+	boolean isAuthenticated();
 
 	/**
 	 * Check to see if we have enough information to authenticate with remote
 	 * api
-	 * 
+	 *
 	 * @return true if we have authToken, false if we need login information
 	 */
-	public boolean isLoggedIn();
+	boolean isLoggedIn();
 
 	/**
 	 * Get a login task that can display and handle a login dialog
 	 * @return
 	 */
-	public RemoteLoginTask getLoginTask();
+	RemoteLoginTask getLoginTask();
+
+    /**
+     * Pull the remote Todo.txt file
+     * @return
+     */
+    File pullTodo();
+
+    /**
+     * Push mobile
+     * @param file
+     */
+    void pushTodo(File file);
 
 }

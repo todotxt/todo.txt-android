@@ -28,8 +28,6 @@ package com.todotxt.todotxttouch.task;
 
 import android.content.SharedPreferences;
 import com.todotxt.todotxttouch.TodoApplication;
-import com.todotxt.todotxttouch.remote.RemoteFactory;
-import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
 
 /**
  * A factory for creating TaskBags
@@ -38,15 +36,13 @@ import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
  */
 public class TaskBagFactory {
 	public static TaskBag getTaskBag(TodoApplication application,
-			SharedPreferences sharedPreferences, String defaultTodoTxtPath) {
-		TaskBagImpl.Preferences taskBagPreferences = new TaskBagImpl.Preferences(
-                sharedPreferences, defaultTodoTxtPath);
+			SharedPreferences sharedPreferences) {
+		TaskBagImpl.Preferences taskBagPreferences = new TaskBagImpl.Preferences(sharedPreferences);
 
 		LocalFileTaskRepository localFileTaskRepository = new LocalFileTaskRepository(
 				taskBagPreferences);
-		RemoteTaskRepository remoteTaskRepository = RemoteFactory.getRemoteTaskRepository(application);
 
 		return new TaskBagImpl(taskBagPreferences, localFileTaskRepository,
-				remoteTaskRepository);
+				application.getRemoteClientManager());
 	}
 }

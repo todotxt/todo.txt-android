@@ -114,7 +114,7 @@ public class Preferences extends PreferenceActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							((TodoApplication) getApplication())
-									.unlinkRemoteClient();
+									.getRemoteClientManager().getRemoteClient().deauthenticate();
 							Preferences.this.setResult(RESULT_SYNC_LIST);
 
 							// produce a logout intent and broadcast it
@@ -122,8 +122,7 @@ public class Preferences extends PreferenceActivity {
 							broadcastLogoutIntent
 									.setAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
 							sendBroadcast(broadcastLogoutIntent);
-
-							Preferences.this.finish();
+                            finish();
 						}
 					});
 			logoutAlert.setNegativeButton(R.string.cancel, null);

@@ -768,7 +768,7 @@ public class TodoTxtTouch extends ListActivity implements
 	 * TODO: This needs to be nicer
 	 */
 	void backgroundPullFromRemote() {
-		if (m_app.getRemoteClient().isAuthenticated()) {
+		if (m_app.getRemoteClientManager().getRemoteClient().isAuthenticated()) {
 			m_app.m_pulling = true;
 			updateSyncUI();
 
@@ -809,7 +809,7 @@ public class TodoTxtTouch extends ListActivity implements
 	 * TODO: This needs to be nicer
 	 */
 	void backgroundPushToRemote() {
-		if (m_app.getRemoteClient().isAuthenticated()) {
+		if (m_app.getRemoteClientManager().getRemoteClient().isAuthenticated()) {
 			m_app.m_pushing = true;
 			m_app.m_pulling = false;
 			updateSyncUI();
@@ -936,12 +936,12 @@ public class TodoTxtTouch extends ListActivity implements
 				if (m_app.m_prefs.getBoolean("show_task_age_pref", false)) {
 					if (!task.isCompleted()
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
-						// Log.v(TAG,
-						// task.getPrependedDate() + " is "
-						// + task.getRelativeAge());
 						holder.taskage.setText(task.getRelativeAge());
 						holder.taskage.setVisibility(View.VISIBLE);
-					} else {
+					}
+                    else {
+                        holder.taskage.setText("");
+                        holder.taskage.setVisibility(View.GONE);
 						holder.tasktext.setPadding(
 								holder.tasktext.getPaddingLeft(),
 								holder.tasktext.getPaddingTop(),

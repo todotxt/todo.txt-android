@@ -31,46 +31,24 @@ package com.todotxt.todotxttouch;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
-
-import com.todotxt.todotxttouch.remote.RemoteClient;
-import com.todotxt.todotxttouch.remote.RemoteFactory;
+import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 
 public class TodoApplication extends Application {
-
 	private final static String TAG = TodoApplication.class.getSimpleName();
-
 	public SharedPreferences m_prefs;
-
-	private RemoteClient remoteClient;
-
+	private RemoteClientManager remoteClientManager;
 	public boolean m_pulling = false;
 	public boolean m_pushing = false;
-
 	private TaskBag taskBag;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-		remoteClient = RemoteFactory.getRemoteClient(this);
-
-		authenticate();
-
-		Log.v(TAG,
-				"Work offline set to : "
-						+ m_prefs.getBoolean("workofflinepref", false));
-
-		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs, getResources()
-				.getString(R.string.TODOTXTPATH_defaultPath));
-	}
-
-	public boolean authenticate() {
-		return remoteClient.authenticate();
+		remoteClientManager = new RemoteClientManager(this, m_prefs);
+		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
 	}
 
 	@Override
@@ -78,18 +56,12 @@ public class TodoApplication extends Application {
 		super.onTerminate();
 	}
 
-	public void unlinkRemoteClient() {
-		Log.i(TAG, "Clearing current user data!");
-		remoteClient.deauthenticate();
-		taskBag.disconnectFromRemote();
-	}
-
 	public TaskBag getTaskBag() {
 		return taskBag;
 	}
 
-	public RemoteClient getRemoteClient() {
-		return remoteClient;
+	public RemoteClientManager getRemoteClientManager() {
+		return remoteClientManager;
 	}
 
 }

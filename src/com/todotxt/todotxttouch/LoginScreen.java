@@ -76,7 +76,7 @@ public class LoginScreen extends Activity {
 			}
 		});
 
-		final RemoteClient remoteClient = m_app.getRemoteClient();
+		final RemoteClient remoteClient = m_app.getRemoteClientManager().getRemoteClient();
 		if (remoteClient.isAuthenticated()) {
 			switchToTodolist();
 		}
@@ -95,10 +95,10 @@ public class LoginScreen extends Activity {
 	}
 
 	void login() {
-		final RemoteClient client = m_app.getRemoteClient();
-		
+		final RemoteClient client = m_app.getRemoteClientManager().getRemoteClient();
+
 		if (client.isLoggedIn()) {
-			if ( m_app.authenticate() ) {
+			if ( m_app.getRemoteClientManager().getRemoteClient().authenticate() ) {
 				switchToTodolist();
 			}
 		}

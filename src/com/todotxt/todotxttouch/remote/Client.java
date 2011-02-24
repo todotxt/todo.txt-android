@@ -1,8 +1,8 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/RemoteFactory.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/Client.java
  *
- * Copyright (c) 2009-2011 Tormod Haugen
+ * Copyright (c) 2011 Tim Barlotta
  *
  * LICENSE:
  *
@@ -19,23 +19,18 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author Tormod Haugen <tormodh[at]gmail[dot]com>
+ * @author Tim Barlotta <tim[at]barlotta[dot]net>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Tormod Haugen
+ * @copyright 2011 Tim Barlotta
  */
+
 package com.todotxt.todotxttouch.remote;
 
-import com.todotxt.todotxttouch.TodoApplication;
-import com.todotxt.todotxttouch.remote.dropbox.DropboxRemoteTaskRepository;
-import com.todotxt.todotxttouch.remote.dropbox.DropboxRemoteClient;
-
-public class RemoteFactory {
-
-	public static RemoteClient getRemoteClient(TodoApplication todoApplication) {
-		return new DropboxRemoteClient(todoApplication);
-	}
-
-	public static RemoteTaskRepository getRemoteTaskRepository(TodoApplication todoApplication) {
-		return new DropboxRemoteTaskRepository(todoApplication);
-	}
+/**
+ * Holder for Supported Remote Clients
+ *
+ * @author Tim Barlotta
+ */
+public enum Client {
+    DROPBOX;
 }
