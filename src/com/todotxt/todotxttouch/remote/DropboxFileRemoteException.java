@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/dropbox/DropboxFileRemoteException.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/DropboxFileRemoteException.java
  *
  * Copyright (c) 2011 Tim Barlotta
  *
@@ -24,18 +24,18 @@
  * @copyright 2011 Tim Barlotta
  */
 
-package com.todotxt.todotxttouch.remote.dropbox;
+package com.todotxt.todotxttouch.remote;
 
 import com.dropbox.client.DropboxAPI;
 import com.todotxt.todotxttouch.remote.RemoteException;
 
 /**
  * Represents an error that occurred during Dropbox persistence
- * 
+ *
  * @author Tim Barlotta
  */
 @SuppressWarnings("serial")
-public class DropboxFileRemoteException extends RemoteException {
+class DropboxFileRemoteException extends RemoteException {
 	private DropboxAPI.FileDownload dropboxFileDownload;
 
 	public DropboxFileRemoteException(String message,

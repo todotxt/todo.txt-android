@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/dropbox/DropboxLoginAsyncTask.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/DropboxLoginAsyncTask.java
  *
  * Copyright (c) 2009-2011 Tormod Haugen
  *
@@ -23,13 +23,14 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2011 Tormod Haugen
  */
-package com.todotxt.todotxttouch.remote.dropbox;
+package com.todotxt.todotxttouch.remote;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.text.Html;
@@ -44,40 +45,31 @@ import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
-import com.todotxt.todotxttouch.remote.RemoteLoginTask;
 import com.todotxt.todotxttouch.util.Util;
 
-public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
+class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 		implements RemoteLoginTask {
 
-	private TodoApplication m_app;
-	private DropboxRemoteClient client;
+	private DropboxRemoteClient dropboxRemoteClient;
+    private SharedPreferences sharedPreferences;
 	private String m_username;
 	private String m_password;
 
-	public void setUsername(String username) {
-		m_username = username;
-	}
-
-	public void setPassword(String password) {
-		m_password = password;
-	}
-
-	public DropboxLoginAsyncTask(TodoApplication act) {
-		m_app = act;
-		client = (DropboxRemoteClient) act.getRemoteClient();
+	public DropboxLoginAsyncTask(DropboxRemoteClient dropboxRemoteClient, SharedPreferences sharedPreferences) {
+        this.dropboxRemoteClient = dropboxRemoteClient;
+        this.sharedPreferences = sharedPreferences;
 	}
 
 	@Override
 	protected Integer doInBackground(Void... params) {
-		if (!client.isAuthenticated()) {
-			client.login(m_username, m_password);
+		if (!dropboxRemoteClient.isAuthenticated()) {
+			dropboxRemoteClient.login(m_username, m_password);
 
-			final Config config = client.getConfig();
+			final Config config = dropboxRemoteClient.getConfig();
 			if (config.authStatus != DropboxAPI.STATUS_SUCCESS)
 				return config.authStatus;
 		}
-		DropboxAPI api = client.getAPI();
+		DropboxAPI api = dropboxRemoteClient.getAPI();
 		Log.d("Xtra", "" + api.accountInfo());
 		if (!api.accountInfo().isError()) {
 			return DropboxAPI.STATUS_SUCCESS;
@@ -89,33 +81,29 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 	@Override
 	protected void onPostExecute(Integer result) {
 		super.onPostExecute(result);
-		final Config config = client.getConfig();
+		final Config config = dropboxRemoteClient.getConfig();
 
 		if (result == DropboxAPI.STATUS_SUCCESS) {
 			if (null != config
 					&& config.authStatus == DropboxAPI.STATUS_SUCCESS) {
 				storeKeys(config.accessTokenKey, config.accessTokenSecret);
-				showToast("Logged into Dropbox");
+				dropboxRemoteClient.showToast("Logged into Dropbox");
 				Intent broadcastLoginIntent = new Intent();
 				broadcastLoginIntent
 						.setAction("com.todotxt.todotxttouch.ACTION_LOGIN");
-				m_app.sendBroadcast(broadcastLoginIntent);
+				dropboxRemoteClient.sendBroadcast(broadcastLoginIntent);
 			}
 		} else {
 			if (result == DropboxAPI.STATUS_NETWORK_ERROR) {
-				showToast("Network error: " + config.authDetail);
+				dropboxRemoteClient.showToast("Network error: " + config.authDetail);
 			} else {
-				showToast("Unsuccessful login.");
+				dropboxRemoteClient.showToast("Unsuccessful login.");
 			}
 		}
 	}
 
-	public void showToast(String string) {
-		Util.showToastLong(m_app, string);
-	}
-
 	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
-		Editor editor = m_app.m_prefs.edit();
+		Editor editor = sharedPreferences.edit();
 		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
 		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
 		editor.commit();
@@ -143,11 +131,11 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 				String u = usernameTV.getText().toString();
 				String p = passwordTV.getText().toString();
 				if (u != null && u.length() > 0 && p != null && p.length() > 0) {
-					DropboxLoginAsyncTask.this.setUsername(u);
-					DropboxLoginAsyncTask.this.setPassword(p);
-					DropboxLoginAsyncTask.this.execute();
+					m_username = u;
+                    m_password = p;
+					execute();
 				} else {
-					DropboxLoginAsyncTask.this.cancel(false);
+					cancel(false);
 				}
 			}
 		});

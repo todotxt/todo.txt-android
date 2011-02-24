@@ -39,9 +39,6 @@ import com.todotxt.todotxttouch.util.Strings;
 
 @SuppressWarnings("serial")
 public class Task implements Serializable {
-
-	final static String TAG = TodoTxtTouch.class.getSimpleName();
-
 	private static final String COMPLETED = "x ";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	private final String originalText;
@@ -88,12 +85,12 @@ public class Task implements Serializable {
 
 		if (defaultPrependedDate != null
 				&& Strings.isEmptyOrNull(this.prependedDate)) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 			this.prependedDate = formatter.format(defaultPrependedDate);
 		}
+
 		if (!Strings.isEmptyOrNull(this.prependedDate)) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			// Log.v(TAG, "Prepended date is " + this.prependedDate);
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 			try {
 				Date d = sdf.parse(this.prependedDate);
 				this.relativeAge = RelativeDate.getRelativeDate(d);
