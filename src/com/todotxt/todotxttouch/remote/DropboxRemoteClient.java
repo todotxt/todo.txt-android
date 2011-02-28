@@ -44,7 +44,7 @@ import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.util.Util;
 
 class DropboxRemoteClient implements RemoteClient {
-    private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";
+	private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";
 	private static final File TODO_TXT_TMP_FILE = new File(
 			Environment.getExternalStorageDirectory(),
 			"data/com.todotxt.todotxttouch/tmp/todo.txt");
@@ -52,29 +52,44 @@ class DropboxRemoteClient implements RemoteClient {
 	private DropboxAPI dropboxApi = new DropboxAPI();
 	private TodoApplication todoApplication;
 	private SharedPreferences sharedPreferences;
-    private Config config;
+	private Config config;
 
-	public DropboxRemoteClient(TodoApplication todoApplication, SharedPreferences sharedPreferences) {
+	public DropboxRemoteClient(TodoApplication todoApplication,
+			SharedPreferences sharedPreferences) {
 		this.todoApplication = todoApplication;
 		this.sharedPreferences = sharedPreferences;
 	}
 
-    @Override
-    public Client getClient() {
-        return Client.DROPBOX;
-    }
+	@Override
+	public Client getClient() {
+		return Client.DROPBOX;
+	}
 
 	/**
 	 * Get the stored key - secret pair for authenticating the user
-	 *
+	 * 
 	 * @return a string array with key and secret
 	 */
 	private String[] getAuthToken() {
 		String[] keys = { null, null };
-		keys[0] = sharedPreferences.getString(Constants.PREF_ACCESSTOKEN_KEY, null);
-		keys[1] = sharedPreferences
-				.getString(Constants.PREF_ACCESSTOKEN_SECRET, null);
+		keys[0] = sharedPreferences.getString(Constants.PREF_ACCESSTOKEN_KEY,
+				null);
+		keys[1] = sharedPreferences.getString(
+				Constants.PREF_ACCESSTOKEN_SECRET, null);
 		return keys;
+	}
+
+	/**
+	 * Store the key - secret pair for an authenticated user.
+	 * 
+	 * @param accessTokenKey
+	 * @param accessTokenSecret
+	 */
+	void storeKeys(String accessTokenKey, String accessTokenSecret) {
+		Editor editor = sharedPreferences.edit();
+		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
+		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
+		editor.commit();
 	}
 
 	/**
@@ -94,8 +109,8 @@ class DropboxRemoteClient implements RemoteClient {
 
 		String[] userAuthToken = getAuthToken();
 		if (isLoggedIn()) {
-			config = dropboxApi.authenticateToken(userAuthToken[0], userAuthToken[1],
-					config);
+			config = dropboxApi.authenticateToken(userAuthToken[0],
+					userAuthToken[1], config);
 			if (null != config)
 				return true;
 		}
@@ -108,7 +123,7 @@ class DropboxRemoteClient implements RemoteClient {
 	public void deauthenticate() {
 		clearAuthToken();
 		dropboxApi.deauthenticate();
-        TODO_TXT_TMP_FILE.delete();
+		TODO_TXT_TMP_FILE.delete();
 	}
 
 	@Override
@@ -122,47 +137,46 @@ class DropboxRemoteClient implements RemoteClient {
 		return null != userAuthToken[0] && null != userAuthToken[1];
 	}
 
-    @Override
+	@Override
 	public RemoteLoginTask getLoginTask() {
-		return new DropboxLoginAsyncTask(this, sharedPreferences);
+		return new DropboxLoginAsyncTask(this);
 	}
 
-    @Override
-    public File pullTodo( ){
-        DropboxAPI.FileDownload fileDownload = dropboxApi.getFileStream(
-                Constants.DROPBOX_MODUS, getRemotePathAndFilename(), null);
-        if (fileDownload.isError()) {
-            if (404 == fileDownload.httpCode) {
-                pushTodo(TODO_TXT_TMP_FILE);
-                return TODO_TXT_TMP_FILE;
-            } else {
-                throw new DropboxFileRemoteException(
-                        "Error loading from dropbox", fileDownload);
-            }
-        }
+	@Override
+	public File pullTodo() {
+		DropboxAPI.FileDownload fileDownload = dropboxApi.getFileStream(
+				Constants.DROPBOX_MODUS, getRemotePathAndFilename(), null);
+		if (fileDownload.isError()) {
+			if (404 == fileDownload.httpCode) {
+				pushTodo(TODO_TXT_TMP_FILE);
+				return TODO_TXT_TMP_FILE;
+			} else {
+				throw new DropboxFileRemoteException(
+						"Error loading from dropbox", fileDownload);
+			}
+		}
 
-        try {
-            Util.writeFile(fileDownload.is, TODO_TXT_TMP_FILE);
-            return TODO_TXT_TMP_FILE;
-        } catch(IOException e) {
-            throw new RemoteException("Error writing to tmp file", e);
-        }
-    }
+		try {
+			Util.writeFile(fileDownload.is, TODO_TXT_TMP_FILE);
+			return TODO_TXT_TMP_FILE;
+		} catch (IOException e) {
+			throw new RemoteException("Error writing to tmp file", e);
+		}
+	}
 
-    @Override
-    public void pushTodo(File file) {
-        try {
-            if(!file.exists()) {
-                Util.createParentDirectory(file);
-                file.createNewFile();
-            }
-        }
-        catch(IOException e) {
-            throw new RemoteException("Failed to ensure that file exists", e);
-        }
+	@Override
+	public void pushTodo(File file) {
+		try {
+			if (!file.exists()) {
+				Util.createParentDirectory(file);
+				file.createNewFile();
+			}
+		} catch (IOException e) {
+			throw new RemoteException("Failed to ensure that file exists", e);
+		}
 
 		dropboxApi.putFile(Constants.DROPBOX_MODUS, getRemotePath(), file);
-    }
+	}
 
 	Config getConfig() {
 		if (null == config)
@@ -174,7 +188,7 @@ class DropboxRemoteClient implements RemoteClient {
 	 * Method enabling logging in with a username and password. Do not store the
 	 * username or password. Config object <code>config</code> will contain user
 	 * key and secret to authenticate w/o username/password later.
-	 *
+	 * 
 	 * @param username
 	 *            - email registered with dropbox
 	 * @param password
@@ -195,21 +209,21 @@ class DropboxRemoteClient implements RemoteClient {
 		return false;
 	}
 
-    void sendBroadcast(Intent intent) {
-        todoApplication.sendBroadcast(intent);
-    }
+	void sendBroadcast(Intent intent) {
+		todoApplication.sendBroadcast(intent);
+	}
 
-    void showToast(String string) {
-        Util.showToastLong(todoApplication, string);
-    }
+	void showToast(String string) {
+		Util.showToastLong(todoApplication, string);
+	}
 
 	DropboxAPI getAPI() {
 		return dropboxApi;
 	}
 
 	String getRemotePath() {
-		return sharedPreferences.getString("todotxtpath", todoApplication.getResources()
-				.getString(R.string.TODOTXTPATH_defaultPath));
+		return sharedPreferences.getString("todotxtpath", todoApplication
+				.getResources().getString(R.string.TODOTXTPATH_defaultPath));
 	}
 
 	String getRemotePathAndFilename() {
@@ -223,8 +237,8 @@ class DropboxRemoteClient implements RemoteClient {
 	private void createConfig() {
 		String consumerKey = todoApplication.getResources()
 				.getText(R.string.dropbox_consumer_key).toString();
-		String consumerSecret = todoApplication.getText(R.string.dropbox_consumer_secret)
-				.toString();
+		String consumerSecret = todoApplication.getText(
+				R.string.dropbox_consumer_secret).toString();
 
 		config = dropboxApi.getConfig(null, false);
 		config.consumerKey = consumerKey;
@@ -232,6 +246,10 @@ class DropboxRemoteClient implements RemoteClient {
 		config.server = "api.dropbox.com";
 		config.contentServer = "api-content.dropbox.com";
 		config.port = 80;
+	}
+
+	public boolean isAvailable() {
+		return todoApplication.isNetworkAvailable();
 	}
 
 }
