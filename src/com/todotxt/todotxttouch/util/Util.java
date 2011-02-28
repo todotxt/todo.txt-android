@@ -36,8 +36,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import com.todotxt.todotxttouch.R;
-import com.todotxt.todotxttouch.TodoException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
@@ -62,6 +60,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.todotxt.todotxttouch.R;
+import com.todotxt.todotxttouch.TodoException;
 
 public class Util {
 

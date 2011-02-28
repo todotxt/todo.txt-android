@@ -26,15 +26,16 @@
 
 package com.todotxt.todotxttouch.task;
 
-import android.os.Environment;
-import android.util.Log;
-import com.todotxt.todotxttouch.TodoException;
-import com.todotxt.todotxttouch.util.TaskIo;
-import com.todotxt.todotxttouch.util.Util;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import android.os.Environment;
+import android.util.Log;
+
+import com.todotxt.todotxttouch.TodoException;
+import com.todotxt.todotxttouch.util.TaskIo;
+import com.todotxt.todotxttouch.util.Util;
 
 /**
  * A task repository for interacting with the local file system

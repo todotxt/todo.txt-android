@@ -35,8 +35,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import com.todotxt.todotxttouch.remote.RemoteLoginTask;
 import com.todotxt.todotxttouch.remote.RemoteClient;
+import com.todotxt.todotxttouch.remote.RemoteLoginTask;
 
 public class LoginScreen extends Activity {
 

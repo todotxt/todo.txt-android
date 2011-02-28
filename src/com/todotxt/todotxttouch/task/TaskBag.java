@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * Interface for interacting with the tasks in aggregate
- *
+ * 
  * @author Tim Barlotta
  */
 public interface TaskBag {
@@ -74,6 +74,12 @@ public interface TaskBag {
 	 * Pulls tasks from remoteRepository, stores in localRepository
 	 */
 	void pullFromRemote();
+
+	/**
+	 * Force-pull tasks from remoteRepository into localRepository disregarding
+	 * Work Offline status
+	 */
+	void pullFromRemote(boolean overridePreference);
 
 	/* END REMOTE APIs */
 }

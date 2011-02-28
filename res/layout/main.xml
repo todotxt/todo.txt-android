@@ -37,9 +37,6 @@ You should have received a copy of the GNU General Public License along with Tod
 		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" />
 		<View style="@style/TitleBarSpring" />
 		<ImageView style="@style/TitleBarSeparator" />
-		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_upload"
-			android:src="@drawable/gd_action_bar_export_normal" android:onClick="onUploadClick"
-			android:visibility="gone" />
 
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_refresh"
 			android:src="@drawable/ic_title_sync" android:onClick="onSyncClick" />

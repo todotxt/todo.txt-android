@@ -46,6 +46,7 @@ public class Preferences extends PreferenceActivity {
 	private static final int ABOUT_DIALOG = 1;
 	private static final int LOGOUT_DIALOG = 2;
 	public static final int RESULT_SYNC_LIST = 2;
+
 	private String version;
 
 	@Override
@@ -88,7 +89,8 @@ public class Preferences extends PreferenceActivity {
 		if (id == ABOUT_DIALOG) {
 			AlertDialog.Builder aboutAlert = new AlertDialog.Builder(this);
 			aboutAlert.setTitle("Todo.txt Touch v" + version);
-			aboutAlert.setMessage("by Gina Trapani &\nthe Todo.txt community");
+			aboutAlert
+					.setMessage("by Gina Trapani &\nthe Todo.txt community\n\nhttp://todotxt.com");
 			aboutAlert.setIcon(R.drawable.todotxt_touch_icon);
 			aboutAlert.setPositiveButton("Follow us",
 					new DialogInterface.OnClickListener() {
@@ -114,7 +116,8 @@ public class Preferences extends PreferenceActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							((TodoApplication) getApplication())
-									.getRemoteClientManager().getRemoteClient().deauthenticate();
+									.getRemoteClientManager().getRemoteClient()
+									.deauthenticate();
 							Preferences.this.setResult(RESULT_SYNC_LIST);
 
 							// produce a logout intent and broadcast it
@@ -122,7 +125,7 @@ public class Preferences extends PreferenceActivity {
 							broadcastLogoutIntent
 									.setAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
 							sendBroadcast(broadcastLogoutIntent);
-                            finish();
+							finish();
 						}
 					});
 			logoutAlert.setNegativeButton(R.string.cancel, null);

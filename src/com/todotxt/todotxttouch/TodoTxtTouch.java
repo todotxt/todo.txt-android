@@ -117,6 +117,8 @@ public class TodoTxtTouch extends ListActivity implements
 
 	private ArrayList<String> m_filters = new ArrayList<String>();
 
+	private static final int SYNC_CHOICE_DIALOG = 100;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -174,14 +176,6 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "Searched for " + m_search);
 			setFilteredTasks(false);
 		}
-
-		if (this.m_app.m_prefs.getBoolean("workofflinepref", false)) {
-			findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
-			findViewById(R.id.btn_title_upload).setVisibility(View.VISIBLE);
-		} else {
-			findViewById(R.id.btn_title_upload).setVisibility(View.GONE);
-			findViewById(R.id.btn_title_refresh).setVisibility(View.VISIBLE);
-		}
 	}
 
 	private void initializeTasks() {
@@ -220,20 +214,10 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.i(TAG, "New access token secret. Syncing!");
 			backgroundPullFromRemote();
 		} else if ("workofflinepref".equals(key)) {
-			if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
-				findViewById(R.id.btn_title_refresh).setVisibility(View.GONE);
-				findViewById(R.id.btn_title_upload).setVisibility(View.VISIBLE);
-				this.options_menu.findItem(R.id.sync).setVisible(false);
-				this.options_menu.findItem(R.id.upload).setVisible(true);
-			} else {
-				Log.i(TAG, "Switched online mode, must push local changes.");
-				showToast(getString(R.string.back_online_sync));
-				backgroundPushToRemote();
-				findViewById(R.id.btn_title_refresh)
-						.setVisibility(View.VISIBLE);
-				findViewById(R.id.btn_title_upload).setVisibility(View.GONE);
-				this.options_menu.findItem(R.id.sync).setVisible(true);
-				this.options_menu.findItem(R.id.upload).setVisible(false);
+			if (!m_app.m_prefs.getBoolean("workofflinepref", false)) {
+				Log.i(TAG,
+						"Switched to online mode, must sync one way or the other.");
+				showDialog(SYNC_CHOICE_DIALOG);
 			}
 		}
 	}
@@ -277,13 +261,6 @@ public class TodoTxtTouch extends ListActivity implements
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		this.options_menu = menu;
-		if (this.m_app.m_prefs.getBoolean("workofflinepref", false)) {
-			menu.findItem(R.id.sync).setVisible(false);
-			menu.findItem(R.id.upload).setVisible(true);
-		} else {
-			menu.findItem(R.id.sync).setVisible(true);
-			menu.findItem(R.id.upload).setVisible(false);
-		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -523,11 +500,16 @@ public class TodoTxtTouch extends ListActivity implements
 			break;
 		case R.id.sync:
 			Log.v(TAG, "onMenuItemSelected: sync");
-			backgroundPullFromRemote();
-			break;
-		case R.id.upload:
-			Log.v(TAG, "onMenuItemSelected: upload");
-			backgroundPushToRemote();
+			if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
+				Log.v(TAG,
+						"Working offline; prompt user to ask which way to sync");
+				showDialog(SYNC_CHOICE_DIALOG);
+			} else {
+				Log.i(TAG, "Working online; should automatically pull");
+				m_app.m_pulling = true;
+				updateSyncUI();
+				backgroundPullFromRemote();
+			}
 			break;
 		case R.id.search:
 			onSearchRequested();
@@ -609,6 +591,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		final Dialog d;
+
 		if (R.id.priority == id) {
 			final List<Priority> pStrs = taskBag.getPriorities();
 			int size = pStrs.size();
@@ -641,6 +624,27 @@ public class TodoTxtTouch extends ListActivity implements
 				}
 			});
 			return d;
+		} else if (id == SYNC_CHOICE_DIALOG) {
+			Log.v(TAG, "Time to show the sync choice dialog");
+			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
+			upDownChoice.setTitle(R.string.sync_dialog_title);
+			upDownChoice.setMessage(R.string.sync_dialog_msg);
+			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+							backgroundPushToRemote();
+							showToast(getString(R.string.sync_upload_message));
+						}
+					});
+			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+							backgroundPullFromRemote();
+							showToast(getString(R.string.sync_download_message));
+						}
+					});
+			return upDownChoice.show();
+
 		} else {
 			return null;
 		}
@@ -654,17 +658,15 @@ public class TodoTxtTouch extends ListActivity implements
 	/** Handle "refresh/download" action. */
 	public void onSyncClick(View v) {
 		Log.v(TAG, "titlebar: sync");
-		m_app.m_pulling = true;
-		updateSyncUI();
-		backgroundPullFromRemote();
-	}
-
-	/** Handle "upload" action. */
-	public void onUploadClick(View v) {
-		Log.v(TAG, "titlebar: upload");
-		m_app.m_pushing = true;
-		updateSyncUI();
-		backgroundPushToRemote();
+		if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
+			Log.v(TAG, "Working offline; prompt user to ask which way to sync");
+			showDialog(SYNC_CHOICE_DIALOG);
+		} else {
+			Log.i(TAG, "Working online; should automatically pull");
+			m_app.m_pulling = true;
+			updateSyncUI();
+			backgroundPullFromRemote();
+		}
 	}
 
 	/** Handle refine filter click **/
@@ -750,18 +752,15 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	private void updateSyncUI() {
-		if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
-			findViewById(R.id.btn_title_upload).setVisibility(
-					m_app.m_pushing ? View.GONE : View.VISIBLE);
-		} else {
-			findViewById(R.id.btn_title_refresh).setVisibility(
-					m_app.m_pulling ? View.GONE : View.VISIBLE);
-		}
-
+		// hide action bar
+		findViewById(R.id.actionbar).setVisibility(View.GONE);
+		// hide refresh button
+		findViewById(R.id.btn_title_refresh).setVisibility(
+				m_app.m_pulling || m_app.m_pushing ? View.GONE : View.VISIBLE);
+		// show moving refresh indicator
 		findViewById(R.id.title_refresh_progress).setVisibility(
 				m_app.m_pulling || m_app.m_pushing ? View.VISIBLE : View.GONE);
 
-		findViewById(R.id.actionbar).setVisibility(View.GONE);
 	}
 
 	/**
@@ -778,7 +777,7 @@ public class TodoTxtTouch extends ListActivity implements
 				protected Boolean doInBackground(Void... params) {
 					try {
 						Log.d(TAG, "start taskBag.pullFromRemote");
-						taskBag.pullFromRemote();
+						taskBag.pullFromRemote(true);
 					} catch (Exception e) {
 						Log.e(TAG, e.getMessage());
 						return false;
@@ -938,10 +937,9 @@ public class TodoTxtTouch extends ListActivity implements
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
 						holder.taskage.setText(task.getRelativeAge());
 						holder.taskage.setVisibility(View.VISIBLE);
-					}
-                    else {
-                        holder.taskage.setText("");
-                        holder.taskage.setVisibility(View.GONE);
+					} else {
+						holder.taskage.setText("");
+						holder.taskage.setVisibility(View.GONE);
 						holder.tasktext.setPadding(
 								holder.tasktext.getPaddingLeft(),
 								holder.tasktext.getPaddingTop(),

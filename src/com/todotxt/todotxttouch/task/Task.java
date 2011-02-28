@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.todotxt.todotxttouch.TodoTxtTouch;
 import com.todotxt.todotxttouch.util.RelativeDate;
 import com.todotxt.todotxttouch.util.Strings;
 

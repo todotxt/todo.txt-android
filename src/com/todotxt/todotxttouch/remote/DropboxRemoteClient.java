@@ -28,11 +28,13 @@
  */
 package com.todotxt.todotxttouch.remote;
 
+import java.io.File;
+import java.io.IOException;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
@@ -40,9 +42,6 @@ import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.util.Util;
-
-import java.io.File;
-import java.io.IOException;
 
 class DropboxRemoteClient implements RemoteClient {
     private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";

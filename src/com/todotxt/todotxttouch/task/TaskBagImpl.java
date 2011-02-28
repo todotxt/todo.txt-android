@@ -24,9 +24,6 @@
  */
 package com.todotxt.todotxttouch.task;
 
-import android.content.SharedPreferences;
-import android.util.Log;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,216 +34,227 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.util.TaskIo;
 
 /**
  * Implementation of the TaskBag interface
- *
+ * 
  * @author Tim Barlotta
  */
 class TaskBagImpl implements TaskBag {
-    private static final String TAG = TaskBagImpl.class.getSimpleName();
-    private Preferences preferences;
-    private final LocalTaskRepository localRepository;
-    private final RemoteClientManager remoteClientManager;
-    private ArrayList<Task> tasks = new ArrayList<Task>();
+	private static final String TAG = TaskBagImpl.class.getSimpleName();
+	private Preferences preferences;
+	private final LocalTaskRepository localRepository;
+	private final RemoteClientManager remoteClientManager;
+	private ArrayList<Task> tasks = new ArrayList<Task>();
 
-    public TaskBagImpl(Preferences preferences, LocalTaskRepository localRepository, RemoteClientManager remoteClientManager) {
-        this.preferences = preferences;
-        this.localRepository = localRepository;
-        this.remoteClientManager = remoteClientManager;
-    }
+	public TaskBagImpl(Preferences preferences,
+			LocalTaskRepository localRepository,
+			RemoteClientManager remoteClientManager) {
+		this.preferences = preferences;
+		this.localRepository = localRepository;
+		this.remoteClientManager = remoteClientManager;
+	}
 
-    public void updatePreferences(TaskBagImpl.Preferences preferences) {
-        this.preferences = preferences;
-    }
+	public void updatePreferences(TaskBagImpl.Preferences preferences) {
+		this.preferences = preferences;
+	}
 
-    @Override
-    public void reload() {
-        localRepository.init();
-        this.tasks = localRepository.load();
-    }
+	@Override
+	public void reload() {
+		localRepository.init();
+		this.tasks = localRepository.load();
+	}
 
-    @Override
-    public int size() {
-        return tasks.size();
-    }
+	@Override
+	public int size() {
+		return tasks.size();
+	}
 
-    @Override
-    public List<Task> getTasks() {
-        return getTasks(null, null);
-    }
+	@Override
+	public List<Task> getTasks() {
+		return getTasks(null, null);
+	}
 
-    @Override
-    public List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator) {
-        ArrayList<Task> localTasks = new ArrayList<Task>();
-        if(filter != null) {
-            for(Task t : tasks) {
-                if(filter.apply(t)) {
-                    localTasks.add(t);
-                }
-            }
-        }
-        else {
-            localTasks.addAll(tasks);
-        }
+	@Override
+	public List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator) {
+		ArrayList<Task> localTasks = new ArrayList<Task>();
+		if (filter != null) {
+			for (Task t : tasks) {
+				if (filter.apply(t)) {
+					localTasks.add(t);
+				}
+			}
+		} else {
+			localTasks.addAll(tasks);
+		}
 
-        if(comparator == null) {
-            comparator = Sort.PRIORITY_DESC.getComparator();
-        }
+		if (comparator == null) {
+			comparator = Sort.PRIORITY_DESC.getComparator();
+		}
 
-        Collections.sort(localTasks, comparator);
+		Collections.sort(localTasks, comparator);
 
-        return localTasks;
-    }
+		return localTasks;
+	}
 
-    @Override
-    public void addAsTask(String input) {
-        try {
-            reload();
-            Task task = new Task(tasks.size(), input, (preferences.isPrependDateEnabled() ? new Date() : null));
-            tasks.add(task);
-            localRepository.store(tasks);
-            pushToRemote();
-        }
-        catch(Exception e) {
-            throw new TaskPersistException("An error occurred while adding {" + input + "}", e);
-        }
-    }
+	@Override
+	public void addAsTask(String input) {
+		try {
+			reload();
+			Task task = new Task(tasks.size(), input,
+					(preferences.isPrependDateEnabled() ? new Date() : null));
+			tasks.add(task);
+			localRepository.store(tasks);
+			pushToRemote();
+		} catch (Exception e) {
+			throw new TaskPersistException("An error occurred while adding {"
+					+ input + "}", e);
+		}
+	}
 
-    @Override
-    public void update(Task task) {
-        try {
-            reload();
-            Task found = TaskBagImpl.find(tasks, task);
-            if(found != null) {
-                task.copyInto(found);
-                Log.i(TAG, "copied into found {" + found + "}");
-                localRepository.store(tasks);
-                pushToRemote();
-            }
-            else {
-                throw new TaskPersistException("Task not found, not updated");
-            }
-        }
-        catch(Exception e) {
-            throw new TaskPersistException("An error occurred while updating Task {" + task + "}", e);
-        }
-    }
+	@Override
+	public void update(Task task) {
+		try {
+			reload();
+			Task found = TaskBagImpl.find(tasks, task);
+			if (found != null) {
+				task.copyInto(found);
+				Log.i(TAG, "copied into found {" + found + "}");
+				localRepository.store(tasks);
+				pushToRemote();
+			} else {
+				throw new TaskPersistException("Task not found, not updated");
+			}
+		} catch (Exception e) {
+			throw new TaskPersistException(
+					"An error occurred while updating Task {" + task + "}", e);
+		}
+	}
 
-    @Override
-    public void delete(Task task) {
-        try {
-            reload();
-            Task found = TaskBagImpl.find(tasks, task);
-            if(found != null) {
-                tasks.remove(found);
-                localRepository.store(tasks);
-                pushToRemote();
-            }
-            else {
-                throw new TaskPersistException("Task not found, not deleted");
-            }
-        }
-        catch(Exception e) {
-            throw new TaskPersistException("An error occurred while deleting Task {" + task + "}", e);
-        }
-    }
+	@Override
+	public void delete(Task task) {
+		try {
+			reload();
+			Task found = TaskBagImpl.find(tasks, task);
+			if (found != null) {
+				tasks.remove(found);
+				localRepository.store(tasks);
+				pushToRemote();
+			} else {
+				throw new TaskPersistException("Task not found, not deleted");
+			}
+		} catch (Exception e) {
+			throw new TaskPersistException(
+					"An error occurred while deleting Task {" + task + "}", e);
+		}
+	}
 
-    /* REMOTE APIS */
-    @Override
-    public void pushToRemote() {
-        pushToRemote(false);
-    }
+	/* REMOTE APIS */
+	@Override
+	public void pushToRemote() {
+		pushToRemote(false);
+	}
 
-    @Override
-    public void pushToRemote(boolean overridePreference) {
-        if(!this.preferences.isWorkOfflineEnabled() || overridePreference) {
-            ArrayList<Task> localTasks = localRepository.load();
-            remoteClientManager.getRemoteClient().pushTodo(LocalFileTaskRepository.TODO_TXT_FILE);
-        }
-    }
+	@Override
+	public void pushToRemote(boolean overridePreference) {
+		if (!this.preferences.isWorkOfflineEnabled() || overridePreference) {
+			remoteClientManager.getRemoteClient().pushTodo(
+					LocalFileTaskRepository.TODO_TXT_FILE);
+		}
+	}
 
-    @Override
-    public void pullFromRemote() {
-        try {
-            if(!this.preferences.isWorkOfflineEnabled()) {
-                File remoteFile = remoteClientManager.getRemoteClient().pullTodo();
-                if(remoteFile != null && remoteFile.exists()) {
-                    ArrayList<Task> remoteTasks = TaskIo.loadTasksFromFile(remoteFile);
-                    localRepository.store(remoteTasks);
-                    reload();
-                }
-            }
-        }
-        catch(IOException e) {
-            throw new TaskPersistException("Error loading tasks from remote file", e);
-        }
-    }
+	@Override
+	public void pullFromRemote() {
+		pullFromRemote(false);
+	}
 
-    @Override
-    public ArrayList<Priority> getPriorities() {
-        // TODO cache this after reloads?
-        Set<Priority> res = new HashSet<Priority>();
-        for(Task item : tasks) {
-            res.add(item.getPriority());
-        }
-        ArrayList<Priority> ret = new ArrayList<Priority>(res);
-        Collections.sort(ret);
-        return ret;
-    }
+	@Override
+	public void pullFromRemote(boolean overridePreference) {
+		try {
+			if (!this.preferences.isWorkOfflineEnabled() || overridePreference) {
+				File remoteFile = remoteClientManager.getRemoteClient()
+						.pullTodo();
+				if (remoteFile != null && remoteFile.exists()) {
+					ArrayList<Task> remoteTasks = TaskIo
+							.loadTasksFromFile(remoteFile);
+					localRepository.store(remoteTasks);
+					reload();
+				}
+			}
+		} catch (IOException e) {
+			throw new TaskPersistException(
+					"Error loading tasks from remote file", e);
+		}
+	}
 
-    @Override
-    public ArrayList<String> getContexts() {
-        // TODO cache this after reloads?
-        Set<String> res = new HashSet<String>();
-        for(Task item : tasks) {
-            res.addAll(item.getContexts());
-        }
-        ArrayList<String> ret = new ArrayList<String>(res);
-        Collections.sort(ret);
-        return ret;
-    }
+	@Override
+	public ArrayList<Priority> getPriorities() {
+		// TODO cache this after reloads?
+		Set<Priority> res = new HashSet<Priority>();
+		for (Task item : tasks) {
+			res.add(item.getPriority());
+		}
+		ArrayList<Priority> ret = new ArrayList<Priority>(res);
+		Collections.sort(ret);
+		return ret;
+	}
 
-    @Override
-    public ArrayList<String> getProjects() {
-        // TODO cache this after reloads?
-        Set<String> res = new HashSet<String>();
-        for(Task item : tasks) {
-            res.addAll(item.getProjects());
-        }
-        ArrayList<String> ret = new ArrayList<String>(res);
-        Collections.sort(ret);
-        return ret;
-    }
+	@Override
+	public ArrayList<String> getContexts() {
+		// TODO cache this after reloads?
+		Set<String> res = new HashSet<String>();
+		for (Task item : tasks) {
+			res.addAll(item.getContexts());
+		}
+		ArrayList<String> ret = new ArrayList<String>(res);
+		Collections.sort(ret);
+		return ret;
+	}
 
-    private static Task find(List<Task> tasks, Task task) {
-        for(Task task2 : tasks) {
-            if(task2.getText().equals(task.getOriginalText()) && task2.getPriority() == task.getOriginalPriority()) {
-                return task2;
-            }
-        }
-        return null;
-    }
+	@Override
+	public ArrayList<String> getProjects() {
+		// TODO cache this after reloads?
+		Set<String> res = new HashSet<String>();
+		for (Task item : tasks) {
+			res.addAll(item.getProjects());
+		}
+		ArrayList<String> ret = new ArrayList<String>(res);
+		Collections.sort(ret);
+		return ret;
+	}
 
-    public static class Preferences {
-        private final SharedPreferences sharedPreferences;
+	private static Task find(List<Task> tasks, Task task) {
+		for (Task task2 : tasks) {
+			if (task2.getText().equals(task.getOriginalText())
+					&& task2.getPriority() == task.getOriginalPriority()) {
+				return task2;
+			}
+		}
+		return null;
+	}
 
-        public Preferences(SharedPreferences sharedPreferences) {
-            this.sharedPreferences = sharedPreferences;
-        }
+	public static class Preferences {
+		private final SharedPreferences sharedPreferences;
 
-        public boolean isUseWindowsLineBreaksEnabled() {
-            return sharedPreferences.getBoolean("linebreakspref", false);
-        }
+		public Preferences(SharedPreferences sharedPreferences) {
+			this.sharedPreferences = sharedPreferences;
+		}
 
-        public boolean isPrependDateEnabled() {
-            return sharedPreferences.getBoolean("todotxtprependdate", false);
-        }
+		public boolean isUseWindowsLineBreaksEnabled() {
+			return sharedPreferences.getBoolean("linebreakspref", false);
+		}
 
-        public boolean isWorkOfflineEnabled() {
-            return sharedPreferences.getBoolean("workofflinepref", false);
-        }
-    }
+		public boolean isPrependDateEnabled() {
+			return sharedPreferences.getBoolean("todotxtprependdate", false);
+		}
+
+		public boolean isWorkOfflineEnabled() {
+			return sharedPreferences.getBoolean("workofflinepref", false);
+		}
+	}
 }

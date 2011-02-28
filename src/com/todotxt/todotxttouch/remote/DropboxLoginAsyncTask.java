@@ -44,8 +44,6 @@ import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
-import com.todotxt.todotxttouch.TodoApplication;
-import com.todotxt.todotxttouch.util.Util;
 
 class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 		implements RemoteLoginTask {

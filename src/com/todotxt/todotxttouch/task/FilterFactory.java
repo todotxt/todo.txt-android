@@ -26,9 +26,9 @@
 
 package com.todotxt.todotxttouch.task;
 
-import com.todotxt.todotxttouch.util.Strings;
-
 import java.util.List;
+
+import com.todotxt.todotxttouch.util.Strings;
 
 /**
  * Creates a filter based on passed in variables

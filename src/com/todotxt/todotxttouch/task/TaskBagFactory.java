@@ -27,6 +27,7 @@
 package com.todotxt.todotxttouch.task;
 
 import android.content.SharedPreferences;
+
 import com.todotxt.todotxttouch.TodoApplication;
 
 /**

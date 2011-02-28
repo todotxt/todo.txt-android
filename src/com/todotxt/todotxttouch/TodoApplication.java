@@ -31,12 +31,13 @@ package com.todotxt.todotxttouch;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 
 public class TodoApplication extends Application {
-	private final static String TAG = TodoApplication.class.getSimpleName();
+	// private final static String TAG = TodoApplication.class.getSimpleName();
 	public SharedPreferences m_prefs;
 	private RemoteClientManager remoteClientManager;
 	public boolean m_pulling = false;
