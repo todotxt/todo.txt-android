@@ -86,7 +86,6 @@ public class AddTask extends Activity {
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
 		// create shortcut and exit
-		// create shortcut and exit
 		if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
 			Log.d(TAG, "Setting up shortcut icon");
 			setupShortcut();
@@ -235,47 +234,53 @@ public class AddTask extends Activity {
 				final String input = textInputField.getText().toString()
 						.replaceAll("\\r\\n|\\r|\\n", " ");
 
-				new AsyncTask<Object, Void, Boolean>() {
-					protected void onPreExecute() {
-						m_ProgressDialog = ProgressDialog.show(AddTask.this,
-								getTitle(), "Please wait...", true);
-					}
-
-					@Override
-					protected Boolean doInBackground(Object... params) {
-						try {
-							Task task = (Task) params[0];
-							String input = (String) params[1];
-							if (task != null) {
-								task.update(input);
-								taskBag.update(task);
-							} else {
-								taskBag.addAsTask(input);
-							}
-							return true;
-						} catch (Exception e) {
-							Log.e(TAG,
-									"input: " + input + " - " + e.getMessage());
-							return false;
-						}
-					}
-
-					protected void onPostExecute(Boolean result) {
-						if (result) {
-							String res = m_backup != null ? getString(R.string.updated_task)
-									: getString(R.string.added_task);
-							Util.showToastLong(AddTask.this, res);
-							finish();
-						} else {
-							String res = m_backup != null ? getString(R.string.update_task_failed)
-									: getString(R.string.add_task_failed);
-							Util.showToastLong(AddTask.this, res);
-						}
-						m_ProgressDialog.dismiss();
-					}
-				}.execute(m_backup, input);
+				addEditAsync(input);
 			}
+
 		});
+	}
+
+	private void addEditAsync(final String input) {
+		new AsyncTask<Object, Void, Boolean>() {
+			protected void onPreExecute() {
+				m_ProgressDialog = ProgressDialog.show(AddTask.this,
+						getTitle(), "Please wait...", true);
+			}
+
+			@Override
+			protected Boolean doInBackground(Object... params) {
+				try {
+					Task task = (Task) params[0];
+					String input = (String) params[1];
+					if (task != null) {
+						task.update(input);
+						taskBag.update(task);
+					} else {
+						taskBag.addAsTask(input);
+					}
+					return true;
+				} catch (Exception e) {
+					Log.e(TAG, "input: " + input + " - " + e.getMessage());
+					return false;
+				}
+			}
+
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					String res = m_backup != null ? getString(R.string.updated_task)
+							: getString(R.string.added_task);
+					Util.showToastLong(AddTask.this, res);
+					sendBroadcast(new Intent(
+							"com.todotxt.todotxttouch.START_SYNC"));
+					finish();
+				} else {
+					String res = m_backup != null ? getString(R.string.update_task_failed)
+							: getString(R.string.add_task_failed);
+					Util.showToastLong(AddTask.this, res);
+				}
+				m_ProgressDialog.dismiss();
+			}
+		}.execute(m_backup, input);
 	}
 
 	private void setupShortcut() {
