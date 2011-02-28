@@ -89,6 +89,8 @@ public class TodoTxtTouch extends ListActivity implements
 	private final static String INTENT_ACTION_LOGOUT = "com.todotxt.todotxttouch.ACTION_LOGOUT";
 	private final static String INTENT_ASYNC_SUCCESS = "com.todotxt.todotxttouch.ASYNC_SUCCESS";
 	private final static String INTENT_ASYNC_FAILED = "com.todotxt.todotxttouch.ASYNC_FAILED";
+	private final static String INTENT_START_SYNC_TO_REMOTE = "com.todotxt.todotxttouch.START_SYNC";
+	private final static String INTENT_GO_OFFLINE = "com.todotxt.todotxttouch.GO_OFFLINE";
 
 	private final static int REQUEST_FILTER = 1;
 	private final static int REQUEST_PREFERENCES = 2;
@@ -138,6 +140,8 @@ public class TodoTxtTouch extends ListActivity implements
 		intentFilter.addAction(INTENT_ACTION_LOGOUT);
 		intentFilter.addAction(INTENT_ASYNC_SUCCESS);
 		intentFilter.addAction(INTENT_ASYNC_FAILED);
+		intentFilter.addAction(INTENT_GO_OFFLINE);
+		intentFilter.addAction(INTENT_START_SYNC_TO_REMOTE);
 
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
@@ -154,8 +158,20 @@ public class TodoTxtTouch extends ListActivity implements
 					m_app.m_pulling = false;
 					m_app.m_pushing = false;
 					updateSyncUI();
+				} else if (intent.getAction().equalsIgnoreCase(
+						INTENT_GO_OFFLINE)) {
+					if (isOfflineMode()) {
+						showToast("Client still not available.\nWorking offline");
+					} else {
+						setOfflineMode();
+						showToast("Client not available.\nWorking offline");
+					}
+				} else if (intent.getAction().equalsIgnoreCase(
+						INTENT_START_SYNC_TO_REMOTE)) {
+					pushToRemote();
 				}
 			}
+
 		};
 		registerReceiver(m_broadcastReceiver, intentFilter);
 
@@ -184,7 +200,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 		if (firstrun) {
 			Log.i(TAG, "Initializing app");
-			taskBag.pullFromRemote();
+			syncClient();
 			Editor editor = m_app.m_prefs.edit();
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
@@ -212,12 +228,12 @@ public class TodoTxtTouch extends ListActivity implements
 		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
 		if (Constants.PREF_ACCESSTOKEN_SECRET.equals(key)) {
 			Log.i(TAG, "New access token secret. Syncing!");
-			backgroundPullFromRemote();
+			syncClient();
 		} else if ("workofflinepref".equals(key)) {
-			if (!m_app.m_prefs.getBoolean("workofflinepref", false)) {
+			if (!isOfflineMode()) {
 				Log.i(TAG,
 						"Switched to online mode, must sync one way or the other.");
-				showDialog(SYNC_CHOICE_DIALOG);
+				syncClient(true);
 			}
 		}
 	}
@@ -298,70 +314,62 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 		if (menuid == R.id.update) {
 			Log.v(TAG, "update");
-			final Task backup = m_adapter.getItem(pos);
-			Intent intent = new Intent(this, AddTask.class);
-			intent.putExtra(Constants.EXTRA_TASK, (Serializable) backup);
-			startActivity(intent);
+			editTaskAt(pos);
 		} else if (menuid == R.id.delete) {
 			Log.v(TAG, "delete");
-			OnClickListener listener = new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					final Task task = m_adapter.getItem(pos);
-					new AsyncTask<Object, Void, Boolean>() {
-
-						protected void onPreExecute() {
-							m_ProgressDialog = showProgressDialog("Deleting");
-						}
-
-						@Override
-						protected Boolean doInBackground(Object... params) {
-							try {
-								taskBag.delete((Task) params[0]);
-								return true;
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-								return false;
-							}
-						}
-
-						protected void onPostExecute(Boolean result) {
-							TodoTxtTouch.currentActivityPointer
-									.dismissProgressDialog(true);
-							if (result) {
-								Util.showToastLong(TodoTxtTouch.this,
-										"Deleted task " + task.inFileFormat());
-							} else {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Could not delete task "
-												+ task.inFileFormat());
-							}
-						}
-					}.execute(task);
-				}
-			};
-			Util.showDeleteConfirmationDialog(this, listener);
+			deleteTaskAt(pos);
 		} else if (menuid == R.id.done) {
 			Log.v(TAG, "done");
+			completeTaskAt(pos);
+		} else if (menuid == R.id.unComplete) {
+			Log.v(TAG, "undo Complete");
+			undoCompleteTaskAt(pos);
+		} else if (menuid == R.id.priority) {
+			Log.v(TAG, "priority");
+			prioritizeTaskAt(pos);
+		} else if (menuid == R.id.share) {
+			Log.v(TAG, "share");
+			shareTaskAt(pos);
+		}
 
-			final Task task = m_adapter.getItem(pos);
-			if (task.isCompleted()) {
-				Util.showToastLong(TodoTxtTouch.this, "Task already complete");
-			} else {
-				task.markComplete(new Date());
-				Log.v(TAG, "Completing task with this text: " + task.getText());
+		return super.onContextItemSelected(item);
+	}
+
+	private void shareTaskAt(final int pos) {
+		final Task task = m_adapter.getItem(pos);
+
+		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+		shareIntent.setType("text/plain");
+		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+				"Todo.txt task");
+		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, task.getText());
+
+		startActivity(Intent.createChooser(shareIntent, "Share"));
+	}
+
+	private void prioritizeTaskAt(final int pos) {
+		final String[] prioArr = Priority
+				.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Select priority");
+		builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, final int which) {
+				final Task task = m_adapter.getItem(pos);
+				dialog.dismiss();
 				new AsyncTask<Object, Void, Boolean>() {
-
 					protected void onPreExecute() {
-						m_ProgressDialog = showProgressDialog("Marking Task Complete");
+						m_ProgressDialog = showProgressDialog("Prioritizing Task");
 					}
 
 					@Override
 					protected Boolean doInBackground(Object... params) {
 						try {
 							Task task = (Task) params[0];
-							task.markComplete(new Date());
+							String[] prioArr = (String[]) params[1];
+							int which = (Integer) params[2];
+							task.setPriority(Priority
+									.toPriority(prioArr[which]));
 							taskBag.update(task);
 							return true;
 						} catch (Exception e) {
@@ -375,119 +383,157 @@ public class TodoTxtTouch extends ListActivity implements
 								.dismissProgressDialog(true);
 						if (result) {
 							Util.showToastLong(TodoTxtTouch.this,
-									"Completed task " + task.inFileFormat());
+									"Prioritized task " + task.getText());
+							sendBroadcast(new Intent(
+									INTENT_START_SYNC_TO_REMOTE));
 						} else {
 							Util.showToastLong(
 									TodoTxtTouch.this,
-									"Could not complete task "
+									"Could not prioritize task "
+											+ task.inFileFormat());
+						}
+					}
+				}.execute(task, prioArr, which);
+			}
+		});
+		builder.show();
+	}
+
+	private void undoCompleteTaskAt(final int pos) {
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				final Task task = m_adapter.getItem(pos);
+				new AsyncTask<Object, Void, Boolean>() {
+					protected void onPreExecute() {
+						m_ProgressDialog = showProgressDialog("Marking Task Not Complete");
+					}
+
+					@Override
+					protected Boolean doInBackground(Object... params) {
+						try {
+							Task task = (Task) params[0];
+							task.markIncomplete();
+							taskBag.update(task);
+							return true;
+						} catch (Exception e) {
+							Log.e(TAG, e.getMessage(), e);
+							return false;
+						}
+					}
+
+					protected void onPostExecute(Boolean result) {
+						TodoTxtTouch.currentActivityPointer
+								.dismissProgressDialog(true);
+						if (result) {
+							Util.showToastLong(TodoTxtTouch.this,
+									"Task marked as not completed");
+							sendBroadcast(new Intent(
+									INTENT_START_SYNC_TO_REMOTE));
+						} else {
+							Util.showToastLong(TodoTxtTouch.this,
+									"Could not mark task as not completed");
+						}
+					}
+				}.execute(task);
+			}
+		};
+		Util.showConfirmationDialog(this, R.string.areyousure, listener);
+	}
+
+	private void completeTaskAt(final int pos) {
+		final Task task = m_adapter.getItem(pos);
+		if (task.isCompleted()) {
+			Util.showToastLong(TodoTxtTouch.this, "Task already complete");
+		} else {
+			task.markComplete(new Date());
+			Log.v(TAG, "Completing task with this text: " + task.getText());
+			new AsyncTask<Object, Void, Boolean>() {
+
+				protected void onPreExecute() {
+					m_ProgressDialog = showProgressDialog("Marking Task Complete");
+				}
+
+				@Override
+				protected Boolean doInBackground(Object... params) {
+					try {
+						Task task = (Task) params[0];
+						task.markComplete(new Date());
+						taskBag.update(task);
+						return true;
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage(), e);
+						return false;
+					}
+				}
+
+				protected void onPostExecute(Boolean result) {
+					TodoTxtTouch.currentActivityPointer
+							.dismissProgressDialog(true);
+					if (result) {
+						Util.showToastLong(TodoTxtTouch.this, "Completed task "
+								+ task.inFileFormat());
+						sendBroadcast(new Intent(INTENT_START_SYNC_TO_REMOTE));
+					} else {
+						Util.showToastLong(
+								TodoTxtTouch.this,
+								"Could not complete task "
+										+ task.inFileFormat());
+					}
+				}
+			}.execute(task);
+		}
+	}
+
+	private void editTaskAt(final int pos) {
+		final Task backup = m_adapter.getItem(pos);
+		Intent intent = new Intent(this, AddTask.class);
+		intent.putExtra(Constants.EXTRA_TASK, (Serializable) backup);
+		startActivity(intent);
+	}
+
+	private void deleteTaskAt(final int pos) {
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				final Task task = m_adapter.getItem(pos);
+
+				new AsyncTask<Object, Void, Boolean>() {
+
+					protected void onPreExecute() {
+						m_ProgressDialog = showProgressDialog("Deleting");
+					}
+
+					@Override
+					protected Boolean doInBackground(Object... params) {
+						try {
+							taskBag.delete((Task) params[0]);
+							return true;
+						} catch (Exception e) {
+							Log.e(TAG, e.getMessage(), e);
+							return false;
+						}
+					}
+
+					protected void onPostExecute(Boolean result) {
+						TodoTxtTouch.currentActivityPointer
+								.dismissProgressDialog(true);
+						if (result) {
+							Util.showToastLong(TodoTxtTouch.this,
+									"Deleted task " + task.inFileFormat());
+							sendBroadcast(new Intent(
+									INTENT_START_SYNC_TO_REMOTE));
+						} else {
+							Util.showToastLong(
+									TodoTxtTouch.this,
+									"Could not delete task "
 											+ task.inFileFormat());
 						}
 					}
 				}.execute(task);
 			}
-		} else if (menuid == R.id.unComplete) {
-			Log.v(TAG, "undo Complete");
-			OnClickListener listener = new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					final Task task = m_adapter.getItem(pos);
-					new AsyncTask<Object, Void, Boolean>() {
-						protected void onPreExecute() {
-							m_ProgressDialog = showProgressDialog("Marking Task Not Complete");
-						}
-
-						@Override
-						protected Boolean doInBackground(Object... params) {
-							try {
-								Task task = (Task) params[0];
-								task.markIncomplete();
-								taskBag.update(task);
-								return true;
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-								return false;
-							}
-						}
-
-						protected void onPostExecute(Boolean result) {
-							TodoTxtTouch.currentActivityPointer
-									.dismissProgressDialog(true);
-							if (result) {
-								Util.showToastLong(TodoTxtTouch.this,
-										"Task marked as not completed");
-							} else {
-								Util.showToastLong(TodoTxtTouch.this,
-										"Could not mark task as not completed");
-							}
-						}
-					}.execute(task);
-				}
-			};
-			Util.showConfirmationDialog(this, R.string.areyousure, listener);
-		} else if (menuid == R.id.priority) {
-			Log.v(TAG, "priority");
-			final String[] prioArr = Priority.rangeInCode(Priority.NONE,
-					Priority.E).toArray(new String[0]);
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Select priority");
-			builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, final int which) {
-					final Task task = m_adapter.getItem(pos);
-					dialog.dismiss();
-					new AsyncTask<Object, Void, Boolean>() {
-						protected void onPreExecute() {
-							m_ProgressDialog = showProgressDialog("Prioritizing Task");
-						}
-
-						@Override
-						protected Boolean doInBackground(Object... params) {
-							try {
-								Task task = (Task) params[0];
-								String[] prioArr = (String[]) params[1];
-								int which = (Integer) params[2];
-								task.setPriority(Priority
-										.toPriority(prioArr[which]));
-								taskBag.update(task);
-								return true;
-							} catch (Exception e) {
-								Log.e(TAG, e.getMessage(), e);
-								return false;
-							}
-						}
-
-						protected void onPostExecute(Boolean result) {
-							TodoTxtTouch.currentActivityPointer
-									.dismissProgressDialog(true);
-							if (result) {
-								Util.showToastLong(TodoTxtTouch.this,
-										"Prioritized task " + task.getText());
-							} else {
-								Util.showToastLong(
-										TodoTxtTouch.this,
-										"Could not prioritize task "
-												+ task.inFileFormat());
-							}
-						}
-					}.execute(task, prioArr, which);
-				}
-			});
-			builder.show();
-		} else if (menuid == R.id.share) {
-			Log.v(TAG, "share");
-			final Task task = m_adapter.getItem(pos);
-
-			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-			shareIntent.setType("text/plain");
-			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-					"Todo.txt task");
-			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-					task.getText());
-
-			startActivity(Intent.createChooser(shareIntent, "Share"));
-		}
-
-		return super.onContextItemSelected(item);
+		};
+		Util.showDeleteConfirmationDialog(this, listener);
 	}
 
 	@Override
@@ -495,51 +541,125 @@ public class TodoTxtTouch extends ListActivity implements
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
 		switch (item.getItemId()) {
 		case R.id.add_new:
-			Intent intent = new Intent(this, AddTask.class);
-			startActivity(intent);
+			startAddTaskActivity();
 			break;
 		case R.id.sync:
 			Log.v(TAG, "onMenuItemSelected: sync");
-			if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
+			syncClient();
+			break;
+		case R.id.search:
+			onSearchRequested();
+			break;
+		case R.id.preferences:
+			startPreferencesActivity();
+			break;
+		case R.id.filter:
+			startFilterActivity();
+			break;
+		case R.id.sort:
+			startSortDialog();
+			break;
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
+		return true;
+	}
+
+	private void startAddTaskActivity() {
+		Intent intent = new Intent(this, AddTask.class);
+		startActivity(intent);
+	}
+
+	private void startSortDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setSingleChoiceItems(R.array.sort, sort.getId(),
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Log.v(TAG, "onClick " + which);
+						sort = Sort.getById(which);
+						dialog.dismiss();
+						setFilteredTasks(false);
+					}
+				});
+		builder.show();
+	}
+
+	private void startPreferencesActivity() {
+		Intent settingsActivity = new Intent(getBaseContext(),
+				Preferences.class);
+		startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
+	}
+
+	/**
+	 * Sync with remote client.
+	 * 
+	 * <ul>
+	 * <li>Will Pull in online mode.
+	 * <li>Will ask "push or pull" in offline mode.
+	 * <li>Will go offline if no network
+	 * </ul>
+	 */
+	private void syncClient() {
+		syncClient(false);
+	}
+
+	/**
+	 * Sync with remote client.
+	 * 
+	 * <ul>
+	 * <li>Will Pull in online mode.
+	 * <li>Will ask "push or pull" in offline mode.
+	 * <li>Will ask if <code>forceSyncChoice</code> is true
+	 * <li>Will go offline if no network
+	 * </ul>
+	 * 
+	 * @param forceSyncChoice
+	 *            true to force push, pull dialog
+	 */
+	private void syncClient(boolean forceSyncChoice) {
+		if (isOfflineMode() || forceSyncChoice) {
+			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
+				Log.v(TAG, "Working offline; no network");
+				sendBroadcast(new Intent(INTENT_GO_OFFLINE));
+			} else {
 				Log.v(TAG,
 						"Working offline; prompt user to ask which way to sync");
 				showDialog(SYNC_CHOICE_DIALOG);
+			}
+		} else {
+			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
+				Log.d(TAG, "Pulling while online w/o network; go offline");
+				sendBroadcast(new Intent(INTENT_GO_OFFLINE));
 			} else {
 				Log.i(TAG, "Working online; should automatically pull");
 				m_app.m_pulling = true;
 				updateSyncUI();
 				backgroundPullFromRemote();
 			}
-			break;
-		case R.id.search:
-			onSearchRequested();
-			break;
-		case R.id.preferences:
-			Intent settingsActivity = new Intent(getBaseContext(),
-					Preferences.class);
-			startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
-			break;
-		case R.id.filter:
-			startFilterActivity();
-			break;
-		case R.id.sort:
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setSingleChoiceItems(R.array.sort, sort.getId(),
-					new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							Log.v(TAG, "onClick " + which);
-							sort = Sort.getById(which);
-							dialog.dismiss();
-							setFilteredTasks(false);
-						}
-					});
-			builder.show();
-			break;
-		default:
-			return super.onMenuItemSelected(featureId, item);
 		}
-		return true;
+	}
+
+	/**
+	 * Check network status, then push.
+	 */
+	private void pushToRemote() {
+		if (isOfflineMode()) {
+			Log.d(TAG, "Working offline, don't push now");
+		} else {
+			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
+				Log.d(TAG, "Pushing while online w/o network; go offline");
+				sendBroadcast(new Intent(INTENT_GO_OFFLINE));
+			} else {
+				Log.i(TAG, "Working online; should push after change");
+				backgroundPushToRemote();
+			}
+		}
+
+	}
+
+	private boolean isOfflineMode() {
+		return m_app.m_prefs.getBoolean("workofflinepref", false);
 	}
 
 	@Override
@@ -658,15 +778,7 @@ public class TodoTxtTouch extends ListActivity implements
 	/** Handle "refresh/download" action. */
 	public void onSyncClick(View v) {
 		Log.v(TAG, "titlebar: sync");
-		if (m_app.m_prefs.getBoolean("workofflinepref", false)) {
-			Log.v(TAG, "Working offline; prompt user to ask which way to sync");
-			showDialog(SYNC_CHOICE_DIALOG);
-		} else {
-			Log.i(TAG, "Working online; should automatically pull");
-			m_app.m_pulling = true;
-			updateSyncUI();
-			backgroundPullFromRemote();
-		}
+		syncClient();
 	}
 
 	/** Handle refine filter click **/
@@ -764,9 +876,10 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	/**
-	 * TODO: This needs to be nicer
+	 * Do an asynchronous pull from remote. Check network availability before
+	 * calling this.
 	 */
-	void backgroundPullFromRemote() {
+	private void backgroundPullFromRemote() {
 		if (m_app.getRemoteClientManager().getRemoteClient().isAuthenticated()) {
 			m_app.m_pulling = true;
 			updateSyncUI();
@@ -805,7 +918,7 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	/**
-	 * TODO: This needs to be nicer
+	 * Do asynchronous push with gui changes. Do availability check first.
 	 */
 	void backgroundPushToRemote() {
 		if (m_app.getRemoteClientManager().getRemoteClient().isAuthenticated()) {
@@ -991,5 +1104,11 @@ public class TodoTxtTouch extends ListActivity implements
 		i.putExtra(Constants.EXTRA_SEARCH, m_search);
 
 		startActivityIfNeeded(i, REQUEST_FILTER);
+	}
+
+	private void setOfflineMode() {
+		Editor editor = m_app.m_prefs.edit();
+		editor.putBoolean("workofflinepref", true);
+		editor.commit();
 	}
 }

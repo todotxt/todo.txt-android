@@ -29,15 +29,18 @@
 package com.todotxt.todotxttouch;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 
 public class TodoApplication extends Application {
-	// private final static String TAG = TodoApplication.class.getSimpleName();
+	private final static String TAG = TodoApplication.class.getSimpleName();
 	public SharedPreferences m_prefs;
 	private RemoteClientManager remoteClientManager;
 	public boolean m_pulling = false;
@@ -63,6 +66,16 @@ public class TodoApplication extends Application {
 
 	public RemoteClientManager getRemoteClientManager() {
 		return remoteClientManager;
+	}
+
+	public boolean isNetworkAvailable() {
+		ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		boolean networkAvailable = cm.getActiveNetworkInfo() != null
+				&& cm.getActiveNetworkInfo().isConnected();
+		Log.d(TAG, "Checking network availabilty. Network is "
+				+ (networkAvailable ? "" : "not ") + "available.");
+		return networkAvailable;
 	}
 
 }

@@ -30,8 +30,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -42,20 +40,17 @@ import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
-import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 
-class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
-		implements RemoteLoginTask {
+class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> implements
+		RemoteLoginTask {
 
 	private DropboxRemoteClient dropboxRemoteClient;
-    private SharedPreferences sharedPreferences;
 	private String m_username;
 	private String m_password;
 
-	public DropboxLoginAsyncTask(DropboxRemoteClient dropboxRemoteClient, SharedPreferences sharedPreferences) {
-        this.dropboxRemoteClient = dropboxRemoteClient;
-        this.sharedPreferences = sharedPreferences;
+	public DropboxLoginAsyncTask(DropboxRemoteClient dropboxRemoteClient) {
+		this.dropboxRemoteClient = dropboxRemoteClient;
 	}
 
 	@Override
@@ -84,30 +79,34 @@ class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 		if (result == DropboxAPI.STATUS_SUCCESS) {
 			if (null != config
 					&& config.authStatus == DropboxAPI.STATUS_SUCCESS) {
-				storeKeys(config.accessTokenKey, config.accessTokenSecret);
+				dropboxRemoteClient.storeKeys(config.accessTokenKey,
+						config.accessTokenSecret);
 				dropboxRemoteClient.showToast("Logged into Dropbox");
-				Intent broadcastLoginIntent = new Intent();
-				broadcastLoginIntent
-						.setAction("com.todotxt.todotxttouch.ACTION_LOGIN");
-				dropboxRemoteClient.sendBroadcast(broadcastLoginIntent);
+				signalLoginSuccess();
 			}
 		} else {
 			if (result == DropboxAPI.STATUS_NETWORK_ERROR) {
-				dropboxRemoteClient.showToast("Network error: " + config.authDetail);
+				dropboxRemoteClient.showToast("Network error: "
+						+ config.authDetail);
 			} else {
 				dropboxRemoteClient.showToast("Unsuccessful login.");
 			}
 		}
 	}
 
-	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
-		Editor editor = sharedPreferences.edit();
-		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
-		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
-		editor.commit();
+	private void signalLoginSuccess() {
+		Intent broadcastLoginIntent = new Intent(
+				"com.todotxt.todotxttouch.ACTION_LOGIN");
+		dropboxRemoteClient.sendBroadcast(broadcastLoginIntent);
 	}
 
 	public void showLoginDialog(Activity act) {
+		if (dropboxRemoteClient.isLoggedIn()) {
+			if (dropboxRemoteClient.authenticate()) {
+				signalLoginSuccess();
+				return;
+			}
+		}
 		LayoutInflater inflator = LayoutInflater.from(act);
 		View v = inflator.inflate(R.layout.logindialog, null);
 		final TextView usernameTV = (TextView) v.findViewById(R.id.username);
@@ -130,7 +129,7 @@ class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 				String p = passwordTV.getText().toString();
 				if (u != null && u.length() > 0 && p != null && p.length() > 0) {
 					m_username = u;
-                    m_password = p;
+					m_password = p;
 					execute();
 				} else {
 					cancel(false);
@@ -139,4 +138,5 @@ class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 		});
 		b.show();
 	}
+
 }

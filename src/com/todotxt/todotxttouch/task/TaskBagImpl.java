@@ -20,6 +20,7 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Tormod Haugen
  * @copyright 2011 Tim Barlotta
  */
 package com.todotxt.todotxttouch.task;
@@ -110,7 +111,6 @@ class TaskBagImpl implements TaskBag {
 					(preferences.isPrependDateEnabled() ? new Date() : null));
 			tasks.add(task);
 			localRepository.store(tasks);
-			pushToRemote();
 		} catch (Exception e) {
 			throw new TaskPersistException("An error occurred while adding {"
 					+ input + "}", e);
@@ -126,7 +126,6 @@ class TaskBagImpl implements TaskBag {
 				task.copyInto(found);
 				Log.i(TAG, "copied into found {" + found + "}");
 				localRepository.store(tasks);
-				pushToRemote();
 			} else {
 				throw new TaskPersistException("Task not found, not updated");
 			}
@@ -144,8 +143,6 @@ class TaskBagImpl implements TaskBag {
 			if (found != null) {
 				tasks.remove(found);
 				localRepository.store(tasks);
-				pushToRemote();
-			} else {
 				throw new TaskPersistException("Task not found, not deleted");
 			}
 		} catch (Exception e) {

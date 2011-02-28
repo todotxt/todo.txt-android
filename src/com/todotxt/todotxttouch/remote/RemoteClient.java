@@ -29,11 +29,11 @@ import java.io.File;
 
 public interface RemoteClient {
 
-    Client getClient();
+	Client getClient();
 
 	/**
 	 * Attempts to authenticate with remote api
-	 *
+	 * 
 	 * @return true if successful
 	 */
 	boolean authenticate();
@@ -45,7 +45,7 @@ public interface RemoteClient {
 
 	/**
 	 * Check to see if we are authenticated with remote api
-	 *
+	 * 
 	 * @return true if authenticated
 	 */
 	boolean isAuthenticated();
@@ -53,27 +53,40 @@ public interface RemoteClient {
 	/**
 	 * Check to see if we have enough information to authenticate with remote
 	 * api
-	 *
+	 * 
+	 * @deprecated This is information internal to the remote service. Will be
+	 *             removed. Use {@link RemoteClient#isAuthenticated()} instead.
 	 * @return true if we have authToken, false if we need login information
 	 */
 	boolean isLoggedIn();
 
 	/**
 	 * Get a login task that can display and handle a login dialog
+	 * 
 	 * @return
 	 */
 	RemoteLoginTask getLoginTask();
 
-    /**
-     * Pull the remote Todo.txt file
-     * @return
-     */
-    File pullTodo();
+	/**
+	 * Pull the remote Todo.txt file
+	 * 
+	 * @return
+	 */
+	File pullTodo();
 
-    /**
-     * Push mobile
-     * @param file
-     */
-    void pushTodo(File file);
+	/**
+	 * Push mobile
+	 * 
+	 * @param file
+	 */
+	void pushTodo(File file);
+
+	/**
+	 * A method to check if the remote service is available (network, sd-card,
+	 * etc)
+	 * 
+	 * @return true if available, false if not
+	 */
+	boolean isAvailable();
 
 }

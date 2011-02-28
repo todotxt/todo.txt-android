@@ -31,16 +31,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.todotxt.todotxttouch.remote.RemoteClient;
 import com.todotxt.todotxttouch.remote.RemoteLoginTask;
+import com.todotxt.todotxttouch.util.Util;
 
 public class LoginScreen extends Activity {
 
-	final static String TAG = TodoTxtTouch.class.getSimpleName();
+	final static String TAG = LoginScreen.class.getSimpleName();
 
 	private TodoApplication m_app;
 	private Button m_LoginButton;
@@ -76,7 +78,8 @@ public class LoginScreen extends Activity {
 			}
 		});
 
-		final RemoteClient remoteClient = m_app.getRemoteClientManager().getRemoteClient();
+		final RemoteClient remoteClient = m_app.getRemoteClientManager()
+				.getRemoteClient();
 		if (remoteClient.isAuthenticated()) {
 			switchToTodolist();
 		}
@@ -95,16 +98,18 @@ public class LoginScreen extends Activity {
 	}
 
 	void login() {
-		final RemoteClient client = m_app.getRemoteClientManager().getRemoteClient();
+		final RemoteClient client = m_app.getRemoteClientManager()
+				.getRemoteClient();
 
-		if (client.isLoggedIn()) {
-			if ( m_app.getRemoteClientManager().getRemoteClient().authenticate() ) {
-				switchToTodolist();
-			}
+		if (!client.isAvailable()) {
+			Log.d(TAG, "Remote service " + client.getClass().getSimpleName()
+					+ " is not available; aborting login");
+			Util.showToastLong(m_app,
+					"Cannot log in:\nRemote Service not available");
+		} else {
+			RemoteLoginTask loginTask = client.getLoginTask();
+			loginTask.showLoginDialog(this);
 		}
-
-		RemoteLoginTask loginTask = client.getLoginTask();
-		loginTask.showLoginDialog(this);
 	}
 
 }
