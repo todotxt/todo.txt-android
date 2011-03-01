@@ -205,6 +205,9 @@ public class TodoTxtTouch extends ListActivity implements
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
 		} else {
+			if (!isOfflineMode()) {
+				syncClient();
+			}
 			taskBag.reload();
 		}
 	}
