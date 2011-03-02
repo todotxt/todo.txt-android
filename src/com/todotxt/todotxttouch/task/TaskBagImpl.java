@@ -143,6 +143,7 @@ class TaskBagImpl implements TaskBag {
 			if (found != null) {
 				tasks.remove(found);
 				localRepository.store(tasks);
+			} else {
 				throw new TaskPersistException("Task not found, not deleted");
 			}
 		} catch (Exception e) {
