@@ -161,10 +161,10 @@ public class TodoTxtTouch extends ListActivity implements
 				} else if (intent.getAction().equalsIgnoreCase(
 						INTENT_GO_OFFLINE)) {
 					if (isOfflineMode()) {
-						showToast("Client still not available.\nWorking offline");
+						showToast(getString(R.string.toast_notconnected));
 					} else {
 						setOfflineMode();
-						showToast("Client not available.\nWorking offline");
+						showToast(getString(R.string.toast_notconnected_switch_to_offline));
 					}
 				} else if (intent.getAction().equalsIgnoreCase(
 						INTENT_START_SYNC_TO_REMOTE)) {

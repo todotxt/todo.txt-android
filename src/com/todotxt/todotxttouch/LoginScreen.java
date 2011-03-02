@@ -104,8 +104,7 @@ public class LoginScreen extends Activity {
 		if (!client.isAvailable()) {
 			Log.d(TAG, "Remote service " + client.getClass().getSimpleName()
 					+ " is not available; aborting login");
-			Util.showToastLong(m_app,
-					"Cannot log in:\nRemote Service not available");
+			Util.showToastLong(m_app, R.string.toast_login_notconnected);
 		} else {
 			RemoteLoginTask loginTask = client.getLoginTask();
 			loginTask.showLoginDialog(this);
