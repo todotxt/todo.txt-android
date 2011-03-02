@@ -113,7 +113,6 @@ public class TodoTxtTouch extends ListActivity implements
 	private ArrayList<String> m_projects = new ArrayList<String>();
 	private String m_search;
 
-	private int m_pos = Constants.INVALID_POSITION;
 	private Sort sort = Sort.PRIORITY_DESC;
 	private BroadcastReceiver m_broadcastReceiver;
 
@@ -181,7 +180,7 @@ public class TodoTxtTouch extends ListActivity implements
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 
-		getListView().setOnCreateContextMenuListener(this);
+		registerForContextMenu(getListView());
 
 		initializeTasks();
 
@@ -217,6 +216,7 @@ public class TodoTxtTouch extends ListActivity implements
 		super.onDestroy();
 		m_app.m_prefs.unregisterOnSharedPreferenceChangeListener(this);
 		unregisterReceiver(m_broadcastReceiver);
+		unregisterForContextMenu(getListView());
 	}
 
 	@Override
@@ -288,12 +288,7 @@ public class TodoTxtTouch extends ListActivity implements
 			ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
 		AdapterView.AdapterContextMenuInfo menuInfoAdap = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		final int pos;
-		if (m_pos != Constants.INVALID_POSITION) {
-			pos = m_pos;
-		} else {
-			pos = menuInfoAdap.position;
-		}
+		final int pos = menuInfoAdap.position;
 		final Task task = m_adapter.getItem(pos);
 		if (task.isCompleted()) {
 			inflater.inflate(R.menu.context_completed, menu);
@@ -308,27 +303,21 @@ public class TodoTxtTouch extends ListActivity implements
 		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
 		int menuid = item.getItemId();
-		final int pos;
-		if (m_pos != Constants.INVALID_POSITION) {
-			pos = m_pos;
-			m_pos = Constants.INVALID_POSITION;
-		} else {
-			pos = menuInfo.position;
-		}
+		final int pos = menuInfo.position;
 		if (menuid == R.id.update) {
-			Log.v(TAG, "update");
+			Log.v(TAG, "update at " + pos);
 			editTaskAt(pos);
 		} else if (menuid == R.id.delete) {
-			Log.v(TAG, "delete");
+			Log.v(TAG, "delete at " + pos);
 			deleteTaskAt(pos);
 		} else if (menuid == R.id.done) {
-			Log.v(TAG, "done");
+			Log.v(TAG, "done at " + pos);
 			completeTaskAt(pos);
 		} else if (menuid == R.id.unComplete) {
-			Log.v(TAG, "undo Complete");
+			Log.v(TAG, "undo Complete at " + pos);
 			undoCompleteTaskAt(pos);
 		} else if (menuid == R.id.priority) {
-			Log.v(TAG, "priority");
+			Log.v(TAG, "priority at " + pos);
 			prioritizeTaskAt(pos);
 		} else if (menuid == R.id.share) {
 			Log.v(TAG, "share");
@@ -862,8 +851,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		m_pos = position;
-		openContextMenu(getListView());
+		completeTaskAt(position);
 	}
 
 	private void updateSyncUI() {
@@ -981,7 +969,14 @@ public class TodoTxtTouch extends ListActivity implements
 
 		@Override
 		public long getItemId(int position) {
-			return items.get(position).getId();
+			if (!items.isEmpty()) {
+				return items.get(position).getId();
+			} else {
+				// Seemed to be an emulator only bug; having an item "selected"
+				// (scroll-wheel etc) when sync'ing results in FC from index out
+				// of bounds ex
+				return -1;
+			}
 		}
 
 		@Override
