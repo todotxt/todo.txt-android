@@ -77,6 +77,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		contexts.
 	</string>
 	<string name="search_summary">Enter text to search for.</string>
+	
 	<!-- preferences -->
 	<string name="dropbox_logout_pref_title">Log out</string>
 	<string name="dropbox_logout_pref_summary">Log out of Dropbox.</string>
@@ -110,6 +111,11 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="show_task_age_pref_key">show_task_age_pref</string>
 	<string name="show_task_age_pref_title">Show task age</string>
 	<string name="show_task_age_pref_summary">Show age of tasks with a creation date.</string>
+
+	<string name="short_touch_pref_title">Quick complete</string>
+	<string name="short_touch_pref_summary_on">Short touch on a task to mark it complete.</string>
+	<!--  <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string>-->
+	
 	<!-- sync dialog -->
 	<string name="sync_dialog_title">Manual Sync</string>
 	<string name="sync_dialog_msg">Do you want to upload or download your todo.txt
@@ -155,10 +161,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	<!--online/offline toasts-->
 	<string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
 	<string name="toast_notconnected">No internet connection;\nYou\'re working offline.</string>
-	<string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline mode.</string>
+	<string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline
+		mode.</string>
 	<string name="short_touch_pref_key">short_touch_pref</string>
-	<string name="short_touch_pref_title">Touch to complete</string>
-	<string name="short_touch_pref_summary_on">Short touch on task marks as complete</string>
-	<string name="short_touch_pref_summary_off">Short touch brings up context menu</string>
-	
+
 </resources>
