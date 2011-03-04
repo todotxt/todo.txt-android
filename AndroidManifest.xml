@@ -31,8 +31,8 @@ You should have received a copy of the GNU General Public License along with Tod
  -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.todotxt.todotxttouch" android:versionName="0.5"
-	android:versionCode="19">
+	package="com.todotxt.todotxttouch" android:versionName="0.6"
+	android:versionCode="20">
 	<!-- Warning 'is lower than the project target API level' should be ok -->
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<uses-permission android:name="android.permission.INTERNET" />
