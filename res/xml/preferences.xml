@@ -40,6 +40,8 @@ You should have received a copy of the GNU General Public License along with Tod
 			android:title="@string/show_task_age_pref_title" android:summary="@string/show_task_age_pref_summary" />
 		<CheckBoxPreference android:key="@string/line_breaks_pref_key"
 			android:title="@string/line_breaks_pref_title" android:summary="@string/line_breaks_pref_summary" />
+		<CheckBoxPreference android:key="@string/short_touch_pref_key"
+			android:title="@string/short_touch_pref_title" android:summaryOn="@string/short_touch_pref_summary_on" android:summaryOff="@string/short_touch_pref_summary_off"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory android:key="dropbox_settings"
