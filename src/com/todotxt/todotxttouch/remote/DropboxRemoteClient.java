@@ -160,6 +160,14 @@ class DropboxRemoteClient implements RemoteClient {
 						"Error loading from dropbox", fileDownload);
 			}
 		}
+		try {
+			if (!TODO_TXT_TMP_FILE.exists()) {
+				Util.createParentDirectory(TODO_TXT_TMP_FILE);
+				TODO_TXT_TMP_FILE.createNewFile();
+			}
+		} catch (IOException e) {
+			throw new RemoteException("Failed to ensure that file exists", e);
+		}
 
 		try {
 			Util.writeFile(fileDownload.is, TODO_TXT_TMP_FILE);
