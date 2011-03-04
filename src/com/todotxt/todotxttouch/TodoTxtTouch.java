@@ -863,7 +863,13 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		m_pos = position;
-		openContextMenu(getListView());
+		boolean completeOnShort = m_app.m_prefs.getBoolean(
+				getString(R.string.short_touch_pref_key), false);
+		if (completeOnShort) {
+			completeTaskAt(position);
+		} else {
+			openContextMenu(getListView());
+		}
 	}
 
 	private void updateSyncUI() {
@@ -981,7 +987,14 @@ public class TodoTxtTouch extends ListActivity implements
 
 		@Override
 		public long getItemId(int position) {
-			return items.get(position).getId();
+			if (!items.isEmpty()) {
+				return items.get(position).getId();
+			} else {
+				// Seemed to be an emulator only bug; having an item "selected"
+				// (scroll-wheel etc) when sync'ing results in FC from index out
+				// of bounds ex
+				return -1;
+			}
 		}
 
 		@Override

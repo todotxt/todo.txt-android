@@ -156,5 +156,9 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
 	<string name="toast_notconnected">No internet connection;\nYou\'re working offline.</string>
 	<string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline mode.</string>
+	<string name="short_touch_pref_key">short_touch_pref</string>
+	<string name="short_touch_pref_title">Touch to complete</string>
+	<string name="short_touch_pref_summary_on">Short touch on task marks as complete</string>
+	<string name="short_touch_pref_summary_off">Short touch brings up context menu</string>
 	
 </resources>
