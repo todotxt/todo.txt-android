@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoTxtTouch.java
  *
- * Copyright (c) 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest
+ * Copyright (c) 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Florian Behr
  *
  * LICENSE:
  *
@@ -25,15 +25,18 @@
  * @author Tormod Haugen <tormodh[at]gmail[dot]com>
  * @author shanest <ssshanest[at]gmail[dot]com>
  * @author Adam Zaloudek <AdamZaloudek[at]hotmail[dot]com>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Adam Zaloudek
+ * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Adam Zaloudek, Florian Behr
  */
 package com.todotxt.todotxttouch;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,6 +56,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -274,7 +278,24 @@ public class TodoTxtTouch extends ListActivity implements
 		if (task.isCompleted()) {
 			inflater.inflate(R.menu.context_completed, menu);
 		} else {
+			addVariableMenuItems(menu, task);
 			inflater.inflate(R.menu.main_long, menu);
+		}
+	}
+
+	/**
+	 * Adds menu items to the context menu depending on the tasks content (for
+	 * now only links)
+	 * 
+	 * @param menu
+	 *            The menu to add items to
+	 * @param task
+	 *            The task this menu is created for
+	 */
+	private void addVariableMenuItems(ContextMenu menu, final Task task) {
+		ListIterator<URL> i = task.getLinks().listIterator();
+		while (i.hasNext()) {
+			menu.add(Menu.NONE, R.id.url, Menu.NONE, i.next().toString());
 		}
 	}
 
@@ -309,6 +330,10 @@ public class TodoTxtTouch extends ListActivity implements
 		} else if (menuid == R.id.share) {
 			Log.v(TAG, "share");
 			shareTaskAt(pos);
+		} else if (menuid == R.id.url) {
+			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getTitle()
+					.toString()));
+			startActivity(i);
 		}
 
 		return super.onContextItemSelected(item);
