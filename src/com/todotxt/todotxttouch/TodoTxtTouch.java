@@ -25,8 +25,9 @@
  * @author Tormod Haugen <tormodh[at]gmail[dot]com>
  * @author shanest <ssshanest[at]gmail[dot]com>
  * @author Adam Zaloudek <AdamZaloudek[at]hotmail[dot]com>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Adam Zaloudek
+ * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Adam Zaloudek, Florian Behr
  */
 package com.todotxt.todotxttouch;
 

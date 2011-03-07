@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Task.java
  *
- * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta, Florian Behr
  *
  * LICENSE:
  *
@@ -22,8 +22,9 @@
  * @author mathias <mathias[at]x2[dot](none)>
  * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * @copyright 2009-2011 mathias, Gina Trapani, Tim Barlotta, Florian Behr
  */
 package com.todotxt.todotxttouch.task;
 
