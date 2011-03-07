@@ -31,12 +31,17 @@
 package com.todotxt.todotxttouch;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -53,6 +58,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -77,6 +83,7 @@ import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
+import com.todotxt.todotxttouch.task.LinkParser;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
@@ -298,7 +305,24 @@ public class TodoTxtTouch extends ListActivity implements
 		if (task.isCompleted()) {
 			inflater.inflate(R.menu.context_completed, menu);
 		} else {
+			addVariableMenuItems(menu, task);
 			inflater.inflate(R.menu.main_long, menu);
+		}
+	}
+
+	/**
+	 * Adds menu items to the context menu depending of the tasks content (for
+	 * now only links)
+	 * 
+	 * @param menu
+	 *            The menu to add items to
+	 * @param task
+	 *            The task this menu is created for
+	 */
+	private void addVariableMenuItems(ContextMenu menu, final Task task) {
+		ListIterator<URL> i = task.getLinks().listIterator();
+		while (i.hasNext()) {
+			menu.add(i.next().toString());
 		}
 	}
 
@@ -333,6 +357,9 @@ public class TodoTxtTouch extends ListActivity implements
 		} else if (menuid == R.id.share) {
 			Log.v(TAG, "share");
 			shareTaskAt(pos);
+		} else if (LinkParser.isURL(item.getTitle().toString())){
+			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getTitle().toString()));
+			startActivity(i);
 		}
 
 		return super.onContextItemSelected(item);
