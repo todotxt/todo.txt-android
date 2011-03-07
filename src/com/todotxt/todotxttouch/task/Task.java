@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Task.java
  *
- * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta, Florian Behr
  *
  * LICENSE:
  *
@@ -22,12 +22,14 @@
  * @author mathias <mathias[at]x2[dot](none)>
  * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * @copyright 2009-2011 mathias, Gina Trapani, Tim Barlotta, Florian Behr
  */
 package com.todotxt.todotxttouch.task;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,13 +48,14 @@ public class Task implements Serializable {
 	private long id;
 	private Priority priority;
 	private boolean deleted = false;
-	private boolean completed = false;
+	private boolean completed = false;	
 	private String text;
 	private String completionDate;
 	private String prependedDate;
 	private String relativeAge = "";
 	private List<String> contexts;
 	private List<String> projects;
+	private List<URL> links;
 
 	public Task(long id, String rawText, Date defaultPrependedDate) {
 		this.id = id;
@@ -80,6 +83,7 @@ public class Task implements Serializable {
 
 		this.contexts = ContextParser.getInstance().parse(text);
 		this.projects = ProjectParser.getInstance().parse(text);
+		this.links = LinkParser.getInstance().parse(text);
 		this.deleted = Strings.isEmptyOrNull(text);
 
 		if (defaultPrependedDate != null
@@ -125,6 +129,10 @@ public class Task implements Serializable {
 
 	public List<String> getContexts() {
 		return contexts;
+	}
+	
+	public List<URL> getLinks() {
+		return links;
 	}
 
 	public List<String> getProjects() {
