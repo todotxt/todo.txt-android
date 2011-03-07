@@ -32,8 +32,6 @@
 package com.todotxt.todotxttouch;
 
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +40,6 @@ import java.util.ListIterator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
