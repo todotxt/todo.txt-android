@@ -76,7 +76,4 @@ public class LinkParser {
 		return links;
 	}
 	
-	public static boolean isURL(String text) {
-		return LINK_PATTERN.matcher(text).find(0);
-	}
 }

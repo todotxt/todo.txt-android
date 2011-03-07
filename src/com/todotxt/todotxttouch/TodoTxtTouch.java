@@ -81,7 +81,6 @@ import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
-import com.todotxt.todotxttouch.task.LinkParser;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
@@ -309,7 +308,7 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	/**
-	 * Adds menu items to the context menu depending of the tasks content (for
+	 * Adds menu items to the context menu depending on the tasks content (for
 	 * now only links)
 	 * 
 	 * @param menu
@@ -320,7 +319,7 @@ public class TodoTxtTouch extends ListActivity implements
 	private void addVariableMenuItems(ContextMenu menu, final Task task) {
 		ListIterator<URL> i = task.getLinks().listIterator();
 		while (i.hasNext()) {
-			menu.add(i.next().toString());
+			menu.add(Menu.NONE, R.id.url, Menu.NONE, i.next().toString());
 		}
 	}
 
@@ -355,7 +354,7 @@ public class TodoTxtTouch extends ListActivity implements
 		} else if (menuid == R.id.share) {
 			Log.v(TAG, "share");
 			shareTaskAt(pos);
-		} else if (LinkParser.isURL(item.getTitle().toString())){
+		} else if (menuid == R.id.url){
 			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getTitle().toString()));
 			startActivity(i);
 		}
