@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/task/Task.java
  *
- * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta, Florian Behr
  *
  * LICENSE:
  *
@@ -22,12 +22,14 @@
  * @author mathias <mathias[at]x2[dot](none)>
  * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * @copyright 2009-2011 mathias, Gina Trapani, Tim Barlotta, Florian Behr
  */
 package com.todotxt.todotxttouch.task;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,6 +55,7 @@ public class Task implements Serializable {
 	private String relativeAge = "";
 	private List<String> contexts;
 	private List<String> projects;
+	private List<URL> links;
 
 	public Task(long id, String rawText, Date defaultPrependedDate) {
 		this.id = id;
@@ -80,6 +83,7 @@ public class Task implements Serializable {
 
 		this.contexts = ContextParser.getInstance().parse(text);
 		this.projects = ProjectParser.getInstance().parse(text);
+		this.links = LinkParser.getInstance().parse(text);
 		this.deleted = Strings.isEmptyOrNull(text);
 
 		if (defaultPrependedDate != null
@@ -125,6 +129,10 @@ public class Task implements Serializable {
 
 	public List<String> getContexts() {
 		return contexts;
+	}
+
+	public List<URL> getLinks() {
+		return links;
 	}
 
 	public List<String> getProjects() {
@@ -210,54 +218,81 @@ public class Task implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
+		if (obj == null)
 			return false;
-		}
-
-		Task task = (Task) o;
-
-		if (completed != task.completed) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
-		if (deleted != task.deleted) {
+		Task other = (Task) obj;
+		if (completed != other.completed)
 			return false;
-		}
-		if (id != task.id) {
+		if (completionDate == null) {
+			if (other.completionDate != null)
+				return false;
+		} else if (!completionDate.equals(other.completionDate))
 			return false;
-		}
-		if (priority != task.priority) {
+		if (contexts == null) {
+			if (other.contexts != null)
+				return false;
+		} else if (!contexts.equals(other.contexts))
 			return false;
-		}
-		if (!contexts.equals(task.contexts)) {
+		if (deleted != other.deleted)
 			return false;
-		}
-		if (!prependedDate.equals(task.prependedDate)) {
+		if (id != other.id)
 			return false;
-		}
-		if (!projects.equals(task.projects)) {
+		if (links == null) {
+			if (other.links != null)
+				return false;
+		} else if (!links.equals(other.links))
 			return false;
-		}
-		if (!text.equals(task.text)) {
+		if (prependedDate == null) {
+			if (other.prependedDate != null)
+				return false;
+		} else if (!prependedDate.equals(other.prependedDate))
 			return false;
-		}
-
+		if (priority != other.priority)
+			return false;
+		if (projects == null) {
+			if (other.projects != null)
+				return false;
+		} else if (!projects.equals(other.projects))
+			return false;
+		if (relativeAge == null) {
+			if (other.relativeAge != null)
+				return false;
+		} else if (!relativeAge.equals(other.relativeAge))
+			return false;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
 		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		int result = (int) (id ^ (id >>> 32));
-		result = 31 * result + priority.hashCode();
-		result = 31 * result + (deleted ? 1 : 0);
-		result = 31 * result + (completed ? 1 : 0);
-		result = 31 * result + text.hashCode();
-		result = 31 * result + prependedDate.hashCode();
-		result = 31 * result + contexts.hashCode();
-		result = 31 * result + projects.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (completed ? 1231 : 1237);
+		result = prime * result
+				+ ((completionDate == null) ? 0 : completionDate.hashCode());
+		result = prime * result
+				+ ((contexts == null) ? 0 : contexts.hashCode());
+		result = prime * result + (deleted ? 1231 : 1237);
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((links == null) ? 0 : links.hashCode());
+		result = prime * result
+				+ ((prependedDate == null) ? 0 : prependedDate.hashCode());
+		result = prime * result
+				+ ((priority == null) ? 0 : priority.hashCode());
+		result = prime * result
+				+ ((projects == null) ? 0 : projects.hashCode());
+		result = prime * result
+				+ ((relativeAge == null) ? 0 : relativeAge.hashCode());
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
 	}
 }
