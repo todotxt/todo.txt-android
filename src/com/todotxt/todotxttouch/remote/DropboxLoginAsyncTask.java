@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/DropboxLoginAsyncTask.java
  *
- * Copyright (c) 2009-2011 Tormod Haugen
+ * Copyright (c) 2009-2011 Tormod Haugen, Florian Behr
  *
  * LICENSE:
  *
@@ -20,15 +20,13 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Tormod Haugen <tormodh[at]gmail[dot]com>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Tormod Haugen
+ * @copyright 2009-2011 Tormod Haugen, Florian Behr
  */
 package com.todotxt.todotxttouch.remote;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.Html;
@@ -36,11 +34,14 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dropbox.client.DropboxAPI;
 import com.dropbox.client.DropboxAPI.Config;
 import com.todotxt.todotxttouch.R;
+import com.todotxt.todotxttouch.ui.BlurDialog;
+import com.todotxt.todotxttouch.ui.BlurDialog.OnFinishClickListener;
 
 class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> implements
 		RemoteLoginTask {
@@ -111,20 +112,20 @@ class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> implements
 		View v = inflator.inflate(R.layout.logindialog, null);
 		final TextView usernameTV = (TextView) v.findViewById(R.id.username);
 		final TextView passwordTV = (TextView) v.findViewById(R.id.password);
+		final Button loginButton = (Button) v.findViewById(R.id.login_button);
 
 		TextView mTextSample = (TextView) v.findViewById(R.id.register_hint);
 		mTextSample.setMovementMethod(LinkMovementMethod.getInstance());
 		String text = "No account? Create one at <a href=\"http://dropbox.com/m/register\">Dropbox</a>.";
 		mTextSample.setText(Html.fromHtml(text));
 		mTextSample.setFocusable(false);
+		
+		BlurDialog.Builder d = new BlurDialog.Builder(act);
+		d.setView(v);
+		d.setFinishButton(loginButton, new OnFinishClickListener() {
 
-		AlertDialog.Builder b = new AlertDialog.Builder(act);
-		b.setView(v);
-		b.setTitle(R.string.dropbox_authentication);
-		b.setCancelable(true);
-		b.setPositiveButton(R.string.login_button, new OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick() {
 				String u = usernameTV.getText().toString();
 				String p = passwordTV.getText().toString();
 				if (u != null && u.length() > 0 && p != null && p.length() > 0) {
@@ -135,8 +136,9 @@ class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer> implements
 					cancel(false);
 				}
 			}
+			
 		});
-		b.show();
+		d.show();
 	}
 
 }

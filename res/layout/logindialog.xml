@@ -2,57 +2,68 @@
 
 <!--
 
-Todo.txt Touch/res/layout/logindialog.xml
+	Todo.txt Touch/res/layout/logindialog.xml
 
-Copyright (c) 2009-2011 Tormod Haugen, Gina Trapani, mathias
+	Copyright (c) 2009-2011 Tormod Haugen, Gina Trapani, mathias, Florian Behr
 
-LICENSE:
+	LICENSE:
 
-This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+	This file is part of Todo.txt Touch, an Android app for managing your todo.txt
+	file (http://todotxt.com).
 
-Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
-later version.
+	Todo.txt Touch is free software: you can redistribute it and/or modify it
+	under the terms of the GNU General Public
+	License as published by the Free Software Foundation, either version 2 of
+	the License, or (at your option) any
+	later version.
 
-Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
-details.
+	Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT
+	ANY WARRANTY; without even the implied
+	warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more
+	details.
 
-You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
-<http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License along 
+	with
+	Todo.txt Touch. If not, see
+	<http://www.gnu.org/licenses/>.
 
-@author Tormod Haugen <tormodh[at]gmail[dot]com>
-@author Gina Trapani <ginatrapani[at]gmail[dot]com>
-@author mathias <mathias[at]x2[dot](none)>
-@license http://www.gnu.org/licenses/gpl.html
-@copyright 2009-2011 Tormod Haugen, Gina Trapani, mathias
- -->
+	@author Tormod Haugen <tormodh[at]gmail[dot]com>
+	@author Gina Trapani <ginatrapani[at]gmail[dot]com>
+	@author mathias <mathias[at]x2[dot](none)>
+	@author Florian Behr <mail[at]florianbehr[dot]de>
+	@license http://www.gnu.org/licenses/gpl.html
+	@copyright 2009-2011 Tormod Haugen, Gina Trapani, mathias, Florian Behr
+-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="wrap_content"
-	android:orientation="vertical">
+	android:orientation="vertical" android:padding="5pt"
+	android:background="@color/black_trans">
 	<TextView android:id="@+id/username_label" android:text="@string/username_label"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 		android:layout_width="wrap_content" android:layout_height="wrap_content" />
 	<EditText android:id="@+id/username" android:title="@string/username_label"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
-		android:gravity="fill_horizontal" android:textAppearance="?android:attr/textAppearanceMedium"
-		android:inputType="textEmailAddress" />
+		android:layout_height="wrap_content" android:layout_marginLeft="20dip"
+		android:layout_marginRight="20dip" android:gravity="fill_horizontal"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:inputType="textEmailAddress" android:layout_width="fill_parent" />
 	<TextView android:text="@string/password_label"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 		android:id="@+id/password_label" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
 	<EditText android:id="@+id/password" android:title="@string/password_label"
-		android:layout_height="wrap_content"
-		android:layout_width="fill_parent" android:layout_marginLeft="20dip"
-		android:layout_marginRight="20dip" android:gravity="fill_horizontal"
-		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+		android:gravity="fill_horizontal" android:textAppearance="?android:attr/textAppearanceMedium"
 		android:inputType="textPassword" />
 	<TextView android:textAppearance="?android:attr/textAppearanceSmall"
 		android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
 		android:id="@+id/register_hint" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_marginLeft="20dip"
+		android:id="@+id/login_button" android:text="@string/login_button"></Button>
 </LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+Todo.txt Touch/res/layout/login.xml
+
+Copyright (c) 2009-2011 Gina Trapani, Hrayr Artunyan, Florian Behr
+
+LICENSE:
+
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Gina Trapani <ginatrapani[at]gmail[dot]com>
+@author Hrayr Artunyan <hrayr[at]Hrayr-Artunyans-MacBook-Pro[dot]local>
+@author Florian Behr <mail[at]florianbehr[dot]de>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2011 Gina Trapani, Hrayr Artunyan, Florian Behr
+ -->
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/loginbackground"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:background="@drawable/login_background">
+
+<ImageView android:id="@+id/todos_img" 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+    android:src="@drawable/todotxt_touch_256" android:layout_gravity="right|bottom"/>
+	
+<RelativeLayout
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+<LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:paddingBottom="15pt"
+	android:layout_above="@id/login">
+	
+	<TextView android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Todo.txt"
+		android:textSize="12pt"
+		android:typeface="monospace"
+		android:textColor="@color/white"
+		android:paddingTop="15pt"
+	/>
+	<TextView android:id="@+id/title_2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text=" Touch"
+		android:textSize="12pt"
+		android:typeface="serif"
+		android:textStyle="italic"
+	/>
+	</LinearLayout>
+	
+	<Button android:id="@+id/login"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="8pt"
+		android:text="@string/login_screen_button" android:layout_gravity="left" android:layout_centerVertical="true"/>
+</RelativeLayout>
+</FrameLayout>

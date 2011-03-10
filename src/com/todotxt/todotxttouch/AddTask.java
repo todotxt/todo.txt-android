@@ -51,6 +51,7 @@ import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.PriorityTextSplitter;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
+import com.todotxt.todotxttouch.ui.BlurDialog;
 import com.todotxt.todotxttouch.util.CursorPositionCalculator;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
@@ -322,8 +323,11 @@ public class AddTask extends Activity {
 	}
 
 	/** Handle help message **/
-	public void onHelpClick(View v) {
-		Intent intent = new Intent(v.getContext(), HelpActivity.class);
-		startActivity(intent);
+	public void onHelpClick(View v) {		
+		BlurDialog.Builder d = new BlurDialog.Builder(this);
+		d.setView(R.layout.help);
+		d.setFinishButton(R.id.close);
+		d.show();
+		
 	}
 }

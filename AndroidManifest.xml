@@ -39,13 +39,10 @@ You should have received a copy of the GNU General Public License along with Tod
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<application android:name=".TodoApplication" android:icon="@drawable/todotxt_touch_icon"
 		android:label="@string/app_label" android:debuggable="true">
-		<supports-screens android:smallScreens="true"
-			android:normalScreens="true" android:largeScreens="true"
-			android:anyDensity="true" android:resizeable="true" />
+		<supports-screens android:resizeable="true" android:anyDensity="true" android:smallScreens="true" android:normalScreens="true" android:largeScreens="true"/>
 
 		<activity android:name=".LoginScreen" android:label="@string/app_label"
-			android:theme="@android:style/Theme.NoTitleBar"
-			android:screenOrientation="portrait">
+			android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="unspecified">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -79,8 +76,6 @@ You should have received a copy of the GNU General Public License along with Tod
 				<data android:mimeType="text/plain" />
 			</intent-filter>
 		</activity-alias>
-		<activity android:name=".HelpActivity"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
 		<activity android:name=".TodoTxtTouch" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
@@ -88,6 +83,7 @@ You should have received a copy of the GNU General Public License along with Tod
 			<meta-data android:name="android.app.searchable"
 				android:resource="@xml/searchable" />
 		</activity>
+		<activity android:name=".ui.BlurDialog" android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 	</application>
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 </manifest> 
