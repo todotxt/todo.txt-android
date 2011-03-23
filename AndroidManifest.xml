@@ -30,22 +30,23 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2011 Gina Trapani, mathias, Hrayr Artunyan, Stephen Henderson, Tormod Haugen
  -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.todotxt.todotxttouch" android:versionName="0.6"
-	android:versionCode="20">
+<manifest package="com.todotxt.todotxttouch"
+	android:versionName="0.6" android:versionCode="20"
+	xmlns:android="http://schemas.android.com/apk/res/android">
 	<!-- Warning 'is lower than the project target API level' should be ok -->
 	<uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<application android:name=".TodoApplication" android:icon="@drawable/todotxt_touch_icon"
 		android:label="@string/app_label" android:debuggable="true">
-		<supports-screens android:smallScreens="true"
-			android:normalScreens="true" android:largeScreens="true"
-			android:anyDensity="true" android:resizeable="true" />
+		<uses-configuration></uses-configuration>
+		<supports-screens android:largeScreens="true"
+			android:normalScreens="true" android:smallScreens="true"
+			android:resizeable="true" android:anyDensity="true" />
 
 		<activity android:name=".LoginScreen" android:label="@string/app_label"
 			android:theme="@android:style/Theme.NoTitleBar"
-			android:screenOrientation="portrait">
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -81,7 +82,8 @@ You should have received a copy of the GNU General Public License along with Tod
 		</activity-alias>
 		<activity android:name=".HelpActivity"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-		<activity android:name=".TodoTxtTouch" android:theme="@android:style/Theme.NoTitleBar" android:configChanges="keyboardHidden|orientation">
+		<activity android:name=".TodoTxtTouch" android:theme="@android:style/Theme.NoTitleBar"
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>
@@ -89,5 +91,5 @@ You should have received a copy of the GNU General Public License along with Tod
 				android:resource="@xml/searchable" />
 		</activity>
 	</application>
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 </manifest> 
