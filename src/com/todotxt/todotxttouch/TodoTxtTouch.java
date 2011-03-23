@@ -132,8 +132,6 @@ public class TodoTxtTouch extends ListActivity implements
 		// and finish() current activity
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Constants.INTENT_ACTION_LOGOUT);
-		intentFilter.addAction(Constants.INTENT_ASYNC_SUCCESS);
-		intentFilter.addAction(Constants.INTENT_ASYNC_FAILED);
 		intentFilter.addAction(Constants.INTENT_UPDATE_UI);
 
 		m_broadcastReceiver = new BroadcastReceiver() {
@@ -144,13 +142,6 @@ public class TodoTxtTouch extends ListActivity implements
 					Intent i = new Intent(context, LoginScreen.class);
 					startActivity(i);
 					finish();
-				} else if (intent.getAction().equalsIgnoreCase(
-						Constants.INTENT_ASYNC_SUCCESS)
-						|| intent.getAction().equalsIgnoreCase(
-								Constants.INTENT_ASYNC_FAILED)) {
-					m_app.m_pulling = false;
-					m_app.m_pushing = false;
-					updateSyncUI();
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_UPDATE_UI)) {
 					updateSyncUI();
