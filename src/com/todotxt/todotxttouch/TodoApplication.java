@@ -65,6 +65,7 @@ public class TodoApplication extends Application {
 		intentFilter.addAction(Constants.INTENT_GO_OFFLINE);
 		intentFilter.addAction(Constants.INTENT_START_SYNC_TO_REMOTE);
 		intentFilter.addAction(Constants.INTENT_START_SYNC_FROM_REMOTE);
+		intentFilter.addAction(Constants.INTENT_ASYNC_FAILED);
 
 		if (null == m_broadcastReceiver) {
 			m_broadcastReceiver = new BroadcastReceiverExtension();
@@ -174,8 +175,9 @@ public class TodoApplication extends Application {
 					if (result) {
 						Log.d(TAG, "taskBag.pushToRemote done");
 						m_pushing = false;
-						m_pulling = false;
 						updateSyncUI();
+					} else {
+						sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
 					}
 					super.onPostExecute(result);
 				}
@@ -217,6 +219,8 @@ public class TodoApplication extends Application {
 						Log.d(TAG, "taskBag.pullFromRemote done");
 						m_pulling = false;
 						updateSyncUI();
+					} else {
+						sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
 					}
 					super.onPostExecute(result);
 				}
@@ -241,6 +245,12 @@ public class TodoApplication extends Application {
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_FROM_REMOTE)) {
 				pullFromRemote();
+			} else if (intent.getAction().equalsIgnoreCase(
+					Constants.INTENT_ASYNC_FAILED)) {
+				showToast("Synchronizing Failed");
+				m_pulling = false;
+				m_pushing = false;
+				updateSyncUI();
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_GO_OFFLINE)) {
 				if (isOfflineMode()) {

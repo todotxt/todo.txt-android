@@ -145,13 +145,15 @@ class DropboxRemoteClient implements RemoteClient {
 	@Override
 	public File pullTodo() {
 		if (!isAvailable()) {
-			Intent i = new Intent("com.todotxt.todotxttouch.GO_OFFLINE");
+			Intent i = new Intent(Constants.INTENT_GO_OFFLINE);
 			sendBroadcast(i);
 			return null;
 		}
 		DropboxAPI.FileDownload fileDownload = dropboxApi.getFileStream(
 				Constants.DROPBOX_MODUS, getRemotePathAndFilename(), null);
-		if (fileDownload.isError()) {
+		if (null == fileDownload) {
+			throw new RemoteException("Cannot get file from Dropbox");
+		} else if (fileDownload.isError()) {
 			if (404 == fileDownload.httpCode) {
 				pushTodo(TODO_TXT_TMP_FILE);
 				return TODO_TXT_TMP_FILE;
