@@ -48,7 +48,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:orientation="horizontal"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content" 
-	android:layout_gravity="center_horizontal"
+	android:layout_gravity="center_horizontal|top"
 	android:paddingBottom="15pt">
 	
 	<TextView android:id="@+id/title"
@@ -59,6 +59,8 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:typeface="monospace"
 		android:textColor="@color/white"
 		android:paddingTop="15pt"
+		android:shadowColor="@color/black"
+		android:shadowRadius="1.0"
 	/>
 	<TextView android:id="@+id/title_2"
 		android:layout_width="wrap_content"
@@ -67,6 +69,8 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:textSize="12pt"
 		android:typeface="serif"
 		android:textStyle="italic"
+		android:shadowColor="@color/black"
+		android:shadowRadius="1.0"
 	/>
 	</LinearLayout>
 	
