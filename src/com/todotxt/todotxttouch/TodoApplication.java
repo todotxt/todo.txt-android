@@ -29,15 +29,21 @@
 package com.todotxt.todotxttouch;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
+import com.todotxt.todotxttouch.util.Util;
 
 public class TodoApplication extends Application {
 	private final static String TAG = TodoApplication.class.getSimpleName();
@@ -46,6 +52,7 @@ public class TodoApplication extends Application {
 	public boolean m_pulling = false;
 	public boolean m_pushing = false;
 	private TaskBag taskBag;
+	private BroadcastReceiver m_broadcastReceiver;
 
 	@Override
 	public void onCreate() {
@@ -53,11 +60,57 @@ public class TodoApplication extends Application {
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
+
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(Constants.INTENT_GO_OFFLINE);
+		intentFilter.addAction(Constants.INTENT_START_SYNC_TO_REMOTE);
+		intentFilter.addAction(Constants.INTENT_START_SYNC_FROM_REMOTE);
+
+		if (null == m_broadcastReceiver) {
+			m_broadcastReceiver = new BroadcastReceiverExtension();
+			registerReceiver(m_broadcastReceiver, intentFilter);
+		}
+
 	}
 
 	@Override
 	public void onTerminate() {
+		unregisterReceiver(m_broadcastReceiver);
 		super.onTerminate();
+	}
+
+	/**
+	 * Check network status, then push.
+	 */
+	private void pushToRemote() {
+		if (isOfflineMode()) {
+			Log.d(TAG, "Working offline, don't push now");
+		} else {
+			if (!getRemoteClientManager().getRemoteClient().isAvailable()) {
+				Log.d(TAG, "Pushing while online w/o network; go offline");
+				sendBroadcast(new Intent(Constants.INTENT_GO_OFFLINE));
+			} else {
+				Log.i(TAG, "Working online; should push after change");
+				backgroundPushToRemote();
+			}
+		}
+	}
+
+	/**
+	 * Check network status, then pull.
+	 */
+	private void pullFromRemote() {
+		if (isOfflineMode()) {
+			Log.d(TAG, "Working offline, don't pull now");
+		} else {
+			if (!getRemoteClientManager().getRemoteClient().isAvailable()) {
+				Log.d(TAG, "Pushing while online w/o network; go offline");
+				sendBroadcast(new Intent(Constants.INTENT_GO_OFFLINE));
+			} else {
+				Log.i(TAG, "Working online; should puull after change");
+				backgroundPullFromRemote();
+			}
+		}
 	}
 
 	public TaskBag getTaskBag() {
@@ -76,6 +129,129 @@ public class TodoApplication extends Application {
 		Log.d(TAG, "Checking network availabilty. Network is "
 				+ (networkAvailable ? "" : "not ") + "available.");
 		return networkAvailable;
+	}
+
+	public boolean isOfflineMode() {
+		return m_prefs.getBoolean("workofflinepref", false);
+	}
+
+	public void setOfflineMode() {
+		Editor editor = m_prefs.edit();
+		editor.putBoolean("workofflinepref", true);
+		editor.commit();
+	}
+
+	public void showToast(String string) {
+		Util.showToastLong(this, string);
+	}
+
+	/**
+	 * Do asynchronous push with gui changes. Do availability check first.
+	 */
+	void backgroundPushToRemote() {
+		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
+			m_pushing = true;
+			m_pulling = false;
+			updateSyncUI();
+
+			new AsyncTask<Void, Void, Boolean>() {
+
+				@Override
+				protected Boolean doInBackground(Void... params) {
+					try {
+						Log.d(TAG, "start taskBag.pushToRemote");
+						taskBag.pushToRemote(true);
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage());
+						return false;
+					}
+					return true;
+				}
+
+				@Override
+				protected void onPostExecute(Boolean result) {
+					Log.d(TAG, "post taskBag.pushToremote");
+					if (result) {
+						Log.d(TAG, "taskBag.pushToRemote done");
+						m_pushing = false;
+						m_pulling = false;
+						updateSyncUI();
+					}
+					super.onPostExecute(result);
+				}
+
+			}.execute();
+		} else {
+			Log.e(TAG, "NOT AUTHENTICATED!");
+			showToast("NOT AUTHENTICATED!");
+		}
+	}
+
+	/**
+	 * Do an asynchronous pull from remote. Check network availability before
+	 * calling this.
+	 */
+	private void backgroundPullFromRemote() {
+		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
+			m_pulling = true;
+			updateSyncUI();
+
+			new AsyncTask<Void, Void, Boolean>() {
+
+				@Override
+				protected Boolean doInBackground(Void... params) {
+					try {
+						Log.d(TAG, "start taskBag.pullFromRemote");
+						taskBag.pullFromRemote(true);
+					} catch (Exception e) {
+						Log.e(TAG, e.getMessage());
+						return false;
+					}
+					return true;
+				}
+
+				@Override
+				protected void onPostExecute(Boolean result) {
+					Log.d(TAG, "post taskBag.pullFromRemote");
+					if (result) {
+						Log.d(TAG, "taskBag.pullFromRemote done");
+						m_pulling = false;
+						updateSyncUI();
+					}
+					super.onPostExecute(result);
+				}
+
+			}.execute();
+		} else {
+			Log.e(TAG, "NOT AUTHENTICATED!");
+			showToast("NOT AUTHENTICATED!");
+		}
+	}
+
+	private void updateSyncUI() {
+		sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI));
+	}
+
+	private final class BroadcastReceiverExtension extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equalsIgnoreCase(
+					Constants.INTENT_START_SYNC_TO_REMOTE)) {
+				pushToRemote();
+			} else if (intent.getAction().equalsIgnoreCase(
+					Constants.INTENT_START_SYNC_FROM_REMOTE)) {
+				pullFromRemote();
+			} else if (intent.getAction().equalsIgnoreCase(
+					Constants.INTENT_GO_OFFLINE)) {
+				if (isOfflineMode()) {
+					showToast(getString(R.string.toast_notconnected));
+				} else {
+					setOfflineMode();
+					showToast(getString(R.string.toast_notconnected_switch_to_offline));
+				}
+
+			}
+		}
 	}
 
 }

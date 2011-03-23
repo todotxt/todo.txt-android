@@ -271,7 +271,7 @@ public class AddTask extends Activity {
 							: getString(R.string.added_task);
 					Util.showToastLong(AddTask.this, res);
 					sendBroadcast(new Intent(
-							"com.todotxt.todotxttouch.START_SYNC"));
+							Constants.INTENT_START_SYNC_TO_REMOTE));
 					finish();
 				} else {
 					String res = m_backup != null ? getString(R.string.update_task_failed)
