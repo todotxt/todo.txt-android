@@ -86,12 +86,6 @@ public class TodoTxtTouch extends ListActivity implements
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
-	private final static String INTENT_ACTION_LOGOUT = "com.todotxt.todotxttouch.ACTION_LOGOUT";
-	private final static String INTENT_ASYNC_SUCCESS = "com.todotxt.todotxttouch.ASYNC_SUCCESS";
-	private final static String INTENT_ASYNC_FAILED = "com.todotxt.todotxttouch.ASYNC_FAILED";
-	private final static String INTENT_START_SYNC_TO_REMOTE = "com.todotxt.todotxttouch.START_SYNC";
-	private final static String INTENT_GO_OFFLINE = "com.todotxt.todotxttouch.GO_OFFLINE";
-
 	private final static int REQUEST_FILTER = 1;
 	private final static int REQUEST_PREFERENCES = 2;
 	private final static int REQUEST_LOGIN = 3;
@@ -137,38 +131,29 @@ public class TodoTxtTouch extends ListActivity implements
 		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(INTENT_ACTION_LOGOUT);
-		intentFilter.addAction(INTENT_ASYNC_SUCCESS);
-		intentFilter.addAction(INTENT_ASYNC_FAILED);
-		intentFilter.addAction(INTENT_GO_OFFLINE);
-		intentFilter.addAction(INTENT_START_SYNC_TO_REMOTE);
+		intentFilter.addAction(Constants.INTENT_ACTION_LOGOUT);
+		intentFilter.addAction(Constants.INTENT_ASYNC_SUCCESS);
+		intentFilter.addAction(Constants.INTENT_ASYNC_FAILED);
+		intentFilter.addAction(Constants.INTENT_UPDATE_UI);
 
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction().equalsIgnoreCase(INTENT_ACTION_LOGOUT)) {
+				if (intent.getAction().equalsIgnoreCase(
+						Constants.INTENT_ACTION_LOGOUT)) {
 					Intent i = new Intent(context, LoginScreen.class);
 					startActivity(i);
 					finish();
 				} else if (intent.getAction().equalsIgnoreCase(
-						INTENT_ASYNC_SUCCESS)
+						Constants.INTENT_ASYNC_SUCCESS)
 						|| intent.getAction().equalsIgnoreCase(
-								INTENT_ASYNC_FAILED)) {
-
+								Constants.INTENT_ASYNC_FAILED)) {
 					m_app.m_pulling = false;
 					m_app.m_pushing = false;
 					updateSyncUI();
 				} else if (intent.getAction().equalsIgnoreCase(
-						INTENT_GO_OFFLINE)) {
-					if (isOfflineMode()) {
-						showToast(getString(R.string.toast_notconnected));
-					} else {
-						setOfflineMode();
-						showToast(getString(R.string.toast_notconnected_switch_to_offline));
-					}
-				} else if (intent.getAction().equalsIgnoreCase(
-						INTENT_START_SYNC_TO_REMOTE)) {
-					pushToRemote();
+						Constants.INTENT_UPDATE_UI)) {
+					updateSyncUI();
 				}
 			}
 
@@ -388,7 +373,7 @@ public class TodoTxtTouch extends ListActivity implements
 							Util.showToastLong(TodoTxtTouch.this,
 									"Prioritized task " + task.getText());
 							sendBroadcast(new Intent(
-									INTENT_START_SYNC_TO_REMOTE));
+									Constants.INTENT_START_SYNC_TO_REMOTE));
 						} else {
 							Util.showToastLong(
 									TodoTxtTouch.this,
@@ -432,7 +417,7 @@ public class TodoTxtTouch extends ListActivity implements
 							Util.showToastLong(TodoTxtTouch.this,
 									"Task marked as not completed");
 							sendBroadcast(new Intent(
-									INTENT_START_SYNC_TO_REMOTE));
+									Constants.INTENT_START_SYNC_TO_REMOTE));
 						} else {
 							Util.showToastLong(TodoTxtTouch.this,
 									"Could not mark task as not completed");
@@ -476,7 +461,8 @@ public class TodoTxtTouch extends ListActivity implements
 					if (result) {
 						Util.showToastLong(TodoTxtTouch.this, "Completed task "
 								+ task.inFileFormat());
-						sendBroadcast(new Intent(INTENT_START_SYNC_TO_REMOTE));
+						sendBroadcast(new Intent(
+								Constants.INTENT_START_SYNC_TO_REMOTE));
 					} else {
 						Util.showToastLong(
 								TodoTxtTouch.this,
@@ -525,7 +511,7 @@ public class TodoTxtTouch extends ListActivity implements
 							Util.showToastLong(TodoTxtTouch.this,
 									"Deleted task " + task.inFileFormat());
 							sendBroadcast(new Intent(
-									INTENT_START_SYNC_TO_REMOTE));
+									Constants.INTENT_START_SYNC_TO_REMOTE));
 						} else {
 							Util.showToastLong(
 									TodoTxtTouch.this,
@@ -624,7 +610,7 @@ public class TodoTxtTouch extends ListActivity implements
 		if (isOfflineMode() || forceSyncChoice) {
 			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
 				Log.v(TAG, "Working offline; no network");
-				sendBroadcast(new Intent(INTENT_GO_OFFLINE));
+				sendBroadcast(new Intent(Constants.INTENT_GO_OFFLINE));
 			} else {
 				Log.v(TAG,
 						"Working offline; prompt user to ask which way to sync");
@@ -633,36 +619,20 @@ public class TodoTxtTouch extends ListActivity implements
 		} else {
 			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
 				Log.d(TAG, "Pulling while online w/o network; go offline");
-				sendBroadcast(new Intent(INTENT_GO_OFFLINE));
+				sendBroadcast(new Intent(Constants.INTENT_GO_OFFLINE));
 			} else {
 				Log.i(TAG, "Working online; should automatically pull");
-				m_app.m_pulling = true;
-				updateSyncUI();
-				backgroundPullFromRemote();
+				// m_app.m_pulling = true;
+				// updateSyncUI();
+				sendBroadcast(new Intent(
+						Constants.INTENT_START_SYNC_FROM_REMOTE));
+				// backgroundPullFromRemote();
 			}
 		}
-	}
-
-	/**
-	 * Check network status, then push.
-	 */
-	private void pushToRemote() {
-		if (isOfflineMode()) {
-			Log.d(TAG, "Working offline, don't push now");
-		} else {
-			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
-				Log.d(TAG, "Pushing while online w/o network; go offline");
-				sendBroadcast(new Intent(INTENT_GO_OFFLINE));
-			} else {
-				Log.i(TAG, "Working online; should push after change");
-				backgroundPushToRemote();
-			}
-		}
-
 	}
 
 	private boolean isOfflineMode() {
-		return m_app.m_prefs.getBoolean("workofflinepref", false);
+		return m_app.isOfflineMode();
 	}
 
 	@Override
@@ -755,14 +725,18 @@ public class TodoTxtTouch extends ListActivity implements
 			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
-							backgroundPushToRemote();
+							sendBroadcast(new Intent(
+									Constants.INTENT_START_SYNC_TO_REMOTE));
+							// backgroundPushToRemote();
 							showToast(getString(R.string.sync_upload_message));
 						}
 					});
 			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
-							backgroundPullFromRemote();
+							sendBroadcast(new Intent(
+									Constants.INTENT_START_SYNC_FROM_REMOTE));
+							// backgroundPullFromRemote();
 							showToast(getString(R.string.sync_download_message));
 						}
 					});
@@ -881,91 +855,7 @@ public class TodoTxtTouch extends ListActivity implements
 		// show moving refresh indicator
 		findViewById(R.id.title_refresh_progress).setVisibility(
 				m_app.m_pulling || m_app.m_pushing ? View.VISIBLE : View.GONE);
-
-	}
-
-	/**
-	 * Do an asynchronous pull from remote. Check network availability before
-	 * calling this.
-	 */
-	private void backgroundPullFromRemote() {
-		if (m_app.getRemoteClientManager().getRemoteClient().isAuthenticated()) {
-			m_app.m_pulling = true;
-			updateSyncUI();
-
-			new AsyncTask<Void, Void, Boolean>() {
-
-				@Override
-				protected Boolean doInBackground(Void... params) {
-					try {
-						Log.d(TAG, "start taskBag.pullFromRemote");
-						taskBag.pullFromRemote(true);
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage());
-						return false;
-					}
-					return true;
-				}
-
-				@Override
-				protected void onPostExecute(Boolean result) {
-					Log.d(TAG, "post taskBag.pullFromRemote");
-					if (result) {
-						Log.d(TAG, "taskBag.pullFromRemote done");
-						setFilteredTasks(false);
-						m_app.m_pulling = false;
-						updateSyncUI();
-					}
-					super.onPostExecute(result);
-				}
-
-			}.execute();
-		} else {
-			Log.e(TAG, "NOT AUTHENTICATED!");
-			showToast("NOT AUTHENTICATED!");
-		}
-	}
-
-	/**
-	 * Do asynchronous push with gui changes. Do availability check first.
-	 */
-	void backgroundPushToRemote() {
-		if (m_app.getRemoteClientManager().getRemoteClient().isAuthenticated()) {
-			m_app.m_pushing = true;
-			m_app.m_pulling = false;
-			updateSyncUI();
-
-			new AsyncTask<Void, Void, Boolean>() {
-
-				@Override
-				protected Boolean doInBackground(Void... params) {
-					try {
-						Log.d(TAG, "start taskBag.pushToRemote");
-						taskBag.pushToRemote(true);
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage());
-						return false;
-					}
-					return true;
-				}
-
-				@Override
-				protected void onPostExecute(Boolean result) {
-					Log.d(TAG, "post taskBag.pushToremote");
-					if (result) {
-						Log.d(TAG, "taskBag.pushToRemote done");
-						m_app.m_pushing = false;
-						m_app.m_pulling = false;
-						updateSyncUI();
-					}
-					super.onPostExecute(result);
-				}
-
-			}.execute();
-		} else {
-			Log.e(TAG, "NOT AUTHENTICATED!");
-			showToast("NOT AUTHENTICATED!");
-		}
+		setFilteredTasks(false);
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> {
@@ -1122,9 +1012,4 @@ public class TodoTxtTouch extends ListActivity implements
 		startActivityIfNeeded(i, REQUEST_FILTER);
 	}
 
-	private void setOfflineMode() {
-		Editor editor = m_app.m_prefs.edit();
-		editor.putBoolean("workofflinepref", true);
-		editor.commit();
-	}
 }

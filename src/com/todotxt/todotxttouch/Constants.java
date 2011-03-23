@@ -47,4 +47,12 @@ public class Constants {
 	public final static String EXTRA_SEARCH = "SEARCH";
 	public final static String EXTRA_TASK = "TASK";
 	public final static String EXTRA_APPLIED_FILTERS = "APPLIED_FITERS";
+
+	public final static String INTENT_ACTION_LOGOUT = "com.todotxt.todotxttouch.ACTION_LOGOUT";
+	public final static String INTENT_ASYNC_SUCCESS = "com.todotxt.todotxttouch.ASYNC_SUCCESS";
+	public final static String INTENT_ASYNC_FAILED = "com.todotxt.todotxttouch.ASYNC_FAILED";
+	public final static String INTENT_START_SYNC_TO_REMOTE = "com.todotxt.todotxttouch.START_SYNC_TO";
+	public final static String INTENT_START_SYNC_FROM_REMOTE = "com.todotxt.todotxttouch.START_SYNC_FROM";
+	public final static String INTENT_GO_OFFLINE = "com.todotxt.todotxttouch.GO_OFFLINE";
+	public final static String INTENT_UPDATE_UI = "com.todotxt.todotxttouch.UPDATE_UI";
 }
