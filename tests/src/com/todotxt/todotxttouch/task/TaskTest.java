@@ -28,6 +28,8 @@
  */
 package com.todotxt.todotxttouch.task;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -297,16 +299,93 @@ public class TaskTest extends TestCase {
 		assertEquals("", task.getCompletionDate());
 	}
 
-	public void testConstructor_complex() {
-		String input = "(D) 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject";
+	public void testConstructor_withLink() throws MalformedURLException {
+		String input = "A simple test with an http://www.url.com";
+		Task task = new Task(1, input);
+
+		assertEquals(1, task.getId());
+		assertEquals("A simple test with an http://www.url.com",
+				task.getOriginalText());
+		assertEquals("A simple test with an http://www.url.com", task.getText());
+		assertEquals(Priority.NONE, task.getOriginalPriority());
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals("", task.getPrependedDate());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(1, task.getLinks().size());
+		assertTrue(task.getLinks().contains(new URL("http://www.url.com")));
+		assertFalse(task.isDeleted());
+		assertFalse(task.isCompleted());
+		assertEquals(input, task.inScreenFormat());
+		assertEquals(input, task.inFileFormat());
+		assertEquals("", task.getCompletionDate());
+	}
+
+	public void testConstructor_withMultipleLinks()
+			throws MalformedURLException {
+		String input = "A simple test with two http://www.urls.com http://www.another.one";
 		Task task = new Task(1, input);
 
 		assertEquals(1, task.getId());
 		assertEquals(
-				"A @complex test +with @multiple projects and @contexts +myproject",
+				"A simple test with two http://www.urls.com http://www.another.one",
 				task.getOriginalText());
 		assertEquals(
-				"A @complex test +with @multiple projects and @contexts +myproject",
+				"A simple test with two http://www.urls.com http://www.another.one",
+				task.getText());
+		assertEquals(Priority.NONE, task.getOriginalPriority());
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals("", task.getPrependedDate());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(2, task.getLinks().size());
+		assertTrue(task.getLinks().contains(new URL("http://www.urls.com")));
+		assertTrue(task.getLinks().contains(new URL("http://www.another.one")));
+		assertFalse(task.isDeleted());
+		assertFalse(task.isCompleted());
+		assertEquals(input, task.inScreenFormat());
+		assertEquals(input, task.inFileFormat());
+		assertEquals("", task.getCompletionDate());
+	}
+
+	public void testConstructor_withInterspersedLinks()
+			throws MalformedURLException {
+		String input = "A simple https://ww.url.com test with two http://www.urls.com http://www.another.one";
+		Task task = new Task(1, input);
+
+		assertEquals(1, task.getId());
+		assertEquals(
+				"A simple https://ww.url.com test with two http://www.urls.com http://www.another.one",
+				task.getOriginalText());
+		assertEquals(
+				"A simple https://ww.url.com test with two http://www.urls.com http://www.another.one",
+				task.getText());
+		assertEquals(Priority.NONE, task.getOriginalPriority());
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals("", task.getPrependedDate());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(3, task.getLinks().size());
+		assertTrue(task.getLinks().contains(new URL("https://www.url.com")));
+		assertTrue(task.getLinks().contains(new URL("http://www.urls.com")));
+		assertTrue(task.getLinks().contains(new URL("http://www.another.one")));
+		assertFalse(task.isDeleted());
+		assertFalse(task.isCompleted());
+		assertEquals(input, task.inScreenFormat());
+		assertEquals(input, task.inFileFormat());
+		assertEquals("", task.getCompletionDate());
+	}
+
+	public void testConstructor_complex() throws MalformedURLException {
+		String input = "(D) 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject and links http://www.link.com";
+		Task task = new Task(1, input);
+
+		assertEquals(1, task.getId());
+		assertEquals(
+				"A @complex test +with @multiple projects and @contexts +myproject and links http://www.link.com",
+				task.getOriginalText());
+		assertEquals(
+				"A @complex test +with @multiple projects and @contexts +myproject and links http://www.link.com",
 				task.getText());
 		assertEquals(Priority.D, task.getOriginalPriority());
 		assertEquals(Priority.D, task.getPriority());
@@ -318,10 +397,12 @@ public class TaskTest extends TestCase {
 		assertEquals(2, task.getProjects().size());
 		assertTrue(task.getProjects().contains("with"));
 		assertTrue(task.getProjects().contains("myproject"));
+		assertEquals(1, task.getLinks().size());
+		assertTrue(task.getLinks().contains(new URL("http://www.link.com")));
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(
-				"A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject and links http://www.link.com",
 				task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
 		assertEquals("", task.getCompletionDate());
@@ -340,6 +421,7 @@ public class TaskTest extends TestCase {
 		assertEquals("", task.getPrependedDate());
 		assertEquals(Collections.<String> emptyList(), task.getContexts());
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(Collections.<String> emptyList(), task.getLinks());
 		assertFalse(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals(input, task.inScreenFormat());
@@ -359,6 +441,7 @@ public class TaskTest extends TestCase {
 		assertEquals("", task.getPrependedDate());
 		assertEquals(Collections.<String> emptyList(), task.getContexts());
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(Collections.<String> emptyList(), task.getLinks());
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals("", task.inScreenFormat());
@@ -377,6 +460,7 @@ public class TaskTest extends TestCase {
 		assertEquals("", task.getPrependedDate());
 		assertEquals(Collections.<String> emptyList(), task.getContexts());
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(Collections.<String> emptyList(), task.getLinks());
 		assertTrue(task.isDeleted());
 		assertFalse(task.isCompleted());
 		assertEquals("", task.inScreenFormat());
@@ -384,16 +468,16 @@ public class TaskTest extends TestCase {
 		assertEquals("", task.getCompletionDate());
 	}
 
-	public void testConstructor_completedTask() {
-		String input = "x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject";
+	public void testConstructor_completedTask() throws MalformedURLException {
+		String input = "x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com";
 		Task task = new Task(1, input);
 
 		assertEquals(1, task.getId());
 		assertEquals(
-				"A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com",
 				task.getOriginalText());
 		assertEquals(
-				"A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com",
 				task.getText());
 		assertEquals(Priority.NONE, task.getOriginalPriority());
 		assertEquals(Priority.NONE, task.getPriority());
@@ -405,25 +489,27 @@ public class TaskTest extends TestCase {
 		assertEquals(2, task.getProjects().size());
 		assertTrue(task.getProjects().contains("with"));
 		assertTrue(task.getProjects().contains("myproject"));
+		assertEquals(1, task.getLinks().size());
+		assertTrue(task.getLinks().contains(new URL("http://www.link.com")));
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
 		assertEquals(
-				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject",
+				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com",
 				task.inScreenFormat());
 		assertEquals(input, task.inFileFormat());
 		assertEquals("2011-02-28", task.getCompletionDate());
 	}
 
-	public void testConstructor_completedTask_upperCase() {
-		String input = "X 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject";
+	public void testConstructor_completedTask_upperCase() throws MalformedURLException {
+		String input = "X 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com";
 		Task task = new Task(1, input);
 
 		assertEquals(1, task.getId());
 		assertEquals(
-				"A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com",
 				task.getOriginalText());
 		assertEquals(
-				"A @complex test +with @multiple projects and @contexts +myproject",
+				"A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com",
 				task.getText());
 		assertEquals(Priority.NONE, task.getOriginalPriority());
 		assertEquals(Priority.NONE, task.getPriority());
@@ -435,13 +521,15 @@ public class TaskTest extends TestCase {
 		assertEquals(2, task.getProjects().size());
 		assertTrue(task.getProjects().contains("with"));
 		assertTrue(task.getProjects().contains("myproject"));
+		assertEquals(1, task.getLinks().size());
+		assertTrue(task.getLinks().contains(new URL("http://www.link.com")));
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
 		assertEquals(
-				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject",
+				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com",
 				task.inScreenFormat());
 		assertEquals(
-				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject",
+				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject with http://www.link.com",
 				task.inFileFormat());
 		assertEquals("2011-02-28", task.getCompletionDate());
 	}
