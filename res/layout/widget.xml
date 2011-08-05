@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+Todo.txt Touch/res/layout/widget.xml
+
+Copyright (c) 2009-2011 Scott Anderson
+
+LICENSE:
+
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Scott Anderson <scotta[at]gmail[dot]com> @license
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2011 Scott Anderson
+ -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/widget_root" android:orientation="vertical"
+	android:layout_height="fill_parent" android:layout_width="fill_parent"
+	android:background="@color/white">
+
+	<LinearLayout style="@style/TitleBar">
+		<ImageView style="@style/TitleBarLogo" android:id="@+id/widget_launchbutton" android:src="@drawable/title_logo"  />
+		<LinearLayout style="@style/TitleBarSpring" />
+		<ImageView style="@style/TitleBarSeparator" />
+
+		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_refresh"
+			android:src="@drawable/ic_title_sync" />
+
+		<ProgressBar style="@style/TitleBarProgressIndicator"
+			android:id="@+id/title_refresh_progress" android:visibility="gone" />
+		<ImageView style="@style/TitleBarSeparator" />
+		<ImageButton style="@style/TitleBarAction" android:src="@drawable/ic_title_add" />
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:background="@color/white" android:layout_weight="1">
+
+		<RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+			<TextView android:id="@+id/taskid1" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:gravity="bottom"
+				android:textSize="10dip" android:layout_alignBaseline="@+id/taskprio1"
+				android:textColor="@color/grey" android:paddingLeft="4dip" />
+			<TextView android:id="@+id/taskprio1" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:padding="4dip"
+				android:textSize="16dip" android:textStyle="bold"
+				android:layout_toRightOf="@id/taskid1" />
+			<TextView android:id="@+id/tasktext1" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingRight="4dip" android:paddingTop="4dip"
+				android:textSize="16dip" android:layout_toRightOf="@id/taskprio1" />
+			<TextView android:id="@+id/taskage1" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingBottom="4dip" android:textSize="11dip"
+				android:layout_below="@id/tasktext1" android:layout_toRightOf="@id/taskprio1"
+				android:textColor="@color/grey" android:visibility="gone" />
+		</RelativeLayout>
+
+		<RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+			<TextView android:id="@+id/taskid2" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:gravity="bottom"
+				android:textSize="10dip" android:layout_alignBaseline="@+id/taskprio2"
+				android:textColor="@color/grey" android:paddingLeft="4dip" />
+			<TextView android:id="@+id/taskprio2" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:padding="4dip"
+				android:textSize="16dip" android:textStyle="bold"
+				android:layout_toRightOf="@id/taskid2" />
+			<TextView android:id="@+id/tasktext2" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingRight="4dip" android:paddingTop="4dip"
+				android:textSize="16dip" android:layout_toRightOf="@id/taskprio2" />
+			<TextView android:id="@+id/taskage2" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingBottom="4dip" android:textSize="11dip"
+				android:layout_below="@id/tasktext2" android:layout_toRightOf="@id/taskprio2"
+				android:textColor="@color/grey" android:visibility="gone" />
+		</RelativeLayout>
+
+		<RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+			<TextView android:id="@+id/taskid3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:gravity="bottom"
+				android:textSize="10dip" android:layout_alignBaseline="@+id/taskprio3"
+				android:textColor="@color/grey" android:paddingLeft="4dip" />
+			<TextView android:id="@+id/taskprio3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:padding="4dip"
+				android:textSize="16dip" android:textStyle="bold"
+				android:layout_toRightOf="@id/taskid3" />
+			<TextView android:id="@+id/tasktext3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingRight="4dip" android:paddingTop="4dip"
+				android:textSize="16dip" android:layout_toRightOf="@id/taskprio3" />
+			<TextView android:id="@+id/taskage3" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingBottom="4dip" android:textSize="11dip"
+				android:layout_below="@id/tasktext3" android:layout_toRightOf="@id/taskprio3"
+				android:textColor="@color/grey" android:visibility="gone" />
+		</RelativeLayout>
+
+		<RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+			<TextView android:id="@+id/taskid4" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:gravity="bottom"
+				android:textSize="10dip" android:layout_alignBaseline="@+id/taskprio4"
+				android:textColor="@color/grey" android:paddingLeft="4dip" />
+			<TextView android:id="@+id/taskprio4" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:padding="4dip"
+				android:textSize="16dip" android:textStyle="bold"
+				android:layout_toRightOf="@id/taskid4" />
+			<TextView android:id="@+id/tasktext4" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingRight="4dip" android:paddingTop="4dip"
+				android:textSize="16dip" android:layout_toRightOf="@id/taskprio4" />
+			<TextView android:id="@+id/taskage4" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:paddingLeft="4dip"
+				android:paddingBottom="4dip" android:textSize="11dip"
+				android:layout_below="@id/tasktext4" android:layout_toRightOf="@id/taskprio4"
+				android:textColor="@color/grey" android:visibility="gone" />
+		</RelativeLayout>
+
+		<TextView android:id="@+id/android:empty"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:text="@string/main_no_items" style="@style/TodoTxtTouchLight"
+			android:gravity="center_vertical|center_horizontal" />
+	</LinearLayout>
+</LinearLayout>
