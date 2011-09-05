@@ -30,12 +30,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences.Editor;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
+import com.todotxt.todotxttouch.remote.Client;
 import com.todotxt.todotxttouch.remote.RemoteClient;
 import com.todotxt.todotxttouch.remote.RemoteLoginTask;
 import com.todotxt.todotxttouch.util.Util;
@@ -54,8 +62,14 @@ public class LoginScreen extends Activity {
 
 		setContentView(R.layout.login);
 
+		// remote provider selection
+		final Spinner clientSelect = (Spinner) findViewById(R.id.remote_select);
+		ArrayAdapter<Client> adapter = new ArrayAdapter<Client>(this, android.R.layout.simple_spinner_item, Client.values());
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		clientSelect.setAdapter(adapter);
+		
 		m_app = (TodoApplication) getApplication();
-
+		
 		// supposed to help with the banding on the green background
 		findViewById(R.id.loginbackground).getBackground().setDither(true);
 
@@ -74,15 +88,20 @@ public class LoginScreen extends Activity {
 		m_LoginButton = (Button) findViewById(R.id.login);
 		m_LoginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				boolean ret = m_app.getRemoteClientManager().setClient(
+						((Client)clientSelect.getSelectedItem()).name());
+				Log.d(TAG, "commitResult: "+ret);
 				login();
 			}
 		});
 
+		
 		final RemoteClient remoteClient = m_app.getRemoteClientManager()
 				.getRemoteClient();
 		if (remoteClient.isAuthenticated()) {
 			switchToTodolist();
 		}
+		
 	}
 
 	private void switchToTodolist() {

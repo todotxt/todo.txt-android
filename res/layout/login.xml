@@ -73,6 +73,12 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:shadowRadius="1.0"
 	/>
 	</LinearLayout>
+
+	<Spinner android:id="@+id/remote_select"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+	/>
 	
 	<Button android:id="@+id/login"
 		android:layout_width="wrap_content"

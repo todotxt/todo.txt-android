@@ -32,5 +32,19 @@ package com.todotxt.todotxttouch.remote;
  * @author Tim Barlotta
  */
 public enum Client {
-    DROPBOX;
+	
+	DROPBOX("Dropbox"), 
+	LOCAL("Local only");
+	
+	private String description;
+	
+	private Client(String description) {
+		this.description = description;
+	}
+	
+	@Override
+	public String toString() {
+		return description;
+	}
+    
 }

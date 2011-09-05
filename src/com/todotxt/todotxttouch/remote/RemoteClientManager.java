@@ -27,8 +27,11 @@
 package com.todotxt.todotxttouch.remote;
 
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 import com.todotxt.todotxttouch.TodoApplication;
+import com.todotxt.todotxttouch.remote.local.LocalRemoteClient;
 
 /**
  * Manager for obtaining, switching, etc. remote clients
@@ -37,6 +40,7 @@ import com.todotxt.todotxttouch.TodoApplication;
  */
 public class RemoteClientManager implements
 		SharedPreferences.OnSharedPreferenceChangeListener {
+	private static final String CURRENT_REMOTE_CLIENT = "CURRENT_REMOTE_CLIENT";
 	// private final static String TAG =
 	// RemoteClientManager.class.getSimpleName();
 	@SuppressWarnings("unused")
@@ -66,17 +70,33 @@ public class RemoteClientManager implements
 	 * @return
 	 */
 	private RemoteClient getRemoteClient(Client clientToken) {
-		return new DropboxRemoteClient(todoApplication, sharedPreferences);
+		
+		switch (clientToken){
+			case DROPBOX: return new DropboxRemoteClient(todoApplication, sharedPreferences);
+			default:
+			case LOCAL: return new LocalRemoteClient(todoApplication, sharedPreferences); /* awesome name :) LocalRemoteClient*/
+		}
+		
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		// TODO later
+		if (CURRENT_REMOTE_CLIENT.equals(key)){
+			calculateRemoteClient(sharedPreferences);
+		}
 	}
 
 	private void calculateRemoteClient(SharedPreferences sharedPreferences) {
-		currentClient = getRemoteClient(Client.DROPBOX);
-		currentClientToken = Client.DROPBOX;
+
+		currentClientToken = Client.valueOf(sharedPreferences.getString(CURRENT_REMOTE_CLIENT, "DROPBOX"));
+		currentClient = getRemoteClient(currentClientToken);
+		
+	}
+
+	public boolean setClient(String name) {
+		Editor editor = sharedPreferences.edit();
+		editor.putString(CURRENT_REMOTE_CLIENT, name);
+		return editor.commit();
 	}
 }

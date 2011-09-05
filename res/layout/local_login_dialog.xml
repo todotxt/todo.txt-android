@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+Todo.txt Touch/res/layout/local_login_dialogg.xml
+
+Copyright (c) 2009-2011 Tomasz Roszko
+
+LICENSE:
+
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Tomasz Roszko <geekonek@gmail.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2011 Tomasz Roszko
+ -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:orientation="vertical">
+	<TextView android:id="@+id/local_login_description" android:text="@string/local_login_description"
+		android:textAppearance="?android:attr/textAppearanceSmall"
+		android:layout_marginLeft="20dip" android:layout_marginRight="20dip"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+</LinearLayout>
