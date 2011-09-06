@@ -20,8 +20,9 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Hrayr Artunyan <hrayr[dot]artunyan[at]gmail[dot]com>
+ * @author Tomasz Roszko <geekone[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Hrayr Artunyan
+ * @copyright 2009-2011 Hrayr Artunyan, Tomasz Roszko
  */
 package com.todotxt.todotxttouch;
 
@@ -30,18 +31,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences.Editor;
-import android.database.DataSetObserver;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import com.todotxt.todotxttouch.remote.Client;
 import com.todotxt.todotxttouch.remote.RemoteClient;
@@ -63,8 +63,38 @@ public class LoginScreen extends Activity {
 		setContentView(R.layout.login);
 
 		// remote provider selection
-		final Spinner clientSelect = (Spinner) findViewById(R.id.remote_select);
-		ArrayAdapter<Client> adapter = new ArrayAdapter<Client>(this, android.R.layout.simple_spinner_item, Client.values());
+		final Spinner clientSelect = (Spinner) findViewById(R.id.remote_select);		
+		ArrayAdapter<Client> adapter = new ArrayAdapter<Client>(this, 
+				android.R.layout.simple_spinner_item, Client.values()){
+
+					@Override
+					public View getView(int position, View convertView,
+							ViewGroup parent) {
+						
+						final LayoutInflater inflater = getLayoutInflater();
+						final View spinnerEntry = inflater.inflate(R.layout.remote_provider_list_entry, null);
+						
+						final TextView providerName = (TextView) spinnerEntry.findViewById(R.id.remoteProviderName);
+						final TextView providerDesc = (TextView) spinnerEntry.findViewById(R.id.remoteProviderDescription);
+						
+						final Client client = getItem(position);
+						
+						
+						
+						String lowerCaseName = client.name().toLowerCase();
+						providerName.setText(getResources().getIdentifier("@string/remote_provider_name_"+lowerCaseName, null, getPackageName()));
+						providerDesc.setText(getResources().getIdentifier("@string/remote_provider_desc_"+lowerCaseName, null, getPackageName()));
+						
+						return spinnerEntry;
+					}
+			
+					@Override
+					public View getDropDownView(int position, View convertView,
+							ViewGroup parent) {
+						return getView(position, convertView, parent);
+					}
+					
+		};
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		clientSelect.setAdapter(adapter);
 		
@@ -88,10 +118,16 @@ public class LoginScreen extends Activity {
 		m_LoginButton = (Button) findViewById(R.id.login);
 		m_LoginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				boolean ret = m_app.getRemoteClientManager().setClient(
-						((Client)clientSelect.getSelectedItem()).name());
-				Log.d(TAG, "commitResult: "+ret);
-				login();
+				//set new remote client based on selection
+				String newClientName = ((Client)clientSelect.getSelectedItem()).name();
+				boolean ret = m_app.getRemoteClientManager().setClient(newClientName);
+				if (ret) {
+					Log.d(TAG, "Changed remote client to: "+newClientName);
+					//login
+					login();
+				} else {
+					Log.e(TAG, "Could not change remote client to: "+newClientName);
+				}
 			}
 		});
 

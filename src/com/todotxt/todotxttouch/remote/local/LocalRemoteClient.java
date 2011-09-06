@@ -1,3 +1,28 @@
+/**
+ *
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/remote/local/LocalRemoteClient.java
+ *
+ * Copyright (c) 2011 Tomasz Roszko
+ *
+ * LICENSE:
+ *
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+ *
+ * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author Tomasz Roszko <geekonek[at]gmail[dot]com>
+ * @license http://www.gnu.org/licenses/gpl.html
+ * @copyright 2011 Tomasz Roszko
+ */
 package com.todotxt.todotxttouch.remote.local;
 
 import java.io.File;
@@ -13,18 +38,18 @@ import com.todotxt.todotxttouch.remote.RemoteLoginTask;
 
 public class LocalRemoteClient implements RemoteClient {
 
-	private static final String LOCAL_REMOTE_CLIENT_CONNECTED = "LOCAL_REMOTE_CLIENT_CONNECTED";
+	private static final String LOCAL_CLIENT_CONNECTED_FLAG = "com.todotxt.localClientConnected";
+	
 	private TodoApplication todoApplication;
 	private boolean loggedIn = false;
 	private SharedPreferences sharedPreferences;
-	
 	
 	public LocalRemoteClient(TodoApplication todoApplication,
 			SharedPreferences sharedPreferences) {
 		this.todoApplication = todoApplication;
 		this.sharedPreferences = sharedPreferences;
-		if (sharedPreferences.contains(LOCAL_REMOTE_CLIENT_CONNECTED) &&
-				sharedPreferences.getBoolean(LOCAL_REMOTE_CLIENT_CONNECTED, false)){
+		//check if configuration says i'm connected
+		if (sharedPreferences.getBoolean(LOCAL_CLIENT_CONNECTED_FLAG, false)){
 			loggedIn = true;
 		}
 	}
@@ -43,7 +68,7 @@ public class LocalRemoteClient implements RemoteClient {
 	public void deauthenticate() {
 		loggedIn = false;
 		Editor editor = sharedPreferences.edit();
-		editor.putBoolean(LOCAL_REMOTE_CLIENT_CONNECTED, false);
+		editor.putBoolean(LOCAL_CLIENT_CONNECTED_FLAG, false);
 		editor.commit();
 	}
 
@@ -64,13 +89,13 @@ public class LocalRemoteClient implements RemoteClient {
 
 	@Override
 	public File pullTodo() {
-		// TODO Auto-generated method stub
+		// noop
 		return null;
 	}
 
 	@Override
 	public void pushTodo(File file) {
-		// TODO Auto-generated method stub
+		// noop
 	}
 
 	@Override
@@ -83,10 +108,11 @@ public class LocalRemoteClient implements RemoteClient {
 	}
 
 	public void login() {
-		this.loggedIn = true;
 		Editor editor = sharedPreferences.edit();
-		editor.putBoolean(LOCAL_REMOTE_CLIENT_CONNECTED, true);
-		editor.commit();
+		editor.putBoolean(LOCAL_CLIENT_CONNECTED_FLAG, true);
+		if (editor.commit()){
+			this.loggedIn = true;
+		}
 	}
 
 }

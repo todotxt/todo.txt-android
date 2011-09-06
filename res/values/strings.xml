@@ -4,7 +4,7 @@
 
 Todo.txt Touch/res/values/strings.xml
 
-Copyright (c) 2009-2011 Gina Trapani, mathias, Tormod Haugen, Hrayr Artunyan, Stephen Henderson, Mirko Friedenhagen, AdamZaloudek
+Copyright (c) 2009-2011 Gina Trapani, mathias, Tormod Haugen, Hrayr Artunyan, Stephen Henderson, Mirko Friedenhagen, AdamZaloudek, Tomasz Roszko
 
 LICENSE:
 
@@ -28,8 +28,9 @@ You should have received a copy of the GNU General Public License along with Tod
 @author Stephen Henderson <me[at]steveh[dot]ca>
 @author Mirko Friedenhagen <mirko-lists[at]friedenhagen[dot]de>
 @author AdamZaloudek <AdamZaloudek[at]hotmail[dot]com>
+@author Tomasz Roszko <geekonek[at]gmail[dot]com>
 @license http://www.gnu.org/licenses/gpl.html
-@copyright 2009-2011 Gina Trapani, mathias, Tormod Haugen, Hrayr Artunyan, Stephen Henderson, Mirko Friedenhagen, AdamZaloudek
+@copyright 2009-2011 Gina Trapani, mathias, Tormod Haugen, Hrayr Artunyan, Stephen Henderson, Mirko Friedenhagen, AdamZaloudek, Tomasz Roszko
  -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -166,5 +167,10 @@ You should have received a copy of the GNU General Public License along with Tod
 
 	<string name="local_login_description">Local storage does not provide any synchronization.\nYour tasks 
 		will only be stored locally.</string>
+
+	<string name="remote_provider_name_local">Local Storage</string>
+	<string name="remote_provider_desc_local">Provides local storage only, no synchronization.</string>
+	<string name="remote_provider_name_dropbox">Dropbox</string>
+	<string name="remote_provider_desc_dropbox">Stores your todo.txt file on Dropbox.</string>
 
 </resources>

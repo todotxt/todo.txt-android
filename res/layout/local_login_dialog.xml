@@ -2,7 +2,7 @@
 
 <!--
 
-Todo.txt Touch/res/layout/local_login_dialogg.xml
+Todo.txt Touch/res/layout/local_login_dialog.xml
 
 Copyright (c) 2009-2011 Tomasz Roszko
 
@@ -21,7 +21,7 @@ details.
 You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
 <http://www.gnu.org/licenses/>.
 
-@author Tomasz Roszko <geekonek@gmail.com>
+@author Tomasz Roszko <geekonek[at]gmail[dot]com>
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2011 Tomasz Roszko
  -->
