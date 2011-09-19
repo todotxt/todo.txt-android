@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoApplication.java
  *
- * Copyright (c) 2009-2011 mathias, Gina Trapani, Tormod Haugen
+ * Copyright (c) 2009-2011 mathias, Gina Trapani, Tormod Haugen, Tomasz Roszko
  *
  * LICENSE:
  *
@@ -23,8 +23,9 @@
  * @author Tormod Haugen <tormodh[at]gmail[dot]com>
  * @author mathias <mathias[at]ws7862[dot](none)>
  * @author mathias <mathias[at]x2[dot](none)>
+ * @author Tomasz Roszko <geekonek[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias, Gina Trapani, Tormod Haugen
+ * @copyright 2009-2011 mathias, Gina Trapani, Tormod Haugen, Tomasz Roszko
  */
 package com.todotxt.todotxttouch;
 
@@ -60,7 +61,7 @@ public class TodoApplication extends Application {
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
-
+		
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Constants.INTENT_GO_OFFLINE);
 		intentFilter.addAction(Constants.INTENT_START_SYNC_TO_REMOTE);
@@ -72,8 +73,13 @@ public class TodoApplication extends Application {
 			registerReceiver(m_broadcastReceiver, intentFilter);
 		}
 
+		
+		//initialize tasks so widget gets tasks after application redeployment
+		taskBag.reload();
+		Log.d("\n\n\n TODO APPLICATION1\n\n\n", taskBag.toString());
+		
 	}
-
+	
 	@Override
 	public void onTerminate() {
 		unregisterReceiver(m_broadcastReceiver);
@@ -262,6 +268,12 @@ public class TodoApplication extends Application {
 
 			}
 		}
+	}
+	
+	public void broadcastWidgetUpdate(){
+		Log.d(TAG, "Broadcasting widget update intent");
+		Intent intent = new Intent(Constants.INTENT_WIDGET_UPDATE);
+		sendBroadcast(intent);
 	}
 
 }

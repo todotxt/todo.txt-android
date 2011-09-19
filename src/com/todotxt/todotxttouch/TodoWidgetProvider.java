@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoWidgetProvider.java
  *
- * Copyright (c) 2011 Scott Anderson
+ * Copyright (c) 2011 Scott Anderson, Tomasz Roszko
  *
  * LICENSE:
  *
@@ -20,151 +20,180 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Scott Anderson <scotta[at]gmail[dot]com>
+ * @author Tomasz Roszko <geekonek[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2011 Scott Anderson
+ * @copyright 2011 Scott Anderson, Tomasz Roszko
  */
 package com.todotxt.todotxttouch;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.text.SpannableString;
+import android.text.style.StrikethroughSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
-import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 
 public class TodoWidgetProvider extends AppWidgetProvider {
 
+	private static final String TAG = TodoWidgetProvider.class.getName();
+	private static final int TASKS_TO_DISPLAY = 4;
+	
+	private static final int TASK_ID = 0;
+	private static final int TASK_PRIO = 1;
+	private static final int TASK_TEXT = 2;
+
+	private final int[][] id = {
+			{R.id.todoWidget_IdTask1, R.id.todoWidget_PrioTask1, R.id.todoWidget_TextTask1},
+			{R.id.todoWidget_IdTask2, R.id.todoWidget_PrioTask2, R.id.todoWidget_TextTask2},
+			{R.id.todoWidget_IdTask3, R.id.todoWidget_PrioTask3, R.id.todoWidget_TextTask3},
+			{R.id.todoWidget_IdTask4, R.id.todoWidget_PrioTask4, R.id.todoWidget_TextTask4}
+	};
+	
 	@Override
-	public void onEnabled(Context context) {
-		RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.widget );
-
-		Intent intent = new Intent(context, LoginScreen.class);
-		PendingIntent loginScreen = PendingIntent.getActivity(context, 0, intent, 0);
-		remoteViews.setOnClickPendingIntent( R.id.widget_launchbutton, loginScreen);
+	public void onReceive(Context context, Intent intent) {
+		super.onReceive(context, intent);
+		
+		//receive intent and update widget content
+		if (Constants.INTENT_WIDGET_UPDATE.equals(intent.getAction())){
+			Log.d(TAG, "Update widget intent received ");
+			updateWidgetContent(context, AppWidgetManager.getInstance(context), null, null);
+		}
 	}
-
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		TodoApplication app = null;
-		try {
-			// context is a ContextWrapper wrapping TodoApplication
-			// This probably isn't guaranteed
-			app = (TodoApplication)((ContextWrapper)context).getBaseContext();
-		} catch(Exception e) {
-			e.printStackTrace();
+	
+	private void updateWidgetContent(Context context, AppWidgetManager appWidgetManager, int[] widgetIds, RemoteViews remoteViews) {
+		
+		Log.d(TAG, "Updating TodoWidgetProvider content.");
+		
+		//get widget ID's if not provided
+		if (widgetIds == null){
+			widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, TodoWidgetProvider.class.getName()));
 		}
-
-		if(app == null) {
-			DateFormat format = SimpleDateFormat.getTimeInstance( SimpleDateFormat.MEDIUM, Locale.getDefault() );
-			for (int i = 0; i < appWidgetIds.length; ++i) {
-				RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-				String string = "couldnt get app\nTime = " + format.format( new Date());
-				remoteViews.setTextViewText(android.R.id.empty, string);
-				remoteViews.setViewVisibility(android.R.id.empty, View.VISIBLE);
-				appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
+		
+		//get remoteViews if not provided
+		if (remoteViews == null){
+			remoteViews = new RemoteViews( context.getPackageName(), R.layout.widget );
+		}
+		
+		//get taskBag from application
+		TaskBag taskBag = ((TodoApplication)((ContextWrapper)context).getBaseContext()).getTaskBag();
+		
+		List<Task> tasks = taskBag.getTasks();
+		int taskCount = tasks.size();
+		Resources resources = context.getResources();
+		
+		
+		for (int i = 0; i < TASKS_TO_DISPLAY; i++) {
+			
+			//get task to display
+			if (i >= tasks.size()){
+				// no more tasks to display
+				remoteViews.setViewVisibility(id[i][TASK_ID], View.GONE);
+				remoteViews.setViewVisibility(id[i][TASK_PRIO], View.GONE);
+				remoteViews.setViewVisibility(id[i][TASK_TEXT], View.GONE);
+				//remoteViews.setViewVisibility(id[i][TASK_ID], View.GONE); //add task age later
+				continue;
 			}
-		} else {
-			TaskBag taskBag = app.getTaskBag();
-			List<Task> tasks = taskBag.getTasks();
-			int taskCount = tasks.size();
+			Task task = tasks.get(i);
 
-			for (int i = 0; i < appWidgetIds.length; ++i) {
-				RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
-
-				if(taskCount > 0)
-					update(app, remoteViews, R.id.taskid1, R.id.taskprio1, R.id.tasktext1, R.id.taskage1, tasks.get(0));
-				if(taskCount > 1)
-					update(app, remoteViews, R.id.taskid2, R.id.taskprio2, R.id.tasktext2, R.id.taskage2, tasks.get(1));
-				if(taskCount > 2)
-					update(app, remoteViews, R.id.taskid3, R.id.taskprio3, R.id.tasktext3, R.id.taskage3, tasks.get(2));
-				if(taskCount > 3)
-					update(app, remoteViews, R.id.taskid4, R.id.taskprio4, R.id.tasktext4, R.id.taskage4, tasks.get(3));
-
-				remoteViews.setViewVisibility(android.R.id.empty, taskCount == 0 ? View.VISIBLE : View.GONE);
-
-				appWidgetManager.updateAppWidget(appWidgetIds[i], remoteViews);
+			
+			
+			//id
+			remoteViews.setTextViewText(id[i][TASK_ID], String.format("%02d", task.getId() + 1));
+			remoteViews.setTextColor(id[i][TASK_ID], resources.getColor(R.color.black));
+			remoteViews.setViewVisibility(id[i][TASK_ID], View.VISIBLE);
+			
+			//text
+			//TODO: use styles from widget theme, like in main task list display
+			SpannableString ss = new SpannableString(task.inScreenFormat());
+			Util.setColor(ss, task.getProjects(), Color.GRAY);
+			Util.setColor(ss, task.getContexts(), Color.GRAY);
+			remoteViews.setTextViewText(id[i][TASK_TEXT], ss);
+			remoteViews.setViewVisibility(id[i][TASK_TEXT], View.VISIBLE);
+			
+			//priority
+			//TODO: use styles from widget theme, like in main task list display
+			int color = R.color.white;			
+			switch (task.getPriority()) {
+				case A: color = R.color.green; break;
+				case B:	color = R.color.blue; break;
+				case C: color = R.color.orange;	break;
+				case D:	color = R.color.gold;
 			}
-		}
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
-	}
+					
+			remoteViews.setTextViewText(id[i][TASK_PRIO], task.getPriority().inListFormat());
+			remoteViews.setTextColor(id[i][TASK_PRIO], resources.getColor(color));
+			remoteViews.setViewVisibility(id[i][TASK_PRIO], View.VISIBLE);
+			
+			
+			//TODO: do wee need to display completed tasks on widget? IMO not
+			if (task.isCompleted()) {
+				Log.v(TAG, "Striking through " + task.getText());
+				ss.setSpan(new StrikethroughSpan(), 0, ss.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
+				//holder.tasktext.setPaintFlags(holder.tasktext.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+			}
 
-	private void update(TodoApplication app, RemoteViews remoteViews, int taskid, int taskprio, int tasktext, int taskage, Task task) {
-		// Copied and modified from TodoTxtTouch.TaskAdapter.getView()
-		remoteViews.setTextViewText(taskid, String.format("%02d", task.getId() + 1));
-		remoteViews.setTextViewText(taskprio, task.getPriority().inListFormat());
-		SpannableString ss = new SpannableString(task.inScreenFormat());
-		Util.setGray(ss, task.getProjects());
-		Util.setGray(ss, task.getContexts());
-		remoteViews.setTextViewText(tasktext, ss);
-
-		Resources res = app.getResources();
-		remoteViews.setTextColor(tasktext, res.getColor(R.color.black));
-
-		switch (task.getPriority()) {
-		case A:
-			remoteViews.setTextColor(taskprio, res.getColor(R.color.green));
-			break;
-		case B:
-			remoteViews.setTextColor(taskprio, res.getColor(R.color.blue));
-			break;
-		case C:
-			remoteViews.setTextColor(taskprio, res.getColor(R.color.orange));
-			break;
-		case D:
-			remoteViews.setTextColor(taskprio, res.getColor(R.color.gold));
-			break;
-		default:
-			remoteViews.setTextColor(taskprio, res.getColor(R.color.black));
-		}
-		/*if (task.isCompleted()) {
-			Log.v(TAG, "Striking through " + task.getText());
-			holder.tasktext.setPaintFlags(holder.tasktext
-					.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-		} else {
-			holder.tasktext.setPaintFlags(holder.tasktext
-					.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-		}*/
-
-		// hide line numbers unless show preference is checked
-		if (!app.m_prefs.getBoolean("showlinenumberspref", false)) {
-			remoteViews.setViewVisibility(taskid, View.GONE);
-		} else {
-			remoteViews.setViewVisibility(taskid, View.VISIBLE);
-		}
-
-		if (app.m_prefs.getBoolean("show_task_age_pref", false)) {
-			if (!task.isCompleted()
-					&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
-				remoteViews.setTextViewText(taskage, task.getRelativeAge());
-				remoteViews.setViewVisibility(taskage, View.VISIBLE);
+			// hide line numbers unless show preference is checked
+			/*if (!app.m_prefs.getBoolean("showlinenumberspref", false)) {
+				remoteViews.setViewVisibility(taskid, View.GONE);
 			} else {
-				remoteViews.setTextViewText(taskage, "");
-				remoteViews.setViewVisibility(taskage, View.GONE);
-				/*holder.tasktext.setPadding(
+				remoteViews.setViewVisibility(taskid, View.VISIBLE);
+			}*/
+
+			/*if (app.m_prefs.getBoolean("show_task_age_pref", false)) {
+				if (!task.isCompleted()
+						&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
+					remoteViews.setTextViewText(taskage, task.getRelativeAge());
+					remoteViews.setViewVisibility(taskage, View.VISIBLE);
+				} else {
+					remoteViews.setTextViewText(taskage, "");
+					remoteViews.setViewVisibility(taskage, View.GONE);
+					holder.tasktext.setPadding(
+							holder.tasktext.getPaddingLeft(),
+							holder.tasktext.getPaddingTop(),
+							holder.tasktext.getPaddingRight(), 4);
+				}
+			} else {
+				holder.tasktext.setPadding(
 						holder.tasktext.getPaddingLeft(),
 						holder.tasktext.getPaddingTop(),
-						holder.tasktext.getPaddingRight(), 4);*/
-			}
-		} else {
-			/*holder.tasktext.setPadding(
-					holder.tasktext.getPaddingLeft(),
-					holder.tasktext.getPaddingTop(),
-					holder.tasktext.getPaddingRight(), 4);*/
+						holder.tasktext.getPaddingRight(), 4);
+			}*/
 		}
+		
+		remoteViews.setViewVisibility(R.id.empty, taskCount == 0 ? View.VISIBLE : View.GONE);
+		appWidgetManager.updateAppWidget(widgetIds, remoteViews);
+		
+	}
+	
+	@Override
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
+		
+		RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.widget );
+		
+		Intent intent = new Intent(context, LoginScreen.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+		remoteViews.setOnClickPendingIntent( R.id.widget_launchbutton, pendingIntent);
+		
+		intent = new Intent(context, AddTask.class);
+		pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+		remoteViews.setOnClickPendingIntent(R.id.widget_addbutton, pendingIntent);
+		
+		updateWidgetContent(context, appWidgetManager, appWidgetIds, remoteViews);
+
 	}
 }

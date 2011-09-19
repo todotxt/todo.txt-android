@@ -4,7 +4,7 @@
 
 Todo.txt Touch/AndroidManifest.xml
 
-Copyright (c) 2009-2011 Gina Trapani, mathias, Hrayr Artunyan, Stephen Henderson, Tormod Haugen, Scott Anderson
+Copyright (c) 2009-2011 Gina Trapani, mathias, Hrayr Artunyan, Stephen Henderson, Tormod Haugen, Scott Anderson, Tomasz Roszko
 
 LICENSE:
 
@@ -27,8 +27,9 @@ You should have received a copy of the GNU General Public License along with Tod
 @author Stephen Henderson <me[at]steveh[dot]ca>
 @author Tormod Haugen <tormodh[at]gmail[dot]com>
 @author Scott Anderson <scotta[at]gmail[dot]com>
+@author Tomasz Roszko <geekonek[at]gmail[dot]com>
 @license http://www.gnu.org/licenses/gpl.html
-@copyright 2009-2011 Gina Trapani, mathias, Hrayr Artunyan, Stephen Henderson, Tormod Haugen, Scott Anderson
+@copyright 2009-2011 Gina Trapani, mathias, Hrayr Artunyan, Stephen Henderson, Tormod Haugen, Scott Anderson, Tomasz Roszko
  -->
 
 <manifest package="com.todotxt.todotxttouch"
@@ -91,13 +92,18 @@ You should have received a copy of the GNU General Public License along with Tod
 			<meta-data android:name="android.app.searchable"
 				android:resource="@xml/searchable" />
 		</activity>
+		
+		<!-- Task list widget -->
 		<receiver android:name=".TodoWidgetProvider" android:label="@string/app_label">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 			</intent-filter>
-			<meta-data android:name="android.appwidget.provider"
-				android:resource="@xml/todo_widget_provider" />
+			<intent-filter>
+				<action android:name="com.todotxt.todotxttouch.APPWIDGET_UPDATE"/>
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider" android:resource="@xml/todo_widget_provider" />
 		</receiver>
+		
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 </manifest> 

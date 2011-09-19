@@ -55,4 +55,5 @@ public class Constants {
 	public final static String INTENT_START_SYNC_FROM_REMOTE = "com.todotxt.todotxttouch.START_SYNC_FROM";
 	public final static String INTENT_GO_OFFLINE = "com.todotxt.todotxttouch.GO_OFFLINE";
 	public final static String INTENT_UPDATE_UI = "com.todotxt.todotxttouch.UPDATE_UI";
+	public final static String INTENT_WIDGET_UPDATE = "com.todotxt.todotxttouch.APPWIDGET_UPDATE";
 }
