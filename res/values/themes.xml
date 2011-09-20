@@ -44,6 +44,8 @@ You should have received a copy of the GNU General Public License along with Tod
 		<item name="android:dividerHeight">1px</item>
 		<item name="android:cacheColorHint">#000000</item>
 	</style>
-	<style name="TodoTheme.Widget" parent="@android:style/Theme.Translucent.NoTitleBar">
+	<!--<style name="TodoTheme.Widget" parent="@android:style/Theme.Translucent.NoTitleBar"></style>-->
+	<style name="TodoTheme.Widget" parent="TodoTxtTouchDark">
+		<item name="android:background">@android:color/transparent</item>
 	</style>
 </resources>
