@@ -258,8 +258,8 @@ public class AddTask extends Activity {
 					} else {
 						taskBag.addAsTask(input);
 					}
-					
-					//make widgets update
+
+					// make widgets update
 					m_app.broadcastWidgetUpdate();
 					return true;
 				} catch (Exception e) {

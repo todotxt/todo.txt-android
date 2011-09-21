@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoWidgetProvider.java
  *
- * Copyright (c) 2011 Scott Anderson, Tomasz Roszko
+ * Copyright (c) 2011 Scott Anderson, Tomasz Roszko, Gina Trapani
  *
  * LICENSE:
  *
@@ -21,6 +21,7 @@
  *
  * @author Scott Anderson <scotta[at]gmail[dot]com>
  * @author Tomasz Roszko <geekonek[at]gmail[dot]com>
+ * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2011 Scott Anderson, Tomasz Roszko
  */
@@ -100,7 +101,6 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 		Resources resources = context.getResources();
 
 		for (int i = 0; i < TASKS_TO_DISPLAY; i++) {
-
 			// get task to display
 			if (i >= tasks.size()) {
 				// no more tasks to display
@@ -110,8 +110,8 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 				continue;
 			}
 			Task task = tasks.get(i);
-			if (!task.isCompleted()) {
 
+			if (!task.isCompleted()) { // don't show completed tasks
 				// text
 				SpannableString ss = new SpannableString(task.inScreenFormat());
 				remoteViews.setTextViewText(id[i][TASK_TEXT], ss);
@@ -161,7 +161,7 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 				intent, 0);
 		remoteViews.setOnClickPendingIntent(R.id.widget_launchbutton,
 				pendingIntent);
-	 	intent = new Intent(context, AddTask.class);
+		intent = new Intent(context, AddTask.class);
 		pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 		remoteViews.setOnClickPendingIntent(R.id.widget_addbutton,
 				pendingIntent);

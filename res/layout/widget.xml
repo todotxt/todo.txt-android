@@ -4,7 +4,7 @@
 
 Todo.txt Touch/res/layout/widget.xml
 
-Copyright (c) 2011 Scott Anderson, Tomasz Roszko
+Copyright (c) 2011 Scott Anderson, Tomasz Roszko, Gina Trapani
 
 LICENSE:
 
@@ -23,8 +23,9 @@ You should have received a copy of the GNU General Public License along with Tod
 
 @author Scott Anderson <scotta[at]gmail[dot]com>
 @author Tomasz Roszko <geekonek[at]gmail[dot]com>
+@author Gina Trapani <ginatrapani[at]gmail[dot]com>
 @license http://www.gnu.org/licenses/gpl.html
-@copyright 2011 Scott Anderson, Tomasz Roszko
+@copyright 2011 Scott Anderson, Tomasz Roszko, Gina Trapani
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,96 +33,83 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:layout_height="fill_parent" android:layout_width="fill_parent"
 	style="@style/TodoTheme.Widget" android:padding="10dip">
 
-	<LinearLayout android:layout_height="@dimen/title_height"
-		android:layout_width="fill_parent" style="@style/widget_w1_CommandBar"
-		android:gravity="fill_horizontal" android:paddingLeft="5dip">
-		<ImageView style="@style/TitleBarLogo" android:id="@+id/widget_launchbutton"
-			android:src="@drawable/title_logo" />
-		<ImageButton android:id="@+id/widget_addbutton" style="@style/TitleBarAction"
-			android:src="@drawable/ic_title_add" android:layout_width="wrap_content"
-			android:layout_height="fill_parent" />
-	</LinearLayout>
-
-	<LinearLayout android:orientation="vertical"
+	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent"
 		android:layout_weight="1" style="@style/widget_w1_TaskBar">
 
-		<RelativeLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/todoWidget_IdTask1"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask1"
-				android:textColor="@color/grey" android:paddingLeft="5dip"
-				style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/todoWidget_PrioTask1"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:padding="4dip" android:textStyle="bold"
-				android:layout_toRightOf="@id/todoWidget_IdTask1" style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/todoWidget_TextTask1"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:paddingLeft="4dip" android:paddingRight="4dip"
-				android:paddingTop="4dip" android:layout_toRightOf="@id/todoWidget_PrioTask1"
-				style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/taskage1" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:paddingLeft="4dip"
-				android:paddingBottom="4dip" android:layout_below="@id/todoWidget_TextTask1"
-				android:layout_toRightOf="@id/todoWidget_PrioTask1"
-				android:textColor="@color/grey" android:visibility="gone"
-				style="@style/widget_w1_TaskText" />
-		</RelativeLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:layout_weight="1" android:paddingTop="5dip"
+			android:layout_marginLeft="10dip">
 
-		<RelativeLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/todoWidget_IdTask2"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask2"
-				android:textColor="@color/grey" android:paddingLeft="5dip"
-				style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/todoWidget_PrioTask2"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:padding="4dip" android:textStyle="bold"
-				android:layout_toRightOf="@id/todoWidget_IdTask2" style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/todoWidget_TextTask2"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:paddingLeft="4dip" android:paddingRight="4dip"
-				android:paddingTop="4dip" android:layout_toRightOf="@id/todoWidget_PrioTask2"
-				style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/taskage2" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:paddingLeft="4dip"
-				android:paddingBottom="4dip" android:layout_below="@id/todoWidget_TextTask2"
-				android:layout_toRightOf="@id/todoWidget_PrioTask2"
-				android:textColor="@color/grey" android:visibility="gone"
-				style="@style/widget_w1_TaskText" />
-		</RelativeLayout>
+			<RelativeLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:id="@+id/todoWidget_IdTask1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask1"
+					android:textColor="@color/grey" style="@style/widget_w1_TaskText" />
+				<TextView android:id="@+id/todoWidget_PrioTask1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:padding="4dip" android:textStyle="bold"
+					android:layout_toRightOf="@id/todoWidget_IdTask1" style="@style/widget_w1_TaskText" />
+				<TextView android:id="@+id/todoWidget_TextTask1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:paddingLeft="4dip" android:paddingTop="4dip"
+					android:layout_toRightOf="@id/todoWidget_PrioTask1" style="@style/widget_w1_TaskText" />
+			</RelativeLayout>
 
-		<RelativeLayout android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/todoWidget_IdTask3"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask3"
-				android:textColor="@color/grey" android:paddingLeft="5dip"
-				style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/todoWidget_PrioTask3"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:padding="4dip" android:textStyle="bold"
-				android:layout_toRightOf="@id/todoWidget_IdTask3" style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/todoWidget_TextTask3"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:paddingLeft="4dip" android:paddingRight="4dip"
-				android:paddingTop="4dip" android:layout_toRightOf="@id/todoWidget_PrioTask3"
-				style="@style/widget_w1_TaskText" />
-			<TextView android:id="@+id/taskage3" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:paddingLeft="4dip"
-				android:paddingBottom="4dip" android:layout_below="@id/todoWidget_TextTask3"
-				android:layout_toRightOf="@id/todoWidget_PrioTask3"
-				android:textColor="@color/grey" android:visibility="gone"
-				style="@style/widget_w1_TaskText" />
-		</RelativeLayout>
+			<RelativeLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:id="@+id/todoWidget_IdTask2"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask2"
+					android:textColor="@color/grey" style="@style/widget_w1_TaskText" />
+				<TextView android:id="@+id/todoWidget_PrioTask2"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:padding="4dip" android:textStyle="bold"
+					android:layout_toRightOf="@id/todoWidget_IdTask2" style="@style/widget_w1_TaskText" />
+				<TextView android:id="@+id/todoWidget_TextTask2"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:paddingLeft="4dip" android:paddingTop="4dip"
+					android:layout_toRightOf="@id/todoWidget_PrioTask2" style="@style/widget_w1_TaskText" />
+			</RelativeLayout>
 
-		<TextView android:id="@+id/empty" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:text="@string/main_no_items"
-			android:gravity="center_vertical|center_horizontal"
-			android:visibility="gone" />
+			<RelativeLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:id="@+id/todoWidget_IdTask3"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask3"
+					android:textColor="@color/grey" style="@style/widget_w1_TaskText" />
+				<TextView android:id="@+id/todoWidget_PrioTask3"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:padding="4dip" android:textStyle="bold"
+					android:layout_toRightOf="@id/todoWidget_IdTask3" style="@style/widget_w1_TaskText" />
+				<TextView android:id="@+id/todoWidget_TextTask3"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:paddingLeft="4dip" android:paddingTop="4dip"
+					android:layout_toRightOf="@id/todoWidget_PrioTask3" style="@style/widget_w1_TaskText" />
+			</RelativeLayout>
+
+			<TextView android:id="@+id/empty" android:layout_width="fill_parent"
+				android:layout_height="fill_parent" android:text="@string/main_no_items"
+				android:gravity="fill_vertical|top|fill_horizontal|left" />
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="fill_parent"
+			android:gravity="center|top" android:orientation="vertical"
+			android:layout_width="wrap_content" android:paddingTop="5dip"
+			android:layout_marginRight="5dip">
+			<ImageView style="@style/WidgetTitleBarLogo" android:id="@+id/widget_launchbutton"
+				android:src="@drawable/todotxt_touch_icon" android:padding="5dip" />
+			<LinearLayout android:layout_height="fill_parent"
+				android:gravity="bottom|right" android:orientation="vertical"
+				android:layout_width="wrap_content" android:layout_gravity="fill_vertical|bottom|right">
+				<ImageButton android:id="@+id/widget_addbutton" style="@style/TitleBarAction"
+					android:src="@android:drawable/ic_menu_add" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:padding="5dip"
+					android:layout_marginBottom="5dip" />
+			</LinearLayout>
+		</LinearLayout>
 
 	</LinearLayout>
 </LinearLayout>

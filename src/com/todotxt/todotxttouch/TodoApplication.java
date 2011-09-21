@@ -61,7 +61,7 @@ public class TodoApplication extends Application {
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
-		
+
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Constants.INTENT_GO_OFFLINE);
 		intentFilter.addAction(Constants.INTENT_START_SYNC_TO_REMOTE);
@@ -73,13 +73,12 @@ public class TodoApplication extends Application {
 			registerReceiver(m_broadcastReceiver, intentFilter);
 		}
 
-		
-		//initialize tasks so widget gets tasks after application redeployment
+		// initialize tasks so widget gets tasks after application redeployment
 		taskBag.reload();
 		Log.d("\n\n\n TODO APPLICATION1\n\n\n", taskBag.toString());
-		
+
 	}
-	
+
 	@Override
 	public void onTerminate() {
 		unregisterReceiver(m_broadcastReceiver);
@@ -269,8 +268,8 @@ public class TodoApplication extends Application {
 			}
 		}
 	}
-	
-	public void broadcastWidgetUpdate(){
+
+	public void broadcastWidgetUpdate() {
 		Log.d(TAG, "Broadcasting widget update intent");
 		Intent intent = new Intent(Constants.INTENT_WIDGET_UPDATE);
 		sendBroadcast(intent);
