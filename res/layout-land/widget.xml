@@ -77,7 +77,8 @@ You should have received a copy of the GNU General Public License along with Tod
 			</RelativeLayout>
 
 			<RelativeLayout android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_marginBottom="4dip">
+				android:layout_height="wrap_content" android:layout_marginBottom="4dip"
+				android:visibility="gone">
 				<TextView android:id="@+id/todoWidget_IdTask3"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask3"

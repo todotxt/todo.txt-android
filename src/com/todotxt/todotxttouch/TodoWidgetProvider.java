@@ -113,7 +113,13 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 
 			if (!task.isCompleted()) { // don't show completed tasks
 				// text
-				SpannableString ss = new SpannableString(task.inScreenFormat());
+				String taskText;
+				if (task.inScreenFormat().length() > 90) {
+					taskText = task.inScreenFormat().substring(0, 90) + "...";
+				} else {
+					taskText = task.inScreenFormat();
+				}
+				SpannableString ss = new SpannableString(taskText);
 				remoteViews.setTextViewText(id[i][TASK_TEXT], ss);
 				remoteViews.setViewVisibility(id[i][TASK_TEXT], View.VISIBLE);
 
@@ -144,6 +150,7 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 
 		remoteViews.setViewVisibility(R.id.empty, taskCount == 0 ? View.VISIBLE
 				: View.GONE);
+
 		appWidgetManager.updateAppWidget(widgetIds, remoteViews);
 
 	}
