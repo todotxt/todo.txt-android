@@ -2,7 +2,7 @@
 
 <!--
 
-Todo.txt Touch/res/values/dimens.xml
+Todo.txt Touch/res/layout/simple_list_item_multiple_choice.xml
 
 Copyright (c) 2009-2011 Hrayr Artunyan
 
@@ -25,17 +25,13 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2011 Hrayr Artunyan
  -->
-
-
-<resources>
-    <dimen name="title_height">55dip</dimen>
-    <dimen name="subtitle_height">25dip</dimen>
-    <dimen name="actionbar_height">35dip</dimen>
-    <dimen name="actionbar_button_radius">4dip</dimen>
-    <dimen name="now_playing_height">90dip</dimen>
-    <dimen name="text_size_small">14sp</dimen>
-    <dimen name="text_size_medium">18sp</dimen>
-    <dimen name="text_size_large">22sp</dimen>
-    <dimen name="tab_height">48dp</dimen>
-    <dimen name="tab_side_padding">2dp</dimen>
-</resources>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:id="@android:id/text1" 
+	android:layout_width="fill_parent" 
+	android:layout_height="?android:attr/listPreferredItemHeight" 
+	android:textAppearance="?android:attr/textAppearanceLarge"
+	android:textColor="@color/black"
+	android:gravity="center_vertical" 
+	android:checkMark="?android:attr/listChoiceIndicatorMultiple" 
+	android:paddingLeft="6dip" 
+	android:paddingRight="6dip"/>

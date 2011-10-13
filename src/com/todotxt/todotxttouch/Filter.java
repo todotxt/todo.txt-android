@@ -32,45 +32,53 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 public class Filter extends TabActivity {
 
 	private final static String TAG = Filter.class.getSimpleName();
 	private static ArrayList<String> appliedFilters = new ArrayList<String>();
+	private TabHost mTabHost;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		TabHost tabHost = getTabHost();
+		mTabHost = getTabHost();
+		
+		Drawable actionBarBg = getResources().getDrawable(R.drawable.title_background);
+		mTabHost.getTabWidget().setBackgroundDrawable(actionBarBg);
 
 		LayoutInflater.from(this).inflate(R.layout.filter,
-				tabHost.getTabContentView(), true);
+				mTabHost.getTabContentView(), true);
 
-		tabHost.addTab(tabHost
+		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_priorities))
-				.setIndicator(getString(R.string.filter_tab_priorities))
+				//.setIndicator(getString(R.string.filter_tab_priorities))
+				.setIndicator(buildIndicator(R.string.filter_tab_priorities))
 				.setContent(R.id.priorities));
-		tabHost.addTab(tabHost
+		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_projects))
-				.setIndicator(getString(R.string.filter_tab_projects))
+				.setIndicator(buildIndicator(R.string.filter_tab_projects))
 				.setContent(R.id.projects));
-		tabHost.addTab(tabHost
+		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_contexts))
-				.setIndicator(getString(R.string.filter_tab_contexts))
+				.setIndicator(buildIndicator(R.string.filter_tab_contexts))
 				.setContent(R.id.contexts));
-		tabHost.addTab(tabHost
+		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_search))
-				.setIndicator(getString(R.string.filter_tab_search))
+				.setIndicator(buildIndicator(R.string.filter_tab_search))
 				.setContent(R.id.search));
 
 		Intent data = getIntent();
@@ -93,19 +101,19 @@ public class Filter extends TabActivity {
 		final ListView priorities = (ListView) findViewById(R.id.prioritieslv);
 		priorities.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		priorities.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_multiple_choice, priosArr));
+				R.layout.simple_list_item_multiple_choice, priosArr));
 		setSelected(priorities, priosArrSelected);
 
 		final ListView projects = (ListView) findViewById(R.id.projectslv);
 		projects.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		projects.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_multiple_choice, projectsArr));
+				R.layout.simple_list_item_multiple_choice, projectsArr));
 		setSelected(projects, projectsArrSelected);
 
 		final ListView contexts = (ListView) findViewById(R.id.contextslv);
 		contexts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		contexts.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_multiple_choice, contextsArr));
+				R.layout.simple_list_item_multiple_choice, contextsArr));
 		setSelected(contexts, contextsArrSelected);
 
 		final EditText search = (EditText) findViewById(R.id.searchet);
@@ -157,7 +165,13 @@ public class Filter extends TabActivity {
 			}
 		});
 	}
-
+	private View buildIndicator(int textRes) {
+    	final TextView indicator = (TextView) this.getLayoutInflater()
+    		.inflate(R.layout.tab_indicator,
+    				mTabHost.getTabWidget(), false);
+    	indicator.setText(textRes);    	
+    	return indicator;
+    }
 	private static ArrayList<String> getItems(ListView adapter, String type) {
 		ArrayList<String> arr = new ArrayList<String>();
 		int size = adapter.getCount();
