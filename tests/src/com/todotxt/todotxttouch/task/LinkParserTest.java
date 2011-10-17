@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  * 
- * A JUnit based test class for the ContextParser
+ * A JUnit based test class for the LinkParser
  * 
  * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html

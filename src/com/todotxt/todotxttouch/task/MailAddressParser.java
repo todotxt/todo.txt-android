@@ -1,6 +1,6 @@
 /**
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/LinkParser.java
+ * Todo.txt Touch/src/com/todotxt/todotxttouch/task/MailAddressParser.java
  *
  * Copyright (c) 2011 Florian Behr
  *
@@ -19,9 +19,8 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * LinkParser
- * A utility class for parsing a string to find all links. A link is any
- * substring of the input text that starts with http:// or https://.
+ * MailAdressParser
+ * A utility class for parsing a string to find all email addresses.
  *
  * @author Florian Behr <mail[at]florianbehr[dot]de>
  *
@@ -30,44 +29,36 @@
  */
 package com.todotxt.todotxttouch.task;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.todotxt.todotxttouch.TodoException;
+public class MailAddressParser {
+	private static final Pattern MAIL_ADDRESS_PATTERN = Pattern
+			.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
+					+ "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\."
+					+ "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
+	private static final MailAddressParser INSTANCE = new MailAddressParser();
 
-public class LinkParser {
-	private static final Pattern LINK_PATTERN = Pattern
-			.compile("(http|https)://[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?");
-	private static final LinkParser INSTANCE = new LinkParser();
-
-	private LinkParser() {
+	private MailAddressParser() {
 	}
 
-	public static LinkParser getInstance() {
+	public static MailAddressParser getInstance() {
 		return INSTANCE;
 	}
 
-	public List<URL> parse(String inputText) {
+	public List<String> parse(String inputText) {
 		if (inputText == null) {
 			return Collections.emptyList();
 		}
 
-		Matcher m = LINK_PATTERN.matcher(inputText);
-		List<URL> links = new ArrayList<URL>();
+		Matcher m = MAIL_ADDRESS_PATTERN.matcher(inputText);
+		List<String> addresses = new ArrayList<String>();
 		while (m.find()) {
-			URL link;
-			try {
-				link = new URL(m.group());
-				links.add(link);
-			} catch (MalformedURLException e) {
-				throw new TodoException("Malformed URL matched the regex", e);
-			}
+			addresses.add(m.group().trim());
 		}
-		return links;
+		return addresses;
 	}
 }

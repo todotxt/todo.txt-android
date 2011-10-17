@@ -284,8 +284,7 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	/**
-	 * Adds menu items to the context menu depending on the tasks content (for
-	 * now only links)
+	 * Adds menu items to the context menu depending on the tasks content
 	 * 
 	 * @param menu
 	 *            The menu to add items to
@@ -297,6 +296,11 @@ public class TodoTxtTouch extends ListActivity implements
 		while (i.hasNext()) {
 			menu.add(Menu.NONE, R.id.url, Menu.NONE, i.next().toString());
 		}
+		
+		ListIterator<String> j = task.getMailAddresses().listIterator();
+		while (j.hasNext()) {
+			menu.add(Menu.NONE, R.id.mail, Menu.NONE, j.next());
+		}		
 	}
 
 	@Override
@@ -331,8 +335,16 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "share");
 			shareTaskAt(pos);
 		} else if (menuid == R.id.url) {
+			Log.v(TAG, "url: " + item.getTitle().toString());
 			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getTitle()
 					.toString()));
+			startActivity(i);
+		} else if (menuid == R.id.mail) {
+			Log.v(TAG, "mail: " + item.getTitle().toString());
+			Intent i = new Intent(Intent.ACTION_SEND, Uri.parse(item.getTitle()
+					.toString()));
+			i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] {item.getTitle().toString()});
+			i.setType("text/plain");
 			startActivity(i);
 		}
 

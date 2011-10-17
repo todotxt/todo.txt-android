@@ -35,4 +35,5 @@ You should have received a copy of the GNU General Public License along with Tod
 	<item android:title="@string/delete" android:id="@+id/delete" />
 	<item android:title="@string/share" android:id="@+id/share" />
 	<item android:visible="false" android:id="@+id/url"></item>
+	<item android:id="@+id/mail" android:visible="false"></item>
 </menu>
