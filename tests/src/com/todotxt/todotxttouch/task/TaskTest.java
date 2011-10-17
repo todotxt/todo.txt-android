@@ -350,15 +350,15 @@ public class TaskTest extends TestCase {
 
 	public void testConstructor_withInterspersedLinks()
 			throws MalformedURLException {
-		String input = "A simple https://ww.url.com test with two http://www.urls.com http://www.another.one";
+		String input = "A simple https://www.url.com test with two http://www.urls.com http://www.another.one";
 		Task task = new Task(1, input);
 
 		assertEquals(1, task.getId());
 		assertEquals(
-				"A simple https://ww.url.com test with two http://www.urls.com http://www.another.one",
+				"A simple https://www.url.com test with two http://www.urls.com http://www.another.one",
 				task.getOriginalText());
 		assertEquals(
-				"A simple https://ww.url.com test with two http://www.urls.com http://www.another.one",
+				"A simple https://www.url.com test with two http://www.urls.com http://www.another.one",
 				task.getText());
 		assertEquals(Priority.NONE, task.getOriginalPriority());
 		assertEquals(Priority.NONE, task.getPriority());
