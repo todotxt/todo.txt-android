@@ -297,6 +297,11 @@ public class TodoTxtTouch extends ListActivity implements
 		while (i.hasNext()) {
 			menu.add(Menu.NONE, R.id.url, Menu.NONE, i.next().toString());
 		}
+
+		ListIterator<String> i3 = task.getPhoneNumbers().listIterator();
+		while (i3.hasNext()) {
+			menu.add(Menu.NONE, R.id.phone_number, Menu.NONE, i3.next());
+		}
 	}
 
 	@Override
@@ -332,6 +337,11 @@ public class TodoTxtTouch extends ListActivity implements
 			shareTaskAt(pos);
 		} else if (menuid == R.id.url) {
 			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getTitle()
+					.toString()));
+			startActivity(i);
+		} else if (menuid == R.id.phone_number) {
+			Log.v(TAG, "phone_number");
+			Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + item.getTitle()
 					.toString()));
 			startActivity(i);
 		}
