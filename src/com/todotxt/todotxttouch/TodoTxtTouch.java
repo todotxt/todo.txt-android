@@ -296,11 +296,14 @@ public class TodoTxtTouch extends ListActivity implements
 		while (i.hasNext()) {
 			menu.add(Menu.NONE, R.id.url, Menu.NONE, i.next().toString());
 		}
-		
 		ListIterator<String> j = task.getMailAddresses().listIterator();
 		while (j.hasNext()) {
 			menu.add(Menu.NONE, R.id.mail, Menu.NONE, j.next());
-		}		
+		}
+		ListIterator<String> i3 = task.getPhoneNumbers().listIterator();
+		while (i3.hasNext()) {
+			menu.add(Menu.NONE, R.id.phone_number, Menu.NONE, i3.next());
+		}
 	}
 
 	@Override
@@ -343,8 +346,13 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "mail: " + item.getTitle().toString());
 			Intent i = new Intent(Intent.ACTION_SEND, Uri.parse(item.getTitle()
 					.toString()));
-			i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] {item.getTitle().toString()});
+			i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { item
+					.getTitle().toString() });
 			i.setType("text/plain");
+		} else if (menuid == R.id.phone_number) {
+			Log.v(TAG, "phone_number");
+			Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"
+					+ item.getTitle().toString()));
 			startActivity(i);
 		}
 
@@ -464,7 +472,7 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showToastLong(TodoTxtTouch.this, "Task already complete");
 		} else {
 			task.markComplete(new Date());
-			//Log.v(TAG, "Completing task with this text: " + task.getText());
+			// Log.v(TAG, "Completing task with this text: " + task.getText());
 			new AsyncTask<Object, Void, Boolean>() {
 
 				protected void onPreExecute() {
@@ -966,7 +974,7 @@ public class TodoTxtTouch extends ListActivity implements
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
 				if (task.isCompleted()) {
-					//Log.v(TAG, "Striking through " + task.getText());
+					// Log.v(TAG, "Striking through " + task.getText());
 					holder.tasktext.setPaintFlags(holder.tasktext
 							.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 				} else {
