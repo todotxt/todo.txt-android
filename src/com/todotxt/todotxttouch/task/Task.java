@@ -56,6 +56,7 @@ public class Task implements Serializable {
 	private List<String> contexts;
 	private List<String> projects;
 	private List<URL> links;
+	private List<String> phoneNumbers;
 
 	public Task(long id, String rawText, Date defaultPrependedDate) {
 		this.id = id;
@@ -84,6 +85,7 @@ public class Task implements Serializable {
 		this.contexts = ContextParser.getInstance().parse(text);
 		this.projects = ProjectParser.getInstance().parse(text);
 		this.links = LinkParser.getInstance().parse(text);
+		this.phoneNumbers = PhoneNumberParser.getInstance().parse(text);
 		this.deleted = Strings.isEmptyOrNull(text);
 
 		if (defaultPrependedDate != null
@@ -133,6 +135,10 @@ public class Task implements Serializable {
 
 	public List<URL> getLinks() {
 		return links;
+	}
+
+	public List<String> getPhoneNumbers() {
+		return phoneNumbers;
 	}
 
 	public List<String> getProjects() {
@@ -247,6 +253,11 @@ public class Task implements Serializable {
 				return false;
 		} else if (!links.equals(other.links))
 			return false;
+		if (phoneNumbers == null) {
+			if (other.phoneNumbers != null)
+				return false;
+		} else if (!phoneNumbers.equals(other.phoneNumbers))
+			return false;
 		if (prependedDate == null) {
 			if (other.prependedDate != null)
 				return false;
@@ -284,6 +295,8 @@ public class Task implements Serializable {
 		result = prime * result + (deleted ? 1231 : 1237);
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((links == null) ? 0 : links.hashCode());
+		result = prime * result
+				+ ((phoneNumbers == null) ? 0 : phoneNumbers.hashCode());
 		result = prime * result
 				+ ((prependedDate == null) ? 0 : prependedDate.hashCode());
 		result = prime * result

@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="libs/json_simple-1.1.jar"/>
 	<classpathentry kind="lib" path="libs/apache-mime4j-0.6.jar"/>
 	<classpathentry kind="lib" path="libs/httpmime-4.0.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="libs/libphonenumber-4.1.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
