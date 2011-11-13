@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/task/TaskIo.java
  *
- * Copyright (c) 2011 Tim Barlotta
+ * Copyright (c) 2011 Tim Barlotta, Florian Behr
  *
  * LICENSE:
  *
@@ -20,8 +20,9 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2011 Tim Barlotta
+ * @copyright 2011 Tim Barlotta, Florian Behr
  */
 
 package com.todotxt.todotxttouch.util;
@@ -60,6 +61,9 @@ public class TaskIo {
 				line = line.trim();
 				if (line.length() > 0) {
 					items.add(new Task(counter, line));
+				} else {
+					Task last = items.get(items.size() - 1);
+					last.setNextBlankLines(last.getNextBlankLines() + 1);
 				}
 				counter++;
 			}
@@ -72,33 +76,17 @@ public class TaskIo {
 
 	public static ArrayList<Task> loadTasksFromFile(File file)
 			throws IOException {
-		ArrayList<Task> items = new ArrayList<Task>();
-		BufferedReader in = null;
 		if (!file.exists()) {
 			Log.w(TAG, file.getAbsolutePath() + " does not exist!");
 		} else {
 			InputStream is = new FileInputStream(file);
-			try {
-				in = new BufferedReader(new InputStreamReader(is));
-				String line;
-				long counter = 0L;
-				while ((line = in.readLine()) != null) {
-					line = line.trim();
-					if (line.length() > 0) {
-						items.add(new Task(counter, line));
-					}
-					counter++;
-				}
-			} finally {
-				Util.closeStream(in);
-				Util.closeStream(is);
-			}
+			return loadTasksFromStream(is);
 		}
-		return items;
+		return new ArrayList<Task>();
 	}
 
 	public static void writeToFile(List<Task> tasks, File file,
-			boolean useWindowsBreaks) {
+			boolean useWindowsBreaks, boolean preserveBlankLines) {
 		try {
 			if (!Util.isDeviceWritable()) {
 				throw new IOException("Device is not writable!");
@@ -111,9 +99,19 @@ public class TaskIo {
 				if (useWindowsBreaks) {
 					// Log.v(TAG, "Using Windows line breaks");
 					fw.write("\r\n");
+					if (preserveBlankLines) {
+						for (int k = 0; k < tasks.get(i).getNextBlankLines(); k++) {
+							fw.write("\r\n");
+						}
+					}
 				} else {
 					// Log.v(TAG, "NOT using Windows line breaks");
 					fw.write("\n");
+					if (preserveBlankLines) {
+						for (int k = 0; k < tasks.get(i).getNextBlankLines(); k++) {
+							fw.write("\n");
+						}
+					}
 				}
 			}
 			fw.close();

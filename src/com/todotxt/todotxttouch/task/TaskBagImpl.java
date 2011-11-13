@@ -246,6 +246,10 @@ class TaskBagImpl implements TaskBag {
 		public boolean isUseWindowsLineBreaksEnabled() {
 			return sharedPreferences.getBoolean("linebreakspref", false);
 		}
+		
+		public boolean isPreserveLineBreaksEnabled() {
+			return sharedPreferences.getBoolean("preservelinebreakspref", false);
+		}
 
 		public boolean isPrependDateEnabled() {
 			return sharedPreferences.getBoolean("todotxtprependdate", false);
