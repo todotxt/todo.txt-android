@@ -82,7 +82,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="show_line_numbers_pref_summary">Zeige die Zeilennummern aller Tasks an.</string>
 	<string name="line_breaks_pref_key">linebreakspref</string>
 	<string name="line_breaks_pref_title">Windows Zeilenenden</string>
-	<string name="line_breaks_pref_summary">Benutze Windows-freundliche Zeilenenden in der Textdateiin.</string>
+	<string name="line_breaks_pref_summary">Benutze Windows-freundliche Zeilenenden in der Textdatei.</string>
 	<string name="work_offline_pref_key">workofflinepref</string>
 	<string name="work_offline_pref_title">Arbeite Offline</string>
 	<string name="work_offline_pref_summary">Lade nicht automatisch jede Änderung zu Dropbox.</string>
