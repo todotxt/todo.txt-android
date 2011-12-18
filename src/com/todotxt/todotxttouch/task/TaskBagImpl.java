@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.util.TaskIo;
@@ -47,7 +46,6 @@ import com.todotxt.todotxttouch.util.TaskIo;
  * @author Tim Barlotta
  */
 class TaskBagImpl implements TaskBag {
-	private static final String TAG = TaskBagImpl.class.getSimpleName();
 	private Preferences preferences;
 	private final LocalTaskRepository localRepository;
 	private final RemoteClientManager remoteClientManager;
@@ -124,7 +122,7 @@ class TaskBagImpl implements TaskBag {
 			Task found = TaskBagImpl.find(tasks, task);
 			if (found != null) {
 				task.copyInto(found);
-				//Log.i(TAG, "copied into found {" + found + "}");
+				// Log.i(TAG, "copied into found {" + found + "}");
 				localRepository.store(tasks);
 			} else {
 				throw new TaskPersistException("Task not found, not updated");
