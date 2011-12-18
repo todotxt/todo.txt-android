@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Todo.txt Touch/AndroidManifest.xml
+
+Copyright (c) 2009-2011 Gina Trapani, mathias, Hrayr Artunyan, Stephen Henderson, Tormod Haugen, Scott Anderson, Tomasz Roszko
+
+LICENSE:
+
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Gina Trapani <ginatrapani[at]gmail[dot]com>
+@author mathias <mathias[at]x2[dot](none)>
+@author Hrayr Artunyan <hrayr[dot]artunyan[at]gmail[dot]com>
+@author Stephen Henderson <me[at]steveh[dot]ca>
+@author Tormod Haugen <tormodh[at]gmail[dot]com>
+@author Scott Anderson <scotta[at]gmail[dot]com>
+@author Tomasz Roszko <geekonek[at]gmail[dot]com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2011 Gina Trapani, mathias, Hrayr Artunyan, Stephen Henderson, Tormod Haugen, Scott Anderson, Tomasz Roszko
+-->
+
+<manifest package="com.todotxt.todotxttouch"
+    android:versionCode="21"
+    android:versionName="0.7" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Warning 'is lower than the project target API level' should be ok -->
+    <uses-sdk
+        android:minSdkVersion="3"
+        android:targetSdkVersion="4" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+
+    <application
+        android:name=".TodoApplication"
+        android:debuggable="true"
+        android:icon="@drawable/todotxt_touch_icon"
+        android:label="@string/app_label" >
+         <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask" >
+            <intent-filter>
+
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-PUT-APP-KEY-HERE" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>        
+        <activity
+            android:name=".LoginScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_label"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Filter"
+            android:label="Filter"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".Preferences"
+            android:label="@string/set_preferences" />
+        <activity
+            android:name=".AddTask"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/addtask"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <activity-alias
+            android:name=".AddTaskShortcut"
+            android:label="@string/shortcut_addtask_name"
+            android:targetActivity=".AddTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".AddTaskShare"
+            android:label="@string/share_addtask_name"
+            android:targetActivity=".AddTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".HelpActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+        <activity
+            android:name=".TodoTxtTouch"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+       
+        <!-- Task list widget -->
+        <receiver
+            android:name=".TodoWidgetProvider"
+            android:label="@string/app_label" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.todotxt.todotxttouch.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/todo_widget_provider" />
+        </receiver>
+    </application>
+
+</manifest>
