@@ -124,7 +124,7 @@ class TaskBagImpl implements TaskBag {
 			Task found = TaskBagImpl.find(tasks, task);
 			if (found != null) {
 				task.copyInto(found);
-				Log.i(TAG, "copied into found {" + found + "}");
+				//Log.i(TAG, "copied into found {" + found + "}");
 				localRepository.store(tasks);
 			} else {
 				throw new TaskPersistException("Task not found, not updated");
