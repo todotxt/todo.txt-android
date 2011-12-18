@@ -3,11 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="libs/dropbox-client-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="libs/signpost-commonshttp4-1.2.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/signpost-core-1.2.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/json_simple-1.1.jar"/>
-	<classpathentry kind="lib" path="libs/apache-mime4j-0.6.jar"/>
-	<classpathentry kind="lib" path="libs/httpmime-4.0.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="/home/florian/workspace/todo.txt-touch/libs/dropbox-android-sdk-1.2.2.jar" sourcepath="/home/florian/workspace/dropbox-android-sdk-1.2.2/src"/>
+	<classpathentry kind="lib" path="/home/florian/workspace/todo.txt-touch/libs/apache-mime4j-0.6.jar"/>
+	<classpathentry kind="lib" path="/home/florian/workspace/todo.txt-touch/libs/httpmime-4.0.3.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

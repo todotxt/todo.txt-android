@@ -2,7 +2,7 @@
  *
  * Todo.txt Touch/src/com/todotxt/todotxttouch/LoginScreen.java
  *
- * Copyright (c) 2009-2011 Hrayr Artunyan
+ * Copyright (c) 2009-2011 Hrayr Artunyan, Florian Behr
  *
  * LICENSE:
  *
@@ -20,8 +20,9 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Hrayr Artunyan <hrayr[dot]artunyan[at]gmail[dot]com>
+ * @author Florian Behr <mail[at]florianbehr[dot]de>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Hrayr Artunyan
+ * @copyright 2009-2011 Hrayr Artunyan, Florian Behr
  */
 package com.todotxt.todotxttouch;
 
@@ -37,7 +38,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.todotxt.todotxttouch.remote.RemoteClient;
-import com.todotxt.todotxttouch.remote.RemoteLoginTask;
 import com.todotxt.todotxttouch.util.Util;
 
 public class LoginScreen extends Activity {
@@ -47,6 +47,7 @@ public class LoginScreen extends Activity {
 	private TodoApplication m_app;
 	private Button m_LoginButton;
 	private BroadcastReceiver m_broadcastReceiver;
+	private boolean m_loginStarted;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +75,11 @@ public class LoginScreen extends Activity {
 		m_LoginButton = (Button) findViewById(R.id.login);
 		m_LoginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				login();
+				startLogin();
 			}
 		});
 
-		final RemoteClient remoteClient = m_app.getRemoteClientManager()
+		RemoteClient remoteClient = m_app.getRemoteClientManager()
 				.getRemoteClient();
 		if (remoteClient.isAuthenticated()) {
 			switchToTodolist();
@@ -92,12 +93,32 @@ public class LoginScreen extends Activity {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		if (m_loginStarted) {
+			finishLogin();
+		}
+	}
+
+	private void finishLogin() {
+		RemoteClient remoteClient = m_app.getRemoteClientManager()
+				.getRemoteClient();
+		remoteClient.finishLogin();		
+		if (remoteClient.isAuthenticated()) {			
+			Intent broadcastLoginIntent = new Intent(
+					"com.todotxt.todotxttouch.ACTION_LOGIN");
+			sendBroadcast(broadcastLoginIntent);
+		}
+		m_loginStarted = false;
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(m_broadcastReceiver);
 	}
 
-	void login() {
+	void startLogin() {
 		final RemoteClient client = m_app.getRemoteClientManager()
 				.getRemoteClient();
 
@@ -106,8 +127,8 @@ public class LoginScreen extends Activity {
 					+ " is not available; aborting login");
 			Util.showToastLong(m_app, R.string.toast_login_notconnected);
 		} else {
-			RemoteLoginTask loginTask = client.getLoginTask();
-			loginTask.showLoginDialog(this);
+			client.startLogin();
+			m_loginStarted = true;
 		}
 	}
 
