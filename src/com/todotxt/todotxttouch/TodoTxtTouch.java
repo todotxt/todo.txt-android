@@ -452,7 +452,7 @@ public class TodoTxtTouch extends ListActivity implements
 			Util.showToastLong(TodoTxtTouch.this, "Task already complete");
 		} else {
 			task.markComplete(new Date());
-			Log.v(TAG, "Completing task with this text: " + task.getText());
+			//Log.v(TAG, "Completing task with this text: " + task.getText());
 			new AsyncTask<Object, Void, Boolean>() {
 
 				protected void onPreExecute() {
@@ -954,7 +954,7 @@ public class TodoTxtTouch extends ListActivity implements
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
 				if (task.isCompleted()) {
-					Log.v(TAG, "Striking through " + task.getText());
+					//Log.v(TAG, "Striking through " + task.getText());
 					holder.tasktext.setPaintFlags(holder.tasktext
 							.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 				} else {
