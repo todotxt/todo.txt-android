@@ -39,6 +39,21 @@ public interface RemoteClient {
 	boolean authenticate();
 
 	/**
+	 * Starts the login with remote api
+	 * 
+	 * @return true if successful
+	 */
+	boolean startLogin();
+
+	/**
+	 * Implement this for two-step oAuth type login to finish the process. Call
+	 * this from the onResume() of your activity
+	 * 
+	 * @return true if successful
+	 */
+	boolean finishLogin();
+
+	/**
 	 * Attempts to deauthenticate with remote api
 	 */
 	void deauthenticate();

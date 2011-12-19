@@ -50,6 +50,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -349,6 +350,12 @@ public class Util {
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
+	}
+
+	public static boolean isOnline(Context context) {
+		ConnectivityManager cm = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		return cm.getActiveNetworkInfo().isConnectedOrConnecting();
 	}
 
 }
