@@ -4,7 +4,7 @@
 
 Todo.txt Touch/res/layout/login.xml
 
-Copyright (c) 2009-2011 Gina Trapani, Hrayr Artunyan
+Copyright (c) 2009-2011 Gina Trapani, Hrayr Artunyan, Tomasz Roszko
 
 LICENSE:
 
@@ -23,8 +23,9 @@ You should have received a copy of the GNU General Public License along with Tod
 
 @author Gina Trapani <ginatrapani[at]gmail[dot]com>
 @author Hrayr Artunyan <hrayr[at]Hrayr-Artunyans-MacBook-Pro[dot]local>
+@author Tomasz Roszko <geekonek[at]gmail[dot]com>
 @license http://www.gnu.org/licenses/gpl.html
-@copyright 2009-2011 Gina Trapani, Hrayr Artunyan
+@copyright 2009-2011 Gina Trapani, Hrayr Artunyan, Tomasz Roszko
  -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -73,6 +74,12 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:shadowRadius="1.0"
 	/>
 	</LinearLayout>
+
+	<Spinner android:id="@+id/remote_select"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_horizontal"
+	/>
 	
 	<Button android:id="@+id/login"
 		android:layout_width="wrap_content"

@@ -20,37 +20,43 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Tomasz Roszko <geekonek[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2011 Tim Barlotta
+ * @copyright 2011 Tim Barlotta, Tomasz Roszko
  */
 
 package com.todotxt.todotxttouch.remote;
 
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 import com.todotxt.todotxttouch.TodoApplication;
+import com.todotxt.todotxttouch.remote.local.LocalRemoteClient;
 
 /**
  * Manager for obtaining, switching, etc. remote clients
  * 
  * @author Tim Barlotta
  */
-public class RemoteClientManager implements
-		SharedPreferences.OnSharedPreferenceChangeListener {
-	// private final static String TAG =
-	// RemoteClientManager.class.getSimpleName();
-	@SuppressWarnings("unused")
+public class RemoteClientManager implements SharedPreferences.OnSharedPreferenceChangeListener {
+	
+	private static final String CURRENT_CLIENT_KEY = "com.todotxt.currentClient";
+	private final static String TAG = RemoteClientManager.class.getSimpleName();
+
 	private Client currentClientToken;
 	private RemoteClient currentClient;
 	private TodoApplication todoApplication;
 	private SharedPreferences sharedPreferences;
 
-	public RemoteClientManager(TodoApplication todoApplication,
-			SharedPreferences sharedPreferences) {
+	public RemoteClientManager(TodoApplication todoApplication,	SharedPreferences sharedPreferences) {
 		this.todoApplication = todoApplication;
-		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 		this.sharedPreferences = sharedPreferences;
+		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+		
+		//calculate current client from shared properties
 		calculateRemoteClient(sharedPreferences);
+		
 		currentClient.authenticate();
 	}
 
@@ -66,17 +72,46 @@ public class RemoteClientManager implements
 	 * @return
 	 */
 	private RemoteClient getRemoteClient(Client clientToken) {
-		return new DropboxRemoteClient(todoApplication, sharedPreferences);
+		
+		Log.d(TAG, "Creating new "+clientToken+" remote client instance.");
+		
+		switch (clientToken){
+			case DROPBOX: return new DropboxRemoteClient(todoApplication, sharedPreferences);
+			case LOCAL: return new LocalRemoteClient(todoApplication, sharedPreferences); /* awesome name :) LocalRemoteClient*/
+			default:
+				throw new IllegalArgumentException("Unsuported remote client. "+clientToken);
+		}
+		
 	}
 
+	/**
+	 * Create new remote client when configuration property changes
+	 */
 	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
-		// TODO later
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,	String key) {
+		if (CURRENT_CLIENT_KEY.equals(key)){
+			calculateRemoteClient(sharedPreferences);
+		}
 	}
 
 	private void calculateRemoteClient(SharedPreferences sharedPreferences) {
-		currentClient = getRemoteClient(Client.DROPBOX);
-		currentClientToken = Client.DROPBOX;
+
+		//initialize selected client (defaults to local for first time access, will still be redirected
+		//to login screen)
+		currentClientToken = Client.valueOf(
+				sharedPreferences.getString(CURRENT_CLIENT_KEY, Client.LOCAL.name()));
+		currentClient = getRemoteClient(currentClientToken);
+		
+	}
+
+	/**
+	 * Sets new selected client in configuration
+	 * @param client name
+	 * @return true if configuration succesfully updated
+	 */
+	public boolean setClient(String name) {
+		Editor editor = sharedPreferences.edit();
+		editor.putString(CURRENT_CLIENT_KEY, name);
+		return editor.commit();
 	}
 }

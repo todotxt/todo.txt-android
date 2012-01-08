@@ -20,8 +20,9 @@
  * <http://www.gnu.org/licenses/>.
  *
  * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Tomasz Roszko <geekonek[at]gmail[dot]com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2011 Tim Barlotta
+ * @copyright 2011 Tim Barlotta, Tomasz Roszko
  */
 
 package com.todotxt.todotxttouch.remote;
@@ -32,5 +33,6 @@ package com.todotxt.todotxttouch.remote;
  * @author Tim Barlotta
  */
 public enum Client {
-    DROPBOX;
+	DROPBOX, 
+	LOCAL;
 }
