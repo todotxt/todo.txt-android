@@ -366,7 +366,7 @@ public class TaskTest extends TestCase {
 		assertEquals(Collections.<String> emptyList(), task.getContexts());
 		assertEquals(Collections.<String> emptyList(), task.getProjects());
 		assertEquals(3, task.getLinks().size());
-		assertTrue(task.getLinks().contains(new URL("https://www.url.com")));
+		assertTrue(task.getLinks().contains(new URL("https://ww.url.com")));
 		assertTrue(task.getLinks().contains(new URL("http://www.urls.com")));
 		assertTrue(task.getLinks().contains(new URL("http://www.another.one")));
 		assertFalse(task.isDeleted());
