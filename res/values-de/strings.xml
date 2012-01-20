@@ -100,4 +100,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<!-- title bar changes -->
 	<string name="title_search_results">Suchergebnisse für: </string>
 	<string name="title_filter_applied">Angewendeter Filter: </string>
+	<string name="preserve_line_breaks_pref_title">Leere Zeilen behalten</string>
+	<string name="preserve_line_breaks_pref_summary">Die Formatierung der Textdatei beibehalten</string>
 </resources>

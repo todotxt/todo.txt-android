@@ -164,5 +164,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline
 		mode.</string>
 	<string name="short_touch_pref_key">short_touch_pref</string>
+	<string name="preserve_line_breaks_pref_title">Preserve line breaks</string>
+	<string name="preserve_line_breaks_pref_summary">Preserve formatting of the text file</string>
+	<string name="preserve_line_breaks_pref_key">preservelinebreakspref</string>
 
 </resources>

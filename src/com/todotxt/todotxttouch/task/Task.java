@@ -49,6 +49,7 @@ public class Task implements Serializable {
 	private Priority priority;
 	private boolean deleted = false;
 	private boolean completed = false;
+	private int nextBlankLines = 0;
 	private String text;
 	private String completionDate;
 	private String prependedDate;
@@ -155,6 +156,14 @@ public class Task implements Serializable {
 		return completed;
 	}
 
+	public int getNextBlankLines() {
+		return nextBlankLines;
+	}
+
+	public void setNextBlankLines(int nextBlankLines) {
+		this.nextBlankLines = nextBlankLines;
+	}
+
 	public String getCompletionDate() {
 		return completionDate;
 	}
@@ -214,6 +223,7 @@ public class Task implements Serializable {
 
 	public void copyInto(Task destination) {
 		destination.id = this.id;
+		destination.nextBlankLines = this.nextBlankLines;
 		destination.init(this.inFileFormat(), null);
 	}
 
@@ -246,6 +256,8 @@ public class Task implements Serializable {
 			if (other.links != null)
 				return false;
 		} else if (!links.equals(other.links))
+			return false;
+		if (nextBlankLines != other.nextBlankLines)
 			return false;
 		if (prependedDate == null) {
 			if (other.prependedDate != null)
@@ -284,6 +296,7 @@ public class Task implements Serializable {
 		result = prime * result + (deleted ? 1231 : 1237);
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((links == null) ? 0 : links.hashCode());
+		result = prime * result + nextBlankLines;
 		result = prime * result
 				+ ((prependedDate == null) ? 0 : prependedDate.hashCode());
 		result = prime * result
