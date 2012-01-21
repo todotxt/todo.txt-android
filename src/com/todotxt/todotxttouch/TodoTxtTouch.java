@@ -829,12 +829,21 @@ public class TodoTxtTouch extends ListActivity implements
 				Log.e(TAG, e.getMessage(), e);
 			}
 		}
+		
+		ListView lv = getListView();
+		int index = lv.getFirstVisiblePosition();
+		View v = lv.getChildAt(0);
+		int top = (v == null) ? 0 : v.getTop();
+
 		m_adapter.clear();
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
 				m_prios, m_contexts, m_projects, m_search, false), sort
 				.getComparator())) {
 			m_adapter.add(task);
 		}
+
+		lv.setSelectionFromTop(index, top);
+
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
 		final LinearLayout actionbar = (LinearLayout) findViewById(R.id.actionbar);
 		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
