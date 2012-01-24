@@ -1,12 +1,9 @@
 /**
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/TodoTxtTouch.java
- *
- * Copyright (c) 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Florian Behr
+ * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
- *
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
  * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
@@ -19,15 +16,9 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
- * @author mathias <mathias[at]x2[dot](none)>
- * @author Stephen Henderson <me[at]steveh[dot]ca>
- * @author Tormod Haugen <tormodh[at]gmail[dot]com>
- * @author shanest <ssshanest[at]gmail[dot]com>
- * @author Adam Zaloudek <AdamZaloudek[at]hotmail[dot]com>
- * @author Florian Behr <mail[at]florianbehr[dot]de>
+ * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Gina Trapani, mathias, Stephen Henderson, Tormod Haugen, shanest, Adam Zaloudek, Florian Behr
+ * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch;
 
@@ -829,7 +820,7 @@ public class TodoTxtTouch extends ListActivity implements
 				Log.e(TAG, e.getMessage(), e);
 			}
 		}
-		
+
 		ListView lv = getListView();
 		int index = lv.getFirstVisiblePosition();
 		View v = lv.getChildAt(0);

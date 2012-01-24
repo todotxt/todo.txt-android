@@ -1,12 +1,9 @@
 /**
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/LoginScreen.java
- *
- * Copyright (c) 2009-2011 Hrayr Artunyan, Florian Behr
+ * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
- *
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
  * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
@@ -19,10 +16,9 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author Hrayr Artunyan <hrayr[dot]artunyan[at]gmail[dot]com>
- * @author Florian Behr <mail[at]florianbehr[dot]de>
+ * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Hrayr Artunyan, Florian Behr
+ * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch;
 
@@ -103,8 +99,8 @@ public class LoginScreen extends Activity {
 	private void finishLogin() {
 		RemoteClient remoteClient = m_app.getRemoteClientManager()
 				.getRemoteClient();
-		remoteClient.finishLogin();		
-		if (remoteClient.isAuthenticated()) {			
+		remoteClient.finishLogin();
+		if (remoteClient.isAuthenticated()) {
 			Intent broadcastLoginIntent = new Intent(
 					"com.todotxt.todotxttouch.ACTION_LOGIN");
 			sendBroadcast(broadcastLoginIntent);

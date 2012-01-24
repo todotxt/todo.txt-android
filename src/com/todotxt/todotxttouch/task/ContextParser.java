@@ -1,12 +1,9 @@
 /**
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/task/ContextParser.java
- *
- * Copyright (c) 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
- *
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
  * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
@@ -19,16 +16,9 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * ContextParser
- * A utility class for parsing a string to find all contexts. A context is any
- * substring of the input text that starts with @ character and ends with a
- * space or the end of the text. e.g. @phone
- *
- * @author mathias <mathias[at]x2[dot](none)>
- * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
- * @author Tim Barlotta <tim[at]barlotta[dot]net>
+ * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias, Gina Trapani, Tim Barlotta
+ * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch.task;
 

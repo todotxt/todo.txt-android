@@ -1,12 +1,9 @@
 /**
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/test/ContextParserTest.java
- *
- * Copyright (c) 2009-2011 Stephen Henderson, Tim Barlotta
+ * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
- *
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
  * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
@@ -18,13 +15,10 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
- * 
- * A JUnit based test class for the ContextParser
- * 
- * @author Tim Barlotta <tim[at]barlotta[dot]net>
- * @author Stephen Henderson <me[at]steveh[dot]ca>
+ *
+ * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 Stephen Henderson, Tim Barlotta 
+ * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch.task;
 

@@ -1,12 +1,9 @@
 /**
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/Filter.java
- *
- * Copyright (c) 2009-2011 mathias, Gina Trapani
+ * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
- *
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
  * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
@@ -19,11 +16,9 @@
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
  *
- * @author mathias <mathias[at]x2[dot](none)>
- * @author Gina Trapani <ginatrapani[at]gmail[dot]com>
- * @author mathias <mathias[at]ws7862[dot](none)>
+ * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011 mathias, Gina Trapani
+ * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch;
 
@@ -55,8 +50,9 @@ public class Filter extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mTabHost = getTabHost();
-		
-		Drawable actionBarBg = getResources().getDrawable(R.drawable.title_background);
+
+		Drawable actionBarBg = getResources().getDrawable(
+				R.drawable.title_background);
 		mTabHost.getTabWidget().setBackgroundDrawable(actionBarBg);
 
 		LayoutInflater.from(this).inflate(R.layout.filter,
@@ -64,7 +60,7 @@ public class Filter extends TabActivity {
 
 		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_priorities))
-				//.setIndicator(getString(R.string.filter_tab_priorities))
+				// .setIndicator(getString(R.string.filter_tab_priorities))
 				.setIndicator(buildIndicator(R.string.filter_tab_priorities))
 				.setContent(R.id.priorities));
 		mTabHost.addTab(mTabHost
@@ -164,13 +160,14 @@ public class Filter extends TabActivity {
 			}
 		});
 	}
+
 	private View buildIndicator(int textRes) {
-    	final TextView indicator = (TextView) this.getLayoutInflater()
-    		.inflate(R.layout.tab_indicator,
-    				mTabHost.getTabWidget(), false);
-    	indicator.setText(textRes);    	
-    	return indicator;
-    }
+		final TextView indicator = (TextView) this.getLayoutInflater().inflate(
+				R.layout.tab_indicator, mTabHost.getTabWidget(), false);
+		indicator.setText(textRes);
+		return indicator;
+	}
+
 	private static ArrayList<String> getItems(ListView adapter, String type) {
 		ArrayList<String> arr = new ArrayList<String>();
 		int size = adapter.getCount();

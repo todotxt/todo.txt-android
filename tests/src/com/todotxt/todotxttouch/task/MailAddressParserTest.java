@@ -1,12 +1,9 @@
 /**
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/test/MailAddressParserTest.java
- *
- * Copyright (c) 2011 Florian Behr
+ * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
- *
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
  * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
@@ -18,12 +15,10 @@
  *
  * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
  * <http://www.gnu.org/licenses/>.
- * 
- * A JUnit based test class for the MailAddressParser
- * 
- * @author Florian Behr <mail[at]florianbehr[dot]de>
+ *
+ * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2011 Florian Behr 
+ * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch.task;
 
@@ -59,28 +54,31 @@ public class MailAddressParserTest extends TestCase {
 		assertEquals(1, links.size());
 		assertTrue(links.contains("this@mail.address"));
 	}
-	
-	public void test_withMailAddressContainingNumbers() throws MalformedURLException {
+
+	public void test_withMailAddressContainingNumbers()
+			throws MalformedURLException {
 		String input = "a simple string with th15@ma4il45.address";
 		List<String> links = MailAddressParser.getInstance().parse(input);
 		assertEquals(1, links.size());
 		assertTrue(links.contains("th15@ma4il45.address"));
 	}
-	
-	public void test_withMailAddressContainingDotsAndHypens() throws MalformedURLException {
+
+	public void test_withMailAddressContainingDotsAndHypens()
+			throws MalformedURLException {
 		String input = "a simple string with t.h-is@ma-il.address";
 		List<String> links = MailAddressParser.getInstance().parse(input);
 		assertEquals(1, links.size());
 		assertTrue(links.contains("t.h-is@ma-il.address"));
 	}
-	
-	public void test_withMailAddressContainingNumersDotsAndHypens() throws MalformedURLException {
+
+	public void test_withMailAddressContainingNumersDotsAndHypens()
+			throws MalformedURLException {
 		String input = "a simple string with t.h-1s@ma-1l.address";
 		List<String> links = MailAddressParser.getInstance().parse(input);
 		assertEquals(1, links.size());
 		assertTrue(links.contains("t.h-1s@ma-1l.address"));
 	}
-	
+
 	public void test_withMultipleMailAddresses() throws MalformedURLException {
 		String input = "this is a text with an@mail.address and another@mail.address";
 		List<String> links = MailAddressParser.getInstance().parse(input);
@@ -89,7 +87,8 @@ public class MailAddressParserTest extends TestCase {
 		assertTrue(links.contains("another@mail.address"));
 	}
 
-	public void test_withInterspersedMailAddresses() throws MalformedURLException {
+	public void test_withInterspersedMailAddresses()
+			throws MalformedURLException {
 		String input = "this string h4s@a.variety of ma.il@addresses.all throughout th-is@te.xt";
 		List<String> links = MailAddressParser.getInstance().parse(input);
 		assertEquals(3, links.size());

@@ -1,28 +1,8 @@
 /**
- *
- * Todo.txt Touch/src/com/todotxt/todotxttouch/util/RelativeDate.java
- *
- * Copyright (c) 2009-2011
- *
- * LICENSE:
- *
  * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
- *
- * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
- * later version.
- *
- * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
- * <http://www.gnu.org/licenses/>.
- *
- * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2011
+ * 
+ * Thanks to: http://kurtischiappone.com/programming/java/relative-date
  */
-//Thanks to: http://kurtischiappone.com/programming/java/relative-date
 package com.todotxt.todotxttouch.util;
 
 import java.text.SimpleDateFormat;
@@ -47,7 +27,7 @@ public class RelativeDate {
 	 * show the actual date, but you want to show the relative date for days,
 	 * months, and years, you can add the other cases in by copying the logic
 	 * for hours, minutes, seconds.
-	 *
+	 * 
 	 * @param calendar
 	 * @param years
 	 * @param months
@@ -72,7 +52,8 @@ public class RelativeDate {
 				return "today";
 		} else if (years == 0 || years == -1) {
 			if (years == -1) {
-				months = 11 - months + Calendar.getInstance().get(Calendar.MONTH);
+				months = 11 - months
+						+ Calendar.getInstance().get(Calendar.MONTH);
 				if (months == 1)
 					return "1 month ago";
 				else
@@ -93,7 +74,7 @@ public class RelativeDate {
 	/**
 	 * This method returns a String representing the relative date by comparing
 	 * the Calendar being passed in to the date / time that it is right now.
-	 *
+	 * 
 	 * @param calendar
 	 * @return String representing the relative date
 	 */
@@ -119,7 +100,7 @@ public class RelativeDate {
 	/**
 	 * This method returns a String representing the relative date by comparing
 	 * the Date being passed in to the date / time that it is right now.
-	 *
+	 * 
 	 * @param date
 	 * @return String representing the relative date
 	 */
@@ -138,7 +119,7 @@ public class RelativeDate {
 	 * This can be changed by passing in a new simple date format and then
 	 * calling {@link RelativeDate#getRelativeDate(Calendar)} or
 	 * {@link RelativeDate#getRelativeDate(Date)}.
-	 *
+	 * 
 	 * @param dateFormat
 	 */
 
