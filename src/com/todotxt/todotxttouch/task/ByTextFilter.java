@@ -34,6 +34,7 @@ package com.todotxt.todotxttouch.task;
 class ByTextFilter implements Filter<Task> {
 	private String text;
 	private boolean caseSensitive;
+	private String[] parts;
 
 	public ByTextFilter(String text, boolean caseSensitive) {
 		if (text == null) {
@@ -41,20 +42,24 @@ class ByTextFilter implements Filter<Task> {
 		}
 		this.text = caseSensitive ? text : text.toUpperCase();
 		this.caseSensitive = caseSensitive;
+		
+		this.parts = this.text.split("\\s");
 	}
 
 	@Override
 	public boolean apply(Task input) {
-		if (text.length() <= 0) {
-			return true;
-		}
-
 		String taskText = caseSensitive ? input.getText() : input.getText()
 				.toUpperCase();
-		if (taskText.contains(text)) {
-			return true;
+		
+		for ( int i = 0; i < parts.length; ++i )
+		{
+			String part = this.parts[i];
+			
+			if ((part.length() > 0) && ! taskText.contains(part))
+				return(false);
 		}
-		return false;
+		
+		return true;
 	}
 
 	/* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
