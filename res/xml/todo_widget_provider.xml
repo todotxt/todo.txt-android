@@ -28,6 +28,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
 	android:minWidth="294dp"
-	android:minHeight="144dp"
+	android:minHeight="40dp"
 	android:initialLayout="@layout/widget"
 	android:updatePeriodMillis="1000" />

@@ -92,7 +92,7 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 					R.layout.widget);
 		}
 
-		// get taskBag from application
+		// get taskBag from application 
 		TaskBag taskBag = ((TodoApplication) ((ContextWrapper) context)
 				.getBaseContext()).getTaskBag();
 
@@ -114,8 +114,8 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 			if (!task.isCompleted()) { // don't show completed tasks
 				// text
 				String taskText;
-				if (task.inScreenFormat().length() > 90) {
-					taskText = task.inScreenFormat().substring(0, 90) + "...";
+				if (task.inScreenFormat().length() > 33) {
+					taskText = task.inScreenFormat().substring(0, 33) + "...";
 				} else {
 					taskText = task.inScreenFormat();
 				}

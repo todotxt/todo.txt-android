@@ -46,7 +46,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
 
 	<style name="widget_w1_TextAppearance" parent="@android:style/TextAppearance">
-		<item name="android:textSize">14sp</item>
+		<item name="android:textSize">12sp</item>
 		<item name="android:textColor">@color/white</item>
 	</style>
 

@@ -44,11 +44,19 @@ You should have received a copy of the GNU General Public License along with Tod
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="top"
             android:layout_marginLeft="10dip"
             android:layout_weight="1"
-            android:gravity="center_vertical"
+            android:gravity="top"
             android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/empty"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="top"
+                android:paddingTop="5dip"
+                android:text="@string/main_no_items" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -69,8 +77,8 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/todoWidget_IdTask1"
-                    android:paddingLeft="4dip"
                     android:paddingRight="4dip"
+                    android:paddingTop="5dip"
                     android:textStyle="bold" />
 
                 <TextView
@@ -79,7 +87,8 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/todoWidget_PrioTask1"
-                    android:paddingLeft="4dip" />
+                    android:paddingLeft="4dip"
+                    android:paddingTop="5dip" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -101,9 +110,8 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/todoWidget_IdTask2"
-                    android:paddingLeft="4dip"
                     android:paddingRight="4dip"
-                    android:paddingTop="10dip"
+                    android:paddingTop="5dip"
                     android:textStyle="bold" />
 
                 <TextView
@@ -113,7 +121,7 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/todoWidget_PrioTask2"
                     android:paddingLeft="4dip"
-                    android:paddingTop="10dip" />
+                    android:paddingTop="5dip" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -136,9 +144,8 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/todoWidget_IdTask3"
-                    android:paddingLeft="4dip"
                     android:paddingRight="4dip"
-                    android:paddingTop="10dip"
+                    android:paddingTop="5dip"
                     android:textStyle="bold" />
 
                 <TextView
@@ -148,15 +155,8 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/todoWidget_PrioTask3"
                     android:paddingLeft="4dip"
-                    android:paddingTop="10dip" />
+                    android:paddingTop="5dip" />
             </RelativeLayout>
-
-            <TextView
-                android:id="@+id/empty"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center_vertical"
-                android:text="@string/main_no_items" />
         </LinearLayout>
 
         <LinearLayout
