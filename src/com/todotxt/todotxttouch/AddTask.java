@@ -22,7 +22,6 @@
  */
 package com.todotxt.todotxttouch;
 
-
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -110,8 +109,8 @@ public class AddTask extends Activity {
 		if (task != null) {
 			m_backup = task;
 			textInputField.setText(task.inFileFormat());
-			setTitle(R.string.update);
-			titleBarLabel.setText(R.string.update);
+			setTitle(R.string.updatetask);
+			titleBarLabel.setText(R.string.updatetask);
 		} else {
 			setTitle(R.string.addtask);
 			titleBarLabel.setText(R.string.addtask);
