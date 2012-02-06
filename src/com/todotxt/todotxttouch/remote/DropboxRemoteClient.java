@@ -146,11 +146,6 @@ class DropboxRemoteClient implements RemoteClient {
 	}
 
 	@Override
-	public RemoteLoginTask getLoginTask() {
-		return null;
-	}
-
-	@Override
 	public File pullTodo() {
 		if (!isAvailable()) {
 			Intent i = new Intent(Constants.INTENT_GO_OFFLINE);

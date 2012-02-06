@@ -73,13 +73,6 @@ public interface RemoteClient {
 	boolean isLoggedIn();
 
 	/**
-	 * Get a login task that can display and handle a login dialog
-	 * 
-	 * @return
-	 */
-	RemoteLoginTask getLoginTask();
-
-	/**
 	 * Pull the remote Todo.txt file
 	 * 
 	 * @return

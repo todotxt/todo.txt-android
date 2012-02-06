@@ -86,8 +86,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<!--  <string name="short_touch_pref_summary_off">Kurzer Klick auf einem Task zeihgt Kontext-Menü.</string>-->
 
 	<!-- login -->
-	<string name="username_label">Email Adresse:</string>
-	<string name="password_label">Dropbox Kennwort:</string>
 	<string name="login_screen_button">In Dropbox einloggen</string>
 	<!-- delete -->
 	<string name="delete_task_title">Task löschen</string>

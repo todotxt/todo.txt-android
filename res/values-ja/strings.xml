@@ -73,8 +73,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="line_breaks_pref_title">Windows用改行コード</string>
 	<string name="line_breaks_pref_summary">テキストファイルの改行コードをWindows用に設定します。</string>
 	<!-- login -->
-	<string name="username_label">メールアドレス:</string>
-	<string name="password_label">パスワード:</string>
 	<string name="login_screen_button">Dropbox にログイン</string>
 	<!-- delete -->
 	<string name="delete_task_title">削除</string>

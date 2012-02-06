@@ -100,8 +100,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <!-- login -->
     <string name="first_title_word">Todo.txt</string>
     <string name="second_title_word">Touch</string>
-    <string name="username_label">Email Address:</string>
-    <string name="password_label">Dropbox Password:</string>
     <string name="login_screen_button">Log in to Dropbox</string>
     <!-- delete -->
     <string name="delete_task_title">Delete Task</string>
