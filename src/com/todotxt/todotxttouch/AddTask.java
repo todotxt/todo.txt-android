@@ -22,6 +22,7 @@
  */
 package com.todotxt.todotxttouch;
 
+
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -58,6 +59,7 @@ public class AddTask extends Activity {
 	private Task m_backup;
 
 	private TodoApplication m_app;
+
 	private TaskBag taskBag;
 
 	private TextView titleBarLabel;

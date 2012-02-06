@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <resources>
-	<color name="red">#C73F17</color>
 	<color name="green">#587058</color>
 	<color name="blue">#587498</color>
 	<color name="gold">#FFD800</color>
@@ -31,7 +30,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<color name="black">#000000</color>
 	<color name="white">#FFFFFF</color>
 	<color name="grey">#888888</color>
-    <color name="title_separator">#40ffffff</color>
     <color name="black_trans">#bb000000</color>
     
     <!--  action bar colors -->

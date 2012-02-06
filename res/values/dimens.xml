@@ -28,10 +28,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <dimen name="subtitle_height">25dip</dimen>
     <dimen name="actionbar_height">35dip</dimen>
     <dimen name="actionbar_button_radius">4dip</dimen>
-    <dimen name="now_playing_height">90dip</dimen>
-    <dimen name="text_size_small">14sp</dimen>
-    <dimen name="text_size_medium">18sp</dimen>
-    <dimen name="text_size_large">22sp</dimen>
     <dimen name="tab_height">48dp</dimen>
     <dimen name="tab_side_padding">2dp</dimen>
 </resources>

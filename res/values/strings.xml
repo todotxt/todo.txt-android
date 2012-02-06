@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -24,136 +23,120 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="app_label">Todo.txt Touch</string>
-	<string name="added_task">Added task</string>
-	<string name="add_task_failed">Could not add task</string>
-	<string name="updated_task">Updated task</string>
-	<string name="update_task_failed">Could not update task</string>
-	<string name="initialized_dropbox">Initialized Dropbox support! Check
-		Dropbox/todo/todo.txt.</string>
-	<string name="sort">Sort</string>
-	<string name="filter">Filter</string>
-	<string name="main_no_items">No tasks to display.</string>
-	<string name="set_preferences">Settings</string>
-	<string name="preferences">Settings</string>
-	<string name="sync">Refresh</string>
-	<string name="upload">Upload</string>
-	<string name="search">Search</string>
-	<string name="refresh">Refresh</string>
-	<string name="add">Add</string>
-	<string name="addtask">Add Task</string>
-	<string name="done">Complete</string>
-	<string name="priority">Prioritize</string>
-	<string name="update">Update</string>
-	<string name="delete">Delete</string>
-	<string name="share">Share</string>
-	<string name="unComplete">Undo Complete</string>
-	<string name="context">Context</string>
-	<string name="project">Project</string>
-	<string name="tag">Tag</string>
-	<string name="ok">OK</string>
-	<string name="cancel">Cancel</string>
-	<string name="clear">Clear</string>
-	<string name="areyousure">Are you sure?</string>
-	<string name="tasktexthint">Call Mom @phone +FamilialPeace\n\n
-	</string>
-	<string name="add_task_help">
-		<b>Projects</b>
-		start with a + sign and contain no spaces, like +KitchenRemodel or
-		+Novel.\n\n
-		<b>Contexts</b>
-		(where you will complete a task) start with an @ sign, like @phone or
+
+    <string name="app_label">Todo.txt Touch</string>
+    <string name="added_task">Added task</string>
+    <string name="add_task_failed">Could not add task</string>
+    <string name="updated_task">Updated task</string>
+    <string name="update_task_failed">Could not update task</string>
+    <string name="sort">Sort</string>
+    <string name="filter">Filter</string>
+    <string name="main_no_items">No tasks to display.</string>
+    <string name="set_preferences">Settings</string>
+    <string name="preferences">Settings</string>
+    <string name="sync">Refresh</string>
+    <string name="search">Search</string>
+    <string name="refresh">Refresh</string>
+    <string name="add">Add</string>
+    <string name="addtask">Add Task</string>
+    <string name="newtask">New Task</string>
+    <string name="done">Complete</string>
+    <string name="priority">Prioritize</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="share">Share</string>
+    <string name="unComplete">Undo Complete</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="clear">Clear</string>
+    <string name="areyousure">Are you sure?</string>
+    <string name="tasktexthint">Call Mom @phone +FamilialPeace\n\n</string>
+    <string name="add_task_help"><b>Projects</b> start with a + sign and contain no spaces, like +KitchenRemodel or
+		+Novel.\n\n<b>Contexts</b> (where you will complete a task) start with an @ sign, like @phone or
 		@GroceryStore.\n\n
 		A task can include any number of projects or
-		contexts.
-	</string>
-	<string name="search_summary">Enter text to search for.</string>
-	
-	<!-- preferences -->
-	<string name="dropbox_logout_pref_title">Log out</string>
-	<string name="dropbox_logout_pref_summary">Log out of Dropbox.</string>
-	<string name="dropbox_logout_explainer">Are you sure you wish to log out of Dropbox?
-	</string>
-	<string name="TODOTXTPATH_key">todotxtpath</string>
-	<string name="TODOTXTPATH_title">File location</string>
-	<string name="TODOTXTPATH_summary">The Dropbox folder where todo.txt is stored.
-	</string>
-	<string name="TODOTXTPATH_defaultPath">/todo</string>
-	<string name="DROPBOX_settings_header">Dropbox</string>
-	<string name="todotxt_settings_header">todo.txt</string>
-	<string name="about_settings_header">About</string>
+		contexts.</string>
 
-	<string name="prepend_date_pref_key">todotxtprependdate</string>
-	<string name="prepend_date_pref_title">Date new tasks</string>
-	<string name="prepend_date_pref_summary">
-		Automatically add creation date to new tasks.
-	</string>
-	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
-	<string name="show_line_numbers_pref_title">Show line numbers</string>
-	<string name="show_line_numbers_pref_summary">Display the line number of each task.</string>
-	<string name="line_breaks_pref_key">linebreakspref</string>
-	<string name="line_breaks_pref_title">Windows line breaks</string>
-	<string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
-	<string name="work_offline_pref_key">workofflinepref</string>
-	<string name="work_offline_pref_title">Work offline</string>
-	<string name="work_offline_pref_summary">Don\'t automatically upload every change to
+    <!-- preferences -->
+    <string name="dropbox_logout_pref_title">Log out</string>
+    <string name="dropbox_logout_pref_summary">Log out of Dropbox.</string>
+    <string name="dropbox_logout_explainer">Are you sure you wish to log out of Dropbox?</string>
+    <string name="TODOTXTPATH_key">todotxtpath</string>
+    <string name="TODOTXTPATH_title">File location</string>
+    <string name="TODOTXTPATH_summary">The Dropbox folder where todo.txt is stored.</string>
+    <string name="TODOTXTPATH_defaultPath">/todo</string>
+    <string name="DROPBOX_settings_header">Dropbox</string>
+    <string name="todotxt_settings_header">todo.txt</string>
+    <string name="about_settings_header">About</string>
+    <string name="prepend_date_pref_key">todotxtprependdate</string>
+    <string name="prepend_date_pref_title">Date new tasks</string>
+    <string name="prepend_date_pref_summary">Automatically add creation date to new tasks.</string>
+    <string name="show_line_numbers_pref_key">showlinenumberspref</string>
+    <string name="show_line_numbers_pref_title">Show line numbers</string>
+    <string name="show_line_numbers_pref_summary">Display the line number of each task.</string>
+    <string name="line_breaks_pref_key">linebreakspref</string>
+    <string name="line_breaks_pref_title">Windows line breaks</string>
+    <string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
+    <string name="work_offline_pref_key">workofflinepref</string>
+    <string name="work_offline_pref_title">Work offline</string>
+    <string name="work_offline_pref_summary">Don\'t automatically upload every change to
 		Dropbox.</string>
+    <string name="show_task_age_pref_key">show_task_age_pref</string>
+    <string name="show_task_age_pref_title">Show task age</string>
+    <string name="show_task_age_pref_summary">Show age of tasks with a creation date.</string>
+    <string name="short_touch_pref_title">Quick complete</string>
+    <string name="short_touch_pref_summary_on">Short touch on a task to mark it complete.</string>
+    <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->
 
-	<string name="show_task_age_pref_key">show_task_age_pref</string>
-	<string name="show_task_age_pref_title">Show task age</string>
-	<string name="show_task_age_pref_summary">Show age of tasks with a creation date.</string>
 
-	<string name="short_touch_pref_title">Quick complete</string>
-	<string name="short_touch_pref_summary_on">Short touch on a task to mark it complete.</string>
-	<!--  <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string>-->
-	
-	<!-- sync dialog -->
-	<string name="sync_dialog_title">Manual Sync</string>
-	<string name="sync_dialog_msg">Do you want to upload or download your todo.txt
-		file?</string>
-	<string name="sync_dialog_upload">Upload changes</string>
-	<string name="sync_dialog_download">Download to phone</string>
-	<string name="sync_upload_message">Uploading todo.txt...</string>
-	<string name="sync_download_message">Downloading todo.txt...</string>
-	<!-- login -->
-	<string name="dropbox_authentication">Log in to Dropbox</string>
-	<string name="username_label">Email Address:</string>
-	<string name="password_label">Dropbox Password:</string>
-	<string name="login_button">Log in</string>
-	<string name="login_screen_button">Log in to Dropbox</string>
-	<!-- delete -->
-	<string name="delete_task_title">Delete Task</string>
-	<string name="delete_task_message">This cannot be undone. Are you sure?</string>
-	<string name="delete_task_confirm">Delete</string>
-	<!-- search -->
-	<string name="search_hint">Search todo.txt</string>
-	<!-- filter tabs -->
-	<string name="filter_tab_priorities">Priorities</string>
-	<string name="filter_tab_projects">Projects</string>
-	<string name="filter_tab_contexts">Contexts</string>
-	<string name="filter_tab_search">Keywords</string>
-	<!-- title bar changes -->
-	<string name="title_search_results">Search term: </string>
-	<string name="title_filter_applied">Filtered by: </string>
-	<string name="add_task_priority_btn">Priority</string>
-	<string name="add_task_context_btn">Context</string>
-	<string name="add_task_project_btn">Project</string>
-	<string name="add_task_help_btn">Help</string>
+    <!-- sync dialog -->
+    <string name="sync_dialog_title">Manual Sync</string>
+    <string name="sync_dialog_msg">Do you want to upload or download your todo.txt file?</string>
+    <string name="sync_dialog_upload">Upload changes</string>
+    <string name="sync_dialog_download">Download to phone</string>
+    <string name="sync_upload_message">Uploading todo.txt…</string>
+    <string name="sync_download_message">Downloading todo.txt…</string>
+    <!-- login -->
+    <string name="first_title_word">Todo.txt</string>
+    <string name="second_title_word">Touch</string>
+    <string name="username_label">Email Address:</string>
+    <string name="password_label">Dropbox Password:</string>
+    <string name="login_screen_button">Log in to Dropbox</string>
+    <!-- delete -->
+    <string name="delete_task_title">Delete Task</string>
+    <string name="delete_task_message">This cannot be undone. Are you sure?</string>
+    <string name="delete_task_confirm">Delete</string>
+    <!-- search -->
+    <string name="search_hint">Search todo.txt</string>
+    <!-- filter tabs -->
+    <string name="filter_tab_priorities">Priorities</string>
+    <string name="filter_tab_projects">Projects</string>
+    <string name="filter_tab_contexts">Contexts</string>
+    <string name="filter_tab_search">Keywords</string>
+    <!-- title bar changes -->
+    <string name="title_search_results">Search term: </string>
+    <string name="title_filter_applied">Filtered by: </string>
+    <string name="add_task_priority_btn">Priority</string>
+    <string name="add_task_context_btn">Context</string>
+    <string name="add_task_project_btn">Project</string>
+    <string name="add_task_help_btn">Help</string>
+    <string name="priority_prompt">Priority</string>
+    <string name="project_prompt">Project</string>
+    <string name="context_prompt">Context</string>
+    <string name="refine">Refine</string>
+    <string name="separator">Separator</string>
+    
+    <!-- launcher shortcut -->
+    <string name="shortcut_addtask_name">Add Task</string>
+    <!-- share -->
+    <string name="share_addtask_name">Add to Todo.txt</string>
 
-	<string name="priority_prompt">Priority</string>
-	<string name="project_prompt">Project</string>
-	<string name="context_prompt">Context</string>
-	
-	<!-- launcher shortcut -->
-	<string name="shortcut_addtask_name">Add Task</string>
-	<!-- share -->
-	<string name="share_addtask_name">Add to Todo.txt</string>
-	
-	<!--online/offline toasts-->
-	<string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
-	<string name="toast_notconnected">No internet connection;\nYou\'re working offline.</string>
-	<string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline
+    <!-- online/offline toasts -->
+    <string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
+    <string name="toast_notconnected">No internet connection;\nYou\'re working offline.</string>
+    <string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline
 		mode.</string>
-	<string name="short_touch_pref_key">short_touch_pref</string>
+    <string name="short_touch_pref_key">short_touch_pref</string>
 
 </resources>

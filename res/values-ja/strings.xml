@@ -29,8 +29,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="add_task_failed">追加に失敗しました</string>
 	<string name="updated_task">更新されました</string>
 	<string name="update_task_failed">更新に失敗しました</string>
-	<string name="initialized_dropbox">Initialized Dropbox support! Check
-		Dropbox/todo/todo.txt.</string>
 	<string name="sort">並び替え</string>
 	<string name="filter">フィルター</string>
 	<string name="main_no_items">タスクがありません。</string>
@@ -47,16 +45,12 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="delete">削除</string>
 	<string name="share">共有</string>
 	<string name="unComplete">完了の取り消し</string>
-	<string name="context">コンテキスト</string>
-	<string name="project">プロジェクト</string>
-	<string name="tag">タグ</string>
 	<string name="ok">OK</string>
 	<string name="cancel">キャンセル</string>
 	<string name="clear">クリア</string>
 	<string name="areyousure">本当によろしいですか？</string>
 	<string name="tasktexthint">ここにタスクを入力してください。新しいプロジェクトやコンテキストを追加するには + と @ を使います。\n\n例:医者を呼ぶ @phone +Health
 	</string>
-	<string name="search_summary">検索する文字列を入力してください</string>
 	<!-- preferences -->
 	<string name="dropbox_logout_pref_title">ログアウト</string>
 	<string name="dropbox_logout_pref_summary">Dropbox からログアウトします。</string>
@@ -79,10 +73,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="line_breaks_pref_title">Windows用改行コード</string>
 	<string name="line_breaks_pref_summary">テキストファイルの改行コードをWindows用に設定します。</string>
 	<!-- login -->
-	<string name="dropbox_authentication">Dropbox ログイン</string>
 	<string name="username_label">メールアドレス:</string>
 	<string name="password_label">パスワード:</string>
-	<string name="login_button">ログイン</string>
 	<string name="login_screen_button">Dropbox にログイン</string>
 	<!-- delete -->
 	<string name="delete_task_title">削除</string>

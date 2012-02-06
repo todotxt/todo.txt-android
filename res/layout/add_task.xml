@@ -24,14 +24,14 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/home_root" android:orientation="vertical"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@color/white">
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 	<LinearLayout style="@style/TitleBar">
-		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" />
+		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" 
+		    android:contentDescription="@string/app_label"/>
 		<View style="@style/TitleBarSpring" />
 		<TextView style="@style/TitleBarLabel" android:id="@+id/title_bar_label"
-			android:text="New Task" />
+			android:text="@string/newtask" />
 	</LinearLayout>
 	
 	<LinearLayout style="@style/ActionBar"
@@ -44,15 +44,15 @@ You should have received a copy of the GNU General Public License along with Tod
 				android:text="@string/add_task_priority_btn"
 				android:onClick="onPriorityClick"
 				android:drawableRight="@drawable/ic_actionbar_drop" />
-	        <ImageView style="@style/ActionBarSeparator" />
-	       	<ImageView style="@style/ActionBarSeparatorWhite" />
+	        <ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator" />
+	       	<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator"/>
 			<Button style="@style/ActionBarCenterButton"
 				android:id="@+id/project_btn"
 				android:text="@string/add_task_project_btn"
 				android:onClick="onProjectClick"
 				android:drawableRight="@drawable/ic_actionbar_drop" />
-        	<ImageView style="@style/ActionBarSeparator" />
-        	<ImageView style="@style/ActionBarSeparatorWhite" />
+        	<ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator"/>
+        	<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator"/>
 			<Button style="@style/ActionBarRightButton"
 				android:id="@+id/context_btn"
 				android:text="@string/add_task_context_btn"
@@ -65,11 +65,11 @@ You should have received a copy of the GNU General Public License along with Tod
 			android:text="@string/add_task_help_btn" 
 			android:onClick="onHelpClick"/>
 	</LinearLayout>
-	<ImageView style="@style/HorizontalRule" />
+	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator"/>
 
 	<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
-		android:layout_alignParentTop="true" android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
 		android:layout_weight="1"
 		android:background="@color/white"
 		android:padding="5dip" android:capitalize="sentences" />
@@ -91,7 +91,7 @@ You should have received a copy of the GNU General Public License along with Tod
 			android:prompt="@string/context_prompt" />
 	</LinearLayout>
 	
-	<ImageView style="@style/HorizontalRule" />
+	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator"/>
 	
 	<LinearLayout android:orientation="horizontal" 
 		android:layout_width="fill_parent"
@@ -100,15 +100,15 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:padding="3dip">
 		
 		<Button android:id="@+id/addTask" 
-			android:layout_weight="1"
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
-			android:text="@string/add" />
+			android:text="@string/add" 
+			android:layout_weight="1"/>
 	
 		<Button android:id="@+id/cancel" 
-			android:layout_weight="1"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content" 
-			android:text="@string/cancel" />
+			android:text="@string/cancel" 
+			android:layout_weight="1"/>
 	</LinearLayout>
 </LinearLayout>

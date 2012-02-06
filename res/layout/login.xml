@@ -33,7 +33,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content" 
     android:layout_gravity="center_horizontal|bottom"
-	android:src="@drawable/todotxt_touch_256" />
+	android:src="@drawable/todotxt_touch_256" android:contentDescription="@string/app_label"/>
 	
 <LinearLayout
 	android:orientation="vertical" 
@@ -50,7 +50,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<TextView android:id="@+id/title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Todo.txt"
+		android:text="@string/first_title_word"
 		android:textSize="12pt"
 		android:typeface="monospace"
 		android:textColor="@color/white"
@@ -61,7 +61,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<TextView android:id="@+id/title_2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text=" Touch"
+		android:text="@string/second_title_word"
 		android:textSize="12pt"
 		android:typeface="serif"
 		android:textStyle="italic"

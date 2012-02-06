@@ -33,12 +33,12 @@ You should have received a copy of the GNU General Public License along with Tod
     <LinearLayout
         style="@style/widget_w1_TaskBar"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dip"
         android:layout_weight="1"
         android:orientation="horizontal" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="0dip"
             android:layout_height="fill_parent"
             android:layout_gravity="top"
             android:layout_marginLeft="10dip"
@@ -166,10 +166,11 @@ You should have received a copy of the GNU General Public License along with Tod
             <ImageView
                 android:id="@+id/widget_launchbutton"
                 style="@style/WidgetTitleBarLogo"
-                android:maxHeight="40px"
-                android:maxWidth="40px"
+                android:maxHeight="40dp"
+                android:maxWidth="40dp"
                 android:padding="5dip"
-                android:src="@drawable/widget_icon_launcher_40" />
+                android:src="@drawable/widget_icon_launcher_40"
+                android:contentDescription="@string/app_label" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -185,7 +186,8 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dip"
                     android:padding="5dip"
-                    android:src="@drawable/widget_add" />
+                    android:src="@drawable/widget_add" 
+                    android:contentDescription="@string/addtask"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

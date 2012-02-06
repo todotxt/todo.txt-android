@@ -26,16 +26,16 @@ You should have received a copy of the GNU General Public License along with Tod
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/widget_root" android:orientation="vertical"
 	android:layout_height="fill_parent" android:layout_width="fill_parent"
-	style="@style/TodoTheme.Widget" android:padding="10dip">
+	style="@style/TodoTheme.Widget" android:padding="10dip" android:baselineAligned="false" >
 
 	<LinearLayout android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:layout_weight="1" style="@style/widget_w1_TaskBar">
+		android:layout_width="fill_parent" android:layout_height="0dip"
+		android:layout_weight="1" style="@style/widget_w1_TaskBar" android:baselineAligned="false" >
 
 		<LinearLayout android:orientation="vertical"
-			android:gravity="center_vertical" android:layout_width="fill_parent"
+			android:gravity="center_vertical" android:layout_width="0dip"
 			android:layout_gravity="center_vertical" android:layout_height="fill_parent"
-			android:layout_weight="1" android:layout_marginLeft="10dip">
+			android:layout_marginLeft="10dip">
 
 			<RelativeLayout android:layout_width="fill_parent"
 				android:layout_height="wrap_content">
@@ -100,14 +100,14 @@ You should have received a copy of the GNU General Public License along with Tod
 			android:layout_marginRight="5dip">
 			<ImageView style="@style/WidgetTitleBarLogo" android:id="@+id/widget_launchbutton"
 				android:src="@drawable/widget_icon_launcher_40" android:padding="5dip"
-				android:maxWidth="40px" android:maxHeight="40px" />
+				android:maxWidth="40dp" android:maxHeight="40dp" android:contentDescription="@string/app_label"/>
 			<LinearLayout android:layout_height="fill_parent"
 				android:gravity="bottom|center" android:orientation="vertical"
 				android:layout_width="wrap_content" android:layout_gravity="fill_vertical|bottom">
 				<ImageButton android:id="@+id/widget_addbutton" style="@style/TitleBarAction"
 					android:src="@drawable/widget_add" android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:padding="5dip"
-					android:layout_marginBottom="5dip" />
+					android:layout_marginBottom="5dip" android:contentDescription="@string/addtask"/>
 			</LinearLayout>
 		</LinearLayout>
 

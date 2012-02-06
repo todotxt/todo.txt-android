@@ -38,6 +38,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:autoText="false"
         android:capitalize="none"
         android:gravity="fill_horizontal"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:hint="@string/tasktexthint"/>
 
 </LinearLayout>
