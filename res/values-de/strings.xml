@@ -39,7 +39,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="addtask">Task hinzufügen</string>
 	<string name="done">Erledigt</string>
 	<string name="priority">Gewichten</string>
-	<string name="update">Akualisieren</string>
+	<string name="update">Aktualisieren</string>
 	<string name="delete">Löschen</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Abbrechen</string>
