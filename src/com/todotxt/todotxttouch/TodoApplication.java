@@ -29,7 +29,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -118,16 +117,6 @@ public class TodoApplication extends Application {
 
 	public RemoteClientManager getRemoteClientManager() {
 		return remoteClientManager;
-	}
-
-	public boolean isNetworkAvailable() {
-		ConnectivityManager cm = (ConnectivityManager) getApplicationContext()
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		boolean networkAvailable = cm.getActiveNetworkInfo() != null
-				&& cm.getActiveNetworkInfo().isConnected();
-		Log.d(TAG, "Checking network availabilty. Network is "
-				+ (networkAvailable ? "" : "not ") + "available.");
-		return networkAvailable;
 	}
 
 	public boolean isOfflineMode() {
