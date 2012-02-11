@@ -25,8 +25,10 @@ package com.todotxt.todotxttouch.task;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -1078,5 +1080,116 @@ public class TaskTest extends TestCase {
 				task.inScreenFormat());
 		assertEquals(expectedResult, task.inFileFormat());
 		assertEquals("", task.getCompletionDate());
+	}
+	
+	public void testFilterInit_nulls() {
+		Task task = new Task(1, "");
+		task.initWithFilters(null, null, null);
+		
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+	}
+
+	public void testFilterInit_empty() {
+		Task task = new Task(1, "");
+		task.initWithFilters(new ArrayList<Priority>(), new ArrayList<String>(), new ArrayList<String>());
+		
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+	}
+	
+	public void testFilterInit_onePriority() {
+		ArrayList<Priority> ps = new ArrayList<Priority>();
+		ps.add(Priority.A);
+		
+		Task task = new Task(1, "");
+		task.initWithFilters(ps, new ArrayList<String>(), new ArrayList<String>());
+		
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+
+		assertEquals("initialized with A", Priority.A, task.getPriority());
+		
+		ps.remove(0);
+		ps.add(Priority.D);
+
+		task = new Task(1, "");
+		task.initWithFilters(ps, new ArrayList<String>(), new ArrayList<String>());
+		
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+
+		assertEquals("initialized with D", Priority.D, task.getPriority());
+	}
+
+	public void testFilterInit_multiPriority() {
+		ArrayList<Priority> ps = new ArrayList<Priority>();
+		ps.add(Priority.A);
+		ps.add(Priority.D);
+		
+		Task task = new Task(1, "");
+		task.initWithFilters(ps, new ArrayList<String>(), new ArrayList<String>());
+		
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(Priority.NONE, task.getPriority());
+	}
+	
+	public void testFilterInit_oneProject() {
+		ArrayList<String> projects = new ArrayList<String>();
+		projects.add("fred");
+		
+		Task task = new Task(1, "");
+		task.initWithFilters(null, null, projects);
+		
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		
+		List<String> tp = task.getProjects();
+		assertEquals("project count", 1, tp.size());
+		assertEquals("fred", tp.get(0));
+	}
+
+	public void testFilterInit_multiProject() {
+		ArrayList<String> projects = new ArrayList<String>();
+		projects.add("fred");
+		projects.add("barney");
+		
+		Task task = new Task(1, "");
+		task.initWithFilters(null, null, projects);
+		
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+	}
+
+	public void testFilterInit_oneContext() {
+		ArrayList<String> contexts = new ArrayList<String>();
+		contexts.add("quarry");
+		
+		Task task = new Task(1, "");
+		task.initWithFilters(null, contexts, null);
+		
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		
+		List<String> tc = task.getContexts();
+		assertEquals("context count", 1, tc.size());
+		assertEquals("quarry", tc.get(0));
+	}
+
+	public void testFilterInit_multiContext() {
+		ArrayList<String> contexts = new ArrayList<String>();
+		contexts.add("quarry");
+		contexts.add("home");
+		
+		Task task = new Task(1, "");
+		task.initWithFilters(null, contexts, null);
+		
+		assertEquals(Priority.NONE, task.getPriority());
+		assertEquals(Collections.<String> emptyList(), task.getProjects());
+		assertEquals(Collections.<String> emptyList(), task.getContexts());
 	}
 }
