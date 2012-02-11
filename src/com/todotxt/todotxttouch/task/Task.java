@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -312,5 +313,23 @@ public class Task implements Serializable {
 				+ ((relativeAge == null) ? 0 : relativeAge.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
 		return result;
+	}
+
+	public void initWithFilters(ArrayList<Priority> prios,
+			ArrayList<String> ctxts, ArrayList<String> pjs) {
+		if ((prios != null) && (prios.size() == 1))
+		{
+			setPriority(prios.get(0));
+		}
+		if ((ctxts != null) && (ctxts.size() == 1))
+		{
+			contexts.clear();
+			contexts.add(ctxts.get(0));
+		}
+		if ((pjs != null) && (pjs.size() == 1))
+		{
+			projects.clear();
+			projects.add(pjs.get(0));
+		}
 	}
 }

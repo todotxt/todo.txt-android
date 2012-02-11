@@ -23,6 +23,7 @@
 package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -103,30 +104,46 @@ public class AddTask extends Activity {
 		if (share_text != null) {
 			textInputField.setText(share_text);
 		}
+		
+		Task iniTask = null;
 
 		Task task = (Task) getIntent().getSerializableExtra(
 				Constants.EXTRA_TASK);
 		if (task != null) {
 			m_backup = task;
+			iniTask = m_backup;
 			textInputField.setText(task.inFileFormat());
 			setTitle(R.string.updatetask);
 			titleBarLabel.setText(R.string.updatetask);
 		} else {
 			setTitle(R.string.addtask);
 			titleBarLabel.setText(R.string.addtask);
-		}
 
+			if (textInputField.getText().length() == 0)
+			{
+				@SuppressWarnings("unchecked")
+				ArrayList<Priority> prios = (ArrayList<Priority>)intent.getSerializableExtra(Constants.EXTRA_PRIORITIES_SELECTED);
+				@SuppressWarnings("unchecked")
+				ArrayList<String> contexts = (ArrayList<String>) intent.getSerializableExtra(Constants.EXTRA_CONTEXTS_SELECTED);
+				@SuppressWarnings("unchecked")
+				ArrayList<String> projects = (ArrayList<String>) intent.getSerializableExtra(Constants.EXTRA_PROJECTS_SELECTED);
+
+				iniTask = new Task(1, "");
+				iniTask.initWithFilters(prios, contexts, projects);
+			}
+		}
+		
 		textInputField.setSelection(textInputField.getText().toString()
 				.length());
-
+		
 		// priorities
 		priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add("Priority");
 		prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
-		if (m_backup != null) {
-			int index = prioArr.indexOf(m_backup.getPriority().getCode());
+		if (iniTask != null) {
+			int index = prioArr.indexOf(iniTask.getPriority().getCode());
 			priorities.setSelection(index < 0 ? 0 : index);
 		}
 		priorities.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -159,6 +176,17 @@ public class AddTask extends Activity {
 		final ArrayList<String> projectsArr = taskBag.getProjects();
 		projectsArr.add(0, "Project");
 		projects.setAdapter(Util.newSpinnerAdapter(this, projectsArr));
+		
+		if (iniTask != null) {
+			List<String> ps = iniTask.getProjects();
+			
+			if ((ps != null) && (ps.size() == 1))
+			{
+				int index = projectsArr.indexOf(ps.get(0));
+				projects.setSelection(index < 0 ? 0 : index);
+			}
+		}
+
 		projects.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -186,6 +214,17 @@ public class AddTask extends Activity {
 		final ArrayList<String> contextsArr = taskBag.getContexts();
 		contextsArr.add(0, "Context");
 		contexts.setAdapter(Util.newSpinnerAdapter(this, contextsArr));
+		
+		if (iniTask != null) {
+			List<String> cs = iniTask.getContexts();
+			
+			if ((cs != null) && (cs.size() == 1))
+			{
+				int index = contextsArr.indexOf(cs.get(0));
+				contexts.setSelection(index < 0 ? 0 : index);
+			}
+		}
+		
 		contexts.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,

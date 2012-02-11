@@ -778,7 +778,13 @@ public class TodoTxtTouch extends ListActivity implements
 
 	/** Handle "add task" action. */
 	public void onAddTaskClick(View v) {
-		startActivity(new Intent(this, AddTask.class));
+		Intent i = new Intent(this, AddTask.class);
+		
+		i.putExtra(Constants.EXTRA_PRIORITIES_SELECTED, m_prios);
+		i.putExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_contexts);
+		i.putExtra(Constants.EXTRA_PROJECTS_SELECTED, m_projects);
+		
+		startActivity(i);
 	}
 
 	/** Handle "refresh/download" action. */
