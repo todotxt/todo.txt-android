@@ -24,12 +24,10 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <resources>
-
 	<string-array name="sort">
 		<item>Gewichtung</item>
-		<item>ID Ascending</item> <!-- TODO: Add correct translation here -->
-		<item>ID Descending</item> <!-- TODO: Add correct translation here -->
-		<item>Text (A-Z)</item> <!-- TODO: Add correct translation here -->
+		<item>ID aufsteigend</item> 
+		<item>ID absteigend</item> 
+		<item>Text (A-Z)</item> 
 	</string-array>
-
 </resources>

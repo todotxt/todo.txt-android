@@ -123,11 +123,11 @@ public class Filter extends TabActivity {
 				Log.v(TAG, "Clearing all filter types.");
 				appliedFilters = new ArrayList<String>();
 				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-						getItems(priorities, "Priority"));
+						getItems(priorities, getString(R.string.filter_tab_priorities)));
 				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-						getItems(projects, "Project"));
+						getItems(projects, getString(R.string.filter_tab_projects)));
 				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-						getItems(contexts, "Context"));
+						getItems(contexts, getString(R.string.filter_tab_contexts)));
 				data.putExtra(Constants.EXTRA_SEARCH, search.getText()
 						.toString());
 				data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,

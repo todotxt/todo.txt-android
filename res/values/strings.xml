@@ -90,7 +90,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="short_touch_pref_summary_on">Short touch on a task to mark it complete.</string>
     <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->
 
-
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>
     <string name="sync_dialog_msg">Do you want to upload or download your todo.txt file?</string>
@@ -137,5 +136,12 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline
 		mode.</string>
     <string name="short_touch_pref_key">short_touch_pref</string>
-
+    
+    <!-- Relative Dates -->
+    <string name="dates_days_ago">%d days ago</string>
+    <string name="dates_one_day_ago">1 day ago</string>
+    <string name="dates_today">today</string>
+    <string name="dates_months_ago">%d months ago</string>
+    <string name="dates_one_month_ago">1 month ago</string>
+        
 </resources>
