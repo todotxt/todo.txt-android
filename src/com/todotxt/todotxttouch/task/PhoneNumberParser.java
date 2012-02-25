@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import android.os.Build;
+
 import com.google.i18n.phonenumbers.PhoneNumberMatch;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
@@ -44,6 +46,13 @@ public class PhoneNumberParser {
 
 	public List<String> parse(String inputText) {
 		if (inputText == null) {
+			return Collections.emptyList();
+		} 
+		
+		// Only run the phone number parser if Android version is not Honeycomb
+		// API level 11 - 13
+		int sdk = Build.VERSION.SDK_INT;
+		if (sdk >= 11 && sdk <= 13) {
 			return Collections.emptyList();
 		}
 
