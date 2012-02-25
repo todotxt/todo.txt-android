@@ -195,7 +195,7 @@ public class AddTask extends Activity {
 					int cursorPosition = textInputField.getSelectionStart();
 					String currentText = textInputField.getText().toString();
 					String item = "+" + projectsArr.get(position);
-					textInputField.setText(Strings.insertPadded(currentText,
+					textInputField.setText(Strings.insertPaddedIfNeeded(currentText,
 							cursorPosition, item));
 					textInputField.setSelection(CursorPositionCalculator
 							.calculate(cursorPosition, currentText,
@@ -233,7 +233,7 @@ public class AddTask extends Activity {
 					int cursorPosition = textInputField.getSelectionStart();
 					String currentText = textInputField.getText().toString();
 					String item = "@" + contextsArr.get(position);
-					textInputField.setText(Strings.insertPadded(currentText,
+					textInputField.setText(Strings.insertPaddedIfNeeded(currentText,
 							cursorPosition, item));
 					textInputField.setSelection(CursorPositionCalculator
 							.calculate(cursorPosition, currentText,
