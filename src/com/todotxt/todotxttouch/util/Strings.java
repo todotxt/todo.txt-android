@@ -76,6 +76,63 @@ public final class Strings {
 	}
 
 	/**
+	 * Inserts a given string into another padding it with spaces. Is aware if
+	 * the insertion point has a space on either end and does not add extra
+	 * spaces. If the string-to-insert is already present (and not part of another word)
+	 * we return the original string unchanged.
+	 * 
+	 * @param s
+	 *            the string to insert into
+	 * @param insertAt
+	 *            the position to insert the string
+	 * @param stringToInsert
+	 *            the string to insert
+	 * @return the result of inserting the stringToInsert into the passed in
+	 *         string
+	 * @throws IndexOutOfBoundsException
+	 *             if the insertAt is negative, or insertAt is larger than the
+	 *             length of s String object
+	 */
+	public static String insertPaddedIfNeeded(String s, int insertAt,
+			String stringToInsert) {
+		if (Strings.isEmptyOrNull(stringToInsert)) {
+			return s;
+		}
+
+		boolean found = false;
+		int startPos = 0;
+		
+		while ((startPos < s.length()) && (! found))
+		{
+			int pos = s.indexOf(stringToInsert, startPos);
+			
+			if (pos < 0)
+				break;
+			
+			startPos = pos + 1;
+			int	before = pos - 1;
+			int after = pos + stringToInsert.length();
+			
+			if (((pos == 0) || (Character.isWhitespace(s.charAt(before)))) &&
+			 ((after >= s.length()) || (Character.isWhitespace(s.charAt(after)))))
+				found = true;
+		}
+		
+		if (found)
+		{
+			StringBuilder newText = new StringBuilder(s);
+			
+			if (newText.lastIndexOf(SINGLE_SPACE) != newText.length() - 1) {
+				newText.append(SINGLE_SPACE);
+			}
+			
+			return( newText.toString() );
+		}
+		else
+			return( Strings.insertPadded(s, insertAt, stringToInsert) );
+	}
+
+	/**
 	 * Checks the passed in string to see if it is null or an blank string
 	 * 
 	 * @param s
