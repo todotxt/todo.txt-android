@@ -10,10 +10,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import android.content.Context;
+
+import com.todotxt.todotxttouch.R;
+import com.todotxt.todotxttouch.TodoApplication;
+
 public class RelativeDate {
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
+	private static Context context = TodoApplication.getAppContetxt();
+	
+	
 	/**
 	 * This method computes the relative date according to the Calendar being
 	 * passed in and the number of years, months, days, etc. that differ. This
@@ -40,29 +47,28 @@ public class RelativeDate {
 
 	private static String computeRelativeDate(Calendar calendar, int years,
 			int months, int days, int hours, int minutes, int seconds) {
-
+		
 		String date = sdf.format(calendar.getTime());
 
 		if (years == 0 && months == 0) {
 			if (days < -1)
-				return Math.abs(days) + " days ago";
+				return context.getString(R.string.dates_days_ago, Math.abs(days));
 			else if (days == -1)
-				return "1 day ago";
+				return context.getString(R.string.dates_one_day_ago);
 			else if (days == 0)
-				return "today";
-		} else if (years == 0 || years == -1) {
+				return context.getString(R.string.dates_today);		} else if (years == 0 || years == -1) {
 			if (years == -1) {
 				months = 11 - months
 						+ Calendar.getInstance().get(Calendar.MONTH);
 				if (months == 1)
-					return "1 month ago";
+					return context.getString(R.string.dates_one_month_ago);
 				else
-					return months + " months ago";
+					return context.getString(R.string.dates_months_ago, months);
 			} else {
 				if (months != -1)
-					return Math.abs(months) + " months ago";
+					return context.getString(R.string.dates_months_ago,Math.abs(months));
 				else
-					return "1 month ago";
+					return context.getString(R.string.dates_one_month_ago);
 			}
 		} else {
 			return date;

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -23,82 +22,115 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
 -->
 <resources>
-	<string name="app_label">Todo.txt Touch</string>
-	<string name="added_task">Task hinzugefügt.</string>
-	<string name="add_task_failed">Konnte Task nicht hinzufügen.</string>
-	<string name="updated_task">Task aktualisiert.</string>
-	<string name="update_task_failed">Konnte Task nicht aktualisieren.</string>
-	<string name="sort">Sortieren</string>
-	<string name="filter">Filtern</string>
-	<string name="main_no_items">Keine anzuzeigenden Tasks.</string>
-	<string name="set_preferences">Einstellungen</string>
-	<string name="preferences">Einstellungen</string>
-	<string name="sync">Sync</string>
-	<string name="refresh">Aktualisieren</string>
-	<string name="add">Hinzufügen</string>
-	<string name="addtask">Task hinzufügen</string>
-	<string name="done">Erledigt</string>
-	<string name="priority">Gewichten</string>
-	<string name="update">Aktualisieren</string>
-	<string name="delete">Löschen</string>
-	<string name="ok">OK</string>
-	<string name="cancel">Abbrechen</string>
+
+    <string name="app_label">Todo.txt Touch</string>
+    <string name="added_task">Task hinzugefügt.</string>
+    <string name="add_task_failed">Konnte Task nicht hinzufügen.</string>
+    <string name="updated_task">Task aktualisiert.</string>
+    <string name="update_task_failed">Konnte Task nicht aktualisieren.</string>
+    <string name="sort">Sortieren</string>
+    <string name="filter">Filtern</string>
+    <string name="main_no_items">Keine anzuzeigenden Tasks.</string>
+    <string name="set_preferences">Einstellungen</string>
+    <string name="preferences">Einstellungen</string>
+    <string name="sync">Sync</string>
+    <string name="search">Suche</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="add">Hinzufügen</string>
+    <string name="addtask">Task hinzufügen</string>
+    <string name="updatetask">Task ändern</string>
+    <string name="newtask">Neuer Task</string>
+    <string name="done">Erledigt</string>
+    <string name="priority">Gewichten</string>
+    <string name="update">Aktualisieren</string>
+    <string name="delete">Löschen</string>
+    <string name="share">Teilen</string>
+    <string name="unComplete">Erledigt rückgängig</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="close">Schliessen</string>
     <string name="clear">Löschen</string>
-	<string name="areyousure">Sind Sie sicher?</string>
-	<string name="tasktexthint">Task hier beschreiben. Neue Projekt Namen mit +
-		und Kontexte mit @. Zum Beispiel:\n\nArzt anrufen @fon +Gesundheit
-	</string>
-	<!-- preferences -->
-	<string name="dropbox_logout_pref_title">Ausloggen</string>
-	<string name="dropbox_logout_pref_summary">Aus Dropbox ausloggen.</string>
-	<string name="dropbox_logout_explainer">Wollen Sie sich wirklich aus Dropbox ausloggen?
-	</string>
-	<string name="TODOTXTPATH_key">todotxtpath</string>
-	<string name="TODOTXTPATH_title">Ort der Datei</string>
-	<string name="TODOTXTPATH_summary">Der Dropbox Ordner in dem todo.txt gespeichert wird.
-	</string>
-	<string name="TODOTXTPATH_defaultPath">/todo</string>
-	<string name="DROPBOX_settings_header">Dropbox</string>
-	<string name="todotxt_settings_header">todo.txt</string>
-	<string name="about_settings_header">Über</string>
+    <string name="areyousure">Sind Sie sicher?</string>
+    <string name="tasktexthint">ask hier beschreiben. Neue Projekt Namen mit +
+		und Kontexte mit @. Zum Beispiel:\n\nArzt anrufen @fon +Gesundheit</string>
+    <string name="add_task_help"><b>Projekte</b>fangen mit einem + Zeichen und haben keine Leerzeichen, like +BuchSchreiben oder +Messe\n\n<b>Kontexte</b> (wo Sie den Task abschliessen möchten) fangen mit einem @ Zeichen an. Bsp.: @telefon oder @firma\n\n
+		Ein Task kann mehrere Projekte oder Kontexte haben.</string>
 
-	<string name="prepend_date_pref_key">todotxtprependdate</string>
-	<string name="prepend_date_pref_title">Neue Tasks mit Datum</string>
-	<string name="prepend_date_pref_summary">
-		Heutiges Datum automatisch neuen Tasks hinzufügen.
-	</string>
-	<string name="show_line_numbers_pref_key">showlinenumberspref</string>
-	<string name="show_line_numbers_pref_title">Zeilennummern anzeigen.</string>
-	<string name="show_line_numbers_pref_summary">Zeige die Zeilennummern aller Tasks an.</string>
-	<string name="line_breaks_pref_key">linebreakspref</string>
-	<string name="line_breaks_pref_title">Windows Zeilenenden</string>
-	<string name="line_breaks_pref_summary">Benutze Windows-freundliche Zeilenenden in der Textdatei.</string>
-	<string name="work_offline_pref_key">workofflinepref</string>
-	<string name="work_offline_pref_title">Arbeite Offline</string>
-	<string name="work_offline_pref_summary">Lade nicht automatisch jede Änderung zu Dropbox.</string>
+    <!-- preferences -->
+    <string name="dropbox_logout_pref_title">Ausloggen</string>
+    <string name="dropbox_logout_pref_summary">Aus Dropbox ausloggen.</string>
+    <string name="dropbox_logout_explainer">ollen Sie sich wirklich aus Dropbox ausloggen?</string>
+    <string name="TODOTXTPATH_key">todotxtpath</string>
+    <string name="TODOTXTPATH_title">Ort der Datei</string>
+    <string name="TODOTXTPATH_summary">er Dropbox Ordner in dem todo.txt gespeichert wird.</string>
+    <string name="TODOTXTPATH_defaultPath">/todo</string>
+    <string name="DROPBOX_settings_header">Dropbox</string>
+    <string name="todotxt_settings_header">todo.txt</string>
+    <string name="about_settings_header">Über</string>
+    <string name="prepend_date_pref_key">todotxtprependdate</string>
+    <string name="prepend_date_pref_title">Neue Tasks mit Datum</string>
+    <string name="prepend_date_pref_summary">		Heutiges Datum automatisch neuen Tasks hinzufügen.</string>
+    <string name="show_line_numbers_pref_key">showlinenumberspref</string>
+    <string name="show_line_numbers_pref_title">Zeilennummern anzeigen.</string>
+    <string name="show_line_numbers_pref_summary">Zeige die Zeilennummern aller Tasks an.</string>
+    <string name="line_breaks_pref_key">linebreakspref</string>
+    <string name="line_breaks_pref_title">Windows Zeilenenden</string>
+    <string name="line_breaks_pref_summary">Benutze Windows-freundliche Zeilenenden in der Textdatei.</string>
+    <string name="work_offline_pref_key">workofflinepref</string>
+    <string name="work_offline_pref_title">Arbeite Offline</string>
+    <string name="work_offline_pref_summary">Lade nicht automatisch jede Änderung zu Dropbox.</string>
+    <string name="show_task_age_pref_key">show_task_age_pref</string>
+    <string name="show_task_age_pref_title">Zeige Task Alter.</string>
+    <string name="show_task_age_pref_summary">Zeige Task Alter mit Erzeugungsdatum.</string>
+    <string name="short_touch_pref_title">Schnelles erledigen</string>
+    <string name="short_touch_pref_summary_on">Kurzer Klick auf einem Task markiert als erledigt.</string>
+    <!-- <string name="short_touch_pref_summary_off">Kurzer Klick auf einem Task zeihgt Kontext-Menü.</string> -->
 
-	<string name="show_task_age_pref_key">show_task_age_pref</string>
-	<string name="show_task_age_pref_title">Zeige Task Alter.</string>
-	<string name="show_task_age_pref_summary">Zeige Task Alter mit Erzeugungsdatum.</string>
 
-	<string name="short_touch_pref_title">Schnelles erledigen</string>
-	<string name="short_touch_pref_summary_on">Kurzer Klick auf einem Task markiert als erledigt.</string>
-	<!--  <string name="short_touch_pref_summary_off">Kurzer Klick auf einem Task zeihgt Kontext-Menü.</string>-->
-
-	<!-- login -->
-	<string name="login_screen_button">In Dropbox einloggen</string>
-	<!-- delete -->
-	<string name="delete_task_title">Task löschen</string>
-	<string name="delete_task_message">Kann nicht rückgängig gemacht werden. Sind Sie sicher?</string>
-	<string name="delete_task_confirm">Löschen</string>
-	<!-- search -->
-	<string name="search_hint">todo.txt durchsuchen</string>
-	<!-- filter tabs -->
-	<string name="filter_tab_priorities">Gewichtung</string>
-	<string name="filter_tab_projects">Projekte</string>
-	<string name="filter_tab_contexts">Kontexte</string>
-	<string name="filter_tab_search">Schlüsselworte</string>
-	<!-- title bar changes -->
-	<string name="title_search_results">Suchergebnisse für: </string>
-	<string name="title_filter_applied">Angewendeter Filter: </string>
+    <!-- sync dialog -->
+    <string name="sync_dialog_title">Manueller Sync</string>
+    <string name="sync_dialog_msg">Möchten Sie die todo.txt-Datei hoch- oder runterladen?</string>
+    <string name="sync_dialog_upload">Änderungen hochladen</string>
+    <string name="sync_dialog_download">Auf das Telefon runterladen</string>
+    <string name="sync_upload_message">todo.txt wir hochgeladen...</string>
+    <string name="sync_download_message">todo.txt wird runtergeladen...</string>
+    <!-- login -->
+    <string name="login_screen_button">In Dropbox einloggen</string>
+    <!-- delete -->
+    <string name="delete_task_title">Task löschen</string>
+    <string name="delete_task_message">Kann nicht rückgängig gemacht werden. Sind Sie sicher?</string>
+    <string name="delete_task_confirm">Löschen</string>
+    <!-- search -->
+    <string name="search_hint">todo.txt durchsuchen</string>
+    <!-- filter tabs -->
+    <string name="filter_tab_priorities">Gewichtung</string>
+    <string name="filter_tab_projects">Projekte</string>
+    <string name="filter_tab_contexts">Kontexte</string>
+    <string name="filter_tab_search">Schlüsselworte</string>
+    <!-- title bar changes -->
+    <string name="title_search_results">Suchergebnisse für: </string>
+    <string name="title_filter_applied">aktive Filter: </string>
+    <string name="add_task_priority_btn">Gewichtung</string>
+    <string name="add_task_context_btn">Kontext</string>
+    <string name="add_task_project_btn">Projekt</string>
+    <string name="add_task_help_btn">Hilfe</string>
+    <string name="priority_prompt">Gewichtung</string>
+    <string name="project_prompt">Projekt</string>
+    <string name="context_prompt">Kontext</string>
+    <string name="separator">Trenner</string>
+    <string name="refine">Ändern</string>
+    <!-- launcher shortcut -->
+    <string name="shortcut_addtask_name">Task hinzufügen</string>
+    <!-- share -->
+    <string name="share_addtask_name">Zu Todo.txt hinzufügen</string>
+    <!-- online/offline toasts -->
+    <string name="toast_login_notconnected">Kann mich nicht anmelden:\nKeine Internetverbindung.</string>
+    <string name="toast_notconnected">Keine Internetverbindung;\nSie arbeiten jetzt im offline-Modus.</string>
+    <string name="toast_notconnected_switch_to_offline">Keine Internetverbindung!\nSchalte in den Offline-Modus.</string>
+    <!-- Relative Dates -->
+    <string name="dates_days_ago">vor %d Tagen</string>
+    <string name="dates_one_day_ago">gestern</string>
+    <string name="dates_today">heute</string>
+    <string name="dates_months_ago">vor %d Monaten</string>
+    <string name="dates_one_month_ago">vor 1 Monat</string>
 </resources>
