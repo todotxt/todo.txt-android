@@ -97,4 +97,29 @@ public class StringsTest extends TestCase {
 		assertEquals("this test is ",
 				Strings.insertPadded("this test ", 10, "is"));
 	}
+	
+	public void testInsertPaddedIfNeeded_intoEmpty() {
+		assertEquals("thing one ",
+				Strings.insertPaddedIfNeeded("", 0, "thing one"));
+	}
+	
+	public void testInsertPaddedIfNeeded_alreadyThere() {
+		assertEquals("@errands hi ",
+				Strings.insertPaddedIfNeeded("@errands hi", 11, "@errands"));
+		assertEquals("hi @errands ",
+				Strings.insertPaddedIfNeeded("hi @errands", 11, "@errands"));
+		assertEquals("+project hi ",
+				Strings.insertPaddedIfNeeded("+project hi", 11, "+project"));
+		assertEquals("hi +project ",
+				Strings.insertPaddedIfNeeded("hi +project", 11, "+project"));
+	}
+	
+	public void testInsertPaddedIfNeeded_supersetThere() {
+		assertEquals("@errands2 hi @errands ",
+				Strings.insertPaddedIfNeeded("@errands2 hi", 12, "@errands"));
+		assertEquals("+project2 hi +project ",
+				Strings.insertPaddedIfNeeded("+project2 hi", 12, "+project"));
+		assertEquals("john@email @email ",
+				Strings.insertPaddedIfNeeded("john@email", 10, "@email"));
+	}
 }
