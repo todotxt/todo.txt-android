@@ -755,7 +755,8 @@ public class TodoTxtTouch extends ListActivity implements
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_TO_REMOTE));
+									Constants.INTENT_START_SYNC_TO_REMOTE)
+									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
 							// backgroundPushToRemote();
 							showToast(getString(R.string.sync_upload_message));
 						}
@@ -764,7 +765,8 @@ public class TodoTxtTouch extends ListActivity implements
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_FROM_REMOTE));
+									Constants.INTENT_START_SYNC_FROM_REMOTE)
+									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
 							// backgroundPullFromRemote();
 							showToast(getString(R.string.sync_download_message));
 						}
