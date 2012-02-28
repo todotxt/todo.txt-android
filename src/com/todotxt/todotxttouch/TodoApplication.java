@@ -83,8 +83,8 @@ public class TodoApplication extends Application {
 	/**
 	 * Check network status, then push.
 	 */
-	private void pushToRemote() {
-		if (isOfflineMode()) {
+	private void pushToRemote(boolean force) {
+		if (!force && isOfflineMode()) {
 			Log.d(TAG, "Working offline, don't push now");
 		} else {
 			if (!getRemoteClientManager().getRemoteClient().isAvailable()) {
@@ -100,8 +100,8 @@ public class TodoApplication extends Application {
 	/**
 	 * Check network status, then pull.
 	 */
-	private void pullFromRemote() {
-		if (isOfflineMode()) {
+	private void pullFromRemote(boolean force) {
+		if (!force && isOfflineMode()) {
 			Log.d(TAG, "Working offline, don't pull now");
 		} else {
 			if (!getRemoteClientManager().getRemoteClient().isAvailable()) {
@@ -233,12 +233,14 @@ public class TodoApplication extends Application {
 	private final class BroadcastReceiverExtension extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			boolean force_sync = intent.getBooleanExtra(
+					Constants.EXTRA_FORCE_SYNC, false);
 			if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_TO_REMOTE)) {
-				pushToRemote();
+				pushToRemote(force_sync);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_FROM_REMOTE)) {
-				pullFromRemote();
+				pullFromRemote(force_sync);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_ASYNC_FAILED)) {
 				showToast("Synchronizing Failed");

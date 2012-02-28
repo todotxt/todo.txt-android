@@ -41,6 +41,7 @@ public class Constants {
 	public final static String EXTRA_SEARCH = "SEARCH";
 	public final static String EXTRA_TASK = "TASK";
 	public final static String EXTRA_APPLIED_FILTERS = "APPLIED_FITERS";
+	public final static String EXTRA_FORCE_SYNC = "FORCE_SYNC";
 
 	public final static String INTENT_ACTION_LOGOUT = "com.todotxt.todotxttouch.ACTION_LOGOUT";
 	public final static String INTENT_ASYNC_SUCCESS = "com.todotxt.todotxttouch.ASYNC_SUCCESS";
