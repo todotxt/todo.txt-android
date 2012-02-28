@@ -46,13 +46,12 @@ public class TodoApplication extends Application {
 	public boolean m_pushing = false;
 	private TaskBag taskBag;
 	private BroadcastReceiver m_broadcastReceiver;
-	private static Context appContetxt;
-	
-	
+	private static Context appContext;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		this.appContetxt = getApplicationContext();
+		TodoApplication.appContext = getApplicationContext();
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
@@ -127,7 +126,7 @@ public class TodoApplication extends Application {
 	}
 
 	public static Context getAppContetxt() {
-		return appContetxt;
+		return appContext;
 	}
 
 	public void setOfflineMode() {
