@@ -32,6 +32,9 @@ import java.util.List;
  * @author Tim Barlotta
  */
 public interface TaskBag {
+
+	void archive();
+
 	void reload();
 
 	void addAsTask(String input);
@@ -58,13 +61,13 @@ public interface TaskBag {
 	 * Push tasks in localRepository into remoteRepository if you're not working
 	 * offline
 	 */
-	void pushToRemote();
+	void pushToRemote(boolean overwrite);
 
 	/**
 	 * Force-push tasks in localRepository into remoteRepository disregarding
 	 * Work Offline status
 	 */
-	void pushToRemote(boolean overridePreference);
+	void pushToRemote(boolean overridePreference, boolean overwrite);
 
 	/**
 	 * Pulls tasks from remoteRepository, stores in localRepository

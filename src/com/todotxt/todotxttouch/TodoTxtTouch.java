@@ -109,7 +109,8 @@ public class TodoTxtTouch extends ListActivity implements
 	private ArrayList<String> m_filters = new ArrayList<String>();
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
-
+	private static final int SYNC_CONFLICT_DIALOG = 101;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,6 +127,8 @@ public class TodoTxtTouch extends ListActivity implements
 		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
 		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(Constants.INTENT_ACTION_ARCHIVE);
+		intentFilter.addAction(Constants.INTENT_SYNC_CONFLICT);
 		intentFilter.addAction(Constants.INTENT_ACTION_LOGOUT);
 		intentFilter.addAction(Constants.INTENT_UPDATE_UI);
 
@@ -133,6 +136,12 @@ public class TodoTxtTouch extends ListActivity implements
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (intent.getAction().equalsIgnoreCase(
+						Constants.INTENT_ACTION_ARCHIVE)) {
+					// archive
+					// refresh screen to remove completed tasks
+					// push to remote
+					archiveTasks();
+				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_ACTION_LOGOUT)) {
 					Intent i = new Intent(context, LoginScreen.class);
 					startActivity(i);
@@ -140,6 +149,9 @@ public class TodoTxtTouch extends ListActivity implements
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_UPDATE_UI)) {
 					updateSyncUI();
+				} else if (intent.getAction().equalsIgnoreCase(
+						Constants.INTENT_SYNC_CONFLICT)) {
+					handleSyncConflict();
 				}
 			}
 
@@ -476,6 +488,10 @@ public class TodoTxtTouch extends ListActivity implements
 						Task task = (Task) params[0];
 						task.markComplete(new Date());
 						taskBag.update(task);
+						if (m_app.m_prefs.getBoolean("todotxtautoarchive",
+								false)) {
+							taskBag.archive();
+						}
 						return true;
 					} catch (Exception e) {
 						Log.e(TAG, e.getMessage(), e);
@@ -554,6 +570,39 @@ public class TodoTxtTouch extends ListActivity implements
 		Util.showDeleteConfirmationDialog(this, listener);
 	}
 
+	private void archiveTasks() {
+		new AsyncTask<Void, Void, Boolean>() {
+
+			protected void onPreExecute() {
+				m_ProgressDialog = showProgressDialog("Archiving Tasks");
+			}
+
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				try {
+					taskBag.archive();
+					return true;
+				} catch (Exception e) {
+					Log.e(TAG, e.getMessage(), e);
+					return false;
+				}
+			}
+
+			protected void onPostExecute(Boolean result) {
+				TodoTxtTouch.currentActivityPointer.dismissProgressDialog(true);
+				if (result) {
+					Util.showToastLong(TodoTxtTouch.this,
+							"Archived completed tasks");
+					sendBroadcast(new Intent(
+							Constants.INTENT_START_SYNC_TO_REMOTE));
+				} else {
+					Util.showToastLong(TodoTxtTouch.this,
+							"Could not archive tasks");
+				}
+			}
+		}.execute();
+	}
+
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
@@ -609,6 +658,16 @@ public class TodoTxtTouch extends ListActivity implements
 		startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
 	}
 
+	/**
+	 * Called when we can't sync due to a merge conflict.
+	 * Prompts the user to force an upload or download.
+	 */
+	private void handleSyncConflict() {
+		m_app.m_pushing = false;
+		m_app.m_pulling = false;
+		showDialog(SYNC_CONFLICT_DIALOG);
+	}
+	
 	/**
 	 * Sync with remote client.
 	 * 
@@ -756,6 +815,34 @@ public class TodoTxtTouch extends ListActivity implements
 						public void onClick(DialogInterface arg0, int arg1) {
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_TO_REMOTE)
+									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
+							// backgroundPushToRemote();
+							showToast(getString(R.string.sync_upload_message));
+						}
+					});
+			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+							sendBroadcast(new Intent(
+									Constants.INTENT_START_SYNC_FROM_REMOTE)
+									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
+							// backgroundPullFromRemote();
+							showToast(getString(R.string.sync_download_message));
+						}
+					});
+			return upDownChoice.show();
+
+		} else if (id == SYNC_CONFLICT_DIALOG) {
+			Log.v(TAG, "Time to show the sync conflict dialog");
+			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
+			upDownChoice.setTitle(R.string.sync_conflict_dialog_title);
+			upDownChoice.setMessage(R.string.sync_conflict_dialog_msg);
+			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface arg0, int arg1) {
+							sendBroadcast(new Intent(
+									Constants.INTENT_START_SYNC_TO_REMOTE)
+									.putExtra(Constants.EXTRA_OVERWRITE, true)
 									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
 							// backgroundPushToRemote();
 							showToast(getString(R.string.sync_upload_message));
