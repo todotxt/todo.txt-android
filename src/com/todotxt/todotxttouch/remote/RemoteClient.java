@@ -77,14 +77,17 @@ public interface RemoteClient {
 	 * 
 	 * @return
 	 */
-	File pullTodo();
+	PullTodoResult pullTodo();
 
 	/**
 	 * Push mobile
 	 * 
-	 * @param file
+	 * @param todoFile
+	 * @param doneFile
+	 * @param overwrite if true, upload the files even if there
+	 * 	is a remote conflict.
 	 */
-	void pushTodo(File file);
+	void pushTodo(File todoFile, File doneFile, boolean overwrite);
 
 	/**
 	 * A method to check if the remote service is available (network, sd-card,

@@ -34,6 +34,7 @@ import java.util.Set;
 
 import android.content.SharedPreferences;
 
+import com.todotxt.todotxttouch.remote.PullTodoResult;
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.util.TaskIo;
 
@@ -47,7 +48,9 @@ class TaskBagImpl implements TaskBag {
 	private final LocalTaskRepository localRepository;
 	private final RemoteClientManager remoteClientManager;
 	private ArrayList<Task> tasks = new ArrayList<Task>();
-
+	private Date lastReload = null;
+	private Date lastSync = null;
+	
 	public TaskBagImpl(Preferences preferences,
 			LocalTaskRepository localRepository,
 			RemoteClientManager remoteClientManager) {
@@ -60,10 +63,35 @@ class TaskBagImpl implements TaskBag {
 		this.preferences = preferences;
 	}
 
+	private void store(ArrayList<Task> tasks) {
+		localRepository.store(tasks);
+		lastReload = null;
+	}
+
+	private void store() {
+		store(this.tasks);
+	}
+	
+	@Override
+	public void archive() {
+		try {
+			reload();
+			localRepository.archive(tasks);
+			lastReload = null;
+			reload();
+		} catch (Exception e) {
+			throw new TaskPersistException(
+					"An error occurred while archiving", e);
+		}
+	}
+	
 	@Override
 	public void reload() {
-		localRepository.init();
-		this.tasks = localRepository.load();
+		if (lastReload == null || localRepository.todoFileModifiedSince(lastReload)) {
+			localRepository.init();
+			this.tasks = localRepository.load();
+			lastReload = new Date();
+		}
 	}
 
 	@Override
@@ -105,7 +133,7 @@ class TaskBagImpl implements TaskBag {
 			Task task = new Task(tasks.size(), input,
 					(preferences.isPrependDateEnabled() ? new Date() : null));
 			tasks.add(task);
-			localRepository.store(tasks);
+			store();
 		} catch (Exception e) {
 			throw new TaskPersistException("An error occurred while adding {"
 					+ input + "}", e);
@@ -120,7 +148,7 @@ class TaskBagImpl implements TaskBag {
 			if (found != null) {
 				task.copyInto(found);
 				// Log.i(TAG, "copied into found {" + found + "}");
-				localRepository.store(tasks);
+				store();
 			} else {
 				throw new TaskPersistException("Task not found, not updated");
 			}
@@ -137,7 +165,7 @@ class TaskBagImpl implements TaskBag {
 			Task found = TaskBagImpl.find(tasks, task);
 			if (found != null) {
 				tasks.remove(found);
-				localRepository.store(tasks);
+				store();
 			} else {
 				throw new TaskPersistException("Task not found, not deleted");
 			}
@@ -149,15 +177,22 @@ class TaskBagImpl implements TaskBag {
 
 	/* REMOTE APIS */
 	@Override
-	public void pushToRemote() {
-		pushToRemote(false);
+	public void pushToRemote(boolean overwrite) {
+		pushToRemote(false, overwrite);
 	}
 
 	@Override
-	public void pushToRemote(boolean overridePreference) {
+	public void pushToRemote(boolean overridePreference, boolean overwrite) {
 		if (!this.preferences.isWorkOfflineEnabled() || overridePreference) {
+			File doneFile = null;
+			if (localRepository.doneFileModifiedSince(lastSync)) {
+				doneFile = LocalFileTaskRepository.DONE_TXT_FILE;
+			}
 			remoteClientManager.getRemoteClient().pushTodo(
-					LocalFileTaskRepository.TODO_TXT_FILE);
+					LocalFileTaskRepository.TODO_TXT_FILE,
+					doneFile,
+					overwrite);
+			lastSync = new Date();
 		}
 	}
 
@@ -170,14 +205,21 @@ class TaskBagImpl implements TaskBag {
 	public void pullFromRemote(boolean overridePreference) {
 		try {
 			if (!this.preferences.isWorkOfflineEnabled() || overridePreference) {
-				File remoteFile = remoteClientManager.getRemoteClient()
+				PullTodoResult result = remoteClientManager.getRemoteClient()
 						.pullTodo();
-				if (remoteFile != null && remoteFile.exists()) {
+				File todoFile = result.getTodoFile();
+				if (todoFile != null && todoFile.exists()) {
 					ArrayList<Task> remoteTasks = TaskIo
-							.loadTasksFromFile(remoteFile);
-					localRepository.store(remoteTasks);
+							.loadTasksFromFile(todoFile);
+					store(remoteTasks);
 					reload();
 				}
+				
+				File doneFile = result.getDoneFile();
+				if (doneFile != null && doneFile.exists()) {
+					localRepository.loadDoneTasks(doneFile);
+				}
+				lastSync = new Date();
 			}
 		} catch (IOException e) {
 			throw new TaskPersistException(
@@ -223,8 +265,8 @@ class TaskBagImpl implements TaskBag {
 
 	private static Task find(List<Task> tasks, Task task) {
 		for (Task task2 : tasks) {
-			if (task2.getText().equals(task.getOriginalText())
-					&& task2.getPriority() == task.getOriginalPriority()) {
+			if (task2 == task || (task2.getText().equals(task.getOriginalText())
+					&& task2.getPriority() == task.getOriginalPriority())) {
 				return task2;
 			}
 		}
@@ -250,4 +292,5 @@ class TaskBagImpl implements TaskBag {
 			return sharedPreferences.getBoolean("workofflinepref", false);
 		}
 	}
+
 }

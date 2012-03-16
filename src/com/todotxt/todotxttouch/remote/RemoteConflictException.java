@@ -20,32 +20,19 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
-package com.todotxt.todotxttouch.task;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
+package com.todotxt.todotxttouch.remote;
 
 /**
- * A repository for tasks working at the local data store level
+ * Indicates a conflict occurred when working with a remote task store
  * 
- * @author Tim Barlotta
  */
-interface LocalTaskRepository {
-	void init();
+@SuppressWarnings("serial")
+public class RemoteConflictException extends RemoteException {
+	public RemoteConflictException(String message) {
+		super(message);
+	}
 
-	void purge();
-
-	ArrayList<Task> load();
-
-	void store(ArrayList<Task> tasks);
-
-	void archive(ArrayList<Task> tasks);
-
-	void loadDoneTasks(File file);
-
-	boolean todoFileModifiedSince(Date date);
-
-	boolean doneFileModifiedSince(Date date);
-
+	public RemoteConflictException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }
