@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 class ProjectParser {
 	private final static Pattern CONTEXT_PATTERN = Pattern
-			.compile("\\+(\\S*\\w)");;
+			.compile("(?:^|\\s)\\+(\\S*\\w)");;
 	private static final ProjectParser INSTANCE = new ProjectParser();
 
 	private ProjectParser() {
@@ -47,7 +47,7 @@ class ProjectParser {
 		Matcher m = CONTEXT_PATTERN.matcher(inputText);
 		List<String> projects = new ArrayList<String>();
 		while (m.find()) {
-			String project = m.group(1);
+			String project = m.group(1).trim();
 			projects.add(project);
 		}
 		return projects;
