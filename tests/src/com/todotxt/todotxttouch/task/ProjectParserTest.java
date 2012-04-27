@@ -70,4 +70,10 @@ public class ProjectParserTest extends TestCase {
 		assertTrue(strings.contains("string"));
 		assertTrue(strings.contains("test"));
 	}
+	
+	public void test_withoutSpace() {
+		String input = "Check out this web site http://example.com/this+is+an+example";
+		List<String> strings = ProjectParser.getInstance().parse(input);
+		assertEquals(0, strings.size());
+	}
 }
