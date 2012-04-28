@@ -89,11 +89,13 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manueller Sync</string>
+    <string name="sync_dialog_title_conflict">Sync Fehler</string>
     <string name="sync_dialog_msg">Möchten Sie die todo.txt-Datei hoch- oder runterladen?</string>
+    <string name="sync_dialog_msg_conflict">Ein Problem beim Zusammenführen der Dateien ist aufgetreten. Was möchten sie tun?</string>
     <string name="sync_dialog_upload">Änderungen hochladen</string>
     <string name="sync_dialog_download">Auf das Telefon runterladen</string>
-    <string name="sync_upload_message">todo.txt wir hochgeladen...</string>
-    <string name="sync_download_message">todo.txt wird runtergeladen...</string>
+    <string name="sync_upload_message">todo.txt wird hochgeladen…</string>
+    <string name="sync_download_message">todo.txt wird runtergeladen…</string>
     <!-- login -->
     <string name="login_screen_button">In Dropbox einloggen</string>
     <!-- delete -->
@@ -133,4 +135,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="dates_today">heute</string>
     <string name="dates_months_ago">vor %d Monaten</string>
     <string name="dates_one_month_ago">vor 1 Monat</string>
+    
+    
 </resources>

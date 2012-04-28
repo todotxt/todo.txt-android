@@ -27,6 +27,7 @@ public class Constants {
 	public static final String PREF_FIRSTRUN = "firstrun";
 	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";
 	public static final String PREF_ACCESSTOKEN_SECRET = "accesstokensecret";
+	public static final String PREF_REVISION_STRING = "revisionstring";
 	public static final String DROPBOX_MODUS = "dropbox";
 
 	public final static long INVALID_ID = -1;
@@ -51,4 +52,5 @@ public class Constants {
 	public final static String INTENT_GO_OFFLINE = "com.todotxt.todotxttouch.GO_OFFLINE";
 	public final static String INTENT_UPDATE_UI = "com.todotxt.todotxttouch.UPDATE_UI";
 	public final static String INTENT_WIDGET_UPDATE = "com.todotxt.todotxttouch.APPWIDGET_UPDATE";
+	public final static String INTENT_SHOW_PUSHPULL_DIALOG = "com.todotxt.todotxttouch.SHOW_PUSHPULL_DIALOG";
 }

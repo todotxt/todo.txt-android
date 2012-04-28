@@ -92,7 +92,9 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>
+    <string name="sync_dialog_title_conflict">Sync Error</string>
     <string name="sync_dialog_msg">Do you want to upload or download your todo.txt file?</string>
+    <string name="sync_dialog_msg_conflict">There was a merge conflict. What do you want to do now?</string>
     <string name="sync_dialog_upload">Upload to Dropbox</string>
     <string name="sync_dialog_download">Download to device</string>
     <string name="sync_upload_message">Uploading todo.txt…</string>
@@ -143,5 +145,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="dates_today">today</string>
     <string name="dates_months_ago">%d months ago</string>
     <string name="dates_one_month_ago">1 month ago</string>
+    
         
 </resources>

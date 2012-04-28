@@ -78,7 +78,7 @@ public interface RemoteClient {
 	 * @return
 	 */
 	File pullTodo();
-
+	
 	/**
 	 * Push mobile
 	 * 
@@ -93,5 +93,12 @@ public interface RemoteClient {
 	 * @return true if available, false if not
 	 */
 	boolean isAvailable();
+
+	/**
+	 * Get the revision string of the remote file. Format depends on the remote service.
+	 * 
+	 * @return Revision String, can be any format. Depending on implementation.
+	 */
+	String getRevisionString();
 
 }
