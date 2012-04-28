@@ -84,13 +84,14 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="line_breaks_pref_key">linebreakspref</string>
     <string name="line_breaks_pref_title">Windows line breaks</string>
     <string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
-    <string name="work_offline_pref_key">workofflinepref</string>
-    <string name="work_offline_pref_title">Work offline</string>
-    <string name="work_offline_pref_summary">Don\'t automatically upload every change to
+    <string name="manual_sync_pref_key">workofflinepref</string>
+    <string name="manual_sync_pref_title">Manual Sync</string>
+    <string name="manual_sync_pref_summary">Don\'t automatically upload every change to
 		Dropbox.</string>
     <string name="short_touch_pref_title">Quick complete</string>
     <string name="short_touch_pref_summary_on">Short touch on a task to mark it complete.</string>
     <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->
+
 
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>
@@ -129,7 +130,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="context_prompt">Context</string>
     <string name="refine">Refine</string>
     <string name="separator">Separator</string>
-    
+
     <!-- launcher shortcut -->
     <string name="shortcut_addtask_name">Add Task</string>
     <!-- share -->
@@ -137,16 +138,14 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <!-- online/offline toasts -->
     <string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
-    <string name="toast_notconnected">No internet connection;\nYou\'re working offline.</string>
-    <string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline
-		mode.</string>
+    <string name="toast_notconnected">No internet connection;\nNot Syncing.</string>
     <string name="short_touch_pref_key">short_touch_pref</string>
-    
+
     <!-- Relative Dates -->
     <string name="dates_days_ago">%d days ago</string>
     <string name="dates_one_day_ago">1 day ago</string>
     <string name="dates_today">today</string>
     <string name="dates_months_ago">%d months ago</string>
     <string name="dates_one_month_ago">1 month ago</string>
-        
+
 </resources>

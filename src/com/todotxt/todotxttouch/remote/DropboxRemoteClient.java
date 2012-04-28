@@ -174,7 +174,7 @@ class DropboxRemoteClient implements RemoteClient {
 	@Override
 	public PullTodoResult pullTodo() {
 		if (!isAvailable()) {
-			Intent i = new Intent(Constants.INTENT_GO_OFFLINE);
+			Intent i = new Intent(Constants.INTENT_SET_MANUAL);
 			sendBroadcast(i);
 			return new PullTodoResult(null, null);
 		}
