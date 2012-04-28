@@ -89,9 +89,21 @@ public class TodoApplication extends Application {
 			if (!getRemoteClientManager().getRemoteClient().isAvailable()) {
 				Log.d(TAG, "Pushing while online w/o network; go offline");
 				sendBroadcast(new Intent(Constants.INTENT_GO_OFFLINE));
-			} else {
-				Log.i(TAG, "Working online; should push after change");
-				backgroundPushToRemote();
+			} else {				
+				Log.i(TAG, "Working online; should push if file revisions match");
+				
+				// Get stored revision and current remote file revision
+				String storedRev = m_prefs.getString(
+						Constants.PREF_REVISION_STRING, "");
+				String fileRev = getRemoteClientManager().getRemoteClient()
+						.getRevisionString();
+				Log.i(TAG, "stored rev: " + storedRev + "; remote rev: " + fileRev);
+				if (storedRev.equals(fileRev) || force) {
+					backgroundPushToRemote();
+					
+				} else {
+					sendBroadcast(new Intent(Constants.INTENT_SHOW_PUSHPULL_DIALOG));
+				}
 			}
 		}
 	}
@@ -167,6 +179,11 @@ public class TodoApplication extends Application {
 					Log.d(TAG, "post taskBag.pushToremote");
 					if (result) {
 						Log.d(TAG, "taskBag.pushToRemote done");
+						String revision = getRemoteClientManager().getRemoteClient().getRevisionString();
+						Editor edit = m_prefs.edit();
+						edit.putString(Constants.PREF_REVISION_STRING, revision);
+						edit.commit();
+						Log.d(TAG, "saved revision after push: " + revision);
 						m_pushing = false;
 						updateSyncUI();
 					} else {
@@ -176,10 +193,12 @@ public class TodoApplication extends Application {
 				}
 
 			}.execute();
+
 		} else {
 			Log.e(TAG, "NOT AUTHENTICATED!");
 			showToast("NOT AUTHENTICATED!");
 		}
+
 	}
 
 	/**
@@ -197,6 +216,11 @@ public class TodoApplication extends Application {
 				protected Boolean doInBackground(Void... params) {
 					try {
 						Log.d(TAG, "start taskBag.pullFromRemote");
+						Editor editor = m_prefs.edit();
+						String revision = getRemoteClientManager().getRemoteClient().getRevisionString();
+						editor.putString(Constants.PREF_REVISION_STRING, revision);
+						editor.commit();
+						Log.d(TAG, "saved revision before pull: " + revision);						
 						taskBag.pullFromRemote(true);
 					} catch (Exception e) {
 						Log.e(TAG, e.getMessage());

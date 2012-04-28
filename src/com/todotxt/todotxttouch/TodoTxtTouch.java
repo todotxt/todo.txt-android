@@ -109,6 +109,8 @@ public class TodoTxtTouch extends ListActivity implements
 	private ArrayList<String> m_filters = new ArrayList<String>();
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
+	private static final int SYNC_CHOICE_DIALOG_CONFLICT = 101;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +130,7 @@ public class TodoTxtTouch extends ListActivity implements
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Constants.INTENT_ACTION_LOGOUT);
 		intentFilter.addAction(Constants.INTENT_UPDATE_UI);
+		intentFilter.addAction(Constants.INTENT_SHOW_PUSHPULL_DIALOG);
 
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
@@ -140,6 +143,9 @@ public class TodoTxtTouch extends ListActivity implements
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_UPDATE_UI)) {
 					updateSyncUI();
+				} else if (intent.getAction().equalsIgnoreCase(
+						Constants.INTENT_SHOW_PUSHPULL_DIALOG)) {
+					showDialog(SYNC_CHOICE_DIALOG_CONFLICT);
 				}
 			}
 
@@ -746,36 +752,43 @@ public class TodoTxtTouch extends ListActivity implements
 				}
 			});
 			return d;
-		} else if (id == SYNC_CHOICE_DIALOG) {
-			Log.v(TAG, "Time to show the sync choice dialog");
-			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
-			upDownChoice.setTitle(R.string.sync_dialog_title);
-			upDownChoice.setMessage(R.string.sync_dialog_msg);
-			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_TO_REMOTE)
-									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
-							// backgroundPushToRemote();
-							showToast(getString(R.string.sync_upload_message));
-						}
-					});
-			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_FROM_REMOTE)
-									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
-							// backgroundPullFromRemote();
-							showToast(getString(R.string.sync_download_message));
-						}
-					});
-			return upDownChoice.show();
+		} else if (id == SYNC_CHOICE_DIALOG) {			
+			return showSyncChoiceDialog(R.string.sync_dialog_title, R.string.sync_dialog_msg);
+			
+		} else if (id == SYNC_CHOICE_DIALOG_CONFLICT) {
+			return showSyncChoiceDialog(R.string.sync_dialog_title_conflict, R.string.sync_dialog_msg_conflict);
 
 		} else {
 			return null;
 		}
+	}
+	
+	private AlertDialog showSyncChoiceDialog(int titleId, int msgId) {
+		Log.v(TAG, "Time to show the sync choice dialog");
+		AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
+		upDownChoice.setTitle(titleId);
+		upDownChoice.setMessage(msgId);
+		upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						sendBroadcast(new Intent(
+								Constants.INTENT_START_SYNC_TO_REMOTE)
+								.putExtra(Constants.EXTRA_FORCE_SYNC, true));
+						// backgroundPushToRemote();
+						showToast(getString(R.string.sync_upload_message));
+					}
+				});
+		upDownChoice.setNegativeButton(R.string.sync_dialog_download,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						sendBroadcast(new Intent(
+								Constants.INTENT_START_SYNC_FROM_REMOTE)
+								.putExtra(Constants.EXTRA_FORCE_SYNC, true));
+						// backgroundPullFromRemote();
+						showToast(getString(R.string.sync_download_message));
+					}
+				});
+		return upDownChoice.show();
 	}
 
 	/** Handle "add task" action. */
