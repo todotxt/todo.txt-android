@@ -77,7 +77,9 @@ public class AddTask extends Activity {
 		setContentView(R.layout.add_task);
 
 		m_app = (TodoApplication) getApplication();
-		taskBag = m_app.getTaskBag();
+		taskBag = m_app.getTaskBag();	
+		
+		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
 
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
@@ -267,7 +269,6 @@ public class AddTask extends Activity {
 				// strip line breaks
 				final String input = textInputField.getText().toString()
 						.replaceAll("\\r\\n|\\r|\\n", " ");
-
 				addEditAsync(input);
 			}
 

@@ -35,6 +35,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
@@ -148,7 +149,7 @@ class DropboxRemoteClient implements RemoteClient {
 	@Override
 	public File pullTodo() {
 		if (!isAvailable()) {
-			Intent i = new Intent(Constants.INTENT_GO_OFFLINE);
+			Intent i = new Intent(Constants.INTENT_SET_MANUAL);
 			sendBroadcast(i);
 			return null;
 		}
@@ -267,6 +268,18 @@ class DropboxRemoteClient implements RemoteClient {
 	@Override
 	public boolean isAvailable() {
 		return Util.isOnline(todoApplication.getApplicationContext());
+	}
+
+	@Override
+	public String getRevisionString() {
+		try {
+			Entry file = dropboxApi.metadata(getRemotePathAndFilename(), 1, null, false, null);
+			return file.rev;
+		} catch (DropboxException e) {			
+			e.printStackTrace();
+			throw new RemoteException("Couldn't retrieve file metadata for " + getRemotePathAndFilename(),
+					e);
+		}
 	}
 
 }
