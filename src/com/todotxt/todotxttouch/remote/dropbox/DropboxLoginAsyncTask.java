@@ -51,7 +51,7 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 		implements RemoteLoginTask {
 
 	private TodoApplication m_app;
-	private DropboxSyncClient client;
+	private DropboxRemoteClient client;
 	private String m_username;
 	private String m_password;
 
@@ -65,7 +65,7 @@ public class DropboxLoginAsyncTask extends AsyncTask<Void, Void, Integer>
 
 	public DropboxLoginAsyncTask(TodoApplication act) {
 		m_app = act;
-		client = (DropboxSyncClient) act.getRemoteClient();
+		client = (DropboxRemoteClient) act.getRemoteClient();
 	}
 
 	@Override

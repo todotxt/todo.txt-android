@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * Interface for interacting with the tasks in aggregate
- * 
+ *
  * @author Tim Barlotta
  */
 public interface TaskBag {
@@ -43,8 +43,6 @@ public interface TaskBag {
 	void update(Task task);
 
 	void delete(Task task);
-
-	void updatePreferences(TaskBagImpl.Preferences preferences);
 
 	List<Task> getTasks();
 

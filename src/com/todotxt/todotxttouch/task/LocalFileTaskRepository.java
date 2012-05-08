@@ -29,6 +29,7 @@ package com.todotxt.todotxttouch.task;
 import android.os.Environment;
 import android.util.Log;
 import com.todotxt.todotxttouch.TodoException;
+import com.todotxt.todotxttouch.util.TaskIo;
 import com.todotxt.todotxttouch.util.Util;
 
 import java.io.File;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 
 /**
  * A task repository for interacting with the local file system
- * 
+ *
  * @author Tim Barlotta
  */
 class LocalFileTaskRepository implements LocalTaskRepository {
@@ -88,6 +89,6 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	@Override
 	public void store(ArrayList<Task> tasks) {
 		TaskIo.writeToFile(tasks, TODO_TXT_FILE,
-				preferences.useWindowsLineBreaks);
+				preferences.isUseWindowsLineBreaksEnabled());
 	}
 }

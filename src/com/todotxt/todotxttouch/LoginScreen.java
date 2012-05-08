@@ -37,7 +37,6 @@ import android.widget.Button;
 
 import com.todotxt.todotxttouch.remote.RemoteLoginTask;
 import com.todotxt.todotxttouch.remote.RemoteClient;
-import com.todotxt.todotxttouch.remote.dropbox.DropboxLoginAsyncTask;
 
 public class LoginScreen extends Activity {
 
@@ -104,7 +103,8 @@ public class LoginScreen extends Activity {
 			}
 		}
 
-		RemoteLoginTask loginTask = new DropboxLoginAsyncTask(m_app);
+		RemoteLoginTask loginTask = client.getLoginTask();
 		loginTask.showLoginDialog(this);
 	}
+
 }

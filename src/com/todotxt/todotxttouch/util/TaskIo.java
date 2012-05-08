@@ -24,10 +24,11 @@
  * @copyright 2011 Tim Barlotta
  */
 
-package com.todotxt.todotxttouch.task;
+package com.todotxt.todotxttouch.util;
 
 import android.util.Log;
-import com.todotxt.todotxttouch.util.Util;
+
+import com.todotxt.todotxttouch.task.Task;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -24,6 +24,7 @@
  */
 package com.todotxt.todotxttouch.task;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -38,10 +39,10 @@ import com.todotxt.todotxttouch.remote.RemoteTaskRepository;
 
 /**
  * Implementation of the TaskBag interface
- * 
+ *
  * @author Tim Barlotta
  */
-public class TaskBagImpl implements TaskBag {
+class TaskBagImpl implements TaskBag {
 	private static final String TAG = TaskBagImpl.class.getSimpleName();
 	private Preferences preferences;
 	private final LocalTaskRepository localRepository;
@@ -103,7 +104,7 @@ public class TaskBagImpl implements TaskBag {
 		try {
 			reload();
 			Task task = new Task(tasks.size(), input,
-					(preferences.shouldPrependDate ? new Date() : null));
+					(preferences.isPrependDateEnabled() ? new Date() : null));
 			tasks.add(task);
 			localRepository.store(tasks);
 			pushToRemote();
@@ -159,15 +160,12 @@ public class TaskBagImpl implements TaskBag {
 
 	@Override
 	public void disconnectFromRemote() {
-		// TODO remove local purge, for now application doesn't function without
-		// logging into dropbox
-		localRepository.purge();
 		remoteTaskRepository.purge();
 	}
 
 	@Override
 	public void pushToRemote() {
-		if (!this.preferences.workOffline) {
+		if (!this.preferences.isWorkOfflineEnabled()) {
 			ArrayList<Task> localTasks = localRepository.load();
 			remoteTaskRepository.store(localTasks);
 		}
@@ -175,7 +173,7 @@ public class TaskBagImpl implements TaskBag {
 
 	@Override
 	public void pullFromRemote() {
-		if (!this.preferences.workOffline) {
+		if (!this.preferences.isWorkOfflineEnabled()) {
 			this.tasks = remoteTaskRepository.load();
 			localRepository.store(tasks);
 		}
@@ -228,68 +226,28 @@ public class TaskBagImpl implements TaskBag {
 	}
 
 	public static class Preferences {
-		// TODO need to allow for changing this
-		final String todoFileDirectory;
-		final boolean shouldPrependDate;
-		final boolean useWindowsLineBreaks;
-		final boolean workOffline;
+        private final String defaultTodoFileDirectory;
+		private final SharedPreferences sharedPreferences;
 
-		private Preferences(Builder builder) {
-			this.todoFileDirectory = builder.todoFileDirectory;
-			this.shouldPrependDate = builder.shouldPrependDate;
-			this.useWindowsLineBreaks = builder.useWindowsLineBreaks;
-			this.workOffline = builder.workOffline;
+		public Preferences(SharedPreferences sharedPreferences, String defaultTodoFileDirectory) {
+			this.sharedPreferences = sharedPreferences;
+            this.defaultTodoFileDirectory = defaultTodoFileDirectory;
 		}
 
-		public static class Builder {
-			private String todoFileDirectory;
-			private boolean shouldPrependDate = false;
-			private boolean useWindowsLineBreaks = false;
-			private boolean workOffline = false;
+        public String getTodoTextPath() {
+            return sharedPreferences.getString("todotxtpath", defaultTodoFileDirectory);
+        }
 
-			public Builder(String todoFileDirectory) {
-				this.todoFileDirectory = todoFileDirectory;
-			}
+        public boolean isUseWindowsLineBreaksEnabled() {
+            return sharedPreferences.getBoolean("linebreakspref", false);
+        }
 
-			/**
-			 * Sets the shouldPrependDate value in the builder
-			 * 
-			 * @param shouldPrependDate
-			 *            the value to set
-			 * @return this builder
-			 */
-			public Builder shouldPrependDate(boolean shouldPrependDate) {
-				this.shouldPrependDate = shouldPrependDate;
-				return this;
-			}
+        public boolean isPrependDateEnabled() {
+            return sharedPreferences.getBoolean("todotxtprependdate", false);
+        }
 
-			/**
-			 * Sets the useWindowsLineBreaks value in the builder
-			 * 
-			 * @param useWindowsLineBreaks
-			 *            the value to set
-			 * @return this builder
-			 */
-			public Builder useWindowsLineBreaks(boolean useWindowsLineBreaks) {
-				this.useWindowsLineBreaks = useWindowsLineBreaks;
-				return this;
-			}
-
-			/**
-			 * Sets the workOffline value in the builder
-			 * 
-			 * @param workOffline
-			 *            the value to set
-			 * @return this builder
-			 */
-			public Builder workOffline(boolean workOffline) {
-				this.workOffline = workOffline;
-				return this;
-			}
-
-			public Preferences build() {
-				return new Preferences(this);
-			}
-		}
+        public boolean isWorkOfflineEnabled() {
+            return sharedPreferences.getBoolean("workofflinepref", false);
+        }
 	}
 }
