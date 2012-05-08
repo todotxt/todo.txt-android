@@ -167,6 +167,14 @@ class DropboxRemoteClient implements RemoteClient {
 		} catch (FileNotFoundException e1) {
 			throw new RemoteException("Failed to find file", e1);
 		}
+		try {
+			if (!TODO_TXT_TMP_FILE.exists()) {
+				Util.createParentDirectory(TODO_TXT_TMP_FILE);
+				TODO_TXT_TMP_FILE.createNewFile();
+			}
+		} catch (IOException e) {
+			throw new RemoteException("Failed to ensure that file exists", e);
+		}
 
 		try {
 			dropboxApi.getFile(getRemotePathAndFilename(), null, outputStream,
