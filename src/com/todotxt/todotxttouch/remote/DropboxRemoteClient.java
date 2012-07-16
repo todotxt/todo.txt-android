@@ -23,10 +23,7 @@
 package com.todotxt.todotxttouch.remote;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.ArrayList;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,8 +33,6 @@ import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
@@ -48,10 +43,14 @@ import com.todotxt.todotxttouch.util.Util;
 
 class DropboxRemoteClient implements RemoteClient {
 	private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";
+	private static final String DONE_TXT_REMOTE_FILE_NAME = "done.txt";
 	private static final AccessType ACCESS_TYPE = AccessType.DROPBOX;
 	private static final File TODO_TXT_TMP_FILE = new File(
 			Environment.getExternalStorageDirectory(),
 			"data/com.todotxt.todotxttouch/tmp/todo.txt");
+	private static final File DONE_TXT_TMP_FILE = new File(
+			Environment.getExternalStorageDirectory(),
+			"data/com.todotxt.todotxttouch/tmp/done.txt");
 
 	private DropboxAPI<AndroidAuthSession> dropboxApi;
 	private TodoApplication todoApplication;
@@ -145,75 +144,103 @@ class DropboxRemoteClient implements RemoteClient {
 		return dropboxApi.getSession().isLinked();
 	}
 
-	@Override
-	public File pullTodo() {
-		if (!isAvailable()) {
-			Intent i = new Intent(Constants.INTENT_GO_OFFLINE);
-			sendBroadcast(i);
-			return null;
-		}
-		try {
-			if (!TODO_TXT_TMP_FILE.exists()) {
-				Util.createParentDirectory(TODO_TXT_TMP_FILE);
-				TODO_TXT_TMP_FILE.createNewFile();
-			}
-		} catch (IOException e) {
-			throw new RemoteException("Failed to ensure that file exists", e);
-		}
+	/**
+	 * Store the current 'rev' from the metadata retrieved from Dropbox.
+	 * 
+	 * @param key
+	 *            Name of the key in sharedPreferences under which to store the
+	 *            rev value.
+	 * @param rev
+	 *            The value of the rev to be stored.
+	 */
+	private void storeRev(String key, String rev) {
+		Editor prefsEditor = sharedPreferences.edit();
+		prefsEditor.putString(key, rev);
+		prefsEditor.commit();
+	}
 
-		FileOutputStream outputStream = null;
-		try {
-			outputStream = new FileOutputStream(TODO_TXT_TMP_FILE);
-		} catch (FileNotFoundException e1) {
-			throw new RemoteException("Failed to find file", e1);
-		}
-
-		try {
-			dropboxApi.getFile(getRemotePathAndFilename(), null, outputStream,
-					null);
-			outputStream.flush();
-			outputStream.close();
-		} catch (DropboxException e) {
-			throw new RemoteException("Cannot get file from Dropbox");
-		} catch (IOException e) {
-			throw new RemoteException("Failed to find file", e);
-		}
-		return TODO_TXT_TMP_FILE;
-
+	/**
+	 * Load the last 'rev' stored from Dropbox.
+	 * 
+	 * @param key
+	 *            Name of the key in sharedPreferences from which to retrieve
+	 *            the rev value.
+	 * @return The value of the rev to be retrieved.
+	 */
+	private String loadRev(String key) {
+		return sharedPreferences.getString(key, null);
 	}
 
 	@Override
-	public void pushTodo(File file) {
-		try {
-			if (!file.exists()) {
-				Util.createParentDirectory(file);
-				file.createNewFile();
+	public PullTodoResult pullTodo() {
+		if (!isAvailable()) {
+			Intent i = new Intent(Constants.INTENT_GO_OFFLINE);
+			sendBroadcast(i);
+			return new PullTodoResult(null, null);
+		}
+
+		DropboxFile todoFile = new DropboxFile(
+				getTodoFileRemotePathAndFilename(), TODO_TXT_TMP_FILE,
+				loadRev(Constants.PREF_TODO_REV));
+		DropboxFile doneFile = new DropboxFile(
+				getDoneFileRemotePathAndFilename(), DONE_TXT_TMP_FILE,
+				loadRev(Constants.PREF_DONE_REV));
+		ArrayList<DropboxFile> dropboxFiles = new ArrayList<DropboxFile>(2);
+		dropboxFiles.add(todoFile);
+		dropboxFiles.add(doneFile);
+		
+		DropboxFileDownloader downloader = new DropboxFileDownloader(
+				dropboxApi, dropboxFiles);
+		downloader.pullFiles();
+
+		File downloadedTodoFile = null;
+		File downloadedDoneFile = null;
+		if (todoFile.getStatus() == DropboxFileStatus.SUCCESS) {
+			downloadedTodoFile = todoFile.getLocalFile();
+			storeRev(Constants.PREF_TODO_REV, todoFile.getLoadedMetadata().rev);
+		}
+		if (doneFile.getStatus() == DropboxFileStatus.SUCCESS) {
+			downloadedDoneFile = doneFile.getLocalFile();
+			storeRev(Constants.PREF_DONE_REV, doneFile.getLoadedMetadata().rev);
+		}
+
+		return new PullTodoResult(downloadedTodoFile, downloadedDoneFile);
+	}
+
+	@Override
+	public void pushTodo(File todoFile, File doneFile, boolean overwrite) {
+		ArrayList<DropboxFile> dropboxFiles = new ArrayList<DropboxFile>(2);
+		if (todoFile != null) {
+			dropboxFiles.add(new DropboxFile(
+					getTodoFileRemotePathAndFilename(), todoFile,
+					loadRev(Constants.PREF_TODO_REV)));
+		}
+
+		if (doneFile != null) {
+			dropboxFiles.add(new DropboxFile(
+					getDoneFileRemotePathAndFilename(), doneFile,
+					loadRev(Constants.PREF_DONE_REV)));
+		}
+
+		DropboxFileUploader uploader = new DropboxFileUploader(dropboxApi,
+				dropboxFiles, overwrite);
+		uploader.pushFiles();
+
+		if (uploader.getStatus() == DropboxFileStatus.SUCCESS) {
+			if (dropboxFiles.size() > 0) {
+				DropboxFile todoDropboxFile = dropboxFiles.get(0);
+				if (todoDropboxFile.getStatus() == DropboxFileStatus.SUCCESS) {
+					storeRev(Constants.PREF_TODO_REV,
+							todoDropboxFile.getLoadedMetadata().rev);
+				}
 			}
-		} catch (IOException e) {
-			throw new RemoteException("Failed to ensure that file exists", e);
-		}
-
-		FileInputStream inputStream;
-		try {
-			inputStream = new FileInputStream(file);
-		} catch (FileNotFoundException e1) {
-			throw new RemoteException("File " + file.getAbsolutePath()
-					+ " not found", e1);
-		}
-		try {
-			dropboxApi.putFileOverwrite(getRemotePathAndFilename(),
-					inputStream, file.length(), null);
-			inputStream.close();
-
-		} catch (DropboxUnlinkedException e) {
-			throw new RemoteException("User has unlinked.", e);
-		} catch (DropboxException e) {
-			e.printStackTrace();
-			throw new RemoteException("Something went wrong while uploading.",
-					e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RemoteException("Problem with IO", e);
+			if (dropboxFiles.size() > 1) {
+				DropboxFile doneDropboxFile = dropboxFiles.get(1);
+				if (doneDropboxFile.getStatus() == DropboxFileStatus.SUCCESS) {
+					storeRev(Constants.PREF_DONE_REV,
+							doneDropboxFile.getLoadedMetadata().rev);
+				}
+			}
 		}
 	}
 
@@ -260,8 +287,12 @@ class DropboxRemoteClient implements RemoteClient {
 				.getResources().getString(R.string.TODOTXTPATH_defaultPath));
 	}
 
-	String getRemotePathAndFilename() {
+	String getTodoFileRemotePathAndFilename() {
 		return getRemotePath() + "/" + TODO_TXT_REMOTE_FILE_NAME;
+	}
+
+	String getDoneFileRemotePathAndFilename() {
+		return getRemotePath() + "/" + DONE_TXT_REMOTE_FILE_NAME;
 	}
 
 	@Override

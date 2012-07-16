@@ -20,32 +20,24 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
-package com.todotxt.todotxttouch.task;
+package com.todotxt.todotxttouch.remote;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
 
-/**
- * A repository for tasks working at the local data store level
- * 
- * @author Tim Barlotta
- */
-interface LocalTaskRepository {
-	void init();
-
-	void purge();
-
-	ArrayList<Task> load();
-
-	void store(ArrayList<Task> tasks);
-
-	void archive(ArrayList<Task> tasks);
-
-	void loadDoneTasks(File file);
-
-	boolean todoFileModifiedSince(Date date);
-
-	boolean doneFileModifiedSince(Date date);
-
+public class PullTodoResult {
+	private File todoFile;
+	private File doneFile;
+	
+	public PullTodoResult(File todoFile, File doneFile) {
+		this.todoFile = todoFile;
+		this.doneFile = doneFile;
+	}
+	
+	public File getTodoFile() {
+		return todoFile;
+	}
+	
+	public File getDoneFile() {
+		return doneFile;
+	}
 }
