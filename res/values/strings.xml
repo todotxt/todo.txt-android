@@ -60,6 +60,14 @@ You should have received a copy of the GNU General Public License along with Tod
 		contexts.</string>
 
     <!-- preferences -->
+    <string name="ARCHIVE_settings_header">Archive</string>
+    <string name="auto_archive_pref_key">todotxtautoarchive</string>
+    <string name="auto_archive_pref_title">Auto Archive</string>
+    <string name="auto_archive_pref_summary">Auto-archive tasks automatically on completion.</string>
+    <string name="archive_now_pref_key">todotxtarchivenow</string>
+    <string name="archive_now_pref_title">Archive Now</string>
+    <string name="archive_now_pref_summary">Move all done tasks from todo.txt to done.txt.</string>
+    <string name="archive_now_explainer">Are you sure you wish to archive your completed tasks?</string>
     <string name="dropbox_logout_pref_title">Log out</string>
     <string name="dropbox_logout_pref_summary">Log out of Dropbox.</string>
     <string name="dropbox_logout_explainer">Are you sure you wish to log out of Dropbox?</string>
@@ -79,9 +87,9 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="line_breaks_pref_key">linebreakspref</string>
     <string name="line_breaks_pref_title">Windows line breaks</string>
     <string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
-    <string name="work_offline_pref_key">workofflinepref</string>
-    <string name="work_offline_pref_title">Work offline</string>
-    <string name="work_offline_pref_summary">Don\'t automatically upload every change to
+    <string name="manual_sync_pref_key">workofflinepref</string>
+    <string name="manual_sync_pref_title">Manual Sync</string>
+    <string name="manual_sync_pref_summary">Don\'t automatically upload every change to
 		Dropbox.</string>
     <string name="show_task_age_pref_key">show_task_age_pref</string>
     <string name="show_task_age_pref_title">Show task age</string>
@@ -90,6 +98,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="short_touch_pref_summary_on">Short touch on a task to mark it complete.</string>
     <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->
 
+
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>
     <string name="sync_dialog_msg">Do you want to upload or download your todo.txt file?</string>
@@ -97,6 +106,9 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="sync_dialog_download">Download to device</string>
     <string name="sync_upload_message">Uploading todo.txt…</string>
     <string name="sync_download_message">Downloading todo.txt…</string>
+    <!-- sync conflict dialog -->
+    <string name="sync_conflict_dialog_title">File Conflict</string>
+    <string name="sync_conflict_dialog_msg">Oops! There is a newer version of your todo.txt file in Dropbox. \nDo you want to upload your local changes, or download the Dropbox version?</string>
     <!-- login -->
     <string name="first_title_word">Todo.txt</string>
     <string name="second_title_word">Touch</string>
@@ -124,7 +136,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="context_prompt">Context</string>
     <string name="refine">Refine</string>
     <string name="separator">Separator</string>
-    
+
     <!-- launcher shortcut -->
     <string name="shortcut_addtask_name">Add Task</string>
     <!-- share -->
@@ -132,16 +144,14 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <!-- online/offline toasts -->
     <string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
-    <string name="toast_notconnected">No internet connection;\nYou\'re working offline.</string>
-    <string name="toast_notconnected_switch_to_offline">No internet connection!\nSwitching to work offline
-		mode.</string>
+    <string name="toast_notconnected">No internet connection;\nNot Syncing.</string>
     <string name="short_touch_pref_key">short_touch_pref</string>
-    
+
     <!-- Relative Dates -->
     <string name="dates_days_ago">%d days ago</string>
     <string name="dates_one_day_ago">1 day ago</string>
     <string name="dates_today">today</string>
     <string name="dates_months_ago">%d months ago</string>
     <string name="dates_one_month_ago">1 month ago</string>
-        
+
 </resources>

@@ -319,6 +319,30 @@ public class Util {
 		}
 	}
 
+	public static void renameFile(File origFile, File newFile, boolean overwrite) {
+		if (!origFile.exists()) {
+			Log.e(TAG, "Error renaming file: " + origFile + " does not exist");
+			throw new TodoException("Error renaming file: " + origFile
+					+ " does not exist");
+		}
+
+		createParentDirectory(newFile);
+
+		if (overwrite && newFile.exists()) {
+			if (!newFile.delete()) {
+				Log.e(TAG, "Error renaming file: failed to delete " + newFile);
+				throw new TodoException(
+						"Error renaming file: failed to delete " + newFile);
+			}
+		}
+
+		if (!origFile.renameTo(newFile)) {
+			Log.e(TAG, "Error renaming " + origFile + " to " + newFile);
+			throw new TodoException("Error renaming " + origFile + " to "
+					+ newFile);
+		}
+	}
+
 	public static ArrayAdapter<String> newSpinnerAdapter(Context cxt,
 			List<String> items) {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(cxt,

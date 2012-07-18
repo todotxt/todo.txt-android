@@ -95,12 +95,17 @@ public class TaskIo {
 
 	public static void writeToFile(List<Task> tasks, File file,
 			boolean useWindowsBreaks) {
+		writeToFile(tasks, file, false, useWindowsBreaks);
+	}
+
+	public static void writeToFile(List<Task> tasks, File file,
+			boolean append, boolean useWindowsBreaks) {
 		try {
 			if (!Util.isDeviceWritable()) {
 				throw new IOException("Device is not writable!");
 			}
 			Util.createParentDirectory(file);
-			FileWriter fw = new FileWriter(file);
+			FileWriter fw = new FileWriter(file, append);
 			for (int i = 0; i < tasks.size(); ++i) {
 				String fileFormat = tasks.get(i).inFileFormat();
 				fw.write(fileFormat);

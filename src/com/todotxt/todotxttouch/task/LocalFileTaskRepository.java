@@ -25,6 +25,7 @@ package com.todotxt.todotxttouch.task;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.os.Environment;
 import android.util.Log;
@@ -44,6 +45,9 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	final static File TODO_TXT_FILE = new File(
 			Environment.getExternalStorageDirectory(),
 			"data/com.todotxt.todotxttouch/todo.txt");
+	final static File DONE_TXT_FILE = new File(
+			Environment.getExternalStorageDirectory(),
+			"data/com.todotxt.todotxttouch/done.txt");
 	private final TaskBagImpl.Preferences preferences;
 
 	public LocalFileTaskRepository(TaskBagImpl.Preferences preferences) {
@@ -87,5 +91,54 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	public void store(ArrayList<Task> tasks) {
 		TaskIo.writeToFile(tasks, TODO_TXT_FILE,
 				preferences.isUseWindowsLineBreaksEnabled());
+	}
+
+	@Override
+	public void archive(ArrayList<Task> tasks) {
+		boolean windowsLineBreaks = preferences.isUseWindowsLineBreaksEnabled();
+
+		ArrayList<Task> completedTasks = new ArrayList<Task>(tasks.size());
+		ArrayList<Task> incompleteTasks = new ArrayList<Task>(tasks.size());
+
+		for (Task task : tasks) {
+			if (task.isCompleted()) {
+				completedTasks.add(task);
+			} else {
+				incompleteTasks.add(task);
+			}
+		}
+
+		// append completed tasks to done.txt
+		TaskIo.writeToFile(completedTasks, DONE_TXT_FILE, true,
+				windowsLineBreaks);
+
+		// write incomplete tasks back to todo.txt
+		// TODO: remove blank lines (if we ever add support for
+		// PRESERVE_BLANK_LINES)
+		TaskIo.writeToFile(incompleteTasks, TODO_TXT_FILE, false,
+				windowsLineBreaks);
+	}
+
+	@Override
+	public void loadDoneTasks(File file) {
+		Util.renameFile(file, DONE_TXT_FILE, true);
+	}
+
+	@Override
+	public boolean todoFileModifiedSince(Date date) {
+		long date_ms = 0l;
+		if (date != null) {
+			date_ms = date.getTime();
+		}
+		return date_ms < TODO_TXT_FILE.lastModified();
+	}
+
+	@Override
+	public boolean doneFileModifiedSince(Date date) {
+		long date_ms = 0l;
+		if (date != null) {
+			date_ms = date.getTime();
+		}
+		return date_ms < DONE_TXT_FILE.lastModified();
 	}
 }
