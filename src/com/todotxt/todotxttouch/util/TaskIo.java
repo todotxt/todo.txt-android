@@ -61,7 +61,6 @@ public class TaskIo {
 			}
 		} finally {
 			Util.closeStream(in);
-			Util.closeStream(is);
 		}
 		return items;
 	}
@@ -75,18 +74,8 @@ public class TaskIo {
 		} else {
 			InputStream is = new FileInputStream(file);
 			try {
-				in = new BufferedReader(new InputStreamReader(is));
-				String line;
-				long counter = 0L;
-				while ((line = in.readLine()) != null) {
-					line = line.trim();
-					if (line.length() > 0) {
-						items.add(new Task(counter, line));
-					}
-					counter++;
-				}
+                items = loadTasksFromStream(is);
 			} finally {
-				Util.closeStream(in);
 				Util.closeStream(is);
 			}
 		}
