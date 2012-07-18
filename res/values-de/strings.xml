@@ -51,25 +51,23 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="close">Schliessen</string>
     <string name="clear">Löschen</string>
     <string name="areyousure">Sind Sie sicher?</string>
-    <string name="tasktexthint">ask hier beschreiben. Neue Projekt Namen mit +
-		und Kontexte mit @. Zum Beispiel:\n\nArzt anrufen @fon +Gesundheit</string>
-    <string name="add_task_help"><b>Projekte</b>fangen mit einem + Zeichen und haben keine Leerzeichen, like +BuchSchreiben oder +Messe\n\n<b>Kontexte</b> (wo Sie den Task abschliessen möchten) fangen mit einem @ Zeichen an. Bsp.: @telefon oder @firma\n\n
-		Ein Task kann mehrere Projekte oder Kontexte haben.</string>
+    <string name="tasktexthint">Task hier beschreiben. Neue Projekt Namen mit + und Kontexte mit @. Zum Beispiel:\n\nArzt anrufen @fon +Gesundheit</string>
+    <string name="add_task_help"><b>Projekte</b> fangen mit einem + Zeichen und haben keine Leerzeichen, Bsp. +BuchSchreiben oder +Messe\n\n<b>Kontexte</b> (wo Sie den Task abschliessen möchten) fangen mit einem @ Zeichen an, Bsp. @Telefon oder @Firma\n\nEin Task kann mehrere Projekte oder Kontexte haben.</string>
 
     <!-- preferences -->
     <string name="dropbox_logout_pref_title">Ausloggen</string>
     <string name="dropbox_logout_pref_summary">Aus Dropbox ausloggen.</string>
-    <string name="dropbox_logout_explainer">ollen Sie sich wirklich aus Dropbox ausloggen?</string>
+    <string name="dropbox_logout_explainer">Wollen Sie sich wirklich aus Dropbox ausloggen?</string>
     <string name="TODOTXTPATH_key">todotxtpath</string>
     <string name="TODOTXTPATH_title">Ort der Datei</string>
-    <string name="TODOTXTPATH_summary">er Dropbox Ordner in dem todo.txt gespeichert wird.</string>
+    <string name="TODOTXTPATH_summary">Der Dropbox Ordner in dem todo.txt gespeichert wird.</string>
     <string name="TODOTXTPATH_defaultPath">/todo</string>
     <string name="DROPBOX_settings_header">Dropbox</string>
     <string name="todotxt_settings_header">todo.txt</string>
     <string name="about_settings_header">Über</string>
     <string name="prepend_date_pref_key">todotxtprependdate</string>
     <string name="prepend_date_pref_title">Neue Tasks mit Datum</string>
-    <string name="prepend_date_pref_summary">		Heutiges Datum automatisch neuen Tasks hinzufügen.</string>
+    <string name="prepend_date_pref_summary">Heutiges Datum automatisch neuen Tasks hinzufügen.</string>
     <string name="show_line_numbers_pref_key">showlinenumberspref</string>
     <string name="show_line_numbers_pref_title">Zeilennummern anzeigen.</string>
     <string name="show_line_numbers_pref_summary">Zeige die Zeilennummern aller Tasks an.</string>
