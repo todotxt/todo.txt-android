@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_label">Todo.txt Touch</string>
+    <string name="added_task">Tâche ajoutée</string>
+    <string name="add_task_failed">Impossible d\'ajouter la tâche</string>
+    <string name="updated_task">Tâche mise à jour</string>
+    <string name="update_task_failed">MAJ tâche impossible</string>
+    <string name="sort">Trier</string>
+    <string name="filter">Filtrer</string>
+    <string name="main_no_items">Aucunes tâches présentes.</string>
+    <string name="set_preferences">Paramétrer</string>
+    <string name="preferences">Paramètres</string>
+    <string name="sync">Synchroniser</string>
+    <string name="search">Rechercher</string>
+    <string name="refresh">Rafraichir</string>
+    <string name="add">Ajouter</string>
+    <string name="addtask">Ajouter Tâche</string>
+    <string name="updatetask">Mise à jour Tâche</string>
+    <string name="newtask">Nouvelle Tâche</string>
+    <string name="done">Terminer</string>
+    <string name="priority">Prioritiser</string>
+    <string name="update">Mettre à jour</string>
+    <string name="delete">Supprimer</string>
+    <string name="share">Partager</string>
+    <string name="unComplete">Annuler Terminer</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
+    <string name="close">Fermer</string>
+    <string name="clear">Nettoyer</string>
+    <string name="areyousure">Etes vous sûr ?</string>
+    <string name="tasktexthint">Appeler Maman au @téléphone +PaixFamiliale\n\n</string>
+    <string name="add_task_help">Les <b>Projets</b> commencent avec le symbole <b>+</b> et ne peuvent contenir d\'espaces, comme par exemple +RefaireLaCuisine or
+		+LireRomans.\n\nLes <b>Contextes</b> (dans lesquelles vous définirez une tâche) commencent par le symbole @, comme par exemple @téléphone ou @Boulangerie.\n\n
+		Une tâche peut inclure une quantité indéfinie de projets ou de contextes.</string>
+    <!-- preferences -->
+    <string name="dropbox_logout_pref_title">Se déconnecter</string>
+    <string name="dropbox_logout_pref_summary">Se déconnecter de Dropbox.</string>
+    <string name="dropbox_logout_explainer">Etes-vous sûr de vouloir vous déconnecter de Dropbox?</string>
+    <string name="TODOTXTPATH_key">todotxtpath</string>
+    <string name="TODOTXTPATH_title">Emplacement du fichier</string>
+    <string name="TODOTXTPATH_summary">Le dossier Dropbox où est placé todo.txt.</string>
+    <string name="TODOTXTPATH_defaultPath">/todo</string>
+    <string name="DROPBOX_settings_header">Dropbox</string>
+    <string name="todotxt_settings_header">todo.txt</string>
+    <string name="about_settings_header">A propos</string>
+    <string name="prepend_date_pref_key">todotxtprependdate</string>
+    <string name="prepend_date_pref_title">Dater nouvelles tâches</string>
+    <string name="prepend_date_pref_summary">Ajouter automatiquement la date de création aux nouvelles tâches.</string>
+    <string name="show_line_numbers_pref_key">showlinenumberspref</string>
+    <string name="show_line_numbers_pref_title">Afficher numéros de lignes</string>
+    <string name="show_line_numbers_pref_summary">Afficher les numéros de lignes de chaque tâche.</string>
+    <string name="line_breaks_pref_key">linebreakspref</string>
+    <string name="line_breaks_pref_title">Saut de ligne Windows</string>
+    <string name="line_breaks_pref_summary">Utiliser le saut de ligne Windows dans le fichier texte.</string>
+    <string name="work_offline_pref_key">workofflinepref</string>
+    <string name="work_offline_pref_title">Travailler hors ligne</string>
+    <string name="work_offline_pref_summary">Ne pas envoyer automatiquement chaque changement à Dropbox.</string>
+    <string name="show_task_age_pref_key">show_task_age_pref</string>
+    <string name="show_task_age_pref_title">Afficher l\'âge de la tâche</string>
+    <string name="show_task_age_pref_summary">Afficher l\'âge des tâches ayant une date de création.</string>
+    <string name="short_touch_pref_title">Terminer rapidement</string>
+    <string name="short_touch_pref_summary_on">Appyer rapidement sur une tâche pour la marquer comme terminée.</string>
+    <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->
+
+    <!-- sync dialog -->
+    <string name="sync_dialog_title">Syncho manuelle</string>
+    <string name="sync_dialog_msg">Voulez-vous envoyer ou recevoir votre fichier todo.txt ?</string>
+    <string name="sync_dialog_upload">Envoyer sur Dropbox</string>
+    <string name="sync_dialog_download">Recevoir sur l\'appareil</string>
+    <string name="sync_upload_message">Envoi de todo.txt…</string>
+    <string name="sync_download_message">Réception de todo.txt…</string>
+    <!-- login -->
+    <string name="first_title_word">Todo.txt</string>
+    <string name="second_title_word">Touch</string>
+    <string name="login_screen_button">Se connecter à Dropbox</string>
+    <!-- delete -->
+    <string name="delete_task_title">Supprimer la tâche</string>
+    <string name="delete_task_message">Cette action est impossible à annuler. Etes vous sûr ?</string>
+    <string name="delete_task_confirm">Supprimer</string>
+    <!-- search -->
+    <string name="search_hint">Chercher sur todo.txt</string>
+    <!-- filter tabs -->
+    <string name="filter_tab_priorities">Priorités</string>
+    <string name="filter_tab_projects">Projets</string>
+    <string name="filter_tab_contexts">Contextes</string>
+    <string name="filter_tab_search">Mots-clés</string>
+    <!-- title bar changes -->
+    <string name="title_search_results">Mot recherché : </string>
+    <string name="title_filter_applied">Filtrer par : </string>
+    <string name="add_task_priority_btn">Priorité</string>
+    <string name="add_task_context_btn">Contexte</string>
+    <string name="add_task_project_btn">Projet</string>
+    <string name="add_task_help_btn">Aide</string>
+    <string name="priority_prompt">Priorité</string>
+    <string name="project_prompt">Projet</string>
+    <string name="context_prompt">Contexte</string>
+    <string name="refine">Affiner</string>
+    <string name="separator">Separateur</string>
+    
+    <!-- launcher shortcut -->
+    <string name="shortcut_addtask_name">Ajouter Tâche</string>
+    <!-- share -->
+    <string name="share_addtask_name">Ajouter à Todo.txt</string>
+
+    <!-- online/offline toasts -->
+    <string name="toast_login_notconnected">Connexion impossible :\nAucune connexion internet.</string>
+    <string name="toast_notconnected">Aucune connexion internet;\nVous travaillez hors-ligne.</string>
+    <string name="toast_notconnected_switch_to_offline">Aucune connexion internet!\nPassage en mode hors-ligne.</string>
+    <string name="short_touch_pref_key">short_touch_pref</string>
+    
+    <!-- Relative Dates -->
+    <string name="dates_days_ago">Il y a %d jours</string>
+    <string name="dates_one_day_ago">Il y a 1 jour</string>
+    <string name="dates_today">Aujourd\'hui</string>
+    <string name="dates_months_ago">Il y a %d mois</string>
+    <string name="dates_one_month_ago">Il y a 1 mois</string>
+        
+</resources>
