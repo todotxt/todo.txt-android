@@ -93,7 +93,7 @@ public class Preferences extends PreferenceActivity {
 						public void onClick(DialogInterface arg0, int arg1) {
 							Intent i = new Intent(Intent.ACTION_VIEW);
 							i.setData(Uri
-									.parse("http://twitter.com/todotxtapps"));
+									.parse("http://twitter.com/todotxt"));
 							startActivity(i);
 						}
 					});
