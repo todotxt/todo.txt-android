@@ -781,11 +781,11 @@ public class TodoTxtTouch extends ListActivity implements
 	/** Handle "add task" action. */
 	public void onAddTaskClick(View v) {
 		Intent i = new Intent(this, AddTask.class);
-		
+
 		i.putExtra(Constants.EXTRA_PRIORITIES_SELECTED, m_prios);
 		i.putExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_contexts);
 		i.putExtra(Constants.EXTRA_PROJECTS_SELECTED, m_projects);
-		
+
 		startActivity(i);
 	}
 
@@ -939,8 +939,6 @@ public class TodoTxtTouch extends ListActivity implements
 			if (convertView == null) {
 				convertView = m_inflater.inflate(R.layout.list_item, null);
 				holder = new ViewHolder();
-				holder.taskid = (TextView) convertView
-						.findViewById(R.id.taskid);
 				holder.taskprio = (TextView) convertView
 						.findViewById(R.id.taskprio);
 				holder.tasktext = (TextView) convertView
@@ -955,7 +953,6 @@ public class TodoTxtTouch extends ListActivity implements
 
 			Task task = m_adapter.getItem(position);// taskBag.getTasks().get(position);
 			if (task != null) {
-				holder.taskid.setText(String.format("%02d", task.getId() + 1));
 				holder.taskprio.setText(task.getPriority().inListFormat());
 				SpannableString ss = new SpannableString(task.inScreenFormat());
 				Util.setGray(ss, task.getProjects());
@@ -990,13 +987,6 @@ public class TodoTxtTouch extends ListActivity implements
 							.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 				}
 
-				// hide line numbers unless show preference is checked
-				if (!m_app.m_prefs.getBoolean("showlinenumberspref", false)) {
-					holder.taskid.setVisibility(View.GONE);
-				} else {
-					holder.taskid.setVisibility(View.VISIBLE);
-				}
-
 				if (m_app.m_prefs.getBoolean("show_task_age_pref", false)) {
 					if (!task.isCompleted()
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
@@ -1022,7 +1012,6 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	private static class ViewHolder {
-		private TextView taskid;
 		private TextView taskprio;
 		private TextView tasktext;
 		private TextView taskage;

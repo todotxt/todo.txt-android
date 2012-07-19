@@ -26,8 +26,8 @@ You should have received a copy of the GNU General Public License along with Tod
 
 	<string-array name="sort">
 		<item>Priority</item>
-		<item>ID Ascending</item>
-		<item>ID Descending</item>
+		<item>Line number ascending</item>
+		<item>Line number descending</item>
 		<item>Text (A-Z)</item>
 	</string-array>
 

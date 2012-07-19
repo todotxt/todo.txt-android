@@ -25,15 +25,9 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<TextView android:id="@+id/taskid" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:gravity="bottom"
-		android:textSize="10dip" android:layout_alignBaseline="@+id/taskprio"
-		android:textColor="@color/grey" android:paddingLeft="4dip" />
-
 	<TextView android:id="@+id/taskprio" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:padding="4dip"
-		android:textSize="16dip" android:textStyle="bold"
-		android:layout_toRightOf="@id/taskid" />
+		android:textSize="16dip" android:textStyle="bold" />
 
 	<TextView android:id="@+id/tasktext" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:paddingLeft="4dip"

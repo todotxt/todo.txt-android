@@ -70,9 +70,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="prepend_date_pref_key">todotxtprependdate</string>
     <string name="prepend_date_pref_title">Dater nouvelles tâches</string>
     <string name="prepend_date_pref_summary">Ajouter automatiquement la date de création aux nouvelles tâches.</string>
-    <string name="show_line_numbers_pref_key">showlinenumberspref</string>
-    <string name="show_line_numbers_pref_title">Afficher numéros de lignes</string>
-    <string name="show_line_numbers_pref_summary">Afficher les numéros de lignes de chaque tâche.</string>
     <string name="line_breaks_pref_key">linebreakspref</string>
     <string name="line_breaks_pref_title">Saut de ligne Windows</string>
     <string name="line_breaks_pref_summary">Utiliser le saut de ligne Windows dans le fichier texte.</string>
