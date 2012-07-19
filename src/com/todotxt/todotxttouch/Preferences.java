@@ -133,7 +133,7 @@ public class Preferences extends PreferenceActivity {
 			return logoutAlert.show();
 		} else if (id == ARCHIVE_DIALOG) {
 			AlertDialog.Builder archiveAlert = new AlertDialog.Builder(this);
-			archiveAlert.setTitle(R.string.areyousure);
+			archiveAlert.setTitle(R.string.archive_now_title);
 			archiveAlert.setMessage(R.string.archive_now_explainer);
 			archiveAlert.setPositiveButton(R.string.archive_now_pref_title,
 					new DialogInterface.OnClickListener() {
