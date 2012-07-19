@@ -76,9 +76,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="work_offline_pref_key">workofflinepref</string>
     <string name="work_offline_pref_title">Travailler hors ligne</string>
     <string name="work_offline_pref_summary">Ne pas envoyer automatiquement chaque changement à Dropbox.</string>
-    <string name="show_task_age_pref_key">show_task_age_pref</string>
-    <string name="show_task_age_pref_title">Afficher l\'âge de la tâche</string>
-    <string name="show_task_age_pref_summary">Afficher l\'âge des tâches ayant une date de création.</string>
     <string name="short_touch_pref_title">Terminer rapidement</string>
     <string name="short_touch_pref_summary_on">Appyer rapidement sur une tâche pour la marquer comme terminée.</string>
     <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->

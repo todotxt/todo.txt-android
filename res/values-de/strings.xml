@@ -74,9 +74,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="work_offline_pref_key">workofflinepref</string>
     <string name="work_offline_pref_title">Arbeite Offline</string>
     <string name="work_offline_pref_summary">Lade nicht automatisch jede Änderung zu Dropbox.</string>
-    <string name="show_task_age_pref_key">show_task_age_pref</string>
-    <string name="show_task_age_pref_title">Zeige Task Alter.</string>
-    <string name="show_task_age_pref_summary">Zeige Task Alter mit Erzeugungsdatum.</string>
     <string name="short_touch_pref_title">Schnelles erledigen</string>
     <string name="short_touch_pref_summary_on">Kurzer Klick auf einem Task markiert als erledigt.</string>
     <!-- <string name="short_touch_pref_summary_off">Kurzer Klick auf einem Task zeihgt Kontext-Menü.</string> -->

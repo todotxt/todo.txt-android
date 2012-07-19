@@ -987,14 +987,12 @@ public class TodoTxtTouch extends ListActivity implements
 							.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 				}
 
-				if (m_app.m_prefs.getBoolean("show_task_age_pref", false)) {
+				if (m_app.m_prefs.getBoolean("todotxtprependdate", true)) {
 					if (!task.isCompleted()
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
 						holder.taskage.setText(task.getRelativeAge());
 						holder.taskage.setVisibility(View.VISIBLE);
 					} else {
-						holder.taskage.setText("");
-						holder.taskage.setVisibility(View.GONE);
 						holder.tasktext.setPadding(
 								holder.tasktext.getPaddingLeft(),
 								holder.tasktext.getPaddingTop(),
