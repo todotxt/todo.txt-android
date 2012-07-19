@@ -47,6 +47,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -109,6 +110,7 @@ public class TodoTxtTouch extends ListActivity implements
 	private ArrayList<String> m_filters = new ArrayList<String>();
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
+	private static final int SYNC_CHOICE_DIALOG_CONFLICT = 101;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -128,6 +130,8 @@ public class TodoTxtTouch extends ListActivity implements
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Constants.INTENT_ACTION_LOGOUT);
 		intentFilter.addAction(Constants.INTENT_UPDATE_UI);
+		intentFilter.addAction(Constants.INTENT_SHOW_PUSHPULL_DIALOG);
+		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
@@ -140,9 +144,15 @@ public class TodoTxtTouch extends ListActivity implements
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_UPDATE_UI)) {
 					updateSyncUI();
+				} else if (intent.getAction().equalsIgnoreCase(
+						Constants.INTENT_SHOW_PUSHPULL_DIALOG)) {
+					showDialog(SYNC_CHOICE_DIALOG_CONFLICT);
+				} else if (intent.getAction().equalsIgnoreCase(ConnectivityManager.CONNECTIVITY_ACTION)) {
+					if(Util.isOnline(context)) {
+						sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+					}
 				}
 			}
-
 		};
 		registerReceiver(m_broadcastReceiver, intentFilter);
 
@@ -171,13 +181,13 @@ public class TodoTxtTouch extends ListActivity implements
 
 		if (firstrun) {
 			Log.i(TAG, "Initializing app");
-			syncClient();
+			syncClient(true);
 			Editor editor = m_app.m_prefs.edit();
 			editor.putBoolean(Constants.PREF_FIRSTRUN, false);
 			editor.commit();
 		} else {
-			if (!isOfflineMode()) {
-				syncClient();
+			if (!isManualMode()) {
+				syncClient(false);
 			}
 			taskBag.reload();
 		}
@@ -202,14 +212,13 @@ public class TodoTxtTouch extends ListActivity implements
 		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
 		if (Constants.PREF_ACCESSTOKEN_SECRET.equals(key)) {
 			Log.i(TAG, "New access token secret. Syncing!");
-			syncClient();
-		} else if ("workofflinepref".equals(key)) {
-			if (!isOfflineMode()) {
-				Log.i(TAG,
-						"Switched to online mode, must sync one way or the other.");
-				syncClient(true);
-			}
-		}
+			syncClient(false);
+		} /*
+		 * else if (Constants.PREF_MANUAL_MODE.equals(key)) { if
+		 * (!isManualMode()) { Log.i(TAG,
+		 * "Switched to auto mode, must sync one way or the other.");
+		 * syncClient(true); } }
+		 */
 	}
 
 	@Override
@@ -563,7 +572,7 @@ public class TodoTxtTouch extends ListActivity implements
 			break;
 		case R.id.sync:
 			Log.v(TAG, "onMenuItemSelected: sync");
-			syncClient();
+			syncClient(false);
 			break;
 		case R.id.search:
 			onSearchRequested();
@@ -613,55 +622,29 @@ public class TodoTxtTouch extends ListActivity implements
 	 * Sync with remote client.
 	 * 
 	 * <ul>
-	 * <li>Will Pull in online mode.
-	 * <li>Will ask "push or pull" in offline mode.
-	 * <li>Will go offline if no network
+	 * <li>Will Pull in auto mode.
+	 * <li>Will ask "push or pull" in manual mode.
 	 * </ul>
+	 *   
+	 * @param force
+	 *            true to force pull 
 	 */
-	private void syncClient() {
-		syncClient(false);
-	}
-
-	/**
-	 * Sync with remote client.
-	 * 
-	 * <ul>
-	 * <li>Will Pull in online mode.
-	 * <li>Will ask "push or pull" in offline mode.
-	 * <li>Will ask if <code>forceSyncChoice</code> is true
-	 * <li>Will go offline if no network
-	 * </ul>
-	 * 
-	 * @param forceSyncChoice
-	 *            true to force push, pull dialog
-	 */
-	private void syncClient(boolean forceSyncChoice) {
-		if (isOfflineMode() || forceSyncChoice) {
-			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
-				Log.v(TAG, "Working offline; no network");
-				sendBroadcast(new Intent(Constants.INTENT_GO_OFFLINE));
-			} else {
-				Log.v(TAG,
-						"Working offline; prompt user to ask which way to sync");
-				showDialog(SYNC_CHOICE_DIALOG);
-			}
+	private void syncClient(boolean force) {
+		if (isManualMode()) {
+			Log.v(TAG,
+					"Manual mode, choice forced; prompt user to ask which way to sync");
+			showDialog(SYNC_CHOICE_DIALOG);
+		} else if(!force){
+			Log.i(TAG, "auto sync mode; should automatically pull");
+			sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
 		} else {
-			if (!m_app.getRemoteClientManager().getRemoteClient().isAvailable()) {
-				Log.d(TAG, "Pulling while online w/o network; go offline");
-				sendBroadcast(new Intent(Constants.INTENT_GO_OFFLINE));
-			} else {
-				Log.i(TAG, "Working online; should automatically pull");
-				// m_app.m_pulling = true;
-				// updateSyncUI();
-				sendBroadcast(new Intent(
-						Constants.INTENT_START_SYNC_FROM_REMOTE));
-				// backgroundPullFromRemote();
-			}
+			Log.i(TAG, "auto sync mode; should automatically pull (forced)");
+			sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE).putExtra(Constants.EXTRA_FORCE_SYNC, true));
 		}
 	}
 
-	private boolean isOfflineMode() {
-		return m_app.isOfflineMode();
+	private boolean isManualMode() {
+		return m_app.isManualMode();
 	}
 
 	@Override
@@ -747,52 +730,61 @@ public class TodoTxtTouch extends ListActivity implements
 			});
 			return d;
 		} else if (id == SYNC_CHOICE_DIALOG) {
-			Log.v(TAG, "Time to show the sync choice dialog");
-			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
-			upDownChoice.setTitle(R.string.sync_dialog_title);
-			upDownChoice.setMessage(R.string.sync_dialog_msg);
-			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_TO_REMOTE)
-									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
-							// backgroundPushToRemote();
-							showToast(getString(R.string.sync_upload_message));
-						}
-					});
-			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_FROM_REMOTE)
-									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
-							// backgroundPullFromRemote();
-							showToast(getString(R.string.sync_download_message));
-						}
-					});
-			return upDownChoice.show();
+			return showSyncChoiceDialog(R.string.sync_dialog_title,
+					R.string.sync_dialog_msg);
+
+		} else if (id == SYNC_CHOICE_DIALOG_CONFLICT) {
+			return showSyncChoiceDialog(R.string.sync_dialog_title_conflict,
+					R.string.sync_dialog_msg_conflict);
 
 		} else {
 			return null;
 		}
 	}
 
+	private AlertDialog showSyncChoiceDialog(int titleId, int msgId) {
+		Log.v(TAG, "Time to show the sync choice dialog");
+		AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
+		upDownChoice.setTitle(titleId);
+		upDownChoice.setMessage(msgId);
+		upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						sendBroadcast(new Intent(
+								Constants.INTENT_START_SYNC_TO_REMOTE)
+								.putExtra(Constants.EXTRA_FORCE_SYNC, true));
+						// backgroundPushToRemote();
+						showToast(getString(R.string.sync_upload_message));
+					}
+				});
+		upDownChoice.setNegativeButton(R.string.sync_dialog_download,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						sendBroadcast(new Intent(
+								Constants.INTENT_START_SYNC_FROM_REMOTE)
+								.putExtra(Constants.EXTRA_FORCE_SYNC, true));
+						// backgroundPullFromRemote();
+						showToast(getString(R.string.sync_download_message));
+					}
+				});
+		return upDownChoice.show();
+	}
+
 	/** Handle "add task" action. */
 	public void onAddTaskClick(View v) {
 		Intent i = new Intent(this, AddTask.class);
-		
+
 		i.putExtra(Constants.EXTRA_PRIORITIES_SELECTED, m_prios);
 		i.putExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_contexts);
 		i.putExtra(Constants.EXTRA_PROJECTS_SELECTED, m_projects);
-		
+
 		startActivity(i);
 	}
 
 	/** Handle "refresh/download" action. */
 	public void onSyncClick(View v) {
 		Log.v(TAG, "titlebar: sync");
-		syncClient();
+		syncClient(false);
 	}
 
 	/** Handle refine filter click **/
@@ -1037,6 +1029,10 @@ public class TodoTxtTouch extends ListActivity implements
 
 	public void showToast(String string) {
 		Util.showToastLong(this, string);
+	}
+
+	public void showToast(int resid) {
+		Util.showToastLong(this, resid);
 	}
 
 	public void startFilterActivity() {

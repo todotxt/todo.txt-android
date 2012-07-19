@@ -39,8 +39,8 @@ You should have received a copy of the GNU General Public License along with Tod
 
 	<PreferenceCategory android:key="dropbox_settings"
 		android:title="@string/DROPBOX_settings_header">
-		<CheckBoxPreference android:key="@string/work_offline_pref_key"
-			android:title="@string/work_offline_pref_title" android:summary="@string/work_offline_pref_summary" />
+		<CheckBoxPreference android:key="@string/manual_sync_pref_key"
+			android:title="@string/manual_sync_pref_title" android:summary="@string/manual_sync_pref_summary" />
 		<EditTextPreference android:summary="@string/TODOTXTPATH_summary"
 			android:defaultValue="@string/TODOTXTPATH_defaultPath" android:title="@string/TODOTXTPATH_title"
 			android:key="@string/TODOTXTPATH_key" />
