@@ -93,6 +93,7 @@ public class TodoTxtTouch extends ListActivity implements
 	String m_DialogText = "";
 	Boolean m_DialogActive = false;
 	Menu options_menu;
+	private Boolean wasOffline = false;
 
 	private TaskAdapter m_adapter;
 	TodoApplication m_app;
@@ -156,10 +157,7 @@ public class TodoTxtTouch extends ListActivity implements
 					handleSyncConflict();
 				} else if (intent.getAction().equalsIgnoreCase(
 						ConnectivityManager.CONNECTIVITY_ACTION)) {
-					if (Util.isOnline(context)) {
-						sendBroadcast(new Intent(
-								Constants.INTENT_START_SYNC_TO_REMOTE));
-					}
+					handleConnectivityChange(context);
 				}
 			}
 		};
@@ -659,6 +657,22 @@ public class TodoTxtTouch extends ListActivity implements
 		startActivityForResult(settingsActivity, REQUEST_PREFERENCES);
 	}
 
+	private void handleConnectivityChange(Context context) {
+		if (Util.isOnline(context)) {
+			// This is called quite often, seemingly every
+			// time there is a change in signal strength?
+			// Using the wasOffline flag to limit the frequency of syncs.
+			if (!isManualMode() && wasOffline) {
+				Log.d(TAG, "Got connectivity notification. Syncing now...");
+				sendBroadcast(new Intent(
+						Constants.INTENT_START_SYNC_WITH_REMOTE));
+			}
+			wasOffline = false;
+		} else {
+			wasOffline = true;
+		}
+	}
+
 	/**
 	 * Called when we can't sync due to a merge conflict. Prompts the user to
 	 * force an upload or download.
@@ -685,13 +699,14 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG,
 					"Manual mode, choice forced; prompt user to ask which way to sync");
 			showDialog(SYNC_CHOICE_DIALOG);
-		} else if (!force) {
-			Log.i(TAG, "auto sync mode; should automatically pull");
-			sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
 		} else {
-			Log.i(TAG, "auto sync mode; should automatically pull (forced)");
-			sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE)
-					.putExtra(Constants.EXTRA_FORCE_SYNC, true));
+			Log.i(TAG, "auto sync mode; should automatically sync; force = "
+					+ force);
+			Intent i = new Intent(Constants.INTENT_START_SYNC_WITH_REMOTE);
+			if (force) {
+				i.putExtra(Constants.EXTRA_FORCE_SYNC, true);
+			}
+			sendBroadcast(i);
 		}
 	}
 
@@ -816,6 +831,7 @@ public class TodoTxtTouch extends ListActivity implements
 			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
+							Log.v(TAG, "User selected PUSH");
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_TO_REMOTE)
 									.putExtra(Constants.EXTRA_OVERWRITE, true)
@@ -827,6 +843,7 @@ public class TodoTxtTouch extends ListActivity implements
 			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
+							Log.v(TAG, "User selected PULL");
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_FROM_REMOTE)
 									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
