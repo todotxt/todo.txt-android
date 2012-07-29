@@ -79,7 +79,7 @@ public class AddTask extends Activity {
 		m_app = (TodoApplication) getApplication();
 		taskBag = m_app.getTaskBag();	
 		
-		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
+		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_WITH_REMOTE));
 
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
