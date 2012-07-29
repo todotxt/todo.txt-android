@@ -26,12 +26,20 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseFactory;
+import org.apache.http.HttpStatus;
+import org.apache.http.HttpVersion;
+import org.apache.http.impl.DefaultHttpResponseFactory;
+import org.apache.http.message.BasicStatusLine;
+
 import junit.framework.TestCase;
 import android.os.Environment;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.ProgressListener;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.exception.DropboxServerException;
 
 public class DropboxFileUploaderTest extends TestCase {
 	private static final String remotefile1 = "remotefile1";
@@ -70,6 +78,13 @@ public class DropboxFileUploaderTest extends TestCase {
 		dropboxFiles2.add(dbFile2);
 	}
 
+	private DropboxServerException notFoundException() {
+		HttpResponseFactory factory = new DefaultHttpResponseFactory();
+		HttpResponse response = factory.newHttpResponse(new BasicStatusLine(
+				HttpVersion.HTTP_1_1, HttpStatus.SC_NOT_FOUND, null), null);
+		return new DropboxServerException(response);
+	}
+
 	private DropboxAPI.Entry create_metadata(String path, String rev) {
 		return create_metadata(path, rev, false);
 	}
@@ -87,7 +102,7 @@ public class DropboxFileUploaderTest extends TestCase {
 			public DropboxAPI.Entry metadata(String arg0, int arg1,
 					String arg2, boolean arg3, String arg4)
 					throws DropboxException {
-				throw new DropboxException("File not found.");
+				throw notFoundException();
 			}
 
 			public DropboxAPI.Entry putFile(String arg0,
@@ -258,7 +273,7 @@ public class DropboxFileUploaderTest extends TestCase {
 			public DropboxAPI.Entry metadata(String arg0, int arg1,
 					String arg2, boolean arg3, String arg4)
 					throws DropboxException {
-				throw new DropboxException("File not found.");
+				throw notFoundException();
 			}
 
 			public DropboxAPI.Entry putFile(String file,
@@ -293,7 +308,7 @@ public class DropboxFileUploaderTest extends TestCase {
 				if (file.equals(remotefile1)) {
 					return create_metadata(remotefile1, localrev1);
 				} else {
-					throw new DropboxException("File not found.");
+					throw notFoundException();
 				}
 			}
 
@@ -327,7 +342,7 @@ public class DropboxFileUploaderTest extends TestCase {
 					String arg2, boolean arg3, String arg4)
 					throws DropboxException {
 				if (file.equals(remotefile1)) {
-					throw new DropboxException("File not found.");
+					throw notFoundException();
 				} else {
 					return create_metadata(remotefile2, localrev2);
 				}

@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -58,6 +59,7 @@ public class TodoApplication extends Application {
 
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Constants.INTENT_SET_MANUAL);
+		intentFilter.addAction(Constants.INTENT_START_SYNC_WITH_REMOTE);
 		intentFilter.addAction(Constants.INTENT_START_SYNC_TO_REMOTE);
 		intentFilter.addAction(Constants.INTENT_START_SYNC_FROM_REMOTE);
 		intentFilter.addAction(Constants.INTENT_ASYNC_FAILED);
@@ -80,10 +82,24 @@ public class TodoApplication extends Application {
 	}
 
 	/**
+	 * If we previously tried to push and failed, then attempt to push again now.
+	 * Otherwise, pull.
+	 */
+	private void syncWithRemote(boolean force) {
+		if (needToPush()) {
+			Log.d(TAG, "needToPush = true; pushing.");
+			pushToRemote(force, false);
+		} else {
+			Log.d(TAG, "needToPush = false; pulling.");
+			pullFromRemote(force);
+		}
+	}
+	
+	/**
 	 * Check network status, then push.
 	 */
 	private void pushToRemote(boolean force, boolean overwrite) {
-
+		setNeedToPush(true);
 		if (!force && isManualMode()) {
 			Log.i(TAG, "Working offline, don't push now");
 		} else if (getRemoteClientManager().getRemoteClient().isAvailable()
@@ -98,6 +114,7 @@ public class TodoApplication extends Application {
 																		// bug
 																		// fixed
 		} else {
+			Log.i(TAG, "Not connected, don't push now");
 			showToast(R.string.toast_notconnected);
 		}
 	}
@@ -107,8 +124,13 @@ public class TodoApplication extends Application {
 	 */
 	private void pullFromRemote(boolean force) {
 		if (!force && isManualMode()) {
-			Log.i(TAG, "Working offline, don't push now");
-		} else if (getRemoteClientManager().getRemoteClient().isAvailable()
+			Log.i(TAG, "Working offline, don't pull now");
+			return;
+		}
+		
+		setNeedToPush(false);
+		
+		if (getRemoteClientManager().getRemoteClient().isAvailable()
 				&& !m_pushing) {
 			Log.i(TAG, "Working online; should pull file");
 			backgroundPullFromRemote();
@@ -120,6 +142,7 @@ public class TodoApplication extends Application {
 																		// bug
 																		// fixed
 		} else {
+			Log.i(TAG, "Not connected, don't pull now");
 			showToast(R.string.toast_notconnected);
 		}
 	}
@@ -134,6 +157,16 @@ public class TodoApplication extends Application {
 
 	public boolean isManualMode() {
 		return m_prefs.getBoolean(Constants.PREF_MANUAL_MODE, false);
+	}
+
+	public boolean needToPush() {
+		return m_prefs.getBoolean(Constants.PREF_NEED_TO_PUSH, false);
+	}
+
+	public void setNeedToPush(boolean needToPush) {
+		Editor editor = m_prefs.edit();
+		editor.putBoolean(Constants.PREF_NEED_TO_PUSH, needToPush);
+		editor.commit();
 	}
 
 	public static Context getAppContetxt() {
@@ -160,7 +193,7 @@ public class TodoApplication extends Application {
 				static final int SUCCESS = 0;
 				static final int CONFLICT = 1;
 				static final int ERROR = 2;
-				
+
 				@Override
 				protected Integer doInBackground(Void... params) {
 					try {
@@ -182,9 +215,12 @@ public class TodoApplication extends Application {
 					if (result == SUCCESS) {
 						Log.d(TAG, "taskBag.pushToRemote done");
 						m_pushing = false;
+						setNeedToPush(false);
 						updateSyncUI();
+						// Push is complete. Now do a pull in case the remote done.txt has changed.
+						pullFromRemote(true);
 					} else if (result == CONFLICT) {
-						//FIXME: need to know which file had conflict
+						// FIXME: need to know which file had conflict
 						sendBroadcast(new Intent(Constants.INTENT_SYNC_CONFLICT));
 					} else {
 						sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
@@ -256,6 +292,9 @@ public class TodoApplication extends Application {
 			boolean overwrite = intent.getBooleanExtra(
 					Constants.EXTRA_OVERWRITE, false);
 			if (intent.getAction().equalsIgnoreCase(
+					Constants.INTENT_START_SYNC_WITH_REMOTE)) {
+				syncWithRemote(force_sync);
+			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_TO_REMOTE)) {
 				pushToRemote(force_sync, overwrite);
 			} else if (intent.getAction().equalsIgnoreCase(
