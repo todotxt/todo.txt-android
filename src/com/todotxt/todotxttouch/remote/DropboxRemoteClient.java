@@ -39,9 +39,12 @@ import com.dropbox.client2.session.Session.AccessType;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
+import com.todotxt.todotxttouch.TodoTxtTouch;
 import com.todotxt.todotxttouch.util.Util;
 
 class DropboxRemoteClient implements RemoteClient {
+	final static String TAG = TodoTxtTouch.class.getSimpleName();
+	
 	private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";
 	private static final String DONE_TXT_REMOTE_FILE_NAME = "done.txt";
 	private static final AccessType ACCESS_TYPE = AccessType.DROPBOX;
@@ -154,9 +157,12 @@ class DropboxRemoteClient implements RemoteClient {
 	 *            The value of the rev to be stored.
 	 */
 	private void storeRev(String key, String rev) {
+		Log.d(TAG, "Storing rev. key=" + key + ". val=" + rev);
 		Editor prefsEditor = sharedPreferences.edit();
 		prefsEditor.putString(key, rev);
-		prefsEditor.commit();
+		if (!prefsEditor.commit()) {
+			Log.e(TAG, "Failed to store rev key! key=" + key + ". val=" + rev);
+		}
 	}
 
 	/**
@@ -174,6 +180,7 @@ class DropboxRemoteClient implements RemoteClient {
 	@Override
 	public PullTodoResult pullTodo() {
 		if (!isAvailable()) {
+			Log.d(TAG, "Offline. Not Pulling.");
 			Intent i = new Intent(Constants.INTENT_SET_MANUAL);
 			sendBroadcast(i);
 			return new PullTodoResult(null, null);
