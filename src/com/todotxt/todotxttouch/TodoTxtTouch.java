@@ -822,7 +822,6 @@ public class TodoTxtTouch extends ListActivity implements
 						}
 					});
 			return upDownChoice.show();
-			
 		} else if (id == SYNC_CONFLICT_DIALOG) {
 			Log.v(TAG, "Time to show the sync conflict dialog");
 			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
@@ -912,6 +911,7 @@ public class TodoTxtTouch extends ListActivity implements
 		int index = lv.getFirstVisiblePosition();
 		View v = lv.getChildAt(0);
 		int top = (v == null) ? 0 : v.getTop();
+		Log.v(TAG, "ListView index " + index + " top " + top);
 
 		m_adapter.clear();
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(

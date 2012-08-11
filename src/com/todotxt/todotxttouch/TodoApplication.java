@@ -82,8 +82,8 @@ public class TodoApplication extends Application {
 	}
 
 	/**
-	 * If we previously tried to push and failed, then attempt to push again now.
-	 * Otherwise, pull.
+	 * If we previously tried to push and failed, then attempt to push again
+	 * now. Otherwise, pull.
 	 */
 	private void syncWithRemote(boolean force) {
 		if (needToPush()) {
@@ -94,7 +94,7 @@ public class TodoApplication extends Application {
 			pullFromRemote(force);
 		}
 	}
-	
+
 	/**
 	 * Check network status, then push.
 	 */
@@ -127,9 +127,9 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Working offline, don't pull now");
 			return;
 		}
-		
+
 		setNeedToPush(false);
-		
+
 		if (getRemoteClientManager().getRemoteClient().isAvailable()
 				&& !m_pushing) {
 			Log.i(TAG, "Working online; should pull file");
@@ -217,7 +217,8 @@ public class TodoApplication extends Application {
 						m_pushing = false;
 						setNeedToPush(false);
 						updateSyncUI();
-						// Push is complete. Now do a pull in case the remote done.txt has changed.
+						// Push is complete. Now do a pull in case the remote
+						// done.txt has changed.
 						pullFromRemote(true);
 					} else if (result == CONFLICT) {
 						// FIXME: need to know which file had conflict
@@ -244,7 +245,9 @@ public class TodoApplication extends Application {
 	private void backgroundPullFromRemote() {
 		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
 			m_pulling = true;
-			updateSyncUI();
+			// Comment out next line to avoid resetting list position at top;
+			// should maintain position of last action
+			// updateSyncUI();
 
 			new AsyncTask<Void, Void, Boolean>() {
 
