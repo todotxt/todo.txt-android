@@ -233,6 +233,18 @@ public class Util {
 		builder.show();
 	}
 
+	public static void showConfirmationDialog(Context cxt, int msgid,
+			OnClickListener oklistener, int titleid) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
+		// builder.setTitle(cxt.getPackageName());
+		builder.setTitle(titleid);
+		builder.setMessage(msgid);
+		builder.setPositiveButton(android.R.string.ok, oklistener);
+		builder.setNegativeButton(android.R.string.cancel, null);
+		builder.setCancelable(true);
+		builder.show();
+	}
+
 	public static void showDeleteConfirmationDialog(Context cxt,
 			OnClickListener oklistener) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);

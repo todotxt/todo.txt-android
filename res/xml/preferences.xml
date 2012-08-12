@@ -33,8 +33,6 @@
 		android:title="@string/todotxt_settings_header">
 		<CheckBoxPreference android:key="@string/prepend_date_pref_key"
 			android:title="@string/prepend_date_pref_title" android:summary="@string/prepend_date_pref_summary" />
-		<CheckBoxPreference android:key="@string/short_touch_pref_key"
-			android:title="@string/short_touch_pref_title" android:summary="@string/short_touch_pref_summary_on" />
 		<CheckBoxPreference android:key="@string/line_breaks_pref_key"
 			android:title="@string/line_breaks_pref_title" android:summary="@string/line_breaks_pref_summary" />
 	</PreferenceCategory>

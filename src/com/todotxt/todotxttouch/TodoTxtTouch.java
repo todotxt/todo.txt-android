@@ -55,10 +55,13 @@ import android.text.SpannableString;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -112,6 +115,9 @@ public class TodoTxtTouch extends ListActivity implements
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
 	private static final int SYNC_CONFLICT_DIALOG = 101;
+
+	private GestureDetector gestureDetector;
+	private View.OnTouchListener gestureListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -180,6 +186,22 @@ public class TodoTxtTouch extends ListActivity implements
 			Log.v(TAG, "Searched for " + m_search);
 			setFilteredTasks(false);
 		}
+
+		gestureDetector = new GestureDetector(new TodoTxtGestureDetector());
+		gestureListener = new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (gestureDetector.onTouchEvent(event)) {
+					MotionEvent cancelEvent = MotionEvent.obtain(event);
+					cancelEvent.setAction(MotionEvent.ACTION_CANCEL);
+					v.onTouchEvent(cancelEvent);
+					return true;
+				}
+				return false;
+			}
+		};
+
+		getListView().setOnTouchListener(gestureListener);
 	}
 
 	private void initializeTasks() {
@@ -465,7 +487,8 @@ public class TodoTxtTouch extends ListActivity implements
 				}.execute(task);
 			}
 		};
-		Util.showConfirmationDialog(this, R.string.areyousure, listener);
+		Util.showConfirmationDialog(this, R.string.areyousure, listener,
+				R.string.unComplete);
 	}
 
 	private void completeTaskAt(final int pos) {
@@ -962,13 +985,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		m_pos = position;
-		boolean completeOnShort = m_app.m_prefs.getBoolean(
-				getString(R.string.short_touch_pref_key), false);
-		if (completeOnShort) {
-			completeTaskAt(position);
-		} else {
-			openContextMenu(getListView());
-		}
+		openContextMenu(getListView());
 	}
 
 	private void updateSyncUI() {
@@ -1128,4 +1145,42 @@ public class TodoTxtTouch extends ListActivity implements
 		startActivityIfNeeded(i, REQUEST_FILTER);
 	}
 
+	class TodoTxtGestureDetector extends SimpleOnGestureListener {
+		private static final int SWIPE_MIN_DISTANCE = 120;
+		private static final int SWIPE_MAX_OFF_PATH = 250;
+		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+				return false;
+
+			ListView lv = getListView();
+			int pos = lv.pointToPosition((int) e1.getX(), (int) e1.getY());
+
+			// right to left swipe - mark task complete
+			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+				Log.v(TAG, "Fling left");
+				// if task is complete, undo complete
+				final Task task = m_adapter.getItem(pos);
+				if (task.isCompleted()) {
+					undoCompleteTaskAt(pos);
+				}
+				return true;
+			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+				// left to right swipe - uncomplete task
+				Log.v(TAG, "Fling right");
+				// if task is incomplete, mark as complete
+				final Task task = m_adapter.getItem(pos);
+				if (!task.isCompleted()) {
+					completeTaskAt(pos);
+				}
+				return true;
+			}
+			return false;
+		}
+	}
 }

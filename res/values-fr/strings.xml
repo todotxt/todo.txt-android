@@ -76,9 +76,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="work_offline_pref_key">workofflinepref</string>
     <string name="work_offline_pref_title">Travailler hors ligne</string>
     <string name="work_offline_pref_summary">Ne pas envoyer automatiquement chaque changement à Dropbox.</string>
-    <string name="short_touch_pref_title">Terminer rapidement</string>
-    <string name="short_touch_pref_summary_on">Appyer rapidement sur une tâche pour la marquer comme terminée.</string>
-    <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->
 
     <!-- sync dialog -->
     <string name="sync_dialog_title">Syncho manuelle</string>
@@ -124,7 +121,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="toast_login_notconnected">Connexion impossible :\nAucune connexion internet.</string>
     <string name="toast_notconnected">Aucune connexion internet;\nVous travaillez hors-ligne.</string>
     <string name="toast_notconnected_switch_to_offline">Aucune connexion internet!\nPassage en mode hors-ligne.</string>
-    <string name="short_touch_pref_key">short_touch_pref</string>
     
     <!-- Relative Dates -->
     <string name="dates_days_ago">Il y a %d jours</string>

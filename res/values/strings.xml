@@ -88,9 +88,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="manual_sync_pref_key">workofflinepref</string>
     <string name="manual_sync_pref_title">Manual sync</string>
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
-    <string name="short_touch_pref_title">Quick complete</string>
-    <string name="short_touch_pref_summary_on">Short touch on a task to mark it complete.</string>
-    <!-- <string name="short_touch_pref_summary_off">Short touch on a task launches full context menu.</string> -->
 
 
     <!-- sync dialog -->
@@ -139,7 +136,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <!-- online/offline toasts -->
     <string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
     <string name="toast_notconnected">No internet connection: Cannot sync with Dropbox right now.</string>
-    <string name="short_touch_pref_key">short_touch_pref</string>
 
     <!-- Relative Dates -->
     <string name="dates_days_ago">%d days ago</string>
