@@ -181,7 +181,7 @@ public class DropboxFileUploader {
 		Log.d(TAG, "Upload succeeded. new rev = " + metadata.rev + ". path = " + metadata.path);
 		
 		file.setLoadedMetadata(metadata);
-		if (!metadata.path.equals(file.getRemoteFile())) {
+		if (!metadata.path.equalsIgnoreCase(file.getRemoteFile())) {
 			// If the uploaded remote path does not match our expected
 			// remotePath,
 			// then a conflict occurred and we should announce the conflict to
