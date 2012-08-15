@@ -176,6 +176,33 @@ public class DropboxFileUploaderTest extends TestCase {
 		assertEquals(remoterev1, dbFile1.getLoadedMetadata().rev);
 	}
 
+	public void testRemoteFileUppercase() {
+		DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
+			public DropboxAPI.Entry metadata(String arg0, int arg1,
+					String arg2, boolean arg3, String arg4)
+					throws DropboxException {
+				return create_metadata(remotefile1, localrev1);
+			}
+
+			public DropboxAPI.Entry putFile(String arg0,
+					InputStream arg1, long arg2, String arg3,
+					ProgressListener arg4) throws DropboxException {
+				return create_metadata(remotefile1.toUpperCase(), remoterev1);
+			}
+		};
+
+		DropboxFileUploader uploader = new DropboxFileUploader(dropboxapi,
+				dropboxFiles1, false);
+
+		uploader.pushFiles();
+		assertEquals("Status should be SUCCESS", DropboxFileStatus.SUCCESS,
+				uploader.getStatus());
+		assertEquals("Should have 1 file", 1, uploader.getFiles().size());
+		assertEquals("Status should be SUCCESS", DropboxFileStatus.SUCCESS,
+				dbFile1.getStatus());
+		assertEquals(remoterev1, dbFile1.getLoadedMetadata().rev);
+	}
+
 	public void testRemoteFileConflict() {
 		DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
 			public DropboxAPI.Entry metadata(String arg0, int arg1,
