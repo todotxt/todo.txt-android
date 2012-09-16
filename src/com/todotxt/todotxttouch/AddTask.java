@@ -143,6 +143,13 @@ public class AddTask extends Activity {
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add(0,this.getApplicationContext().getString(R.string.add_task_priority_btn));
 		prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
+		for ( Priority usedPriority : taskBag.getPriorities() ) {
+			// taskBag already sorts our priorities, so we should be in order
+			// at this point without any additional sort required
+			if (! prioArr.contains(usedPriority.getCode()))
+				prioArr.add(usedPriority.getCode());
+		}
+		
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
 		if (iniTask != null) {
 			int index = prioArr.indexOf(iniTask.getPriority().getCode());
