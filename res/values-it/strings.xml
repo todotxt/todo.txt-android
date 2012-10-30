@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+	<string name="app_label">Todo.txt Touch</string>
+	<string name="added_task">Attività aggiunta</string>
+	<string name="add_task_failed">Impossibile aggiungere l\'attività</string>
+	<string name="updated_task">Attività aggiornata</string>
+	<string name="update_task_failed">Impostazioni aggiornare l\'attività</string>
+	<string name="sort">Ordina</string>
+	<string name="filter">Filtra</string>
+	<string name="main_no_items">Nessuna attività da visualizzare.</string>
+	<string name="set_preferences">Impostazioni</string>
+	<string name="preferences">Impostazioni</string>
+	<string name="sync">Sincronizza</string>
+	<string name="search">Cerca</string>
+	<string name="refresh">Aggiorna</string>
+	<string name="add">Aggiungi</string>
+	<string name="addtask">Aggiungi attività</string>
+	<string name="updatetask">Aggiorna attività</string>
+	<string name="newtask">Nuova attività</string>
+	<string name="done">Completato</string>
+	<string name="priority">Priorità</string>
+	<string name="update">Aggiorna</string>
+	<string name="delete">Elimina</string>
+	<string name="share">Condividi</string>
+	<string name="unComplete">Annulla completamento</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Annulla</string>
+	<string name="close">Chiudi</string>
+	<string name="clear">Pulisci</string>
+	<string name="areyousure">Sei sicuro?</string>
+	<string name="tasktexthint">Chiama Mamma @telefono +PaceFamiliare\n\n</string>
+	<string name="add_task_help">I <b>Progetti</b> iniziano con un segno + e non contengono spazi, come +RistrutturazioneCucina o
+		+Romanzi.\n\nI <b>Contesti</b> (i luoghi dove completerai le tue attività) iniziano con un segno @, come @telefono o
+		@Supermercato.\n\n
+		Un\'attività può includere un qualsiasi numero di progetti o contesti.</string>
+
+	<!-- preferences -->
+	<string name="ARCHIVE_settings_header">done.txt</string>
+	<string name="auto_archive_pref_key">todotxtautoarchive</string>
+	<string name="auto_archive_pref_title">Archiviazione automatica</string>
+	<string name="auto_archive_pref_summary">Archivia automaticamente le attività completate nel file done.txt.</string>
+	<string name="archive_now_pref_key">todotxtarchivenow</string>
+	<string name="archive_now_pref_title">Archivia adesso</string>
+	<string name="archive_now_pref_summary">Sposta le attività completate da todo.txt a done.txt.</string>
+	<string name="archive_now_title">Archivia attività</string>
+	<string name="archive_now_explainer">L\'operazione non potrà essere annullata. Continuare?</string>
+	<string name="dropbox_logout_pref_title">Disconnetti</string>
+	<string name="dropbox_logout_pref_summary">Disconnetti da Dropbox.</string>
+	<string name="dropbox_logout_explainer">Sei sicuro di volerti sconnettere da Dropbox?</string>
+	<string name="TODOTXTPATH_key">todotxtpath</string>
+	<string name="TODOTXTPATH_title">Cartella di destinazione</string>
+	<string name="TODOTXTPATH_summary">La cartella di Dropbox dove salvare todo.txt.</string>
+	<string name="TODOTXTPATH_defaultPath">/todo</string>
+	<string name="DROPBOX_settings_header">Dropbox</string>
+	<string name="todotxt_settings_header">todo.txt</string>
+	<string name="about_settings_header">About</string>
+	<string name="prepend_date_pref_key">todotxtprependdate</string>
+	<string name="prepend_date_pref_title">Datare nuove attività</string>
+	<string name="prepend_date_pref_summary">Aggiungi automaticamente la data di creazione alle nuove attività.</string>
+	<string name="line_breaks_pref_key">linebreakspref</string>
+	<string name="line_breaks_pref_title">Compatibilità Windows</string>
+	<string name="line_breaks_pref_summary">Nei file di testo usa un terminatore di riga compatibile con Windows.</string>
+	<string name="manual_sync_pref_key">workofflinepref</string>
+	<string name="manual_sync_pref_title">Sincronizza manualmente</string>
+	<string name="manual_sync_pref_summary">Non sincronizzare automaticamente su Dropbox ogni modifica effettuata.</string>
+
+
+	<!-- sync dialog -->
+	<string name="sync_dialog_title">Sincronizza manualmente</string>
+	<string name="sync_dialog_msg">Vuoi sincronizzare o scaricare il tuo file todo.txt?</string>
+	<string name="sync_dialog_upload">Sincronizza su Dropbox</string>
+	<string name="sync_dialog_download">Scarica sul dispositivo</string>
+	<string name="sync_upload_message">Sincronizzazione di todo.txt…</string>
+	<string name="sync_download_message">Download di todo.txt…</string>
+	<!-- sync conflict dialog -->
+	<string name="sync_conflict_dialog_title">Conflitto nel file</string>
+	<string name="sync_conflict_dialog_msg">Oops! Su Dropbox c\'è una versione più recente del tuo file todo.txt. \nVuoi sincronizzare le tue modifiche locali, o scaricare la versione presente su Dropbox?</string>
+	<!-- login -->
+	<string name="first_title_word">Todo.txt</string>
+	<string name="second_title_word">Touch</string>
+	<string name="login_screen_button">Connettiti a Dropbox</string>
+	<!-- delete -->
+	<string name="delete_task_title">Elimina attività</string>
+	<string name="delete_task_message">L\'operazione non potrà essere annullata. Continuare?</string>
+	<string name="delete_task_confirm">Elimina</string>
+	<!-- search -->
+	<string name="search_hint">Cerca in todo.txt</string>
+	<!-- filter tabs -->
+	<string name="filter_tab_priorities">Priorità</string>
+	<string name="filter_tab_projects">Progetti</string>
+	<string name="filter_tab_contexts">Contesti</string>
+	<string name="filter_tab_search">Parole chiave</string>
+	<!-- title bar changes -->
+	<string name="title_search_results">Termine di ricerca: </string>
+	<string name="title_filter_applied">Filtrato tramite: </string>
+	<string name="add_task_priority_btn">Priorità</string>
+	<string name="add_task_context_btn">Contesto</string>
+	<string name="add_task_project_btn">Progetto</string>
+	<string name="add_task_help_btn">Aiuto</string>
+	<string name="priority_prompt">Priorità</string>
+	<string name="project_prompt">Progetto</string>
+	<string name="context_prompt">Contesto</string>
+	<string name="refine">Raffina</string>
+	<string name="separator">Separatore</string>
+
+	<!-- launcher shortcut -->
+	<string name="shortcut_addtask_name">Aggiungi attività</string>
+	<!-- share -->
+	<string name="share_addtask_name">Aggiungi a Todo.txt</string>
+
+	<!-- online/offline toasts -->
+	<string name="toast_login_notconnected">Impossibile effettuare il log in:\nNessuna connessione a internet.</string>
+	<string name="toast_notconnected">Nessuna connessione a internet: Impossibile sincronizzarsi con Dropbox in questo momento.</string>
+
+	<!-- Relative Dates -->
+	<string name="dates_days_ago">%d giorni fa</string>
+	<string name="dates_one_day_ago">1 giorno fa</string>
+	<string name="dates_today">oggi</string>
+	<string name="dates_months_ago">%d mesi fa</string>
+	<string name="dates_one_month_ago">1 mese fa</string>
+
+</resources>
