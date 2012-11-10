@@ -99,7 +99,7 @@ You should have received a copy of the GNU General Public License along with Tod
 			android:layout_width="wrap_content" android:paddingTop="5dip"
 			android:layout_marginRight="5dip">
 			<ImageView style="@style/WidgetTitleBarLogo" android:id="@+id/widget_launchbutton"
-				android:src="@drawable/widget_icon_launcher_40" android:padding="5dip"
+				android:src="@drawable/widget_icon_launcher_36" android:padding="5dip"
 				android:maxWidth="40dp" android:maxHeight="40dp" android:contentDescription="@string/app_label"/>
 			<LinearLayout android:layout_height="fill_parent"
 				android:gravity="bottom|center" android:orientation="vertical"
