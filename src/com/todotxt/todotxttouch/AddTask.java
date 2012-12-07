@@ -176,7 +176,6 @@ public class AddTask extends Activity {
 		// projects
 		projects = (Spinner) findViewById(R.id.projects);
 		final ArrayList<String> projectsArr = taskBag.getProjects();
-		projectsArr.add(0,this.getApplicationContext().getString(R.string.add_task_project_btn));
 		projects.setAdapter(Util.newSpinnerAdapter(this, projectsArr));
 		
 		if (iniTask != null) {
@@ -214,7 +213,6 @@ public class AddTask extends Activity {
 		// contexts
 		contexts = (Spinner) findViewById(R.id.contexts);
 		final ArrayList<String> contextsArr = taskBag.getContexts();
-		contextsArr.add(0, this.getApplicationContext().getString(R.string.add_task_context_btn));
 		contexts.setAdapter(Util.newSpinnerAdapter(this, contextsArr));
 		
 		if (iniTask != null) {
