@@ -889,6 +889,10 @@ public class TodoTxtTouch extends ListActivity implements
 
 		startActivity(i);
 	}
+	
+	public void onFilterClick(View v) {
+		startFilterActivity();
+	}
 
 	/** Handle "refresh/download" action. */
 	public void onSyncClick(View v) {

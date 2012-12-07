@@ -28,10 +28,18 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 	<LinearLayout style="@style/TitleBar">
+
 		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo"
 			android:contentDescription="@string/app_label"/>
 		<View style="@style/TitleBarSpring" />
 		<ImageView style="@style/TitleBarSeparator" android:contentDescription="@string/separator" />
+
+		<ImageButton
+		    android:id="@+id/ImageButton01"
+		    style="@style/TitleBarAction"
+		    android:contentDescription="@string/refresh"
+		    android:onClick="onFilterClick"
+		    android:src="@drawable/ic_title_filter" />
 
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_refresh"
 			android:contentDescription="@string/refresh" android:src="@drawable/ic_title_sync"
