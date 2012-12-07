@@ -53,10 +53,10 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="clear">Clear</string>
     <string name="areyousure">Are you sure?</string>
     <string name="tasktexthint">Call Mom @phone +FamilialPeace\n\n</string>
-    <string name="add_task_help"><b>Projects</b> start with a + sign and contain no spaces, like +KitchenRemodel or
+    <string name="add_task_help"><b>Tags</b> start with a + sign and contain no spaces, like +KitchenRemodel or
 		+Novel.\n\n<b>Contexts</b> (where you will complete a task) start with an @ sign, like @phone or
 		@GroceryStore.\n\n
-		A task can include any number of projects or
+		A task can include any number of tags or
 		contexts.</string>
 
     <!-- preferences -->
@@ -112,7 +112,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="search_hint">Search todo.txt</string>
     <!-- filter tabs -->
     <string name="filter_tab_priorities">Priorities</string>
-    <string name="filter_tab_projects">Projects</string>
+    <string name="filter_tab_projects">Tags</string>
     <string name="filter_tab_contexts">Contexts</string>
     <string name="filter_tab_search">Keywords</string>
     <!-- title bar changes -->
@@ -120,10 +120,10 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="title_filter_applied">Filtered by: </string>
     <string name="add_task_priority_btn">Priority</string>
     <string name="add_task_context_btn">Context</string>
-    <string name="add_task_project_btn">Project</string>
+    <string name="add_task_project_btn">Tag</string>
     <string name="add_task_help_btn">Help</string>
     <string name="priority_prompt">Priority</string>
-    <string name="project_prompt">Project</string>
+    <string name="project_prompt">Tag</string>
     <string name="context_prompt">Context</string>
     <string name="refine">Refine</string>
     <string name="separator">Separator</string>
