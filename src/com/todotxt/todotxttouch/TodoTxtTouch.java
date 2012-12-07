@@ -66,8 +66,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -950,10 +950,11 @@ public class TodoTxtTouch extends ListActivity implements
 		lv.setSelectionFromTop(index, top);
 
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
-		final LinearLayout actionbar = (LinearLayout) findViewById(R.id.actionbar);
 		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
-
+		final Button actionbar_clear = (Button) findViewById(R.id.actionbar_clear);
+		
 		if (filterText != null) {
+			actionbar_clear.setEnabled(true);
 			if (m_filters.size() > 0) {
 				String filterTitle = getString(R.string.title_filter_applied)
 						+ " ";
@@ -966,10 +967,10 @@ public class TodoTxtTouch extends ListActivity implements
 				}
 				actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
 
-				actionbar.setVisibility(View.VISIBLE);
 				filterText.setText(filterTitle);
 
 			} else if (!Strings.isEmptyOrNull(m_search)) {
+				actionbar_clear.setEnabled(true);
 				if (filterText != null) {
 
 					actionbar_icon
@@ -977,11 +978,11 @@ public class TodoTxtTouch extends ListActivity implements
 					filterText.setText(getString(R.string.title_search_results)
 							+ " " + m_search);
 
-					actionbar.setVisibility(View.VISIBLE);
 				}
 			} else {
-				filterText.setText("");
-				actionbar.setVisibility(View.GONE);
+				
+				filterText.setText("No filter");
+				actionbar_clear.setEnabled(false);
 			}
 		}
 	}
@@ -993,8 +994,6 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	private void updateSyncUI() {
-		// hide action bar
-		findViewById(R.id.actionbar).setVisibility(View.GONE);
 		// hide refresh button
 		findViewById(R.id.btn_title_refresh).setVisibility(
 				m_app.m_pulling || m_app.m_pushing ? View.GONE : View.VISIBLE);

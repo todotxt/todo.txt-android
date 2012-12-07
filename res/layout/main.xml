@@ -34,13 +34,6 @@ You should have received a copy of the GNU General Public License along with Tod
 		<View style="@style/TitleBarSpring" />
 		<ImageView style="@style/TitleBarSeparator" android:contentDescription="@string/separator" />
 
-		<ImageButton
-		    android:id="@+id/ImageButton01"
-		    style="@style/TitleBarAction"
-		    android:contentDescription="@string/refresh"
-		    android:onClick="onFilterClick"
-		    android:src="@drawable/ic_title_filter" />
-
 		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_refresh"
 			android:contentDescription="@string/refresh" android:src="@drawable/ic_title_sync"
 			android:onClick="onSyncClick" />
@@ -53,7 +46,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	</LinearLayout>
 
 	<LinearLayout style="@style/ActionBar" android:id="@+id/actionbar"
-		android:visibility="gone">
+		android:visibility="visible">
 
 		<ImageView android:id="@+id/actionbar_icon" android:contentDescription="@string/app_label"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -73,7 +66,7 @@ You should have received a copy of the GNU General Public License along with Tod
 			<ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator" />
 			<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator" />
 			<Button style="@style/ActionBarRightButton" android:text="@string/clear"
-				android:onClick="onClearClick" />
+				android:onClick="onClearClick" android:id="@+id/actionbar_clear"/>
 		</LinearLayout>
 	</LinearLayout>
 	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator" />

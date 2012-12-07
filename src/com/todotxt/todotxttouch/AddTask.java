@@ -173,6 +173,8 @@ public class AddTask extends Activity {
 			}
 		});
 
+		
+		
 		// projects
 		projects = (Spinner) findViewById(R.id.projects);
 		final ArrayList<String> projectsArr = taskBag.getProjects();
@@ -225,6 +227,8 @@ public class AddTask extends Activity {
 			}
 		}
 		
+
+		
 		contexts.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
@@ -271,6 +275,10 @@ public class AddTask extends Activity {
 			}
 
 		});
+		/*
+		 * After adding contexts and projects from the filter put cursor back at the beginning
+		 */
+		textInputField.setSelection(0);
 	}
 
 	private void addEditAsync(final String input) {
