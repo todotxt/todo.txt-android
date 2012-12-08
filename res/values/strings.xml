@@ -85,6 +85,9 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="line_breaks_pref_key">linebreakspref</string>
     <string name="line_breaks_pref_title">Windows line breaks</string>
     <string name="line_breaks_pref_summary">Use Windows-friendly line breaks in the text file.</string>
+    <string name="swipe_complete_pref_key">swipecompletepref</string>
+    <string name="swipe_complete_pref_title">Swipe to complete</string>
+    <string name="swipe_complete_pref_summary">Swipe over a task to complete it.</string>
     <string name="manual_sync_pref_key">workofflinepref</string>
     <string name="manual_sync_pref_title">Manual sync</string>
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
