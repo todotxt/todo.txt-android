@@ -141,7 +141,7 @@ public class AddTask extends Activity {
 		// priorities
 		priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
-		prioArr.add(0,this.getApplicationContext().getString(R.string.add_task_priority_btn));
+		prioArr.add(0,"-");
 		prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
 		priorities.setAdapter(Util.newSpinnerAdapter(this, prioArr));
 		if (iniTask != null) {
