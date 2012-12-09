@@ -49,6 +49,12 @@ class ByProjectFilter implements Filter<Task> {
 				return true;
 			}
 		}
+		/*
+		 * Match tasks without project if filter contains "-"
+		 */
+		if (input.getProjects().size()==0 && projects.contains("-")) {
+			return true;
+		}
 		return false;
 	}
 

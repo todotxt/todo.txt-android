@@ -105,4 +105,16 @@ public class ByProjectFilterTest extends TestCase {
 		assertFalse("apply was not false",
 				filter.apply(new Task(1, "hello world +xyz +goodbye")));
 	}
+
+	public void testFilter_filterNoProject() {
+		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("-"));
+		assertTrue("apply was not true",
+				filter.apply(new Task(1, "hello world")));
+	}
+
+	public void testFilter_filterNoProject_oneTaskProject() {
+		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("-"));
+		assertFalse("apply was not false",
+				filter.apply(new Task(1, "hello world +Test")));
+	}
 }
