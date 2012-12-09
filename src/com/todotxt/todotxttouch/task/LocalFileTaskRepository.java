@@ -30,6 +30,7 @@ import java.util.Date;
 import android.os.Environment;
 import android.util.Log;
 
+import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.TodoException;
 import com.todotxt.todotxttouch.util.TaskIo;
 import com.todotxt.todotxttouch.util.Util;
@@ -43,9 +44,11 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	private static final String TAG = LocalFileTaskRepository.class
 			.getSimpleName();
 	final static File TODO_TXT_FILE = new File(
-			"/data/data/com.todotxt.todotxttouch/todo.txt");
+			TodoApplication.appContext.getFilesDir(),
+			"todo.txt");
 	final static File DONE_TXT_FILE = new File(
-			"/data/data/com.todotxt.todotxttouch/done.txt");
+			TodoApplication.appContext.getFilesDir(),
+			"done.txt");
 	private final TaskBagImpl.Preferences preferences;
 
 	public LocalFileTaskRepository(TaskBagImpl.Preferences preferences) {

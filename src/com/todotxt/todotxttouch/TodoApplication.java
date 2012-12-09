@@ -47,7 +47,7 @@ public class TodoApplication extends Application {
 	public boolean m_pushing = false;
 	private TaskBag taskBag;
 	private BroadcastReceiver m_broadcastReceiver;
-	private static Context appContext;
+	public static Context appContext;
 
 	@Override
 	public void onCreate() {
