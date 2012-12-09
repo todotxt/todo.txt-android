@@ -50,7 +50,15 @@ class ByContextFilter implements Filter<Task> {
 				return true;
 			}
 		}
+		/*
+		 * Match tasks without context if filter contains "-"
+		 */
+		if (input.getContexts().size()==0 && contexts.contains("-")) {
+			return true;
+		}
+
 		return false;
+
 	}
 
 	/* FOR TESTING ONLY, DO NOT USE IN APPLICATION */

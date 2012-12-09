@@ -105,4 +105,16 @@ public class ByContextFilterTest extends TestCase {
 		assertFalse("apply was not false",
 				filter.apply(new Task(1, "hello world @xyz @goodbye")));
 	}
+
+	public void testFilter_noContextFilter_noTaskContext() {
+		ByContextFilter filter = new ByContextFilter(Arrays.asList("-"));
+		assertTrue("apply was not true",
+				filter.apply(new Task(1, "hello world")));
+	}
+
+	public void testFilter_noContextFilter_oneTaskContext() {
+		ByContextFilter filter = new ByContextFilter(Arrays.asList("-"));
+		assertFalse("apply was not false",
+				filter.apply(new Task(1, "hello world @xyz")));
+	}
 }

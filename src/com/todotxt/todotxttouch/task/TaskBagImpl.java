@@ -248,6 +248,7 @@ class TaskBagImpl implements TaskBag {
 		}
 		ArrayList<String> ret = new ArrayList<String>(res);
 		Collections.sort(ret);
+		ret.add(0, "-");
 		return ret;
 	}
 
@@ -260,6 +261,7 @@ class TaskBagImpl implements TaskBag {
 		}
 		ArrayList<String> ret = new ArrayList<String>(res);
 		Collections.sort(ret);
+		ret.add(0, "-");
 		return ret;
 	}
 
