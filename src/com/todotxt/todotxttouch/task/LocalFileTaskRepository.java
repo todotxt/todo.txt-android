@@ -43,11 +43,9 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	private static final String TAG = LocalFileTaskRepository.class
 			.getSimpleName();
 	final static File TODO_TXT_FILE = new File(
-			Environment.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/todo.txt");
+			"/data/data/com.todotxt.todotxttouch/todo.txt");
 	final static File DONE_TXT_FILE = new File(
-			Environment.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/done.txt");
+			"/data/data/com.todotxt.todotxttouch/done.txt");
 	private final TaskBagImpl.Preferences preferences;
 
 	public LocalFileTaskRepository(TaskBagImpl.Preferences preferences) {
