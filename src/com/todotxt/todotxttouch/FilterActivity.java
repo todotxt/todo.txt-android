@@ -40,9 +40,9 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-public class Filter extends TabActivity {
+public class FilterActivity extends TabActivity {
 
-	private final static String TAG = Filter.class.getSimpleName();
+	private final static String TAG = FilterActivity.class.getSimpleName();
 	private static ArrayList<String> appliedFilters = new ArrayList<String>();
 	private TabHost mTabHost;
 

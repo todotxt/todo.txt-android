@@ -25,6 +25,8 @@ package com.todotxt.todotxttouch;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
@@ -46,6 +48,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
+import android.database.DataSetObserver;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -67,7 +70,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -98,7 +104,7 @@ public class TodoTxtTouch extends ListActivity implements
 	Menu options_menu;
 	private Boolean wasOffline = false;
 
-	private TaskAdapter m_adapter;
+	private TaskList m_adapter;
 	TodoApplication m_app;
 
 	// filter variables
@@ -129,8 +135,7 @@ public class TodoTxtTouch extends ListActivity implements
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 		this.taskBag = m_app.getTaskBag();
-		m_adapter = new TaskAdapter(this, R.layout.list_item,
-				taskBag.getTasks(), getLayoutInflater());
+		m_adapter = new TaskList(this.taskBag, getLayoutInflater());
 
 		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
@@ -1003,33 +1008,45 @@ public class TodoTxtTouch extends ListActivity implements
 		setFilteredTasks(false);
 	}
 
-	public class TaskAdapter extends ArrayAdapter<Task> {
-		private List<Task> items;
+	public class TaskList implements ListAdapter,Filterable {
+
+		private List<Task> tasks = new ArrayList<Task>();
 		private LayoutInflater m_inflater;
+		
 
-		public TaskAdapter(Context context, int textViewResourceId,
-				List<Task> tasks, LayoutInflater inflater) {
-			super(context, textViewResourceId, tasks);
-			this.items = tasks;
-			this.m_inflater = inflater;
-		}
-
-		@Override
-		public void clear() {
-			super.clear();
-			items.clear();
-		}
-
-		@Override
-		public long getItemId(int position) {
-			if (!items.isEmpty()) {
-				return items.get(position).getId();
-			} else {
-				// Seemed to be an emulator only bug; having an item "selected"
-				// (scroll-wheel etc) when sync'ing results in FC from index out
-				// of bounds ex
-				return -1;
+		public TaskList(TaskBag taskBag, LayoutInflater layoutInflater) {
+			for (Task t : taskBag.getTasks()) {
+				add(t);
 			}
+			this.m_inflater = layoutInflater;
+		}
+
+		@Override
+		public int getCount() {
+			return tasks.size();
+		}
+
+		public void add(Task task) {
+			tasks.add(task);
+		}
+
+		public void clear() {
+			tasks.clear();
+		}
+
+		@Override
+		public Task getItem(int number) {
+			return tasks.get(number);
+		}
+
+		@Override
+		public long getItemId(int number) {
+			return tasks.get(number).getId();
+		}
+
+		@Override
+		public int getItemViewType(int arg0) {
+			return  IGNORE_ITEM_VIEW_TYPE;
 		}
 
 		@Override
@@ -1050,7 +1067,7 @@ public class TodoTxtTouch extends ListActivity implements
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			Task task = m_adapter.getItem(position);// taskBag.getTasks().get(position);
+			Task task = getItem(position);
 			if (task != null) {
 				holder.taskprio.setText(task.getPriority().inListFormat());
 				SpannableString ss = new SpannableString(task.inScreenFormat());
@@ -1106,6 +1123,57 @@ public class TodoTxtTouch extends ListActivity implements
 			}
 			return convertView;
 		}
+
+		@Override
+		public int getViewTypeCount() {
+			// TODO Auto-generated method stub
+			return 1;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return tasks.isEmpty();
+		}
+
+		@Override
+		public void registerDataSetObserver(DataSetObserver observer) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void unregisterDataSetObserver(DataSetObserver observer) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Filter getFilter() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean areAllItemsEnabled() {
+			// TODO Auto-generated method stub
+			return true;
+		}
+
+		@Override
+		public boolean isEnabled(int position) {
+			// TODO Auto-generated method stub
+			return true;
+		}
+		
+
+	
 	}
 
 	private static class ViewHolder {
@@ -1113,6 +1181,7 @@ public class TodoTxtTouch extends ListActivity implements
 		private TextView tasktext;
 		private TextView taskage;
 	}
+	
 
 	public void storeKeys(String accessTokenKey, String accessTokenSecret) {
 		Editor editor = m_app.m_prefs.edit();
@@ -1130,7 +1199,7 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	public void startFilterActivity() {
-		Intent i = new Intent(this, Filter.class);
+		Intent i = new Intent(this, FilterActivity.class);
 
 		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
 				Priority.inCode(taskBag.getPriorities()));
