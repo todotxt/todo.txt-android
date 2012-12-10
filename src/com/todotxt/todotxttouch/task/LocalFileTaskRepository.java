@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.os.Environment;
 import android.util.Log;
 
 import com.todotxt.todotxttouch.TodoApplication;

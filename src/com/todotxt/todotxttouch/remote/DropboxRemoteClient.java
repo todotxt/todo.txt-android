@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Environment;
 import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;

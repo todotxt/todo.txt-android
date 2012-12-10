@@ -187,7 +187,7 @@ public class TodoTxtTouch extends ListActivity implements
 			setFilteredTasks(false);
 		}
 
-		gestureDetector = new GestureDetector(new TodoTxtGestureDetector());
+		gestureDetector = new GestureDetector(TodoApplication.appContext, new TodoTxtGestureDetector());
 		gestureListener = new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {

@@ -31,8 +31,8 @@ public class HelpActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
-				WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND,
+				WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
 		setContentView(R.layout.help);
 	}
