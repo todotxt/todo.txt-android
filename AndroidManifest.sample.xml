@@ -30,7 +30,6 @@ You should have received a copy of the GNU General Public License along with Tod
         android:targetSdkVersion="4" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <supports-screens
         android:anyDensity="true"
