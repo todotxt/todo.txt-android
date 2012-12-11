@@ -81,6 +81,8 @@ public class AddTask extends Activity {
 		
 		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_WITH_REMOTE));
 
+		
+		
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
 		// create shortcut and exit
@@ -139,7 +141,7 @@ public class AddTask extends Activity {
 				.length());
 		
 		// priorities
-		priorities = (Spinner) findViewById(R.id.priorities);
+		priorities = (Spinner) findViewById(R.id.priority_spinner);
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add(0,"-");
 		prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
@@ -176,7 +178,7 @@ public class AddTask extends Activity {
 		
 		
 		// projects
-		projects = (Spinner) findViewById(R.id.projects);
+		projects = (Spinner) findViewById(R.id.project_spinner);
 		final ArrayList<String> projectsArr = taskBag.getProjects();
 		projects.setAdapter(Util.newSpinnerAdapter(this, projectsArr));
 		
@@ -213,7 +215,7 @@ public class AddTask extends Activity {
 		});
 
 		// contexts
-		contexts = (Spinner) findViewById(R.id.contexts);
+		contexts = (Spinner) findViewById(R.id.context_spinner);
 		final ArrayList<String> contextsArr = taskBag.getContexts();
 		contexts.setAdapter(Util.newSpinnerAdapter(this, contextsArr));
 		

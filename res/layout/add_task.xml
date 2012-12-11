@@ -27,9 +27,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
 	<LinearLayout style="@style/TitleBar">
-		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" 
-		    android:contentDescription="@string/app_label"/>
-		<View style="@style/TitleBarSpring" />
 		<TextView style="@style/TitleBarLabel" android:id="@+id/title_bar_label"
 			android:text="@string/newtask" />
 	</LinearLayout>
@@ -39,23 +36,19 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:visibility="visible">
 		<LinearLayout style="@style/ActionBarButtonSet"
 			android:scrollbars="horizontal">
-			<Button style="@style/ActionBarLeftButton"
-				android:id="@+id/priority_btn"				
-				android:text="@string/add_task_priority_btn"
-				android:onClick="onPriorityClick"
-				android:drawableRight="@drawable/ic_actionbar_drop" />
-	       	<View style="@style/ActionBarSeparatorHolo" android:contentDescription="@string/separator"/>
-			<Button style="@style/ActionBarCenterButton"
-				android:id="@+id/project_btn"
-				android:text="@string/add_task_project_btn"
-				android:onClick="onProjectClick"
-				android:drawableRight="@drawable/ic_actionbar_drop" />
-        	<ImageView style="@style/ActionBarSeparatorHolo" android:contentDescription="@string/separator"/>
-			<Button style="@style/ActionBarRightButton"
-				android:id="@+id/context_btn"
-				android:text="@string/add_task_context_btn"
-				android:onClick="onContextClick" 
-				android:drawableRight="@drawable/ic_actionbar_drop" />
+			<Spinner style="@style/Spinner"
+				android:id="@+id/priority_spinner"				
+				android:prompt="@string/priority_prompt"
+			/>
+			<Spinner style="@style/Spinner"
+				android:id="@+id/project_spinner"
+				android:prompt="@string/project_prompt"
+			/>
+			<Spinner style="@style/Spinner"
+				android:id="@+id/context_spinner"
+				android:prompt="@string/context_prompt"
+			/>
+			
 		</LinearLayout>
 		<View style="@style/TitleBarSpring" />
 		<Button style="@style/ActionBarButton"
