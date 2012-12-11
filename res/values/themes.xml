@@ -24,19 +24,13 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 <resources>
 	<style name="TodoTxtTouchLight" parent="android:Theme">
-		<item name="android:textColor">#000000</item>
-		<item name="android:background">#FFFFFF</item>
-		<item name="android:divider">#DBE9FF</item>
-		<item name="android:footerDividersEnabled">true</item>
-		<item name="android:dividerHeight">1px</item>
-		<item name="android:cacheColorHint">#FFFFFF</item>
 	</style>
 	<style name="TodoTxtTouchDark" parent="android:Theme">
 		<item name="android:textColor">#FFFFFF</item>
 		<item name="android:background">#000000</item>
 		<item name="android:divider">#DBE9FF</item>
 		<item name="android:footerDividersEnabled">true</item>
-		<item name="android:dividerHeight">1px</item>
+		<item name="android:dividerHeight">1sp</item>
 		<item name="android:cacheColorHint">#000000</item>
 	</style>
 	<style name="TodoTheme.Widget" parent="TodoTxtTouchDark">

@@ -23,7 +23,7 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<style name="Theme.TodoTxt" parent="android:style/Theme.Light">
 		<item name="android:windowNoTitle">true</item>
 		<item name="android:windowContentOverlay">@null</item>
@@ -98,32 +98,21 @@ You should have received a copy of the GNU General Public License along with Tod
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:layout_height">@dimen/actionbar_height</item>
 		<item name="android:orientation">horizontal</item>
-		<item name="android:background">@drawable/actionbar_background</item>
-		<item name="android:visibility">gone</item>
 	</style>
 
 	<style name="ActionBarButtonSet">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:orientation">horizontal</item>
-		<item name="android:background">@drawable/actionbar_button_set</item>
 		<item name="android:layout_margin">3dip</item>
 	</style>
 
-	<style name="ActionBarSeparator">
+	<style name="ActionBarSeparatorHolo">
 		<item name="android:layout_width">1px</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_marginTop">3dip</item>
 		<item name="android:layout_marginBottom">3dip</item>
-		<item name="android:background">@drawable/actionbar_separator</item>
-	</style>
-
-	<style name="ActionBarSeparatorWhite">
-		<item name="android:layout_width">1px</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_marginTop">3dip</item>
-		<item name="android:layout_marginBottom">3dip</item>
-		<item name="android:background">@drawable/actionbar_separator_white</item>
+		<item name="android:background">@android:color/holo_blue_light</item>
 	</style>
 
 	<style name="ActionBarButton">
@@ -140,12 +129,13 @@ You should have received a copy of the GNU General Public License along with Tod
 	<style name="ActionBarLeftButton">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">fill_parent</item>
-		<item name="android:background">@drawable/actionbar_left_button</item>
+		<item name="android:background">?android:attr/selectableItemBackground</item>
 		<item name="android:paddingTop">2dip</item>
 		<item name="android:paddingBottom">2dip</item>
 		<item name="android:paddingLeft">7dip</item>
 		<item name="android:paddingRight">7dip</item>
 		<item name="android:drawablePadding">4dip</item>
+		<item name="android:textSize">13sp</item>
 	</style>
 
 	<style name="ActionBarCenterButton">
@@ -162,12 +152,13 @@ You should have received a copy of the GNU General Public License along with Tod
 	<style name="ActionBarRightButton">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">fill_parent</item>
-		<item name="android:background">@drawable/actionbar_right_button</item>
+		<item name="android:background">?android:attr/selectableItemBackground</item>
 		<item name="android:paddingTop">2dip</item>
 		<item name="android:paddingBottom">2dip</item>
 		<item name="android:paddingLeft">7dip</item>
 		<item name="android:paddingRight">7dip</item>
 		<item name="android:drawablePadding">4dip</item>
+		<item name="android:textSize">13sp</item>
 	</style>
 
 	<style name="HorizontalRule">

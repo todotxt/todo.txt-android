@@ -44,15 +44,13 @@ You should have received a copy of the GNU General Public License along with Tod
 				android:text="@string/add_task_priority_btn"
 				android:onClick="onPriorityClick"
 				android:drawableRight="@drawable/ic_actionbar_drop" />
-	        <ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator" />
-	       	<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator"/>
+	       	<View style="@style/ActionBarSeparatorHolo" android:contentDescription="@string/separator"/>
 			<Button style="@style/ActionBarCenterButton"
 				android:id="@+id/project_btn"
 				android:text="@string/add_task_project_btn"
 				android:onClick="onProjectClick"
 				android:drawableRight="@drawable/ic_actionbar_drop" />
-        	<ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator"/>
-        	<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator"/>
+        	<ImageView style="@style/ActionBarSeparatorHolo" android:contentDescription="@string/separator"/>
 			<Button style="@style/ActionBarRightButton"
 				android:id="@+id/context_btn"
 				android:text="@string/add_task_context_btn"
