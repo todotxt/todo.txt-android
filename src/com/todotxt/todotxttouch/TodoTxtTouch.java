@@ -114,8 +114,6 @@ OnSharedPreferenceChangeListener {
 	private Sort sort = Sort.PRIORITY_DESC;
 	private BroadcastReceiver m_broadcastReceiver;
 
-	private ArrayList<String> m_filters = new ArrayList<String>();
-
 	private static final int SYNC_CHOICE_DIALOG = 100;
 	private static final int SYNC_CONFLICT_DIALOG = 101;
 
@@ -930,7 +928,7 @@ OnSharedPreferenceChangeListener {
 		m_prios = new ArrayList<Priority>(); // Collections.emptyList();
 		m_contexts = new ArrayList<String>(); // Collections.emptyList();
 		m_projects = new ArrayList<String>(); // Collections.emptyList();
-		m_filters = new ArrayList<String>();
+		new ArrayList<String>();
 		m_search = "";
 	}
 

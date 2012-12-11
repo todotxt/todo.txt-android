@@ -150,6 +150,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="title_section1">Section 1</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_filter">FilterActivity</string>
+    <string name="title_activity_filter">Filter</string>
 
 </resources>
