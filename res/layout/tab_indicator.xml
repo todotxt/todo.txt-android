@@ -31,4 +31,4 @@ You should have received a copy of the GNU General Public License along with Tod
     android:layout_marginRight="@dimen/tab_side_padding"
     android:gravity="center"
     android:background="@drawable/tab_indicator"
-    android:textColor="@color/black" />
+/>

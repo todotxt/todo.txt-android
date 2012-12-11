@@ -71,14 +71,12 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_width="fill_parent"
 		android:layout_height="0dip"
 		android:layout_weight="1"
-		android:background="@color/white"
 		android:padding="5dip" android:capitalize="sentences" />
 	
 
 	<LinearLayout android:orientation="horizontal" 
 		android:layout_width="fill_parent"
 		android:layout_height="0dip"
-		android:background="@color/grey"
 		android:visibility="invisible">
 		<Spinner android:id="@+id/priorities" android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
@@ -96,7 +94,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<LinearLayout android:orientation="horizontal" 
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:background="@drawable/actionbar_dark_background"
 		android:padding="3dip">
 		
 		<Button android:id="@+id/addTask" 

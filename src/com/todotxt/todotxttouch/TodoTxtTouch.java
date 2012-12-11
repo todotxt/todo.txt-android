@@ -1062,29 +1062,8 @@ OnSharedPreferenceChangeListener {
 			if (task != null) {
 				holder.taskprio.setText(task.getPriority().inListFormat());
 				SpannableString ss = new SpannableString(task.inScreenFormat());
-				Util.setGray(ss, task.getProjects());
-				Util.setGray(ss, task.getContexts());
 				holder.tasktext.setText(ss);
 
-				Resources res = getResources();
-				holder.tasktext.setTextColor(res.getColor(R.color.black));
-
-				switch (task.getPriority()) {
-				case A:
-					holder.taskprio.setTextColor(res.getColor(R.color.green));
-					break;
-				case B:
-					holder.taskprio.setTextColor(res.getColor(R.color.blue));
-					break;
-				case C:
-					holder.taskprio.setTextColor(res.getColor(R.color.orange));
-					break;
-				case D:
-					holder.taskprio.setTextColor(res.getColor(R.color.gold));
-					break;
-				default:
-					holder.taskprio.setTextColor(res.getColor(R.color.black));
-				}
 				if (task.isCompleted()) {
 					// Log.v(TAG, "Striking through " + task.getText());
 					holder.tasktext.setPaintFlags(holder.tasktext

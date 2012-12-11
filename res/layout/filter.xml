@@ -35,7 +35,6 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_alignParentBottom="true"
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
-        android:background="@drawable/actionbar_dark_background"
         android:padding="3dip">
 
 		<Button android:id="@+id/ok"
@@ -62,7 +61,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_above="@id/buttons"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-        android:background="@color/white">
+	>
 
 		<ListView android:id="@+id/prioritieslv" 
 		    android:layout_width="fill_parent"
@@ -75,7 +74,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_above="@id/buttons"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-        android:background="@color/white">
+     >
 
 		<ListView android:id="@+id/projectslv" 
 			android:layout_width="fill_parent"
@@ -88,7 +87,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_above="@id/buttons"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-        android:background="@color/white">
+    >
 
 		<ListView android:id="@+id/contextslv" 
 			android:layout_width="fill_parent"
@@ -101,7 +100,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:layout_above="@id/buttons"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-        android:background="@color/white">
+     >
 
 		<EditText android:id="@+id/searchet" 
             android:layout_width="fill_parent"

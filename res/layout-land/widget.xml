@@ -42,7 +42,7 @@ You should have received a copy of the GNU General Public License along with Tod
 				<TextView android:id="@+id/todoWidget_IdTask1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask1"
-					android:textColor="@color/grey" style="@style/widget_w1_TaskText" />
+					style="@style/widget_w1_TaskText" />
 				<TextView android:id="@+id/todoWidget_PrioTask1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:paddingLeft="4dip" android:paddingRight="4dip"
@@ -59,7 +59,7 @@ You should have received a copy of the GNU General Public License along with Tod
 				<TextView android:id="@+id/todoWidget_IdTask2"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask2"
-					android:textColor="@color/grey" style="@style/widget_w1_TaskText" />
+					style="@style/widget_w1_TaskText" />
 				<TextView android:id="@+id/todoWidget_PrioTask2"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:paddingLeft="4dip" android:paddingRight="4dip"
@@ -77,7 +77,7 @@ You should have received a copy of the GNU General Public License along with Tod
 				<TextView android:id="@+id/todoWidget_IdTask3"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:gravity="bottom" android:layout_alignBaseline="@+id/todoWidget_PrioTask3"
-					android:textColor="@color/grey" style="@style/widget_w1_TaskText" />
+					style="@style/widget_w1_TaskText" />
 				<TextView android:id="@+id/todoWidget_PrioTask3"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:paddingLeft="4dip" android:paddingRight="4dip"

@@ -363,24 +363,6 @@ public class Util {
 		return adapter;
 	}
 
-	public static void setGray(SpannableString ss, List<String> items) {
-		String data = ss.toString();
-		for (String item : items) {
-			int i = data.indexOf("@" + item);
-			if (i != -1) {
-				ss.setSpan(new ForegroundColorSpan(Color.GRAY), i,
-						i + 1 + item.length(),
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-			int j = data.indexOf("+" + item);
-			if (j != -1) {
-				ss.setSpan(new ForegroundColorSpan(Color.GRAY), j,
-						j + 1 + item.length(),
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-		}
-	}
-
 	public static boolean isOnline(Context context) {
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);

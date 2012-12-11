@@ -118,26 +118,8 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 				remoteViews.setTextViewText(id[i][TASK_TEXT], ss);
 				remoteViews.setViewVisibility(id[i][TASK_TEXT], View.VISIBLE);
 
-				// priority
-				int color = R.color.white;
-				switch (task.getPriority()) {
-				case A:
-					color = R.color.green;
-					break;
-				case B:
-					color = R.color.blue;
-					break;
-				case C:
-					color = R.color.orange;
-					break;
-				case D:
-					color = R.color.gold;
-				}
-
 				remoteViews.setTextViewText(id[i][TASK_PRIO], task
 						.getPriority().inListFormat());
-				remoteViews.setTextColor(id[i][TASK_PRIO],
-						resources.getColor(color));
 				remoteViews.setViewVisibility(id[i][TASK_PRIO], View.VISIBLE);
 
 			}

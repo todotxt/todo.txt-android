@@ -54,9 +54,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:text="@string/first_title_word"
 		android:textSize="12pt"
 		android:typeface="monospace"
-		android:textColor="@color/white"
 		android:paddingTop="15dp"
-		android:shadowColor="@color/black"
 		android:shadowRadius="1.0"
 	/>
 	<TextView android:id="@+id/title_2"
@@ -66,7 +64,6 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:textSize="12pt"
 		android:typeface="serif"
 		android:textStyle="italic"
-		android:shadowColor="@color/black"
 		android:shadowRadius="1.0"
 	/>
 	</LinearLayout>
