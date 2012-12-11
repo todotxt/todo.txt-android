@@ -37,35 +37,37 @@ import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
 
 import junit.framework.TestCase;
-import android.os.Environment;
+
+import android.test.AndroidTestCase;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.ProgressListener;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
 
-public class DropboxFileDownloaderTest extends TestCase {
+public class DropboxFileDownloaderTest extends AndroidTestCase {
 	private static final String remotefile1 = "remotefile1";
 	private static final String remotefile2 = "remotefile2";
-	private static final String localpath1 = "data/com.todotxt.todotxttouch/tmp/test1.txt";
-	private static final String localpath2 = "data/com.todotxt.todotxttouch/tmp/test2.txt";
+	private static final String localpath1 = "tmp/test1.txt";
+	private static final String localpath2 = "tmp/test2.txt";
 
 	private static final String remoterev1 = "remoterev1";
 	private static final String remoterev2 = "remoterev2";
 	private static final String origrev1 = "origrev1";
 	private static final String origrev2 = "origrev2";
 
-	private File localFile1 = new File(
-			Environment.getExternalStorageDirectory(), localpath1);
-	private File localFile2 = new File(
-			Environment.getExternalStorageDirectory(), localpath2);
-
+	private File localFile1;
+	private File localFile2;
 	DropboxFile dbFile1;
 	DropboxFile dbFile2;
 	ArrayList<DropboxFile> dropboxFiles1;
 	ArrayList<DropboxFile> dropboxFiles2;
 
 	protected void setUp() throws Exception {
+		localFile1 = new File(
+				getContext().getApplicationContext().getFilesDir(), localpath1);		
+		localFile2 = new File(
+			getContext().getApplicationContext().getFilesDir(), localpath2);		
 		if (localFile1.exists()) {
 			localFile1.delete();
 		}
