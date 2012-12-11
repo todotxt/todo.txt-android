@@ -352,21 +352,6 @@ public class AddTask extends Activity {
 		}
 	}
 
-	/** Handle priority spinner **/
-	public void onPriorityClick(View v) {
-		priorities.performClick();
-	}
-
-	/** Handle project spinner **/
-	public void onProjectClick(View v) {
-		projects.performClick();
-	}
-
-	/** Handle context spinner **/
-	public void onContextClick(View v) {
-		contexts.performClick();
-	}
-
 	/** Handle help message **/
 	public void onHelpClick(View v) {
 		Intent intent = new Intent(v.getContext(), HelpActivity.class);
