@@ -25,8 +25,10 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:title="@string/addtask" android:id="@+id/add_new"
+	    android:showAsAction="ifRoom"
 		android:icon="@android:drawable/ic_menu_add" />
 	<item android:title="@string/sync" android:id="@+id/sync"
+	    android:showAsAction="ifRoom"
 		android:icon="@drawable/menu_sync" />
 	<item android:title="@string/search" android:id="@+id/search"
 		android:icon="@android:drawable/ic_menu_search"
