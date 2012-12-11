@@ -1,24 +1,23 @@
 package com.todotxt.todotxttouch;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+@SuppressWarnings("unused")
 public class FilterActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 
@@ -36,21 +35,30 @@ public class FilterActivity extends FragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-	private PrioritiesFragment prioritiesFragment;
-	private ProjectsFragment projectsFragment;
-	private ContextsFragment contextsFragment;
+	private FilterListFragment prioritiesFragment;
+	private FilterListFragment projectsFragment;
+	private FilterListFragment contextsFragment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_filter);
 
-		prioritiesFragment = new PrioritiesFragment();
-		prioritiesFragment.setArguments(getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES));
-		projectsFragment = new ProjectsFragment();
-		projectsFragment.setArguments(getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS));
-		contextsFragment = new ContextsFragment();
-		contextsFragment.setArguments(getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS));
+		prioritiesFragment = new FilterListFragment();
+		prioritiesFragment.setArguments(
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES),
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED),
+				R.layout.tab_priorities, R.id.prioritieslv);
+		projectsFragment = new FilterListFragment();
+		projectsFragment.setArguments(
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS),
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED),
+				R.layout.tab_projects, R.id.projectslv);
+		contextsFragment = new FilterListFragment();
+		contextsFragment.setArguments(
+				getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS),
+				getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED),
+				R.layout.tab_contexts, R.id.contextslv);
 		
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
@@ -95,6 +103,34 @@ public class FilterActivity extends FragmentActivity implements
 		return true;
 	}
 
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_apply_filter:
+			applyFilter();
+			break;
+		}
+		return true;
+	}
+		
+	private void applyFilter() {
+		ArrayList<String> appliedFilters;
+		Intent data = new Intent();
+
+		appliedFilters = new ArrayList<String>();
+		
+		data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
+				prioritiesFragment.getFilters());
+		data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
+				projectsFragment.getFilters());
+		data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
+				contextsFragment.getFilters());
+		data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,
+				appliedFilters);
+		setResult(Activity.RESULT_OK, data);
+		finish();
+		
+	}
+
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
@@ -132,18 +168,13 @@ public class FilterActivity extends FragmentActivity implements
 			case 0: return prioritiesFragment;
 			case 1: return projectsFragment;
 			case 2: return contextsFragment;
-			}	
-
-			Fragment fragment = new DummySectionFragment();
-			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-			fragment.setArguments(args);
-			return fragment;
+			}
+			return null;
 		}
 
 		@Override
 		public int getCount() {
-			return 4;
+			return 3;
 		}
 
 		@Override
@@ -159,33 +190,6 @@ public class FilterActivity extends FragmentActivity implements
 				return getString(R.string.search).toUpperCase(Locale.getDefault());
 			}
 			return null;
-		}
-	}
-
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
-
-		public DummySectionFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			// Create a new TextView and set its text to the fragment's section
-			// number argument value.
-			TextView textView = new TextView(getActivity());
-			textView.setGravity(Gravity.CENTER);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return textView;
 		}
 	}
 

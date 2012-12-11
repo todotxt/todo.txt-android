@@ -258,7 +258,6 @@ OnSharedPreferenceChangeListener {
 		outState.putStringArrayList("m_prios", Priority.inCode(m_prios));
 		outState.putStringArrayList("m_contexts", m_contexts);
 		outState.putStringArrayList("m_projects", m_projects);
-		outState.putStringArrayList("m_filters", m_filters);
 		outState.putString("m_search", m_search);
 
 		dismissProgressDialog(false);
@@ -278,7 +277,6 @@ OnSharedPreferenceChangeListener {
 		m_prios = Priority.toPriority(state.getStringArrayList("m_prios"));
 		m_contexts = state.getStringArrayList("m_contexts");
 		m_projects = state.getStringArrayList("m_projects");
-		m_filters = state.getStringArrayList("m_filters");
 		m_search = state.getString("m_search");
 		setFilteredTasks(false);
 	}
@@ -287,11 +285,11 @@ OnSharedPreferenceChangeListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
-		
-	    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-	    SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-	    searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
@@ -749,9 +747,13 @@ OnSharedPreferenceChangeListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + " i=" + data);
+		if(data==null) {
+			return;
+		}
+		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + " i=" + data.getExtras());
 		if (requestCode == REQUEST_FILTER) {
 			if (resultCode == Activity.RESULT_OK) {
+				Log.v(TAG, "filters were applied");
 				m_prios = Priority.toPriority(data
 						.getStringArrayListExtra(Constants.EXTRA_PRIORITIES));
 				m_projects = data
@@ -759,8 +761,6 @@ OnSharedPreferenceChangeListener {
 				m_contexts = data
 						.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
 				m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
-				m_filters = data
-						.getStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS);
 				setFilteredTasks(false);
 			}
 		} else if (requestCode == REQUEST_PREFERENCES) {
@@ -950,6 +950,7 @@ OnSharedPreferenceChangeListener {
 		Log.v(TAG, "ListView index " + index + " top " + top);
 
 		m_adapter.clear();
+		final Button actionbar_clear = (Button) findViewById(R.id.actionbar_clear);
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
 				m_prios, m_contexts, m_projects, m_search, false), sort
 				.getComparator())) {
@@ -960,40 +961,30 @@ OnSharedPreferenceChangeListener {
 
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
 		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
-		final Button actionbar_clear = (Button) findViewById(R.id.actionbar_clear);
 
-		if (filterText != null) {
-			actionbar_clear.setEnabled(true);
-			if (m_filters.size() > 0) {
-				String filterTitle = getString(R.string.title_filter_applied)
-						+ " ";
-				int count = m_filters.size();
-				for (int i = 0; i < count; i++) {
-					filterTitle += m_filters.get(i) + " ";
-				}
-				if (!Strings.isEmptyOrNull(m_search)) {
-					filterTitle += "Keyword";
-				}
-				actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
-
-				filterText.setText(filterTitle);
-
-			} else if (!Strings.isEmptyOrNull(m_search)) {
-				actionbar_clear.setEnabled(true);
-				if (filterText != null) {
-
-					actionbar_icon
-					.setImageResource(R.drawable.ic_actionbar_search);
-					filterText.setText(getString(R.string.title_search_results)
-							+ " " + m_search);
-
-				}
-			} else {
-
-				filterText.setText("No filter");
-				actionbar_clear.setEnabled(false);
+		if (m_contexts.size() + m_projects.size() + m_prios.size() > 0) {
+			String filterTitle = getString(R.string.title_filter_applied);
+			if (m_prios.size()>0) {
+				filterTitle+= " " + getString(R.string.priority_prompt);
 			}
+
+			if (m_projects.size()>0) {
+				filterTitle+= " " + getString(R.string.project_prompt);
+			}
+			
+			if (m_contexts.size()>0) {
+				filterTitle+= " " + getString(R.string.context_prompt);
+			}
+			
+			actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
+			actionbar_clear.setEnabled(true);
+			filterText.setText(filterTitle);
+
+		} else {
+			filterText.setText("No filter");
+			actionbar_clear.setEnabled(false);
 		}
+
 	}
 
 	@Override
@@ -1009,7 +1000,7 @@ OnSharedPreferenceChangeListener {
 		private LayoutInflater m_inflater;
 		private TextFilter m_textFilter;
 		private View list;
-		
+
 		public TaskAdapter(Context context, int textViewResourceId,
 				List<Task> tasks, LayoutInflater inflater, ListView view) {
 			super(context, textViewResourceId, tasks);
@@ -1018,22 +1009,22 @@ OnSharedPreferenceChangeListener {
 			this.list = view;
 
 		}
-		
-	    @Override
+
+		@Override
 		public int getCount() {
-	        synchronized(mLock) {
-	            return items!=null ? items.size() : 0; 
-	        }
+			synchronized(mLock) {
+				return items!=null ? items.size() : 0; 
+			}
 		}
 
-	  public Task getItem(int item) {
-	            Task task = null;
-	            synchronized(mLock) {
-	                    task = items!=null ? items.get(item) : null;
+		public Task getItem(int item) {
+			Task task = null;
+			synchronized(mLock) {
+				task = items!=null ? items.get(item) : null;
 
-	            }
-	            return task;
-	        }
+			}
+			return task;
+		}
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final ViewHolder holder;
@@ -1089,29 +1080,29 @@ OnSharedPreferenceChangeListener {
 			}
 			return convertView;
 		}
-	  
+
 		private class TextFilter extends Filter {
 
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults results = new FilterResults();
-				
-					synchronized(mLock) {
+
+				synchronized(mLock) {
 					final ArrayList<Task> filteredItems  = new ArrayList<Task>();
 					final ArrayList<Task> localItems = new ArrayList<Task>();
 					localItems.addAll(taskBag.getTasks());
-                    final int count = localItems.size();
-            		com.todotxt.todotxttouch.task.Filter<Task> uiFilter = FilterFactory.generateAndFilter(
-            				m_prios, m_contexts, m_projects, m_search, false);
-                    for (int i = 0; i < count; i++) {
-                    	final Task item = localItems.get(i);
-                    	 if (!uiFilter.apply(item)) {
-                    		 continue;
-                    	 } else if (constraint == null || constraint.length()==0 ||
-                    			    item.getText().contains(constraint)) {
-                    		 filteredItems.add(item);
-                    	 } 
-                    }
+					final int count = localItems.size();
+					com.todotxt.todotxttouch.task.Filter<Task> uiFilter = FilterFactory.generateAndFilter(
+							m_prios, m_contexts, m_projects, m_search, false);
+					for (int i = 0; i < count; i++) {
+						final Task item = localItems.get(i);
+						if (!uiFilter.apply(item)) {
+							continue;
+						} else if (constraint == null || constraint.length()==0 ||
+								item.getText().contains(constraint)) {
+							filteredItems.add(item);
+						} 
+					}
 					results.count = filteredItems.size();
 					results.values = filteredItems;
 
@@ -1123,19 +1114,19 @@ OnSharedPreferenceChangeListener {
 			@Override
 			protected void publishResults(CharSequence constraint, final FilterResults results) {
 				//noinspection unchecked
-	            synchronized(mLock) {
-	                final ArrayList<Task> localItems = (ArrayList<Task>) results.values;
-	                notifyDataSetChanged();
-	                clear();
-	                //Add the items back in
-	                for (Iterator<Task> iterator = localItems.iterator(); iterator
-	                        .hasNext();) {
-	                    Task t = (Task) iterator.next();
-	                    add(t);
-	                }
-	            }//end synchronized
-	            //this is needed here otherwise the UI will be in a mixed state
-	            list.refreshDrawableState();
+				synchronized(mLock) {
+					final ArrayList<Task> localItems = (ArrayList<Task>) results.values;
+					notifyDataSetChanged();
+					clear();
+					//Add the items back in
+					for (Iterator<Task> iterator = localItems.iterator(); iterator
+							.hasNext();) {
+						Task t = (Task) iterator.next();
+						add(t);
+					}
+				}//end synchronized
+				//this is needed here otherwise the UI will be in a mixed state
+				list.refreshDrawableState();
 			}
 		}
 
