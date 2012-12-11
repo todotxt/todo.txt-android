@@ -62,7 +62,7 @@ public class PhoneNumberParser {
 		ArrayList<String> numbers = new ArrayList<String>();
 		for (PhoneNumberMatch number : numbersMatch) {
 			numbers.add(phoneUtil.format(number.number(),
-					PhoneNumberFormat.NATIONAL));
+					PhoneNumberFormat.INTERNATIONAL));
 
 		}
 
