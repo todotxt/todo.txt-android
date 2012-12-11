@@ -31,7 +31,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
@@ -93,8 +92,6 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 
 		List<Task> tasks = taskBag.getTasks();
 		int taskCount = tasks.size();
-		Resources resources = context.getResources();
-
 		for (int i = 0; i < TASKS_TO_DISPLAY; i++) {
 			// get task to display
 			if (i >= tasks.size()) {

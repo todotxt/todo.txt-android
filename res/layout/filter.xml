@@ -26,9 +26,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-<RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+
 
 	<LinearLayout android:id="@+id/buttons"
 		android:orientation="horizontal"
@@ -58,7 +56,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	</LinearLayout>
 
 	<LinearLayout android:id="@+id/priorities"
-		android:layout_above="@id/buttons"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
 	>
@@ -71,7 +68,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	</LinearLayout>
 
 	<LinearLayout android:id="@+id/projects"
-		android:layout_above="@id/buttons"
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
      >
@@ -108,6 +104,4 @@ You should have received a copy of the GNU General Public License along with Tod
 			android:layout_height="wrap_content" />
 
 	</LinearLayout>
-
-</RelativeLayout>
 </LinearLayout>

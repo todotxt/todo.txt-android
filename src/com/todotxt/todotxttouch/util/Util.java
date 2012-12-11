@@ -42,17 +42,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Environment;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.todotxt.todotxttouch.R;
@@ -276,38 +269,6 @@ public class Util {
 
 	public interface InputDialogListener {
 		void onClick(String input);
-	}
-
-	public static void showInputDialog(Context cxt, int titleid, int msgid,
-			String defaulttext, int lines,
-			final InputDialogListener oklistener, int icon) {
-		LayoutInflater factory = LayoutInflater.from(cxt);
-		final View textEntryView = factory.inflate(R.layout.inputdialog, null);
-		final TextView textinput = (TextView) textEntryView
-				.findViewById(R.id.input);
-		textinput.setText(defaulttext);
-		textinput.setLines(lines);
-		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
-		if (icon > 0) {
-			builder.setIcon(icon);
-		}
-		builder.setTitle(titleid);
-		builder.setMessage(msgid);
-		builder.setView(textEntryView);
-		builder.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						String input = textinput.getText().toString();
-						oklistener.onClick(input);
-					}
-				});
-		builder.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				});
-		builder.setCancelable(true);
-		builder.show();
 	}
 
 	public interface LoginDialogListener {

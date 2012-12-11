@@ -1,196 +1,181 @@
-/**
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
- *
- * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
- *
- * LICENSE:
- *
- * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
- * later version.
- *
- * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
- * <http://www.gnu.org/licenses/>.
- *
- * @author Todo.txt contributors <todotxt@yahoogroups.com>
- * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
- */
 package com.todotxt.todotxttouch;
 
-import java.util.ArrayList;
+import java.util.Locale;
 
-import android.app.Activity;
-import android.app.TabActivity;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TabHost;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class FilterActivity extends TabActivity {
+public class FilterActivity extends FragmentActivity implements
+		ActionBar.TabListener {
 
-	private final static String TAG = FilterActivity.class.getSimpleName();
-	private static ArrayList<String> appliedFilters = new ArrayList<String>();
-	private TabHost mTabHost;
+	/**
+	 * The {@link android.support.v4.view.PagerAdapter} that will provide
+	 * fragments for each of the sections. We use a
+	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
+	 * will keep every loaded fragment in memory. If this becomes too memory
+	 * intensive, it may be best to switch to a
+	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+	 */
+	SectionsPagerAdapter mSectionsPagerAdapter;
 
+	/**
+	 * The {@link ViewPager} that will host the section contents.
+	 */
+	ViewPager mViewPager;
+	private PriorityFragment prioritiesFragment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mTabHost = getTabHost();
+		setContentView(R.layout.activity_filter);
 
-		Drawable actionBarBg = getResources().getDrawable(
-				R.drawable.title_background);
-		mTabHost.getTabWidget().setBackgroundDrawable(actionBarBg);
+		prioritiesFragment = new PriorityFragment();
+		prioritiesFragment.setArguments(getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES));
+		
+		// Set up the action bar.
+		final ActionBar actionBar = getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		LayoutInflater.from(this).inflate(R.layout.filter,
-				mTabHost.getTabContentView(), true);
+		// Create the adapter that will return a fragment for each of the three
+		// primary sections of the app.
+		mSectionsPagerAdapter = new SectionsPagerAdapter(
+				getSupportFragmentManager());
 
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_priorities))
-				// .setIndicator(getString(R.string.filter_tab_priorities))
-				.setIndicator(buildIndicator(R.string.filter_tab_priorities))
-				.setContent(R.id.priorities));
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_projects))
-				.setIndicator(buildIndicator(R.string.filter_tab_projects))
-				.setContent(R.id.projects));
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_contexts))
-				.setIndicator(buildIndicator(R.string.filter_tab_contexts))
-				.setContent(R.id.contexts));
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_search))
-				.setIndicator(buildIndicator(R.string.filter_tab_search))
-				.setContent(R.id.search));
+		// Set up the ViewPager with the sections adapter.
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(mSectionsPagerAdapter);
 
-		Intent data = getIntent();
-		ArrayList<String> priosArr = data
-				.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
-		ArrayList<String> projectsArr = data
-				.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
-		ArrayList<String> contextsArr = data
-				.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
+		// When swiping between different sections, select the corresponding
+		// tab. We can also use ActionBar.Tab#select() to do this if we have
+		// a reference to the Tab.
+		mViewPager
+				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+					@Override
+					public void onPageSelected(int position) {
+						actionBar.setSelectedNavigationItem(position);
+					}
+				});
 
-		ArrayList<String> priosArrSelected = data
-				.getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED);
-		ArrayList<String> projectsArrSelected = data
-				.getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED);
-		ArrayList<String> contextsArrSelected = data
-				.getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED);
-
-		String searchTerm = data.getStringExtra(Constants.EXTRA_SEARCH);
-
-		final ListView priorities = (ListView) findViewById(R.id.prioritieslv);
-		priorities.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		priorities.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.simple_list_item_multiple_choice, priosArr));
-		setSelected(priorities, priosArrSelected);
-
-		final ListView projects = (ListView) findViewById(R.id.projectslv);
-		projects.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		projects.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.simple_list_item_multiple_choice, projectsArr));
-		setSelected(projects, projectsArrSelected);
-
-		final ListView contexts = (ListView) findViewById(R.id.contextslv);
-		contexts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		contexts.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.simple_list_item_multiple_choice, contextsArr));
-		setSelected(contexts, contextsArrSelected);
-
-		final EditText search = (EditText) findViewById(R.id.searchet);
-		search.setText(searchTerm);
-
-		Button ok = (Button) findViewById(R.id.ok);
-		ok.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v(TAG, "onClick OK");
-				Intent data = new Intent();
-				Log.v(TAG, "Clearing all filter types.");
-				appliedFilters = new ArrayList<String>();
-				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-						getItems(priorities, getString(R.string.filter_tab_priorities)));
-				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-						getItems(projects, getString(R.string.filter_tab_projects)));
-				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-						getItems(contexts, getString(R.string.filter_tab_contexts)));
-				data.putExtra(Constants.EXTRA_SEARCH, search.getText()
-						.toString());
-				data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,
-						appliedFilters);
-				setResult(Activity.RESULT_OK, data);
-				finish();
-			}
-		});
-
-		Button cancel = (Button) findViewById(R.id.cancel);
-		cancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v(TAG, "onClick Cancel");
-				setResult(Activity.RESULT_CANCELED);
-				finish();
-			}
-		});
-
-		Button clear = (Button) findViewById(R.id.clear);
-		clear.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v(TAG, "onClick Clear");
-				appliedFilters = new ArrayList<String>();
-				setSelected(priorities, null);
-				setSelected(projects, null);
-				setSelected(contexts, null);
-				search.setText("");
-			}
-		});
-	}
-
-	private View buildIndicator(int textRes) {
-		final TextView indicator = (TextView) this.getLayoutInflater().inflate(
-				R.layout.tab_indicator, mTabHost.getTabWidget(), false);
-		indicator.setText(textRes);
-		return indicator;
-	}
-
-	private static ArrayList<String> getItems(ListView adapter, String type) {
-		ArrayList<String> arr = new ArrayList<String>();
-		int size = adapter.getCount();
-		for (int i = 0; i < size; i++) {
-			if (adapter.isItemChecked(i)) {
-				arr.add((String) adapter.getAdapter().getItem(i));
-				Log.v(TAG, " Adding "
-						+ (String) adapter.getAdapter().getItem(i)
-						+ " to applied filters.");
-				if (!appliedFilters.contains(type)) {
-					appliedFilters.add(type);
-					Log.v(TAG, " Adding " + type + " to applied filter types.");
-				}
-			}
+		// For each of the sections in the app, add a tab to the action bar.
+		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+			// Create a tab with text corresponding to the page title defined by
+			// the adapter. Also specify this Activity object, which implements
+			// the TabListener interface, as the callback (listener) for when
+			// this tab is selected.
+			actionBar.addTab(actionBar.newTab()
+					.setText(mSectionsPagerAdapter.getPageTitle(i))
+					.setTabListener(this));
 		}
-		return arr;
 	}
 
-	private static void setSelected(ListView lv, ArrayList<String> selected) {
-		int count = lv.getCount();
-		for (int i = 0; i < count; i++) {
-			String str = (String) lv.getItemAtPosition(i);
-			lv.setItemChecked(i, selected != null && selected.contains(str));
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_filter, menu);
+		return true;
+	}
+
+	@Override
+	public void onTabSelected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+		// When the given tab is selected, switch to the corresponding page in
+		// the ViewPager.
+		mViewPager.setCurrentItem(tab.getPosition());
+	}
+
+	@Override
+	public void onTabUnselected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+	}
+
+	@Override
+	public void onTabReselected(ActionBar.Tab tab,
+			FragmentTransaction fragmentTransaction) {
+	}
+
+	/**
+	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+	 * one of the sections/tabs/pages.
+	 */
+	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+		public SectionsPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			// getItem is called to instantiate the fragment for the given page.
+			// Return a DummySectionFragment (defined as a static inner class
+			// below) with the page number as its lone argument.
+			if (position == 0) {
+				return prioritiesFragment;
+			}
+			Fragment fragment = new DummySectionFragment();
+			Bundle args = new Bundle();
+			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+			fragment.setArguments(args);
+			return fragment;
+		}
+
+		@Override
+		public int getCount() {
+			return 4;
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			switch (position) {
+			case 0:
+				return getString(R.string.priority_prompt).toUpperCase(Locale.getDefault());
+			case 1:
+				return getString(R.string.project_prompt).toUpperCase(Locale.getDefault());
+			case 2:
+				return getString(R.string.context_prompt).toUpperCase(Locale.getDefault());
+			case 3:
+				return getString(R.string.search).toUpperCase(Locale.getDefault());
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * A dummy fragment representing a section of the app, but that simply
+	 * displays dummy text.
+	 */
+	public static class DummySectionFragment extends Fragment {
+		/**
+		 * The fragment argument representing the section number for this
+		 * fragment.
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+
+		public DummySectionFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			// Create a new TextView and set its text to the fragment's section
+			// number argument value.
+			TextView textView = new TextView(getActivity());
+			textView.setGravity(Gravity.CENTER);
+			textView.setText(Integer.toString(getArguments().getInt(
+					ARG_SECTION_NUMBER)));
+			return textView;
 		}
 	}
 

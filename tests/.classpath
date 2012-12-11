@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/TodoTxtTouch"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="/TodoTxtTouch/libs/dropbox-android-sdk-1.2.3.jar"/>
+	<classpathentry kind="lib" path="D:/Documents/GitHub/todo.txt-touch/libs/dropbox-android-sdk-1.2.3.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/todo.txt-touch"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
