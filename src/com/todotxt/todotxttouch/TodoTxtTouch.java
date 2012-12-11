@@ -1044,6 +1044,7 @@ OnSharedPreferenceChangeListener {
 	        }
 	    }
 	    
+
 		@Override
 		public int getCount() {
 	        synchronized(mLock) {
@@ -1141,29 +1142,27 @@ OnSharedPreferenceChangeListener {
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
 				FilterResults results = new FilterResults();
-				if(constraint==null || constraint.length()==0 ) {
-	                synchronized (mLock) {
-	                    results.values = originalItems;
-	                    results.count = originalItems.size();
-	                }
-					
-				} else {
+				
 					synchronized(mLock) {
 					final ArrayList<Task> filteredItems  = new ArrayList<Task>();
 					final ArrayList<Task> localItems = new ArrayList<Task>();
 					localItems.addAll(originalItems);
                     final int count = localItems.size();
+            		com.todotxt.todotxttouch.task.Filter<Task> uiFilter = FilterFactory.generateAndFilter(
+            				m_prios, m_contexts, m_projects, m_search, false);
                     for (int i = 0; i < count; i++) {
-                    	 final Task item = localItems.get(i);
-                    	 if (item.getText().contains(constraint)) {
+                    	final Task item = localItems.get(i);
+                    	 if (!uiFilter.apply(item)) {
+                    		 continue;
+                    	 } else if (constraint == null || constraint == "") {
+                    		 filteredItems.add(item);
+                    	 } else if (item.getText().contains(constraint) && uiFilter.apply(item)) {
  							filteredItems.add(item);
  						}
                     }
-
 					results.count = filteredItems.size();
 					results.values = filteredItems;
 
-				}
 				}
 				return results;
 			}
