@@ -75,6 +75,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.todotxt.todotxttouch.task.FilterFactory;
@@ -164,7 +165,7 @@ OnSharedPreferenceChangeListener {
 					finish();
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_UPDATE_UI)) {
-					updateSyncUI();
+					setFilteredTasks(false);
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_SYNC_CONFLICT)) {
 					handleSyncConflict();
@@ -290,6 +291,12 @@ OnSharedPreferenceChangeListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+		
+	    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	    SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+	    searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -644,7 +651,6 @@ OnSharedPreferenceChangeListener {
 			syncClient(false);
 			break;
 		case R.id.search:
-			onSearchRequested();
 			break;
 		case R.id.preferences:
 			startPreferencesActivity();
@@ -998,16 +1004,6 @@ OnSharedPreferenceChangeListener {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		m_pos = position;
 		openContextMenu(getListView());
-	}
-
-	private void updateSyncUI() {
-		// hide refresh button
-		findViewById(R.id.btn_title_refresh).setVisibility(
-				m_app.m_pulling || m_app.m_pushing ? View.GONE : View.VISIBLE);
-		// show moving refresh indicator
-		findViewById(R.id.title_refresh_progress).setVisibility(
-				m_app.m_pulling || m_app.m_pushing ? View.VISIBLE : View.GONE);
-		setFilteredTasks(false);
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> implements Filterable {

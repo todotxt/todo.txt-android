@@ -23,14 +23,13 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 <manifest package="com.todotxt.todotxttouch"
     android:versionCode="32"
-    android:versionName="1.0.2" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:versionName="1.0.3" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="4" />
+        android:minSdkVersion="15"
+        android:targetSdkVersion="15" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -75,7 +74,7 @@ You should have received a copy of the GNU General Public License along with Tod
             </intent-filter>
         </activity>
         <activity
-            android:name=".Filter"
+            android:name=".FilterActivity"
             android:label="Filter"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
@@ -121,7 +120,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity
             android:name=".TodoTxtTouch"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.Holo" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
