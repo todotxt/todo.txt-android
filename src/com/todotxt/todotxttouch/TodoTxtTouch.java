@@ -135,16 +135,9 @@ OnSharedPreferenceChangeListener {
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 		this.taskBag = m_app.getTaskBag();
-		/*
-		 * Make a copy of the taskBag. The TaskAdapter is quite buggy if the underlying
-		 * data changes
-		 */
-		ArrayList<Task> copy = new ArrayList<Task>();
-		for (Task t : taskBag.getTasks()) {
-			copy.add(t);
-		}
+
 		m_adapter = new TaskAdapter(this, R.layout.list_item,
-				copy, getLayoutInflater(), getListView());
+				taskBag.getTasks(), getLayoutInflater(), getListView());
 
 		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
@@ -1020,7 +1013,6 @@ OnSharedPreferenceChangeListener {
 	public class TaskAdapter extends ArrayAdapter<Task> implements Filterable {
 
 		private ArrayList<Task> items = new ArrayList<Task>();
-		private ArrayList<Task> originalItems = new ArrayList<Task>();
 		private final Object mLock = new Object();
 		private LayoutInflater m_inflater;
 		private TextFilter m_textFilter;
@@ -1030,22 +1022,12 @@ OnSharedPreferenceChangeListener {
 				List<Task> tasks, LayoutInflater inflater, ListView view) {
 			super(context, textViewResourceId, tasks);
 			this.items = (ArrayList<Task>) tasks;
-			cloneItems(items);
 			this.m_inflater = inflater;
 			this.list = view;
 
 		}
 		
-	    protected void cloneItems(ArrayList<Task> items) {
-	        for (Iterator<Task> iterator = items.iterator(); iterator
-	        .hasNext();) {
-	            Task t = (Task) iterator.next();
-	            originalItems.add(t);
-	        }
-	    }
-	    
-
-		@Override
+	    @Override
 		public int getCount() {
 	        synchronized(mLock) {
 	            return items!=null ? items.size() : 0; 
@@ -1146,7 +1128,7 @@ OnSharedPreferenceChangeListener {
 					synchronized(mLock) {
 					final ArrayList<Task> filteredItems  = new ArrayList<Task>();
 					final ArrayList<Task> localItems = new ArrayList<Task>();
-					localItems.addAll(originalItems);
+					localItems.addAll(taskBag.getTasks());
                     final int count = localItems.size();
             		com.todotxt.todotxttouch.task.Filter<Task> uiFilter = FilterFactory.generateAndFilter(
             				m_prios, m_contexts, m_projects, m_search, false);
@@ -1154,11 +1136,10 @@ OnSharedPreferenceChangeListener {
                     	final Task item = localItems.get(i);
                     	 if (!uiFilter.apply(item)) {
                     		 continue;
-                    	 } else if (constraint == null || constraint == "") {
+                    	 } else if (constraint == null || constraint.length()==0 ||
+                    			    item.getText().contains(constraint)) {
                     		 filteredItems.add(item);
-                    	 } else if (item.getText().contains(constraint) && uiFilter.apply(item)) {
- 							filteredItems.add(item);
- 						}
+                    	 } 
                     }
 					results.count = filteredItems.size();
 					results.values = filteredItems;
