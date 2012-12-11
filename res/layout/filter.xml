@@ -55,42 +55,11 @@ You should have received a copy of the GNU General Public License along with Tod
 
 	</LinearLayout>
 
-	<LinearLayout android:id="@+id/priorities"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-	>
 
-		<ListView android:id="@+id/prioritieslv" 
-		    android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-            android:cacheColorHint="#00000000" />
 
-	</LinearLayout>
 
-	<LinearLayout android:id="@+id/projects"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-     >
 
-		<ListView android:id="@+id/projectslv" 
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent" 
-			android:cacheColorHint="#00000000" />
 
-	</LinearLayout>
-
-	<LinearLayout android:id="@+id/contexts"
-		android:layout_above="@id/buttons"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-    >
-
-		<ListView android:id="@+id/contextslv" 
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-            android:cacheColorHint="#00000000" />
-
-	</LinearLayout>
 
 	<LinearLayout android:id="@+id/search"
         android:layout_above="@id/buttons"

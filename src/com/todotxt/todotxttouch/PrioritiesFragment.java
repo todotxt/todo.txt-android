@@ -12,15 +12,16 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class PriorityFragment extends Fragment {
+public class PrioritiesFragment extends Fragment {
 
 	private ArrayList<String> priosArr = null;
+	private View list = null;
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
 	
-		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.tab_properties, container, false);
+		LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.tab_priorities, container, false);
 		
 		final ListView priorities = (ListView) layout.findViewById(R.id.prioritieslv);
 		priorities.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);

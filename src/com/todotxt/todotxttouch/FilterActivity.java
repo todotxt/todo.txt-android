@@ -36,14 +36,21 @@ public class FilterActivity extends FragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
-	private PriorityFragment prioritiesFragment;
+	private PrioritiesFragment prioritiesFragment;
+	private ProjectsFragment projectsFragment;
+	private ContextsFragment contextsFragment;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_filter);
 
-		prioritiesFragment = new PriorityFragment();
+		prioritiesFragment = new PrioritiesFragment();
 		prioritiesFragment.setArguments(getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES));
+		projectsFragment = new ProjectsFragment();
+		projectsFragment.setArguments(getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS));
+		contextsFragment = new ContextsFragment();
+		contextsFragment.setArguments(getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS));
 		
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
@@ -121,9 +128,12 @@ public class FilterActivity extends FragmentActivity implements
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
-			if (position == 0) {
-				return prioritiesFragment;
-			}
+			switch (position) {
+			case 0: return prioritiesFragment;
+			case 1: return projectsFragment;
+			case 2: return contextsFragment;
+			}	
+
 			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
