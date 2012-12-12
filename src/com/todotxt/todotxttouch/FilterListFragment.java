@@ -3,7 +3,7 @@ package com.todotxt.todotxttouch;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,35 +14,48 @@ import android.widget.ListView;
 
 public class FilterListFragment extends Fragment {
 
-	private ArrayList<String> items = null;
-	private ArrayList<String> selectedItems = null;
+	private ArrayList<String> items;
+	private ArrayList<String> selectedItems;
 	private ListView lv;
 	private int layoutId;
 	private int viewId;
 
-	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
- 
-	
+	public void onCreate (Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// We have state we need to keep over config changes
+		setRetainInstance(true);
+	}
+
+	public void onPause () {
+		selectedItems.clear();
+		selectedItems.addAll(getFilters());
+		super.onPause();
+	}
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+
+
 		LinearLayout layout = (LinearLayout) inflater.inflate(layoutId, container, false);
-		
+
 		lv = (ListView) layout.findViewById(viewId);
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		
+
 		lv.setAdapter(new ArrayAdapter<String>(getActivity(),
 				R.layout.simple_list_item_multiple_choice, items));
+
+
 		for (int i = 0 ; i< items.size() ; i++) {
 			if (selectedItems.contains(items.get(i))) {
 				lv.setItemChecked(i,true);
 			}
 		}
-
 		return layout;
-    }
+	}
 
 	public ArrayList<String> getFilters() {
-		
+
 		ArrayList<String> arr = new ArrayList<String>();
 		if(lv==null) {
 			// Tab was not displayed so no selections made
@@ -63,7 +76,9 @@ public class FilterListFragment extends Fragment {
 	public void setArguments(ArrayList<String> items, ArrayList<String> selectedItems,
 			int layoutId, int listId ) {
 		this.items = items;
-		this.selectedItems  = selectedItems;
+		if (this.selectedItems == null ) { 
+			this.selectedItems  = selectedItems;
+		}
 		this.layoutId = layoutId;
 		this.viewId = listId;
 	}

@@ -1,8 +1,5 @@
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".FilterActivity">
-    
-</android.support.v4.view.ViewPager>
+<LinearLayout android:layout_gravity="center" android:layout_height="fill_parent" android:layout_width="fill_parent" android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout android:id="@+id/fragment_container" android:layout_height="match_parent" android:layout_width="match_parent">
+ 
+ </LinearLayout>
+</LinearLayout>
