@@ -33,11 +33,11 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,14 +62,44 @@ public class AddTask extends Activity {
 
 	private TaskBag taskBag;
 
-	private TextView titleBarLabel;
-
 	private String share_text;
 
 	private Spinner priorities;
 	private Spinner contexts;
 	private Spinner projects;
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.add_task, menu);
+
+		if (m_backup!=null) {
+			MenuItem m = menu.findItem(R.id.menu_add_task);
+			if (m!=null) {
+				m.setTitle(R.string.update);
+				m.setIcon(R.drawable.content_save);
+			}
+		}
+		return true;
+	}
+	
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_add_task:
+			// strip line breaks
+			final EditText textInputField = (EditText) findViewById(R.id.taskText);
+			final String input = textInputField.getText().toString()
+					.replaceAll("\\r\\n|\\r|\\n", " ");
+			addEditAsync(input);
+			break;
+		case R.id.menu_add_task_help:
+			Intent intent = new Intent(this.getApplicationContext(),HelpActivity.class);
+			startActivity(intent);
+			break;
+		}
+		return true;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,9 +128,6 @@ public class AddTask extends Activity {
 			Log.d(TAG, share_text);
 		}
 
-		// title bar label
-		titleBarLabel = (TextView) findViewById(R.id.title_bar_label);
-
 		// text
 		final EditText textInputField = (EditText) findViewById(R.id.taskText);
 		textInputField.setGravity(Gravity.TOP);
@@ -110,19 +137,14 @@ public class AddTask extends Activity {
 		}
 		
 		Task iniTask = null;
-
+		setTitle(R.string.task);
 		Task task = (Task) getIntent().getSerializableExtra(
 				Constants.EXTRA_TASK);
 		if (task != null) {
 			m_backup = task;
 			iniTask = m_backup;
 			textInputField.setText(task.inFileFormat());
-			setTitle(R.string.updatetask);
-			titleBarLabel.setText(R.string.updatetask);
 		} else {
-			setTitle(R.string.addtask);
-			titleBarLabel.setText(R.string.addtask);
-
 			if (textInputField.getText().length() == 0)
 			{
 				@SuppressWarnings("unchecked")
@@ -253,30 +275,6 @@ public class AddTask extends Activity {
 			}
 		});
 
-		// cancel
-		Button cancel = (Button) findViewById(R.id.cancel);
-		cancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
-
-		// add
-		Button addBtn = (Button) findViewById(R.id.addTask);
-		if (m_backup != null) {
-			addBtn.setText(R.string.update);
-		}
-		addBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// strip line breaks
-				final String input = textInputField.getText().toString()
-						.replaceAll("\\r\\n|\\r|\\n", " ");
-				addEditAsync(input);
-			}
-
-		});
 		/*
 		 * After adding contexts and projects from the filter put cursor back at the beginning
 		 */
@@ -352,11 +350,5 @@ public class AddTask extends Activity {
 		if (m_ProgressDialog != null) {
 			m_ProgressDialog.dismiss();
 		}
-	}
-
-	/** Handle help message **/
-	public void onHelpClick(View v) {
-		Intent intent = new Intent(v.getContext(), HelpActivity.class);
-		startActivity(intent);
 	}
 }

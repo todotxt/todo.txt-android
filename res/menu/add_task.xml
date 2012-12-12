@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_add_task"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        android:title="@string/add"
+    	android:icon="@drawable/content_new"
+	/>
+    <item
+        android:id="@+id/menu_add_task_help"
+        android:orderInCategory="100"
+        android:title="@string/add_task_help_btn"
+ 	/>
+</menu>

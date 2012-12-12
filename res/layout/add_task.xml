@@ -25,17 +25,10 @@ You should have received a copy of the GNU General Public License along with Tod
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/home_root" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
-
-	<LinearLayout style="@style/TitleBar">
-		<TextView style="@style/TitleBarLabel" android:id="@+id/title_bar_label"
-			android:text="@string/newtask" />
-	</LinearLayout>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
 	
-	<LinearLayout style="@style/ActionBar"
-		android:id="@+id/subtitle_bar"
-		android:visibility="visible">
-		<LinearLayout style="@style/ActionBarButtonSet"
-			android:scrollbars="horizontal">
 			<Spinner style="@style/Spinner"
 				android:id="@+id/priority_spinner"				
 				android:prompt="@string/priority_prompt"
@@ -49,54 +42,12 @@ You should have received a copy of the GNU General Public License along with Tod
 				android:prompt="@string/context_prompt"
 			/>
 			
-		</LinearLayout>
-		<View style="@style/TitleBarSpring" />
-		<Button style="@style/ActionBarButton"
-			android:id="@+id/help_btn"
-			android:text="@string/add_task_help_btn" 
-			android:onClick="onHelpClick"/>
 	</LinearLayout>
-	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator"/>
-
+	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator" />
+	
 	<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
 		android:layout_width="fill_parent"
 		android:layout_height="0dip"
 		android:layout_weight="1"
-		android:padding="5dip" android:capitalize="sentences" />
-	
-
-	<LinearLayout android:orientation="horizontal" 
-		android:layout_width="fill_parent"
-		android:layout_height="0dip"
-		android:visibility="invisible">
-		<Spinner android:id="@+id/priorities" android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:prompt="@string/priority_prompt"/>
-		<Spinner android:id="@+id/projects" android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:prompt="@string/project_prompt" />
-		<Spinner android:id="@+id/contexts" android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:prompt="@string/context_prompt" />
-	</LinearLayout>
-	
-	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator"/>
-	
-	<LinearLayout android:orientation="horizontal" 
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:padding="3dip">
-		
-		<Button android:id="@+id/addTask" 
-			android:layout_width="fill_parent" 
-			android:layout_height="wrap_content"
-			android:text="@string/add" 
-			android:layout_weight="1"/>
-	
-		<Button android:id="@+id/cancel" 
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" 
-			android:text="@string/cancel" 
-			android:layout_weight="1"/>
-	</LinearLayout>
+		android:padding="5dip" android:inputType="textCapSentences" />
 </LinearLayout>

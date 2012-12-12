@@ -26,9 +26,9 @@ You should have received a copy of the GNU General Public License along with Tod
 <shape xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:shape="rectangle"> 
     <gradient 
-		android:startColor="#40999999" 
-		android:centerColor="#ff999999"
-		android:endColor="#40999999" 
+		android:startColor="@android:color/holo_blue_light" 
+		android:centerColor="@android:color/holo_blue_dark"
+		android:endColor="@android:color/holo_blue_light" 
 		 
 		android:type="linear"
 		android:angle="45" /> 

@@ -42,7 +42,7 @@ public class FilterActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_filter);
+		setContentView(R.layout.filter);
 
 		prioritiesFragment = new FilterListFragment();
 		prioritiesFragment.setArguments(
@@ -99,7 +99,7 @@ public class FilterActivity extends FragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_filter, menu);
+		getMenuInflater().inflate(R.menu.filter, menu);
 		return true;
 	}
 
