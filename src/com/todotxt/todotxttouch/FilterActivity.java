@@ -25,6 +25,7 @@ public class FilterActivity extends Activity {
 	private FilterListFragment prioritiesFragment;
 	private FilterListFragment projectsFragment;
 	private FilterListFragment contextsFragment;
+	private ActionBar actionbar;
 
 	@Override
 	protected void onDestroy () {
@@ -35,7 +36,7 @@ public class FilterActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.filter);
 
-		final ActionBar actionbar = getActionBar();
+		actionbar = getActionBar();
 		ActionBar.Tab tab = null;
 		actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -68,7 +69,9 @@ public class FilterActivity extends Activity {
 				.setTabListener(new MyTabsListener(projectsFragment)));
 		actionbar.addTab(actionbar.newTab().setText(R.string.filter_tab_priorities)
 				.setTabListener(new MyTabsListener(prioritiesFragment)));
+
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,6 +90,19 @@ public class FilterActivity extends Activity {
 		return true;
 	}
 
+	// Safe the active tab on configuration changes
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		savedInstanceState.putInt("active_tab", actionbar.getSelectedNavigationIndex());
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		actionbar.setSelectedNavigationItem(savedInstanceState.getInt("active_tab"));
+	}
+	
 	private void applyFilter() {
 		ArrayList<String> appliedFilters;
 		Intent data = new Intent();
@@ -115,8 +131,7 @@ public class FilterActivity extends Activity {
 
 		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-			//	ft.replace(R.id.fragment_container, fragment);
-		}
+		}		
 
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
@@ -125,7 +140,6 @@ public class FilterActivity extends Activity {
 
 		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-			//	ft.remove(fragment);
 		}
 
 	}
