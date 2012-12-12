@@ -22,8 +22,13 @@
  */
 package com.todotxt.todotxttouch;
 
+import java.util.List;
+
 import android.app.FragmentManager;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
@@ -32,23 +37,61 @@ public class Preferences extends PreferenceActivity {
 
 	public static final int RESULT_SYNC_LIST = 2;
 
-	private FragmentManager preferences;
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		preferences = getFragmentManager();
-		preferences.beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
-
+	
 	}
-	public static class MyPreferenceFragment extends PreferenceFragment
+	
+	@Override
+	public void onBuildHeaders(List<Header> target) {
+		loadHeadersFromResource(R.xml.preference_headers, target);
+	}
+	
+	public static class TodoTxtPrefFragment extends PreferenceFragment
 	{
 		@Override
 		public void onCreate(final Bundle savedInstanceState)
 		{
 			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.xml.preferences);
+			addPreferencesFromResource(R.xml.todotxt_preferences);
 		}
 	}	
+	public static class ArchivePrefFragment extends PreferenceFragment
+	{
+		@Override
+		public void onCreate(final Bundle savedInstanceState)
+		{
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.archive_preferences);
+		}
+	}
+	public static class DropboxPrefFragment extends PreferenceFragment
+	{
+		@Override
+		public void onCreate(final Bundle savedInstanceState)
+		{
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.dropbox_preferences);
+		}
+	}
+	public static class AboutPrefFragment extends PreferenceFragment
+	{
+		@Override
+		public void onCreate(final Bundle savedInstanceState)
+		{
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.about_preferences);
+			PreferenceActivity act = (PreferenceActivity) getActivity();
+			PackageInfo packageInfo;
+			try {
+				packageInfo = act.getPackageManager().getPackageInfo(act.getPackageName(),
+						0);
+				Preference versionPref = (Preference) findPreference("app_version");
+				versionPref.setSummary("v" + packageInfo.versionName);
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
