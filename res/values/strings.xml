@@ -61,7 +61,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <!-- preferences -->
     <string name="ARCHIVE_settings_header">done.txt</string>
-    <string name="ARCHIVE_settings_summary">Settings for acrchiving completed tasks in done.txt</string>
+    <string name="ARCHIVE_settings_summary">Settings for archiving completed tasks in done.txt</string>
     <string name="auto_archive_pref_key">todotxtautoarchive</string>
     <string name="auto_archive_pref_title">Auto archive</string>
     <string name="auto_archive_pref_summary">Automatically archive tasks to done.txt on completion.</string>
