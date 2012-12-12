@@ -153,6 +153,8 @@ OnSharedPreferenceChangeListener {
 					archiveTasks();
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_ACTION_LOGOUT)) {
+					Log.v(TAG, "Logging out from Dropbox");
+					m_app.getRemoteClientManager().getRemoteClient().deauthenticate();
 					Intent i = new Intent(context, LoginScreen.class);
 					startActivity(i);
 					finish();
@@ -754,10 +756,8 @@ OnSharedPreferenceChangeListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(data==null) {
-			return;
-		}
-		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + " i=" + data.getExtras());
+
+		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + ", requestCode=" + requestCode);
 		if (requestCode == REQUEST_FILTER) {
 			if (resultCode == Activity.RESULT_OK) {
 				Log.v(TAG, "filters were applied");
@@ -771,10 +771,11 @@ OnSharedPreferenceChangeListener {
 				setFilteredTasks(false);
 			}
 		} else if (requestCode == REQUEST_PREFERENCES) {
-			if (resultCode == Preferences.RESULT_SYNC_LIST) {
+			if (resultCode == Preferences.RESULT_LOGOUT) {
 				initializeTasks();
 			}
 		} else if (requestCode == REQUEST_LOGIN) {
+			
 
 		}
 	}
@@ -830,7 +831,6 @@ OnSharedPreferenceChangeListener {
 				}
 			});
 			d.setOnCancelListener(new OnCancelListener() {
-
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					removeDialog(R.id.priority);

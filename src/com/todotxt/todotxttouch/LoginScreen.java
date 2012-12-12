@@ -53,9 +53,6 @@ public class LoginScreen extends Activity {
 
 		m_app = (TodoApplication) getApplication();
 
-		// supposed to help with the banding on the green background
-		findViewById(R.id.loginbackground).getBackground().setDither(true);
-
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGIN");
 		m_broadcastReceiver = new BroadcastReceiver() {

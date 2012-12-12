@@ -24,22 +24,34 @@ package com.todotxt.todotxttouch;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+import android.util.Log;
 
 public class Preferences extends PreferenceActivity {
 	final static String TAG = Preferences.class.getSimpleName();
+	public static final int RESULT_LOGOUT = RESULT_FIRST_USER + 1 ;
+	public static final int RESULT_ARCHIVE = RESULT_FIRST_USER + 2 ;
 
-	public static final int RESULT_SYNC_LIST = 2;
+	private void broadcastIntentAndClose(String intent, int result) {
+		
+		Intent broadcastIntent = new Intent(intent);
+		sendBroadcast(broadcastIntent);
+		
+		// Close preferences screen
+		setResult(result);
+		finish();
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
 	}
 	
 	@Override
@@ -64,6 +76,17 @@ public class Preferences extends PreferenceActivity {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.archive_preferences);
 		}
+		
+		@Override
+		public boolean onPreferenceTreeClick (PreferenceScreen preferenceScreen, Preference preference) {
+			if(preference.getKey().equals("archive_now")) {
+				Log.v("PREFERENCES", "Archiving completed items from preferences");
+				((Preferences)this.getActivity()).broadcastIntentAndClose(
+						Constants.INTENT_ACTION_ARCHIVE,
+						Preferences.RESULT_ARCHIVE);			
+			}
+			return true;
+		}
 	}
 	public static class DropboxPrefFragment extends PreferenceFragment
 	{
@@ -72,6 +95,17 @@ public class Preferences extends PreferenceActivity {
 		{
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.dropbox_preferences);
+		}
+		
+		@Override
+		public boolean onPreferenceTreeClick (PreferenceScreen preferenceScreen, Preference preference) {
+			if(preference.getKey().equals("logout_dropbox")) {
+				Log.v("PREFERENCES", "Logging out from Dropbox");				
+				((Preferences)this.getActivity()).broadcastIntentAndClose(
+						Constants.INTENT_ACTION_LOGOUT,
+						Preferences.RESULT_LOGOUT);			
+			}
+			return true;
 		}
 	}
 	public static class AboutPrefFragment extends PreferenceFragment
