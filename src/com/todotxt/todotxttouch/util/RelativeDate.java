@@ -8,7 +8,7 @@ package com.todotxt.todotxttouch.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import android.content.Context;
 
@@ -17,7 +17,7 @@ import com.todotxt.todotxttouch.TodoApplication;
 
 public class RelativeDate {
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 	private static Context context = TodoApplication.getAppContetxt();
 	
 	
@@ -87,7 +87,7 @@ public class RelativeDate {
 
 	public static String getRelativeDate(Calendar calendar) {
 
-		Calendar now = GregorianCalendar.getInstance();
+		Calendar now = Calendar.getInstance();
 
 		int years = calendar.get(Calendar.YEAR) - now.get(Calendar.YEAR);
 		int months = calendar.get(Calendar.MONTH) - now.get(Calendar.MONTH);
@@ -112,7 +112,7 @@ public class RelativeDate {
 	 */
 
 	public static String getRelativeDate(Date date) {
-		Calendar converted = GregorianCalendar.getInstance();
+		Calendar converted = Calendar.getInstance();
 		converted.setTime(date);
 		return getRelativeDate(converted);
 	}

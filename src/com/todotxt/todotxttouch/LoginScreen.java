@@ -70,6 +70,7 @@ public class LoginScreen extends Activity {
 
 		m_LoginButton = (Button) findViewById(R.id.login);
 		m_LoginButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				startLogin();
 			}

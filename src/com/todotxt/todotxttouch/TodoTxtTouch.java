@@ -22,7 +22,6 @@
  */
 package com.todotxt.todotxttouch;
 
-import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -412,6 +411,7 @@ OnSharedPreferenceChangeListener {
 				final Task task = m_adapter.getItem(pos);
 				dialog.dismiss();
 				new AsyncTask<Object, Void, Boolean>() {
+					@Override
 					protected void onPreExecute() {
 						m_ProgressDialog = showProgressDialog("Prioritizing Task");
 					}
@@ -433,6 +433,7 @@ OnSharedPreferenceChangeListener {
 						}
 					}
 
+					@Override
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 						.dismissProgressDialog(true);
@@ -460,6 +461,7 @@ OnSharedPreferenceChangeListener {
 			public void onClick(DialogInterface dialog, int which) {
 				final Task task = m_adapter.getItem(pos);
 				new AsyncTask<Object, Void, Boolean>() {
+					@Override
 					protected void onPreExecute() {
 						m_ProgressDialog = showProgressDialog("Marking Task Not Complete");
 					}
@@ -477,6 +479,7 @@ OnSharedPreferenceChangeListener {
 						}
 					}
 
+					@Override
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 						.dismissProgressDialog(true);
@@ -506,6 +509,7 @@ OnSharedPreferenceChangeListener {
 			// Log.v(TAG, "Completing task with this text: " + task.getText());
 			new AsyncTask<Object, Void, Boolean>() {
 
+				@Override
 				protected void onPreExecute() {
 					m_ProgressDialog = showProgressDialog("Marking Task Complete");
 				}
@@ -527,6 +531,7 @@ OnSharedPreferenceChangeListener {
 					}
 				}
 
+				@Override
 				protected void onPostExecute(Boolean result) {
 					TodoTxtTouch.currentActivityPointer
 					.dismissProgressDialog(true);
@@ -549,7 +554,7 @@ OnSharedPreferenceChangeListener {
 	private void editTaskAt(final int pos) {
 		final Task backup = m_adapter.getItem(pos);
 		Intent intent = new Intent(this, AddTask.class);
-		intent.putExtra(Constants.EXTRA_TASK, (Serializable) backup);
+		intent.putExtra(Constants.EXTRA_TASK, backup);
 		startActivity(intent);
 	}
 
@@ -561,6 +566,7 @@ OnSharedPreferenceChangeListener {
 
 				new AsyncTask<Object, Void, Boolean>() {
 
+					@Override
 					protected void onPreExecute() {
 						m_ProgressDialog = showProgressDialog("Deleting");
 					}
@@ -577,6 +583,7 @@ OnSharedPreferenceChangeListener {
 						}
 					}
 
+					@Override
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 						.dismissProgressDialog(true);
@@ -601,6 +608,7 @@ OnSharedPreferenceChangeListener {
 	private void archiveTasks() {
 		new AsyncTask<Void, Void, Boolean>() {
 
+			@Override
 			protected void onPreExecute() {
 				m_ProgressDialog = showProgressDialog("Archiving Tasks");
 			}
@@ -616,6 +624,7 @@ OnSharedPreferenceChangeListener {
 				}
 			}
 
+			@Override
 			protected void onPostExecute(Boolean result) {
 				TodoTxtTouch.currentActivityPointer.dismissProgressDialog(true);
 				if (result) {
@@ -807,6 +816,7 @@ OnSharedPreferenceChangeListener {
 			d = Util.createMultiChoiceDialog(this,
 					pStrs.toArray(new String[size]), values, null, null,
 					new OnMultiChoiceDialogListener() {
+
 				@Override
 				public void onClick(boolean[] selected) {
 					m_prios.clear();
@@ -820,6 +830,7 @@ OnSharedPreferenceChangeListener {
 				}
 			});
 			d.setOnCancelListener(new OnCancelListener() {
+
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					removeDialog(R.id.priority);
@@ -833,6 +844,7 @@ OnSharedPreferenceChangeListener {
 			upDownChoice.setMessage(R.string.sync_dialog_msg);
 			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
 					new DialogInterface.OnClickListener() {
+				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					sendBroadcast(new Intent(
 							Constants.INTENT_START_SYNC_TO_REMOTE)
@@ -843,6 +855,7 @@ OnSharedPreferenceChangeListener {
 			});
 			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
 					new DialogInterface.OnClickListener() {
+				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					sendBroadcast(new Intent(
 							Constants.INTENT_START_SYNC_FROM_REMOTE)
@@ -859,6 +872,7 @@ OnSharedPreferenceChangeListener {
 			upDownChoice.setMessage(R.string.sync_conflict_dialog_msg);
 			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
 					new DialogInterface.OnClickListener() {
+				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					Log.v(TAG, "User selected PUSH");
 					sendBroadcast(new Intent(
@@ -871,6 +885,7 @@ OnSharedPreferenceChangeListener {
 			});
 			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
 					new DialogInterface.OnClickListener() {
+				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 					Log.v(TAG, "User selected PULL");
 					sendBroadcast(new Intent(
@@ -1015,6 +1030,7 @@ OnSharedPreferenceChangeListener {
 			}
 		}
 
+		@Override
 		public Task getItem(int item) {
 			Task task = null;
 			synchronized(mLock) {
@@ -1119,7 +1135,7 @@ OnSharedPreferenceChangeListener {
 					//Add the items back in
 					for (Iterator<Task> iterator = localItems.iterator(); iterator
 							.hasNext();) {
-						Task t = (Task) iterator.next();
+						Task t = iterator.next();
 						add(t);
 					}
 				}//end synchronized

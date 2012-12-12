@@ -285,6 +285,7 @@ public class AddTask extends Activity {
 
 	private void addEditAsync(final String input) {
 		new AsyncTask<Object, Void, Boolean>() {
+			@Override
 			protected void onPreExecute() {
 				m_ProgressDialog = ProgressDialog.show(AddTask.this,
 						getTitle(), "Please wait...", true);
@@ -311,6 +312,7 @@ public class AddTask extends Activity {
 				}
 			}
 
+			@Override
 			protected void onPostExecute(Boolean result) {
 				if (result) {
 					String res = m_backup != null ? getString(R.string.updated_task)

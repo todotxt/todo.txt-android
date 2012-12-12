@@ -70,6 +70,7 @@ public interface RemoteClient {
 	 *             removed. Use {@link RemoteClient#isAuthenticated()} instead.
 	 * @return true if we have authToken, false if we need login information
 	 */
+	@Deprecated
 	boolean isLoggedIn();
 
 	/**

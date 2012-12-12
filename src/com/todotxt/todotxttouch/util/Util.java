@@ -182,6 +182,7 @@ public class Util {
 		}
 		builder.setMultiChoiceItems(keys, values,
 				new DialogInterface.OnMultiChoiceClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog,
 							int whichButton, boolean isChecked) {
 						res[whichButton] = isChecked;
@@ -189,6 +190,7 @@ public class Util {
 				});
 		builder.setPositiveButton(R.string.ok,
 				new DialogInterface.OnClickListener() {
+					@Override
 					public void onClick(DialogInterface dialog, int whichButton) {
 						listener.onClick(res);
 					}

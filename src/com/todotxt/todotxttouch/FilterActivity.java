@@ -103,6 +103,7 @@ public class FilterActivity extends FragmentActivity implements
 		return true;
 	}
 
+	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_apply_filter:
