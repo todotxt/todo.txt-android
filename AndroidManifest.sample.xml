@@ -49,7 +49,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
             android:configChanges="orientation|keyboard"
-            android:exported="false"
+            android:exported="true"
             android:launchMode="singleTask" >
             <intent-filter>
 
