@@ -45,6 +45,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:allowBackup="false"
         android:icon="@drawable/todotxt_touch_icon"
         android:label="@string/app_label"
+        uiOptions="splitActionBarWhenNarrow"
         android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
