@@ -49,5 +49,5 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_width="fill_parent"
 		android:layout_height="0dip"
 		android:layout_weight="1"
-		android:padding="5dip" android:inputType="textCapSentences" />
+		android:padding="5dip" android:inputType="textCapSentences|textMultiLine" />
 </LinearLayout>
