@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import nl.mpcjanssen.todotxtholo.Constants;
 import nl.mpcjanssen.todotxtholo.remote.PullTodoResult;
 import nl.mpcjanssen.todotxtholo.remote.RemoteClientManager;
 import nl.mpcjanssen.todotxtholo.util.TaskIo;
@@ -102,28 +103,30 @@ class TaskBagImpl implements TaskBag {
 
 	@Override
 	public List<Task> getTasks() {
-		return getTasks(null, null);
+		return getTasks(null, Constants.SORT_REVERSE);
 	}
 
 	@Override
-	public List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator) {
+	public List<Task> getTasks(Filter<Task> filter, int comparator) {
 		ArrayList<Task> localTasks = new ArrayList<Task>();
-		if (filter != null) {
+		
 			for (Task t : tasks) {
-				if (filter.apply(t)) {
-					localTasks.add(t);
-				}
+				if (filter != null) {
+					if (!filter.apply(t)) {
+						continue;
+					} else {
+						localTasks.add(0,t);
+					}
 			}
-		} else {
-			localTasks.addAll(tasks);
+		} 
+			
+		switch(comparator) {
+		case Constants.SORT_ORIGINAL:
+			break;
+		case Constants.SORT_REVERSE:
+			Collections.reverse(localTasks);
+			break;
 		}
-
-		if (comparator == null) {
-			comparator = Sort.PRIORITY_DESC.getComparator();
-		}
-
-		Collections.sort(localTasks, comparator);
-
 		return localTasks;
 	}
 

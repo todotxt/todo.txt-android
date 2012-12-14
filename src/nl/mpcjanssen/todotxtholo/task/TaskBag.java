@@ -45,7 +45,7 @@ public interface TaskBag {
 
 	List<Task> getTasks();
 
-	List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator);
+	List<Task> getTasks(Filter<Task> filter, int comparator);
 
 	int size();
 

@@ -82,7 +82,8 @@ public class TaskIo {
 				while ((line = in.readLine()) != null) {
 					line = line.trim();
 					if (line.length() > 0) {
-						items.add(new Task(counter, line));
+						//items.add(new Task(counter, line));
+						items.add(0, new Task(counter, line));
 					}
 					counter++;
 				}

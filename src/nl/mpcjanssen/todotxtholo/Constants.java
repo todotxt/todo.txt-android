@@ -23,6 +23,9 @@
 package nl.mpcjanssen.todotxtholo;
 
 public class Constants {
+	
+	public static final int SORT_ORIGINAL = 0;
+	public static final int SORT_REVERSE = 1;
 
 	public static final String PREF_FIRSTRUN = "firstrun";
 	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";

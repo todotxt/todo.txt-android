@@ -31,7 +31,6 @@ import java.util.ListIterator;
 
 import nl.mpcjanssen.todotxtholo.task.FilterFactory;
 import nl.mpcjanssen.todotxtholo.task.Priority;
-import nl.mpcjanssen.todotxtholo.task.Sort;
 import nl.mpcjanssen.todotxtholo.task.Task;
 import nl.mpcjanssen.todotxtholo.task.TaskBag;
 import nl.mpcjanssen.todotxtholo.util.Strings;
@@ -110,7 +109,7 @@ OnSharedPreferenceChangeListener {
 	private String m_search;
 
 	private int m_pos = Constants.INVALID_POSITION;
-	private Sort sort = Sort.PRIORITY_DESC;
+	private int sort = Constants.SORT_REVERSE;
 	private BroadcastReceiver m_broadcastReceiver;
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
@@ -250,7 +249,7 @@ OnSharedPreferenceChangeListener {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt("sort", sort.getId());
+		outState.putInt("sort", sort);
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
 
@@ -266,7 +265,7 @@ OnSharedPreferenceChangeListener {
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
 		super.onRestoreInstanceState(state);
-		sort = Sort.getById(state.getInt("sort"));
+		sort = state.getInt("sort");
 		m_DialogActive = state.getBoolean("DialogActive");
 		m_DialogText = state.getString("DialogText");
 		if (m_DialogActive) {
@@ -677,12 +676,12 @@ OnSharedPreferenceChangeListener {
 
 	private void startSortDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setSingleChoiceItems(R.array.sort, sort.getId(),
+		builder.setSingleChoiceItems(R.array.sort, sort,
 				new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Log.v(TAG, "onClick " + which);
-				sort = Sort.getById(which);
+				sort = which;
 				dialog.dismiss();
 				setFilteredTasks(false);
 			}
@@ -965,8 +964,7 @@ OnSharedPreferenceChangeListener {
 		m_adapter.clear();
 		final ImageButton actionbar_clear = (ImageButton) findViewById(R.id.actionbar_clear);
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
-				m_prios, m_contexts, m_projects, m_search, false), sort
-				.getComparator())) {
+				m_prios, m_contexts, m_projects, m_search, false), sort)) {
 			m_adapter.add(task);
 		}
 
