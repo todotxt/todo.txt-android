@@ -3,6 +3,9 @@ package nl.mpcjanssen.todotxtholo;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import nl.mpcjanssen.todotxtholo.TodoTxtTouch.TodoTxtGestureDetector;
+import nl.mpcjanssen.todotxtholo.task.Task;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
@@ -11,21 +14,24 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ListView;
 
 @SuppressWarnings("unused")
 public class FilterActivity extends Activity {
 
-
-	/**
-	 * The {@link ViewPager} that will host the section contents.
-	 */
 	private FilterListFragment prioritiesFragment;
 	private FilterListFragment projectsFragment;
 	private FilterListFragment contextsFragment;
 	private ActionBar actionbar;
+
+	private GestureDetector gestureDetector;
+
+	private OnTouchListener gestureListener;
 
 	@Override
 	protected void onDestroy () {
@@ -49,17 +55,17 @@ public class FilterActivity extends Activity {
 		prioritiesFragment.setArguments(
 				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES),
 				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED),
-				R.layout.tab_priorities, R.id.prioritieslv);
+				R.layout.tab_priorities, R.id.prioritieslv, actionbar);
 		projectsFragment = new FilterListFragment();
 		projectsFragment.setArguments(
 				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS),
 				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED),
-				R.layout.tab_projects, R.id.projectslv);
+				R.layout.tab_projects, R.id.projectslv, actionbar);
 		contextsFragment = new FilterListFragment();
 		contextsFragment.setArguments(
 				getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS),
 				getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED),
-				R.layout.tab_contexts, R.id.contextslv);
+				R.layout.tab_contexts, R.id.contextslv, actionbar);
 
 
 		// Add the fragments in the action_bar
@@ -69,6 +75,7 @@ public class FilterActivity extends Activity {
 				.setTabListener(new MyTabsListener(projectsFragment)));
 		actionbar.addTab(actionbar.newTab().setText(R.string.filter_tab_priorities)
 				.setTabListener(new MyTabsListener(prioritiesFragment)));
+		
 
 	}
 
@@ -102,7 +109,7 @@ public class FilterActivity extends Activity {
 		super.onRestoreInstanceState(savedInstanceState);
 		actionbar.setSelectedNavigationItem(savedInstanceState.getInt("active_tab"));
 	}
-	
+
 	private void applyFilter() {
 		ArrayList<String> appliedFilters;
 		Intent data = new Intent();
