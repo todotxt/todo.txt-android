@@ -45,7 +45,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:allowBackup="false"
         android:icon="@drawable/todotxt_touch_icon"
         android:label="@string/app_label"
-        uiOptions="splitActionBarWhenNarrow"
+        android:uiOptions="splitActionBarWhenNarrow"
         android:theme="@android:style/Theme.Holo.Light.DarkActionBar">
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
@@ -126,22 +126,6 @@ You should have received a copy of the GNU General Public License along with Tod
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-        <!-- Task list widget -->
-        <receiver
-            android:name="nl.mpcjanssen.todotxtholo.TodoWidgetProvider"
-            android:label="@string/app_label" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="nl.mpcjanssen.todotxtholo.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/todo_widget_provider" />
-        </receiver>
 
         <activity
             android:name="nl.mpcjanssen.todotxtholo.FilterActivity"

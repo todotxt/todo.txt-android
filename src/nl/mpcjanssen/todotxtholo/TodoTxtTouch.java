@@ -74,10 +74,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -964,7 +963,7 @@ OnSharedPreferenceChangeListener {
 		Log.v(TAG, "ListView index " + index + " top " + top);
 
 		m_adapter.clear();
-		final Button actionbar_clear = (Button) findViewById(R.id.actionbar_clear);
+		final ImageButton actionbar_clear = (ImageButton) findViewById(R.id.actionbar_clear);
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
 				m_prios, m_contexts, m_projects, m_search, false), sort
 				.getComparator())) {
@@ -974,8 +973,6 @@ OnSharedPreferenceChangeListener {
 		lv.setSelectionFromTop(index, top);
 
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
-		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
-
 		if (m_contexts.size() + m_projects.size() + m_prios.size() > 0) {
 			String filterTitle = getString(R.string.title_filter_applied);
 			if (m_prios.size()>0) {
@@ -990,13 +987,12 @@ OnSharedPreferenceChangeListener {
 				filterTitle+= " " + getString(R.string.context_prompt);
 			}
 			
-			actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
-			actionbar_clear.setEnabled(true);
+			actionbar_clear.setVisibility(View.VISIBLE);
 			filterText.setText(filterTitle);
 
 		} else {
+			actionbar_clear.setVisibility(View.GONE);
 			filterText.setText("No filter");
-			actionbar_clear.setEnabled(false);
 		}
 
 	}

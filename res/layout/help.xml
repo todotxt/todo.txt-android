@@ -42,7 +42,6 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:id="@+id/close"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:background="@drawable/help_close_button"
 		android:text="@string/close"
 		android:textSize="8pt"
 		android:paddingTop="5dip"

@@ -27,28 +27,22 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:id="@+id/home_root" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-	<LinearLayout style="@style/ActionBar" android:id="@+id/actionbar"
+	<LinearLayout android:id="@+id/actionbar"
+	    android:layout_width="match_parent" android:layout_height="wrap_content"
 		android:visibility="visible">
 
 		<ImageView android:id="@+id/actionbar_icon" android:contentDescription="@string/app_label"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_gravity="center_vertical" android:layout_marginLeft="5dip"
-			android:layout_marginRight="5dip" android:src="@drawable/ic_actionbar_filter" />
+			android:layout_marginRight="5dip" android:src="@drawable/labels_light" />
 
 		<TextView android:id="@+id/filter_text" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_gravity="center_vertical"
-			android:textColor="@color/actionbar_label" />
+			android:layout_height="wrap_content" android:layout_gravity="center_vertical"/>
 		<View style="@style/TitleBarSpring" />
-
-		<LinearLayout style="@style/ActionBarButtonSet"
-			android:scrollbars="horizontal">
-
-			<Button style="@style/ActionBarLeftButton" android:text="@string/refine"
-				android:onClick="onRefineClick" />
-			<ImageView style="@style/ActionBarSeparatorHolo" android:contentDescription="@string/separator" />
-			<Button style="@style/ActionBarRightButton" android:text="@string/clear"
+		<ImageButton style="@style/ActionBarButton"
+			    android:src="@drawable/cancel_light"
+			    android:contentDescription="@string/clear_filter"
 				android:onClick="onClearClick" android:id="@+id/actionbar_clear"/>
-		</LinearLayout>
 	</LinearLayout>
 	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator" />
 

@@ -300,9 +300,11 @@ public class TodoApplication extends Application {
 				syncWithRemote(force_sync);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_TO_REMOTE)) {
+				showToast(R.string.toast_synchronizing);
 				pushToRemote(force_sync, overwrite);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_FROM_REMOTE)) {
+				showToast(R.string.toast_synchronizing);
 				pullFromRemote(force_sync);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_ASYNC_FAILED)) {
