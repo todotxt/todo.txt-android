@@ -24,8 +24,8 @@ package nl.mpcjanssen.todotxtholo;
 
 import nl.mpcjanssen.todotxtholo.remote.RemoteClientManager;
 import nl.mpcjanssen.todotxtholo.remote.RemoteConflictException;
+import nl.mpcjanssen.todotxtholo.task.LocalFileTaskRepository;
 import nl.mpcjanssen.todotxtholo.task.TaskBag;
-import nl.mpcjanssen.todotxtholo.task.TaskBagFactory;
 import nl.mpcjanssen.todotxtholo.util.Util;
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -47,6 +47,7 @@ public class TodoApplication extends Application {
 	public boolean m_pushing = false;
 	private TaskBag taskBag;
 	private BroadcastReceiver m_broadcastReceiver;
+	private LocalFileTaskRepository localTaskRepository;
 	public static Context appContext;
 
 	@Override
@@ -55,7 +56,10 @@ public class TodoApplication extends Application {
 		TodoApplication.appContext = getApplicationContext();
 		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
-		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
+		TaskBag.Preferences taskBagPreferences = new TaskBag.Preferences(
+				m_prefs);
+		localTaskRepository = new LocalFileTaskRepository(taskBagPreferences);		
+		this.taskBag = new TaskBag(taskBagPreferences, localTaskRepository, remoteClientManager);
 
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction(Constants.INTENT_SET_MANUAL);

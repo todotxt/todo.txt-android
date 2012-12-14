@@ -109,7 +109,6 @@ OnSharedPreferenceChangeListener {
 	private String m_search;
 
 	private int m_pos = Constants.INVALID_POSITION;
-	private int sort = Constants.SORT_REVERSE;
 	private BroadcastReceiver m_broadcastReceiver;
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
@@ -127,10 +126,12 @@ OnSharedPreferenceChangeListener {
 
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
+		
+		ArrayList<Task> adaptArray = new ArrayList<Task>();
 		this.taskBag = m_app.getTaskBag();
-
+		
 		m_adapter = new TaskAdapter(this, R.layout.list_item,
-				taskBag.getTasks(), getLayoutInflater(), getListView());
+				adaptArray, getLayoutInflater(), getListView());
 
 		// listen to the ACTION_LOGOUT intent, if heard display LoginScreen
 		// and finish() current activity
@@ -173,7 +174,6 @@ OnSharedPreferenceChangeListener {
 
 		setListAdapter(this.m_adapter);
 
-		// FIXME adapter implements Filterable?
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 
@@ -249,7 +249,6 @@ OnSharedPreferenceChangeListener {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt("sort", sort);
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
 
@@ -265,7 +264,6 @@ OnSharedPreferenceChangeListener {
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
 		super.onRestoreInstanceState(state);
-		sort = state.getInt("sort");
 		m_DialogActive = state.getBoolean("DialogActive");
 		m_DialogText = state.getString("DialogText");
 		if (m_DialogActive) {
@@ -660,9 +658,7 @@ OnSharedPreferenceChangeListener {
 		case R.id.filter:
 			startFilterActivity();
 			break;
-		case R.id.sort:
-			startSortDialog();
-			break;
+
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -672,21 +668,6 @@ OnSharedPreferenceChangeListener {
 	private void startAddTaskActivity() {
 		Intent intent = new Intent(this, AddTask.class);
 		startActivity(intent);
-	}
-
-	private void startSortDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setSingleChoiceItems(R.array.sort, sort,
-				new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				Log.v(TAG, "onClick " + which);
-				sort = which;
-				dialog.dismiss();
-				setFilteredTasks(false);
-			}
-		});
-		builder.show();
 	}
 
 	private void startPreferencesActivity() {
@@ -942,8 +923,6 @@ OnSharedPreferenceChangeListener {
 		m_prios = new ArrayList<Priority>(); // Collections.emptyList();
 		m_contexts = new ArrayList<String>(); // Collections.emptyList();
 		m_projects = new ArrayList<String>(); // Collections.emptyList();
-		new ArrayList<String>();
-		m_search = "";
 	}
 
 	void setFilteredTasks(boolean reload) {
@@ -964,8 +943,8 @@ OnSharedPreferenceChangeListener {
 		m_adapter.clear();
 		final ImageButton actionbar_clear = (ImageButton) findViewById(R.id.actionbar_clear);
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
-				m_prios, m_contexts, m_projects, m_search, false), sort)) {
-			m_adapter.add(task);
+				m_prios, m_contexts, m_projects, m_search, false))) {
+			m_adapter.insert(task, 0);
 		}
 
 		lv.setSelectionFromTop(index, top);
@@ -1099,7 +1078,7 @@ OnSharedPreferenceChangeListener {
 				synchronized(mLock) {
 					final ArrayList<Task> filteredItems  = new ArrayList<Task>();
 					final ArrayList<Task> localItems = new ArrayList<Task>();
-					localItems.addAll(taskBag.getTasks());
+					localItems.addAll(items);
 					final int count = localItems.size();
 					nl.mpcjanssen.todotxtholo.task.Filter<Task> uiFilter = FilterFactory.generateAndFilter(
 							m_prios, m_contexts, m_projects, m_search, false);

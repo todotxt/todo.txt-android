@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-
 import nl.mpcjanssen.todotxtholo.TodoApplication;
 import nl.mpcjanssen.todotxtholo.TodoException;
 import nl.mpcjanssen.todotxtholo.util.TaskIo;
@@ -40,7 +39,7 @@ import android.util.Log;
  * 
  * @author Tim Barlotta
  */
-class LocalFileTaskRepository implements LocalTaskRepository {
+public class LocalFileTaskRepository {
 	private static final String TAG = LocalFileTaskRepository.class
 			.getSimpleName();
 	final static File TODO_TXT_FILE = new File(
@@ -49,13 +48,12 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	final static File DONE_TXT_FILE = new File(
 			TodoApplication.appContext.getFilesDir(),
 			"done.txt");
-	private final TaskBagImpl.Preferences preferences;
+	private final TaskBag.Preferences preferences;
 
-	public LocalFileTaskRepository(TaskBagImpl.Preferences preferences) {
-		this.preferences = preferences;
+	public LocalFileTaskRepository(TaskBag.Preferences m_prefs) {
+		this.preferences = m_prefs;
 	}
 
-	@Override
 	public void init() {
 		try {
 			if (!TODO_TXT_FILE.exists()) {
@@ -67,12 +65,10 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 		}
 	}
 
-	@Override
 	public void purge() {
 		TODO_TXT_FILE.delete();
 	}
 
-	@Override
 	public ArrayList<Task> load() {
 		init();
 		if (!TODO_TXT_FILE.exists()) {
@@ -88,13 +84,11 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 		}
 	}
 
-	@Override
 	public void store(ArrayList<Task> tasks) {
 		TaskIo.writeToFile(tasks, TODO_TXT_FILE,
 				preferences.isUseWindowsLineBreaksEnabled());
 	}
 
-	@Override
 	public void archive(ArrayList<Task> tasks) {
 		boolean windowsLineBreaks = preferences.isUseWindowsLineBreaksEnabled();
 
@@ -120,12 +114,10 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 				windowsLineBreaks);
 	}
 
-	@Override
 	public void loadDoneTasks(File file) {
 		Util.renameFile(file, DONE_TXT_FILE, true);
 	}
 
-	@Override
 	public boolean todoFileModifiedSince(Date date) {
 		long date_ms = 0l;
 		if (date != null) {
@@ -134,7 +126,6 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 		return date_ms < TODO_TXT_FILE.lastModified();
 	}
 
-	@Override
 	public boolean doneFileModifiedSince(Date date) {
 		long date_ms = 0l;
 		if (date != null) {
