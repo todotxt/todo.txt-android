@@ -4,6 +4,7 @@
         android:id="@+id/menu_apply_filter"
         android:orderInCategory="100"
         android:showAsAction="always|withText"
+        android:icon="@drawable/labels"
         android:title="@string/filter"/>
 
 </menu>
