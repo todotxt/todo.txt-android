@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.todotxt.todotxttouch.test" android:versionCode="1"
+	package="nl.mpcjanssen.todotxtholo.test" android:versionCode="1"
 	android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="3" />
     <application android:icon="@drawable/todotxt_touch_icon"
@@ -32,6 +32,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
 		<uses-library android:name="android.test.runner" />
 	</application>
-	<instrumentation android:targetPackage="com.todotxt.todotxttouch"
+	<instrumentation android:targetPackage="nl.mpcjanssen.todotxtholo"
 		android:name="android.test.InstrumentationTestRunner" />
 </manifest> 

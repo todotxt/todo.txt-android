@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_label">Todo.txt Touch</string>
+    <string name="app_label">Todo.txt Holo</string>
     <string name="added_task">Added task</string>
     <string name="add_task_failed">Could not add task</string>
     <string name="updated_task">Updated task</string>
@@ -111,7 +111,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="sync_conflict_dialog_msg">Oops! There is a newer version of your todo.txt file in Dropbox. \nDo you want to upload your local changes, or download the Dropbox version?</string>
     <!-- login -->
     <string name="first_title_word">Todo.txt</string>
-    <string name="second_title_word">Touch</string>
+    <string name="second_title_word">Holo</string>
     <string name="login_screen_button">Log in to Dropbox</string>
     <!-- delete -->
     <string name="delete_task_title">Delete Task</string>
@@ -145,7 +145,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <!-- online/offline toasts -->
     <string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
     <string name="toast_notconnected">No internet connection: Cannot sync with Dropbox right now.</string>
-
+    <string name="toast_synchronizing">Synchronizing with Dropbox.</string>
+    
     <!-- Relative Dates -->
     <string name="dates_days_ago">%d days ago</string>
     <string name="dates_one_day_ago">1 day ago</string>

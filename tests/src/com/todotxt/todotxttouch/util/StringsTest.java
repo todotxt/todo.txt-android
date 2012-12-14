@@ -20,7 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
-package com.todotxt.todotxttouch.util;
+package nl.mpcjanssen.todotxtholo.util;
 
 import junit.framework.TestCase;
 

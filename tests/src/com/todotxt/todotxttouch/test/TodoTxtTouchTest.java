@@ -20,9 +20,9 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
-package com.todotxt.todotxttouch.test;
+package nl.mpcjanssen.todotxtholo.test;
 
-import com.todotxt.todotxttouch.TodoTxtTouch;
+import nl.mpcjanssen.todotxtholo.TodoTxtTouch;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class TodoTxtTouchTest extends
@@ -33,7 +33,7 @@ public class TodoTxtTouchTest extends
 	private TodoTxtTouch m_activity;
 
 	public TodoTxtTouchTest() {
-		super("com.todotxt.todotxttouch", TodoTxtTouch.class);
+		super("nl.mpcjanssen.todotxtholo", TodoTxtTouch.class);
 	}
 
 	@Override

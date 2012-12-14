@@ -70,7 +70,7 @@ def update_source(filename, shortfn, copyright):
       fdata = fdata[0:]
     if (fdata.startswith("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")):
       fdata = fdata[38:]
-      #javaHeader = "package com.todotxt.todotxttouch;\n"
+      #javaHeader = "package nl.mpcjanssen.todotxtholo;\n"
 
     tempfn = "/tmp" + shortfn
     nla = get_copyright_namelist(filename, True)

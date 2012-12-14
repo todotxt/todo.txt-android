@@ -68,9 +68,9 @@ def update_source(filename, shortfn, copyright):
     if (fdata.startswith(utfstr)):
       isUTF = True
       fdata = fdata[0:]
-    if (fdata.startswith("package com.todotxt.todotxttouch;\n")):
+    if (fdata.startswith("package nl.mpcjanssen.todotxtholo;\n")):
       fdata = fdata[0:]
-      #javaHeader = "package com.todotxt.todotxttouch;\n"
+      #javaHeader = "package nl.mpcjanssen.todotxtholo;\n"
 
     tempfn = "/tmp" + shortfn
     nla = get_copyright_namelist(filename, True)

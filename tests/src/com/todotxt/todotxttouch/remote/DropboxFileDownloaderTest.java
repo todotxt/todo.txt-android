@@ -20,7 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
  */
-package com.todotxt.todotxttouch.remote;
+package nl.mpcjanssen.todotxtholo.remote;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <preference-headers
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <header android:fragment="com.todotxt.todotxttouch.Preferences$TodoTxtPrefFragment"
+    <header android:fragment="nl.mpcjanssen.todotxtholo.Preferences$TodoTxtPrefFragment"
         android:title="@string/todotxt_settings_header"
         android:summary="@string/todotxt_settings_summary"/>
-    <header android:fragment="com.todotxt.todotxttouch.Preferences$ArchivePrefFragment"
+    <header android:fragment="nl.mpcjanssen.todotxtholo.Preferences$ArchivePrefFragment"
         android:title="@string/ARCHIVE_settings_header"
         android:summary="@string/ARCHIVE_settings_summary"/>
-    <header android:fragment="com.todotxt.todotxttouch.Preferences$DropboxPrefFragment"
+    <header android:fragment="nl.mpcjanssen.todotxtholo.Preferences$DropboxPrefFragment"
         android:title="@string/DROPBOX_settings_header"
         android:summary="@string/DROPBOX_settings_summary"/>
-    <header android:fragment="com.todotxt.todotxttouch.Preferences$AboutPrefFragment"
+    <header android:fragment="nl.mpcjanssen.todotxtholo.Preferences$AboutPrefFragment"
         android:title="@string/about_settings_header"
         android:summary="@string/about_settings_summary"/>       
 </preference-headers>

@@ -22,7 +22,7 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.todotxt.todotxttouch"
+    package="nl.mpcjanssen.todotxtholo"
     android:versionCode="32"
     android:versionName="1.0.3" >
 
@@ -41,7 +41,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:smallScreens="true" />
 
     <application
-        android:name="com.todotxt.todotxttouch.TodoApplication"
+        android:name="nl.mpcjanssen.todotxtholo.TodoApplication"
         android:allowBackup="false"
         android:icon="@drawable/todotxt_touch_icon"
         android:label="@string/app_label"
@@ -64,7 +64,7 @@ You should have received a copy of the GNU General Public License along with Tod
             </intent-filter>
         </activity>
         <activity
-            android:name="com.todotxt.todotxttouch.LoginScreen"
+            android:name="nl.mpcjanssen.todotxtholo.LoginScreen"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_label" >
             <intent-filter>
@@ -75,10 +75,10 @@ You should have received a copy of the GNU General Public License along with Tod
         </activity>
 
         <activity
-            android:name="com.todotxt.todotxttouch.Preferences"
+            android:name="nl.mpcjanssen.todotxtholo.Preferences"
             android:label="@string/set_preferences" />
         <activity
-            android:name="com.todotxt.todotxttouch.AddTask"
+            android:name="nl.mpcjanssen.todotxtholo.AddTask"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
             android:permission="android.permission.INTERNET"
@@ -90,7 +90,7 @@ You should have received a copy of the GNU General Public License along with Tod
         </activity>
 
         <activity-alias
-            android:name="com.todotxt.todotxttouch.AddTaskShortcut"
+            android:name="nl.mpcjanssen.todotxtholo.AddTaskShortcut"
             android:label="@string/shortcut_addtask_name"
             android:targetActivity=".AddTask" >
             <intent-filter>
@@ -99,7 +99,7 @@ You should have received a copy of the GNU General Public License along with Tod
             </intent-filter>
         </activity-alias>
         <activity-alias
-            android:name="com.todotxt.todotxttouch.AddTaskShare"
+            android:name="nl.mpcjanssen.todotxtholo.AddTaskShare"
             android:label="@string/share_addtask_name"
             android:targetActivity=".AddTask" >
             <intent-filter>
@@ -112,10 +112,10 @@ You should have received a copy of the GNU General Public License along with Tod
         </activity-alias>
 
         <activity
-            android:name="com.todotxt.todotxttouch.HelpActivity"
+            android:name="nl.mpcjanssen.todotxtholo.HelpActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
-            android:name="com.todotxt.todotxttouch.TodoTxtTouch"
+            android:name="nl.mpcjanssen.todotxtholo.TodoTxtTouch"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false" >
             <intent-filter>
@@ -129,13 +129,13 @@ You should have received a copy of the GNU General Public License along with Tod
 
         <!-- Task list widget -->
         <receiver
-            android:name="com.todotxt.todotxttouch.TodoWidgetProvider"
+            android:name="nl.mpcjanssen.todotxtholo.TodoWidgetProvider"
             android:label="@string/app_label" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.todotxt.todotxttouch.APPWIDGET_UPDATE" />
+                <action android:name="nl.mpcjanssen.todotxtholo.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
@@ -144,7 +144,7 @@ You should have received a copy of the GNU General Public License along with Tod
         </receiver>
 
         <activity
-            android:name="com.todotxt.todotxttouch.FilterActivity"
+            android:name="nl.mpcjanssen.todotxtholo.FilterActivity"
             android:label="@string/title_activity_filter" >
         </activity>
     </application>
