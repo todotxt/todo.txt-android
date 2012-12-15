@@ -98,8 +98,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="manual_sync_pref_title">Manual sync</string>
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
 	<string name="visit_website_title">Go to the website</string>
-	<string name="visit_website_summary">Visit the todo.txt website</string>
-	<string name="visit_website_data">http://todotxt.com</string>	
+	<string name="visit_website_summary">Visit the todo.txt Holo website</string>
+	<string name="visit_website_data">http://github.com/mpcjanssen/todo.txt-touch</string>	
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>
     <string name="sync_dialog_msg">Do you want to upload or download your todo.txt file?</string>
