@@ -1189,7 +1189,12 @@ OnSharedPreferenceChangeListener {
 
 			ListView lv = getListView();
 			int pos = lv.pointToPosition((int) e1.getX(), (int) e1.getY());
-
+			if (pos == ListView.INVALID_POSITION ) {
+				// return if not on an item
+				return false;
+			}
+		
+			
 			// right to left swipe - mark task complete
 			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
 					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
