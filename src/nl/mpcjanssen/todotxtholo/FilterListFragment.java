@@ -24,6 +24,7 @@ public class FilterListFragment extends Fragment {
 	private ArrayList<String> selectedItems;
 	private ListView lv;
 	private int layoutId;
+	private LinearLayout layout;
 	private int viewId;
 	private GestureDetector gestureDetector;
 	private OnTouchListener gestureListener;
@@ -45,9 +46,9 @@ public class FilterListFragment extends Fragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		LinearLayout layout = (LinearLayout) inflater.inflate(layoutId, container, false);
-
+		if (layout==null) {
+			layout = (LinearLayout) inflater.inflate(layoutId, container, false);
+		}
 		lv = (ListView) layout.findViewById(viewId);
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
