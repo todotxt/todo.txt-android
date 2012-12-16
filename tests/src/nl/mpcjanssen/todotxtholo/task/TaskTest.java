@@ -605,7 +605,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
 		assertEquals(
-				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
+				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inScreenFormat());
 		assertEquals(
 				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
@@ -640,7 +640,7 @@ public class TaskTest extends TestCase {
 		assertFalse(task.isDeleted());
 		assertTrue(task.isCompleted());
 		assertEquals(
-				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",
+				"x 2011-02-28 A @complex test +with @multiple projects and @contexts +myproject",
 				task.inScreenFormat());
 		assertEquals(
 				"x 2011-02-28 2011-12-01 A @complex test +with @multiple projects and @contexts +myproject",

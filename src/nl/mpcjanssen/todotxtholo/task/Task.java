@@ -193,9 +193,6 @@ public class Task implements Serializable {
 		StringBuilder sb = new StringBuilder();
 		if (this.completed) {
 			sb.append(COMPLETED).append(this.completionDate).append(" ");
-			if (!Strings.isEmptyOrNull(this.prependedDate)) {
-				sb.append(this.prependedDate).append(" ");
-			}
 		}
 		sb.append(this.text);
 		return sb.toString();

@@ -1043,14 +1043,16 @@ OnSharedPreferenceChangeListener {
 					// Log.v(TAG, "Striking through " + task.getText());
 					holder.tasktext.setPaintFlags(holder.tasktext
 							.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+					holder.taskage.setPaintFlags(holder.taskage
+							.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 				} else {
 					holder.tasktext.setPaintFlags(holder.tasktext
 							.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+					holder.taskage.setPaintFlags(holder.taskage
+							.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 				}
 
-				if (m_app.m_prefs.getBoolean("todotxtprependdate", true)) {
-					if (!task.isCompleted()
-							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
+					if (!Strings.isEmptyOrNull(task.getRelativeAge())) {
 						holder.taskage.setText(task.getRelativeAge());
 						holder.taskage.setVisibility(View.VISIBLE);
 					} else {
@@ -1058,13 +1060,10 @@ OnSharedPreferenceChangeListener {
 								holder.tasktext.getPaddingLeft(),
 								holder.tasktext.getPaddingTop(),
 								holder.tasktext.getPaddingRight(), 4);
+						holder.taskage.setText("");
+						holder.taskage.setVisibility(View.GONE);
 					}
-				} else {
-					holder.tasktext.setPadding(
-							holder.tasktext.getPaddingLeft(),
-							holder.tasktext.getPaddingTop(),
-							holder.tasktext.getPaddingRight(), 4);
-				}
+				
 			}
 			return convertView;
 		}
