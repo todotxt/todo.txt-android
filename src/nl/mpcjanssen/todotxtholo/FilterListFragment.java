@@ -22,33 +22,38 @@ public class FilterListFragment extends Fragment {
 	final static String TAG = FilterListFragment.class.getSimpleName();
 	private ArrayList<String> items;
 	private ArrayList<String> selectedItems;
-	private ListView lv;
 	private int layoutId;
-	private LinearLayout layout;
 	private int viewId;
+	private ListView lv;
 	private GestureDetector gestureDetector;
 	private OnTouchListener gestureListener;
 	private ActionBar actionbar;
-
-	public void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		// We have state we need to keep over config changes
-		setRetainInstance(true);
-
-	}
-
-	public void onPause () {
+	
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 		selectedItems.clear();
 		selectedItems.addAll(getFilters());
-		super.onPause();
-	}
+        outState.putInt("viewId", viewId);
+        outState.putInt("layoutId", layoutId);
+        outState.putStringArrayList("items", items);
+        outState.putStringArrayList("selectedItems", items);
+    }
 
+    @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (layout==null) {
-			layout = (LinearLayout) inflater.inflate(layoutId, container, false);
+		
+		if (savedInstanceState!=null) {
+			layoutId = savedInstanceState.getInt("layoutId");
+			viewId = savedInstanceState.getInt("viewId");
+			items = savedInstanceState.getStringArrayList("items");
+			selectedItems = savedInstanceState.getStringArrayList("selectedItems");
 		}
+		
+		
+		LinearLayout layout = (LinearLayout) inflater.inflate(layoutId, container, false);
+	
 		lv = (ListView) layout.findViewById(viewId);
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
