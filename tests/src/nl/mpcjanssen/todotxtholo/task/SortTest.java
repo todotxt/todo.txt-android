@@ -42,48 +42,4 @@ public class SortTest extends TestCase {
 		unsortedTasks.add(new Task(9999, "x a completed task"));
 	}
 
-	public void testSort_priorityDescending() {
-		Sort sort = Sort.PRIORITY_DESC;
-		Collections.sort(unsortedTasks, sort.getComparator());
-
-		assertEquals(99, unsortedTasks.get(0).getId());
-		assertEquals(1, unsortedTasks.get(1).getId());
-		assertEquals(5, unsortedTasks.get(2).getId());
-		assertEquals(55, unsortedTasks.get(3).getId());
-		assertEquals(9999, unsortedTasks.get(4).getId());
-	}
-
-	public void testSort_idDescending() {
-		Sort sort = Sort.ID_DESC;
-		Collections.sort(unsortedTasks, sort.getComparator());
-
-		assertEquals(9999, unsortedTasks.get(0).getId());
-		assertEquals(99, unsortedTasks.get(1).getId());
-		assertEquals(55, unsortedTasks.get(2).getId());
-		assertEquals(5, unsortedTasks.get(3).getId());
-		assertEquals(1, unsortedTasks.get(4).getId());
-	}
-
-	public void testSort_idAscending() {
-		Sort sort = Sort.ID_ASC;
-		Collections.sort(unsortedTasks, sort.getComparator());
-
-		assertEquals(1, unsortedTasks.get(0).getId());
-		assertEquals(5, unsortedTasks.get(1).getId());
-		assertEquals(55, unsortedTasks.get(2).getId());
-		assertEquals(99, unsortedTasks.get(3).getId());
-		assertEquals(9999, unsortedTasks.get(4).getId());
-	}
-
-	public void testSort_textAscending() {
-		Sort sort = Sort.TEXT_ASC;
-		Collections.sort(unsortedTasks, sort.getComparator());
-
-		assertEquals(5, unsortedTasks.get(0).getId());
-		assertEquals(9999, unsortedTasks.get(1).getId());
-		assertEquals(1, unsortedTasks.get(2).getId());
-		assertEquals(99, unsortedTasks.get(3).getId());
-		assertEquals(55, unsortedTasks.get(4).getId());
-	}
-
 }
