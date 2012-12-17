@@ -62,4 +62,6 @@ public class Constants {
 	public final static String INTENT_SET_MANUAL = "nl.mpcjanssen.todotxtholo.GO_OFFLINE";
 	public final static String INTENT_UPDATE_UI = "nl.mpcjanssen.todotxtholo.UPDATE_UI";
 	public final static String INTENT_WIDGET_UPDATE = "nl.mpcjanssen.todotxtholo.APPWIDGET_UPDATE";
+	public final static String INTENT_SYNC_START = "nl.mpcjanssen.todotxtholo.SYNC_START";
+	public final static String INTENT_SYNC_DONE = "nl.mpcjanssen.todotxtholo.SYNC_DONE";
 }

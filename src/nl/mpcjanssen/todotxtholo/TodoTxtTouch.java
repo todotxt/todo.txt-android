@@ -71,6 +71,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
@@ -116,6 +117,9 @@ OnSharedPreferenceChangeListener {
 
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
+	
+	private View mRefreshIndeterminateProgressView; // save inflated layout for reference
+	private MenuItem refreshItem; // reference to actionbar menu item we want to swap
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -123,7 +127,7 @@ OnSharedPreferenceChangeListener {
 		currentActivityPointer = this;
 
 		setContentView(R.layout.main);
-
+		
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 		
@@ -140,6 +144,9 @@ OnSharedPreferenceChangeListener {
 		intentFilter.addAction(Constants.INTENT_SYNC_CONFLICT);
 		intentFilter.addAction(Constants.INTENT_ACTION_LOGOUT);
 		intentFilter.addAction(Constants.INTENT_UPDATE_UI);
+		intentFilter.addAction(Constants.INTENT_SYNC_START);
+		intentFilter.addAction(Constants.INTENT_SYNC_DONE);
+		
 		intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 
 		m_broadcastReceiver = new BroadcastReceiver() {
@@ -167,6 +174,21 @@ OnSharedPreferenceChangeListener {
 				} else if (intent.getAction().equalsIgnoreCase(
 						ConnectivityManager.CONNECTIVITY_ACTION)) {
 					handleConnectivityChange(context);
+				} else if (intent.getAction().equalsIgnoreCase(
+						Constants.INTENT_SYNC_START)) {
+						Log.v(TAG,"Start sync");
+						if (mRefreshIndeterminateProgressView == null) {
+							   mRefreshIndeterminateProgressView = getLayoutInflater().inflate(R.layout.main_progress, null);
+						}
+						if (refreshItem != null) {
+							refreshItem.setActionView(mRefreshIndeterminateProgressView);
+						}
+				} else if (intent.getAction().equalsIgnoreCase(
+						Constants.INTENT_SYNC_DONE)) {
+						Log.v(TAG,"Sync done");
+						if (refreshItem != null) {
+							refreshItem.setActionView(null);
+						}
 				}
 			}
 		};
@@ -287,6 +309,8 @@ OnSharedPreferenceChangeListener {
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
+		refreshItem = menu.findItem(R.id.sync);
+		
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
 	}

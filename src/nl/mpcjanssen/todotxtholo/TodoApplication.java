@@ -190,6 +190,9 @@ public class TodoApplication extends Application {
 	 */
 	void backgroundPushToRemote(final boolean overwrite) {
 		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
+			Intent i = new Intent();
+			i.setAction(Constants.INTENT_SYNC_START);
+			sendBroadcast(i);
 			m_pushing = true;
 			updateSyncUI();
 
@@ -216,6 +219,9 @@ public class TodoApplication extends Application {
 				@Override
 				protected void onPostExecute(Integer result) {
 					Log.d(TAG, "post taskBag.pushToremote");
+					Intent i = new Intent();
+					i.setAction(Constants.INTENT_SYNC_DONE);
+					sendBroadcast(i);
 					if (result == SUCCESS) {
 						Log.d(TAG, "taskBag.pushToRemote done");
 						m_pushing = false;
@@ -248,6 +254,9 @@ public class TodoApplication extends Application {
 	 */
 	private void backgroundPullFromRemote() {
 		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
+			Intent i = new Intent();
+			i.setAction(Constants.INTENT_SYNC_START);
+			sendBroadcast(i);
 			m_pulling = true;
 			// Comment out next line to avoid resetting list position at top;
 			// should maintain position of last action
@@ -270,6 +279,10 @@ public class TodoApplication extends Application {
 				@Override
 				protected void onPostExecute(Boolean result) {
 					Log.d(TAG, "post taskBag.pullFromRemote");
+					Intent i = new Intent();
+					i.setAction(Constants.INTENT_SYNC_DONE);
+					sendBroadcast(i);
+					super.onPostExecute(result);
 					if (result) {
 						Log.d(TAG, "taskBag.pullFromRemote done");
 						m_pulling = false;
@@ -300,15 +313,12 @@ public class TodoApplication extends Application {
 					Constants.EXTRA_OVERWRITE, false);
 			if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_WITH_REMOTE)) {
-				showToast(R.string.toast_synchronizing);
 				syncWithRemote(force_sync);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_TO_REMOTE)) {
-				showToast(R.string.toast_synchronizing);
 				pushToRemote(force_sync, overwrite);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_FROM_REMOTE)) {
-				showToast(R.string.toast_synchronizing);
 				pullFromRemote(force_sync);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_ASYNC_FAILED)) {
