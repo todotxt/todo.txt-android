@@ -23,44 +23,73 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/home_root"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+              android:id="@+id/home_root"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
 
     <GridLayout
-        android:id="@+id/spinner_grid"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:orientation="horizontal"
-        android:rowCount="3" >
-			<TextView android:text="@string/priority_prompt"/>			
-        	<Spinner
+            android:id="@+id/spinner_grid"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:rowCount="3"
+            android:useDefaultMargins="true">
+
+        <TextView
+                android:text="@string/priority_prompt"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <Spinner
                 android:id="@+id/priority_spinner"
-                style="@style/Spinner"
-                android:prompt="@string/priority_prompt" />
-			<TextView android:text="@string/project_prompt"/>        	
-            <Spinner
+                android:prompt="@string/priority_prompt"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="fill_horizontal"/>
+
+        <TextView
+                android:text="@string/project_prompt"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <Spinner
                 android:id="@+id/project_spinner"
-                style="@style/Spinner"
-                android:prompt="@string/project_prompt" />
-			<TextView android:text="@string/context_prompt"/>            
-            <Spinner
+                android:prompt="@string/project_prompt"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="fill_horizontal"
+                android:layout_gravity="fill_horizontal"/>
+
+        <TextView
+                android:text="@string/context_prompt"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <Spinner
                 android:id="@+id/context_spinner"
-                style="@style/Spinner"
-                android:prompt="@string/context_prompt" />
+                android:prompt="@string/context_prompt"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="fill_horizontal"
+                android:layout_gravity="fill_horizontal"/>
     </GridLayout>
+
     <ImageView
-        style="@style/HorizontalRule"
-        android:contentDescription="@string/separator" />
+            android:contentDescription="@string/separator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/taskText"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:hint="@string/tasktexthint"
-        android:inputType="textCapSentences|textMultiLine"
-        android:padding="5dip" />
+            android:id="@+id/taskText"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:hint="@string/tasktexthint"
+            android:inputType="textCapSentences|textMultiLine"
+            android:padding="5dip"/>
 </LinearLayout>
