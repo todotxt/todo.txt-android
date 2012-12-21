@@ -22,9 +22,9 @@
  */
 package nl.mpcjanssen.todotxtholo.task;
 
-import junit.framework.TestCase;
-
 import java.util.Arrays;
+
+import junit.framework.TestCase;
 
 /**
  * A junit based test class for testing the ByPriorityFilter class

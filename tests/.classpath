@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="D:/Documents/GitHub/todo.txt-touch/libs/dropbox-android-sdk-1.2.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/todo.txt-holo"/>
+	<classpathentry kind="lib" path="/todo.txt-holo/libs/dropbox-android-sdk-1.5.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

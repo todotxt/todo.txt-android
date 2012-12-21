@@ -30,7 +30,6 @@ import java.util.Collection;
 
 import nl.mpcjanssen.todotxtholo.TodoTxtTouch;
 import nl.mpcjanssen.todotxtholo.util.Util;
-
 import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;

@@ -2,9 +2,9 @@ package nl.mpcjanssen.todotxtholo;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;

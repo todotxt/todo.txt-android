@@ -22,12 +22,12 @@
  */
 package nl.mpcjanssen.todotxtholo.task;
 
-import junit.framework.TestCase;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 public class LinkParserTest extends TestCase {
 	public void test_empty() {

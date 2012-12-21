@@ -32,7 +32,6 @@ import nl.mpcjanssen.todotxtholo.task.TaskBag;
 import nl.mpcjanssen.todotxtholo.util.CursorPositionCalculator;
 import nl.mpcjanssen.todotxtholo.util.Strings;
 import nl.mpcjanssen.todotxtholo.util.Util;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;

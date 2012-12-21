@@ -22,11 +22,10 @@
  */
 package nl.mpcjanssen.todotxtholo.task;
 
-import junit.framework.TestCase;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 public class SortTest extends TestCase {
 	private List<Task> unsortedTasks = new ArrayList<Task>();

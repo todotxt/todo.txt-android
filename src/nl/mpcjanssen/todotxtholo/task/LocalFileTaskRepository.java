@@ -26,11 +26,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
 import nl.mpcjanssen.todotxtholo.TodoApplication;
 import nl.mpcjanssen.todotxtholo.TodoException;
 import nl.mpcjanssen.todotxtholo.util.TaskIo;
 import nl.mpcjanssen.todotxtholo.util.Util;
-
 import android.util.Log;
 
 

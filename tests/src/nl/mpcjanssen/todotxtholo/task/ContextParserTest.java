@@ -22,10 +22,10 @@
  */
 package nl.mpcjanssen.todotxtholo.task;
 
-import junit.framework.TestCase;
-
 import java.util.Collections;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 public class ContextParserTest extends TestCase {
 	public void test_empty() {

@@ -34,7 +34,6 @@ import java.util.Set;
 import nl.mpcjanssen.todotxtholo.remote.PullTodoResult;
 import nl.mpcjanssen.todotxtholo.remote.RemoteClientManager;
 import nl.mpcjanssen.todotxtholo.util.TaskIo;
-
 import android.content.SharedPreferences;
 
 

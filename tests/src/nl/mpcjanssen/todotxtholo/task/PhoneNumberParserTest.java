@@ -22,11 +22,11 @@
  */
 package nl.mpcjanssen.todotxtholo.task;
 
-import junit.framework.TestCase;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
+import junit.framework.TestCase;
 
 public class PhoneNumberParserTest extends TestCase {
 	public void test_empty() {

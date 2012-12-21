@@ -1,25 +1,18 @@
 package nl.mpcjanssen.todotxtholo;
 
 import java.util.ArrayList;
-import java.util.Locale;
-
-import nl.mpcjanssen.todotxtholo.TodoTxtTouch.TodoTxtGestureDetector;
-import nl.mpcjanssen.todotxtholo.task.Task;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.ListView;
 
 @SuppressWarnings("unused")
 public class FilterActivity extends Activity {

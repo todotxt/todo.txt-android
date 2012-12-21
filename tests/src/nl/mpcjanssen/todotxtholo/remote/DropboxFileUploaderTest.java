@@ -33,9 +33,6 @@ import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
 
-import junit.framework.TestCase;
-import android.app.Instrumentation;
-import android.os.Environment;
 import android.test.AndroidTestCase;
 
 import com.dropbox.client2.DropboxAPI;

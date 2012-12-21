@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.mpcjanssen.todotxtholo.task.Task;
-
 import android.util.Log;
 
 

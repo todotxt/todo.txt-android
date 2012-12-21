@@ -30,7 +30,6 @@ import nl.mpcjanssen.todotxtholo.R;
 import nl.mpcjanssen.todotxtholo.TodoApplication;
 import nl.mpcjanssen.todotxtholo.TodoTxtTouch;
 import nl.mpcjanssen.todotxtholo.util.Util;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;

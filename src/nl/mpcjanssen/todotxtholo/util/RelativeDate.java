@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import nl.mpcjanssen.todotxtholo.R;
 import nl.mpcjanssen.todotxtholo.TodoApplication;
-
 import android.content.Context;
 
 
