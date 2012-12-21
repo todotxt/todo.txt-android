@@ -1035,6 +1035,7 @@ OnSharedPreferenceChangeListener {
 			        return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());
 			    }
 			});
+			break;
 		case Constants.SORT_CONTEXT:
 			m_adapter.sort(new Comparator<Task>() {
 			    @Override
@@ -1062,6 +1063,7 @@ OnSharedPreferenceChangeListener {
 			    	}
 			    }
 			});
+			break;
 		}
 	}
 
