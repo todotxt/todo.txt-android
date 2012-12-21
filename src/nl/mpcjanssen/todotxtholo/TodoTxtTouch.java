@@ -989,7 +989,7 @@ OnSharedPreferenceChangeListener {
 		final ImageButton actionbar_clear = (ImageButton) findViewById(R.id.actionbar_clear);
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
 				m_prios, m_contexts, m_projects, m_search, false))) {
-			m_adapter.insert(task, 0);
+			m_adapter.add(task);
 		}
 
 		lv.setSelectionFromTop(index, top);
@@ -1024,6 +1024,9 @@ OnSharedPreferenceChangeListener {
 	private void setSorted() {
 		switch (sort) {
 		case Constants.SORT_UNSORTED:
+			break;
+		case Constants.SORT_REVERSE:
+			m_adapter.sort(Collections.reverseOrder());
 			break;
 		case Constants.SORT_ALPHABETICAL:
 			m_adapter.sort(new Comparator<Task>() {

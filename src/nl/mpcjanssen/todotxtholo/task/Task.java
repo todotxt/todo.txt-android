@@ -35,7 +35,7 @@ import nl.mpcjanssen.todotxtholo.util.Strings;
 
 
 @SuppressWarnings("serial")
-public class Task implements Serializable {
+public class Task implements Serializable, Comparable<Task> {
 	private static final String COMPLETED = "x ";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	private final String originalText;
@@ -329,5 +329,10 @@ public class Task implements Serializable {
 			projects.clear();
 			projects.add(pjs.get(0));
 		}
+	}
+
+	@Override
+	public int compareTo(Task another) {
+		return ((Long)this.getId()).compareTo(another.getId()); 
 	}
 }
