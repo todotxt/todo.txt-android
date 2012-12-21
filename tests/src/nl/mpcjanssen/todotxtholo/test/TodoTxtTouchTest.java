@@ -33,7 +33,7 @@ public class TodoTxtTouchTest extends
 	private TodoTxtTouch m_activity;
 
 	public TodoTxtTouchTest() {
-		super("nl.mpcjanssen.todotxtholo", TodoTxtTouch.class);
+		super(TodoTxtTouch.class);
 	}
 
 	@Override

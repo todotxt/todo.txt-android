@@ -26,9 +26,12 @@ You should have received a copy of the GNU General Public License along with Tod
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="nl.mpcjanssen.todotxtholo.test" android:versionCode="1"
 	android:versionName="1.0">
-	<uses-sdk android:minSdkVersion="3" />
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="17" />
     <application android:icon="@drawable/todotxt_touch_icon"
-		android:label="@string/app_name">
+		android:label="@string/app_name"
+		android:allowBackup="false">
 
 		<uses-library android:name="android.test.runner" />
 	</application>
