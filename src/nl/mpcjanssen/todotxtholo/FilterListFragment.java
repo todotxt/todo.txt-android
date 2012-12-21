@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -55,7 +56,7 @@ public class FilterListFragment extends Fragment {
 		LinearLayout layout = (LinearLayout) inflater.inflate(layoutId, container, false);
 	
 		lv = (ListView) layout.findViewById(viewId);
-		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 		lv.setAdapter(new ArrayAdapter<String>(getActivity(),
 				R.layout.simple_list_item_multiple_choice, items));
@@ -120,6 +121,7 @@ class FilterGestureDetector extends SimpleOnGestureListener {
 	private static final int SWIPE_MIN_DISTANCE = 120;
 	private static final int SWIPE_MAX_OFF_PATH = 250;
 	private static final int SWIPE_THRESHOLD_VELOCITY = 200;	
+	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 

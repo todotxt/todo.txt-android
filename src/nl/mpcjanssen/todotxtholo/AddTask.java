@@ -82,6 +82,7 @@ public class AddTask extends Activity {
 		return true;
 	}
 	
+	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_add_task:

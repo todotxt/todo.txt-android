@@ -1030,13 +1030,15 @@ OnSharedPreferenceChangeListener {
 			break;
 		case Constants.SORT_ALPHABETICAL:
 			m_adapter.sort(new Comparator<Task>() {
-			    public int compare(Task a, Task b) {
+			    @Override
+				public int compare(Task a, Task b) {
 			        return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());
 			    }
 			});
 		case Constants.SORT_CONTEXT:
 			m_adapter.sort(new Comparator<Task>() {
-			    public int compare(Task a, Task b) {
+			    @Override
+				public int compare(Task a, Task b) {
 			    	List<String> contextsA = a.getContexts();
 			    	List<String> contextsB = b.getContexts();
 			    	
@@ -1277,7 +1279,7 @@ OnSharedPreferenceChangeListener {
 
 			ListView lv = getListView();
 			int pos = lv.pointToPosition((int) e1.getX(), (int) e1.getY());
-			if (pos == ListView.INVALID_POSITION ) {
+			if (pos == AdapterView.INVALID_POSITION ) {
 				// return if not on an item
 				return false;
 			}
