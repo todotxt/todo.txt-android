@@ -24,6 +24,8 @@ package nl.mpcjanssen.todotxtholo;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -118,6 +120,8 @@ OnSharedPreferenceChangeListener {
 	
 	private View mRefreshIndeterminateProgressView; // save inflated layout for reference
 	private MenuItem refreshItem; // reference to actionbar menu item we want to swap
+
+	private int sort = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -276,6 +280,7 @@ OnSharedPreferenceChangeListener {
 		outState.putStringArrayList("m_contexts", m_contexts);
 		outState.putStringArrayList("m_projects", m_projects);
 		outState.putString("m_search", m_search);
+		outState.putInt("sort", sort);
 
 		dismissProgressDialog(false);
 		super.onSaveInstanceState(outState);
@@ -294,6 +299,8 @@ OnSharedPreferenceChangeListener {
 		m_contexts = state.getStringArrayList("m_contexts");
 		m_projects = state.getStringArrayList("m_projects");
 		m_search = state.getString("m_search");
+		
+		sort = state.getInt("sort",Constants.SORT_UNSORTED);
 		setFilteredTasks(false);
 	}
 
@@ -680,11 +687,27 @@ OnSharedPreferenceChangeListener {
 		case R.id.filter:
 			startFilterActivity();
 			break;
-
+		case R.id.sort:
+			startSortDialog();
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
 		return true;
+	}
+	
+	private void startSortDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setSingleChoiceItems(R.array.sort, sort,
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Log.v(TAG, "onClick " + which);
+						sort = which;
+						dialog.dismiss();
+						setFilteredTasks(false);
+					}
+				});
+		builder.show();
 	}
 
 	private void startAddTaskActivity() {
@@ -993,7 +1016,48 @@ OnSharedPreferenceChangeListener {
 			actionbar_clear.setVisibility(View.GONE);
 			filterText.setText("No filter");
 		}
+		
+		setSorted();
 
+	}
+
+	private void setSorted() {
+		switch (sort) {
+		case Constants.SORT_UNSORTED:
+			break;
+		case Constants.SORT_ALPHABETICAL:
+			m_adapter.sort(new Comparator<Task>() {
+			    public int compare(Task a, Task b) {
+			        return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());
+			    }
+			});
+		case Constants.SORT_CONTEXT:
+			m_adapter.sort(new Comparator<Task>() {
+			    public int compare(Task a, Task b) {
+			    	List<String> contextsA = a.getContexts();
+			    	List<String> contextsB = b.getContexts();
+			    	
+			    	if (contextsA.isEmpty() && contextsB.isEmpty()) {
+				        return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());			    		
+			    	} else if (contextsA.isEmpty() && !contextsB.isEmpty()) {
+			    		return -1;
+			    	} else if (!contextsA.isEmpty() && contextsB.isEmpty()) {
+			    		return 1;
+			    	} else {
+			    		int result;
+			    		Collections.sort(contextsA);
+			    		Collections.sort(contextsB);
+			    		result = contextsA.get(0).compareToIgnoreCase(contextsB.get(0));
+			    		if (result!=0) {
+			    			return result; 
+			    		} else {
+			    			// same context so sort alphabetically
+			    			return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());
+			    		}
+			    	}
+			    }
+			});
+		}
 	}
 
 	@Override

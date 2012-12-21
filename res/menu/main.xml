@@ -46,4 +46,5 @@ You should have received a copy of the GNU General Public License along with Tod
 	
 	<item android:title="@string/preferences" android:id="@+id/preferences"
 		android:icon="@android:drawable/ic_menu_preferences" />
+	<item android:id="@+id/sort" android:showAsAction="never" android:title="@string/sort"></item>
 </menu>

@@ -25,8 +25,8 @@ You should have received a copy of the GNU General Public License along with Tod
 <resources>
 
 	<string-array name="sort">
-		<item>File order</item>
-		<item>Reverse file order</item>
+		<item>Unsorted</item>
+		<item>Alphabetical</item>
+		<item>By Context</item>
 	</string-array>
-
 </resources>
