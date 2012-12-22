@@ -29,7 +29,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		<item>File Reversed</item>
 		<item>Alphabetical</item>
 		<item>By Priority</item>
-		<item>By Project</item>						
+		<item>@string/by_project</item>						
 		<item>By Context</item>
 	</string-array>
 </resources>

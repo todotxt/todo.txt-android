@@ -46,7 +46,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.net.ConnectivityManager;
-import android.os.Environment;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
