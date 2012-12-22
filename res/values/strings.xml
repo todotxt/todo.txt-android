@@ -121,8 +121,13 @@ You should have received a copy of the GNU General Public License along with Tod
     <!-- search -->
     <string name="search_hint">Search todo.txt</string>
     <!-- sort -->
+    <string name="file_order">File Order</string>
+    <string name="file_reversed">File Reversed</string>
+    <string name="alphabetical">Alphabetical</string>
+    <string name="by_prio">By Priority</string>
     <string name="by_project">By Tag</string>
-
+    <string name="by_context">By Context</string>
+    
     <!-- filter tabs -->
     <string name="filter_tab_priorities">Priorities</string>
     <string name="filter_tab_projects">Tags</string>
