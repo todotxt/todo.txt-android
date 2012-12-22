@@ -25,9 +25,11 @@ package nl.mpcjanssen.todotxtholo;
 public class Constants {
 	
 	public static final int SORT_UNSORTED = 0;
-	public static final int SORT_ALPHABETICAL = 1;
-	public static final int SORT_CONTEXT = 2;
-	public static final int SORT_REVERSE = 3;
+	public static final int SORT_REVERSE = 1;
+	public static final int SORT_ALPHABETICAL = 2;
+	public static final int SORT_PRIORITY = 3;
+	public static final int SORT_PROJECT = 4;
+	public static final int SORT_CONTEXT = 5;
 
 	public static final String PREF_FIRSTRUN = "firstrun";
 	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";

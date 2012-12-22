@@ -1064,6 +1064,54 @@ OnSharedPreferenceChangeListener {
 			    }
 			});
 			break;
+		case Constants.SORT_PRIORITY:
+			m_adapter.sort(new Comparator<Task>() {
+			    @Override
+				public int compare(Task a, Task b) {
+			    	Priority prioA = a.getPriority();
+			    	Priority prioB = b.getPriority();
+			    	
+			    	if (prioA.getCode().equals(prioB.getCode())) {
+			    		return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());
+			    	} else if (prioA.inFileFormat().equals("")) {
+			    		return 1;
+			    	} else if (prioB.inFileFormat().equals("")) {
+			    		return -1;
+			    	} else {
+			    		return prioA.getCode().compareToIgnoreCase(prioB.getCode());
+			    	} 
+			    	
+			    }
+			});
+			break;
+		case Constants.SORT_PROJECT:
+			m_adapter.sort(new Comparator<Task>() {
+			    @Override
+				public int compare(Task a, Task b) {
+			    	List<String> projectsA = a.getProjects();
+			    	List<String> projectsB = b.getProjects();
+			    	
+			    	if (projectsA.isEmpty() && projectsB.isEmpty()) {
+				        return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());			    		
+			    	} else if (projectsA.isEmpty() && !projectsB.isEmpty()) {
+			    		return 1;
+			    	} else if (!projectsA.isEmpty() && projectsB.isEmpty()) {
+			    		return -1;
+			    	} else {
+			    		int result;
+			    		Collections.sort(projectsA);
+			    		Collections.sort(projectsB);
+			    		result = projectsA.get(0).compareToIgnoreCase(projectsB.get(0));
+			    		if (result!=0) {
+			    			return result; 
+			    		} else {
+			    			// same project so sort alphabetically
+			    			return a.getOriginalText().compareToIgnoreCase(b.getOriginalText());
+			    		}
+			    	}
+			    }
+			});
+			break;
 		}
 	}
 

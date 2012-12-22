@@ -251,25 +251,6 @@ public class Util {
 		builder.show();
 	}
 
-	public static boolean isDeviceWritable() {
-		String sdState = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(sdState)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public static boolean isDeviceReadable() {
-		String sdState = Environment.getExternalStorageState();
-		if (Environment.MEDIA_MOUNTED.equals(sdState)
-				|| Environment.MEDIA_MOUNTED_READ_ONLY.equals(sdState)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public interface InputDialogListener {
 		void onClick(String input);
 	}

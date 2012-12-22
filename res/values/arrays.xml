@@ -25,9 +25,11 @@ You should have received a copy of the GNU General Public License along with Tod
 <resources>
 
 	<string-array name="sort">
-		<item>Unsorted</item>
-		<item>Alphabetical</item>
-		<item>By Context</item>
+		<item>File Order</item>
 		<item>File Reversed</item>
+		<item>Alphabetical</item>
+		<item>By Priority</item>
+		<item>By Project</item>						
+		<item>By Context</item>
 	</string-array>
 </resources>
