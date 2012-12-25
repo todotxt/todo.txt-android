@@ -23,8 +23,8 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="nl.mpcjanssen.todotxtholo"
-    android:versionCode="42"
-    android:versionName="0.4.2" >
+    android:versionCode="43"
+    android:versionName="0.4.3" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -81,7 +81,6 @@ You should have received a copy of the GNU General Public License along with Tod
             android:name="nl.mpcjanssen.todotxtholo.AddTask"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            android:permission="android.permission.INTERNET"
             android:label="@string/addtask"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
