@@ -38,7 +38,8 @@ You should have received a copy of the GNU General Public License along with Tod
         android:largeScreens="true"
         android:normalScreens="true"
         android:resizeable="true"
-        android:smallScreens="true" />
+        android:smallScreens="true" 
+        android:xlargeScreens="true"/>
 
     <application
         android:name="nl.mpcjanssen.todotxtholo.TodoApplication"
@@ -67,11 +68,6 @@ You should have received a copy of the GNU General Public License along with Tod
             android:name="nl.mpcjanssen.todotxtholo.LoginScreen"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_label" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -116,7 +112,11 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity
             android:name="nl.mpcjanssen.todotxtholo.TodoTxtTouch"
             android:configChanges="keyboardHidden|orientation"
-            android:exported="false" >
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

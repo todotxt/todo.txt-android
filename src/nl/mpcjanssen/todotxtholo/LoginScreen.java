@@ -99,9 +99,7 @@ public class LoginScreen extends Activity {
 				.getRemoteClient();
 		remoteClient.finishLogin();
 		if (remoteClient.isAuthenticated()) {
-			Intent broadcastLoginIntent = new Intent(
-					"nl.mpcjanssen.todotxtholo.ACTION_LOGIN");
-			sendBroadcast(broadcastLoginIntent);
+			switchToTodolist();
 		}
 		m_loginStarted = false;
 	}

@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import nl.mpcjanssen.todotxtholo.remote.RemoteClient;
 import nl.mpcjanssen.todotxtholo.task.FilterFactory;
 import nl.mpcjanssen.todotxtholo.task.Priority;
 import nl.mpcjanssen.todotxtholo.task.Task;
@@ -127,12 +128,9 @@ OnSharedPreferenceChangeListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentActivityPointer = this;
-
-		setContentView(R.layout.main);
-		
 		m_app = (TodoApplication) getApplication();
 		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
-		
+				
 		ArrayList<Task> adaptArray = new ArrayList<Task>();
 		this.taskBag = m_app.getTaskBag();
 		
@@ -196,6 +194,15 @@ OnSharedPreferenceChangeListener {
 		};
 		registerReceiver(m_broadcastReceiver, intentFilter);
 
+		RemoteClient remoteClient = m_app.getRemoteClientManager()
+				.getRemoteClient();
+		if (!remoteClient.isAuthenticated()) {
+			startLogin();
+			return;
+		}
+				
+		setContentView(R.layout.main);
+		
 		setListAdapter(this.m_adapter);
 
 		ListView lv = getListView();
@@ -228,6 +235,12 @@ OnSharedPreferenceChangeListener {
 		};
 
 		getListView().setOnTouchListener(gestureListener);
+	}
+
+	private void startLogin() {
+		Intent intent = new Intent(this, LoginScreen.class);
+		startActivity(intent);
+		finish();		
 	}
 
 	private void initializeTasks() {
