@@ -701,8 +701,6 @@ public class TodoTxtTouch extends ListActivity implements
 	 * force an upload or download.
 	 */
 	private void handleSyncConflict() {
-		m_app.m_pushing = false;
-		m_app.m_pulling = false;
 		showDialog(SYNC_CONFLICT_DIALOG);
 	}
 
@@ -991,12 +989,12 @@ public class TodoTxtTouch extends ListActivity implements
 	private void updateSyncUI() {
 		// hide action bar
 		findViewById(R.id.actionbar).setVisibility(View.GONE);
-		// hide refresh button
+		// show or hide refresh button
 		findViewById(R.id.btn_title_refresh).setVisibility(
-				m_app.m_pulling || m_app.m_pushing ? View.GONE : View.VISIBLE);
-		// show moving refresh indicator
+				m_app.syncInProgress() ? View.GONE : View.VISIBLE);
+		// show or hide moving refresh indicator
 		findViewById(R.id.title_refresh_progress).setVisibility(
-				m_app.m_pulling || m_app.m_pushing ? View.VISIBLE : View.GONE);
+				m_app.syncInProgress() ? View.VISIBLE : View.GONE);
 		setFilteredTasks(false);
 	}
 
