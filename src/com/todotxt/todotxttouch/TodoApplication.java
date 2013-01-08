@@ -212,7 +212,7 @@ public class TodoApplication extends Application {
 		protected void onPreExecute() {
 			m_pushing = true;
 			pushQueue = 0;
-			updateSyncUI();
+			updateSyncUI(false);
 		}
 		
 		@Override
@@ -242,7 +242,7 @@ public class TodoApplication extends Application {
 				} else {
 					Log.d(TAG, "taskBag.pushToRemote done");
 					setNeedToPush(false);
-					updateSyncUI();
+					updateSyncUI(false);
 					// Push is complete. Now do a pull in case the remote
 					// done.txt has changed.
 					pullFromRemote(true);
@@ -264,9 +264,7 @@ public class TodoApplication extends Application {
 	private void backgroundPullFromRemote() {
 		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
 			m_pulling = true;
-			// Comment out next line to avoid resetting list position at top;
-			// should maintain position of last action
-			// updateSyncUI();
+			updateSyncUI(false);
 
 			new AsyncTask<Void, Void, Boolean>() {
 
@@ -288,7 +286,7 @@ public class TodoApplication extends Application {
 					m_pulling = false;
 					if (result) {
 						Log.d(TAG, "taskBag.pullFromRemote done");
-						updateSyncUI();
+						updateSyncUI(true);
 					} else {
 						sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
 					}
@@ -302,8 +300,9 @@ public class TodoApplication extends Application {
 		}
 	}
 
-	private void updateSyncUI() {
-		sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI));
+	private void updateSyncUI(boolean redrawList) {
+		sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI).putExtra(
+				"redrawList", redrawList));
 	}
 
 	private final class BroadcastReceiverExtension extends BroadcastReceiver {
@@ -327,7 +326,7 @@ public class TodoApplication extends Application {
 				showToast("Synchronizing Failed");
 				m_pulling = false;
 				m_pushing = false;
-				updateSyncUI();
+				updateSyncUI(true);
 			}
 		}
 	}
