@@ -62,7 +62,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		contexts.</string>
 
     <!-- preferences -->
-    <string name="ARCHIVE_settings_header">done.txt</string>
+    <string name="ARCHIVE_settings_header">Archive</string>
     <string name="ARCHIVE_settings_summary">Settings for archiving completed tasks in done.txt</string>
     <string name="auto_archive_pref_key">todotxtautoarchive</string>
     <string name="auto_archive_pref_title">Auto archive</string>
@@ -81,7 +81,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="TODOTXTPATH_defaultPath">/todo</string>
     <string name="DROPBOX_settings_header">Dropbox</string>
     <string name="DROPBOX_settings_summary">Settings for Dropbox synchronisation</string>
-    <string name="todotxt_settings_header">todo.txt</string>
+    <string name="todotxt_settings_header">Main</string>
     <string name="todotxt_settings_summary">Application wide settings</string>
     <string name="about_settings_header">About</string>
     <string name="about_settings_summary">Application information</string>
@@ -98,7 +98,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="manual_sync_pref_title">Manual sync</string>
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
 	<string name="visit_website_title">Go to the website</string>
-	<string name="visit_website_summary">Visit the todo.txt Holo website</string>
+	<string name="visit_website_summary">Visit the Simpletask website</string>
 	<string name="visit_website_data">http://github.com/mpcjanssen/todo.txt-touch</string>	
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>
@@ -111,8 +111,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="sync_conflict_dialog_title">File Conflict</string>
     <string name="sync_conflict_dialog_msg">Oops! There is a newer version of your todo.txt file in Dropbox. \nDo you want to upload your local changes, or download the Dropbox version?</string>
     <!-- login -->
-    <string name="first_title_word">Todo.txt</string>
-    <string name="second_title_word">Holo</string>
+    <string name="first_title_word">Simpletask</string>
     <string name="login_screen_button">Log in to Dropbox</string>
     <!-- delete -->
     <string name="delete_task_title">Delete Task</string>

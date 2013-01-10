@@ -41,12 +41,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-<LinearLayout
-	android:orientation="horizontal"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" 
-	android:layout_gravity="center_horizontal|top"
-	android:paddingBottom="15dp">
+
 	
 	<TextView android:id="@+id/title"
 		android:layout_width="wrap_content"
@@ -57,16 +52,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:paddingTop="15dp"
 		android:shadowRadius="1.0"
 	/>
-	<TextView android:id="@+id/title_2"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/second_title_word"
-		android:textSize="12pt"
-		android:typeface="serif"
-		android:textStyle="italic"
-		android:shadowRadius="1.0"
-	/>
-	</LinearLayout>
+
 	
 	<Button android:id="@+id/login"
 		android:layout_width="wrap_content"
