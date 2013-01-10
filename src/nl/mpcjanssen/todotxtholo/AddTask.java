@@ -338,7 +338,7 @@ public class AddTask extends Activity {
 		intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
 				getString(R.string.shortcut_addtask_name));
 		Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this,
-				R.drawable.todotxt_touch_icon);
+				R.drawable.icon);
 		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 
 		setResult(RESULT_OK, intent);
