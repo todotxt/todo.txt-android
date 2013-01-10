@@ -132,6 +132,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="filter_tab_projects">Tags</string>
     <string name="filter_tab_contexts">Contexts</string>
     <string name="filter_tab_search">Keywords</string>
+    <string name="filter_select_all">Select all</string>
     <!-- title bar changes -->
     <string name="title_search_results">Search term: </string>
     <string name="title_filter_applied">Filtered by: </string>

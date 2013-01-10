@@ -1,5 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+    <item
+        android:id="@+id/menu_select_all"
+        android:orderInCategory="100"
+        android:showAsAction="always|withText"
+        android:icon="@drawable/select_all"
+        android:title="@string/filter_select_all"/>
     <item
         android:id="@+id/menu_apply_filter"
         android:orderInCategory="100"

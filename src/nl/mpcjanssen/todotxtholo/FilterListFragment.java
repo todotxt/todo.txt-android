@@ -25,49 +25,56 @@ public class FilterListFragment extends Fragment {
 	private ArrayList<String> selectedItems;
 	private int layoutId;
 	private int viewId;
+	private int titleId;
 	private ListView lv;
 	private GestureDetector gestureDetector;
 	private OnTouchListener gestureListener;
 	private ActionBar actionbar;
-	
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+	private String filterName;
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 		selectedItems.clear();
 		selectedItems.addAll(getFilters());
-        outState.putInt("viewId", viewId);
-        outState.putInt("layoutId", layoutId);
-        outState.putStringArrayList("items", items);
-        outState.putStringArrayList("selectedItems", items);
-    }
+		outState.putInt("viewId", viewId);
+		outState.putInt("layoutId", layoutId);
+		outState.putInt("titleId", titleId);
+		outState.putStringArrayList("items", items);
+		outState.putStringArrayList("selectedItems", items);
+		outState.putString("filterName", filterName);
+	}
 
-    @Override
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-		if (savedInstanceState!=null) {
+
+		if (savedInstanceState != null) {
 			layoutId = savedInstanceState.getInt("layoutId");
 			viewId = savedInstanceState.getInt("viewId");
+			titleId = savedInstanceState.getInt("titleId");
 			items = savedInstanceState.getStringArrayList("items");
-			selectedItems = savedInstanceState.getStringArrayList("selectedItems");
+			filterName = savedInstanceState.getString("filterName");
+			selectedItems = savedInstanceState
+					.getStringArrayList("selectedItems");
 		}
-		
-		
-		LinearLayout layout = (LinearLayout) inflater.inflate(layoutId, container, false);
-	
+
+		LinearLayout layout = (LinearLayout) inflater.inflate(layoutId,
+				container, false);
+
 		lv = (ListView) layout.findViewById(viewId);
 		lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 		lv.setAdapter(new ArrayAdapter<String>(getActivity(),
 				R.layout.simple_list_item_multiple_choice, items));
 
-
-		for (int i = 0 ; i< items.size() ; i++) {
+		for (int i = 0; i < items.size(); i++) {
 			if (selectedItems.contains(items.get(i))) {
-				lv.setItemChecked(i,true);
+				lv.setItemChecked(i, true);
 			}
 		}
-		gestureDetector = new GestureDetector(TodoApplication.appContext, new FilterGestureDetector());
+		gestureDetector = new GestureDetector(TodoApplication.appContext,
+				new FilterGestureDetector());
 		gestureListener = new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -80,7 +87,7 @@ public class FilterListFragment extends Fragment {
 				return false;
 			}
 		};
-		
+
 		lv.setOnTouchListener(gestureListener);
 		return layout;
 	}
@@ -88,63 +95,86 @@ public class FilterListFragment extends Fragment {
 	public ArrayList<String> getFilters() {
 
 		ArrayList<String> arr = new ArrayList<String>();
-		if(lv==null) {
+		if (lv == null) {
 			// Tab was not displayed so no selections made
 			return arr;
 		}
 		int size = lv.getCount();
 		for (int i = 0; i < size; i++) {
 			if (lv.isItemChecked(i)) {
-				arr.add((String)lv.getAdapter().getItem(i));
+				arr.add((String) lv.getAdapter().getItem(i));
 				Log.v("Filter", " Adding priority "
-						+ (String)lv.getAdapter().getItem(i)
-						+ " to applied filters.");				
+						+ (String) lv.getAdapter().getItem(i)
+						+ " to applied filters.");
 			}
 		}
 		return arr;
 	}
 
-	public void setArguments(ArrayList<String> items, ArrayList<String> selectedItems,
-			int layoutId, int listId , ActionBar actionbar) {
+	public void setArguments(ArrayList<String> items,
+			ArrayList<String> selectedItems, String filterName, int layoutId, int listId,
+			int titleId, ActionBar actionbar) {
 		this.items = items;
-		if (this.selectedItems == null ) { 
-			this.selectedItems  = selectedItems;
+		if (this.selectedItems == null) {
+			this.selectedItems = selectedItems;
 		}
+		this.filterName = filterName;
 		this.layoutId = layoutId;
 		this.viewId = listId;
 		this.actionbar = actionbar;
+		this.titleId = titleId;
 	}
 
+	class FilterGestureDetector extends SimpleOnGestureListener {
+		private static final int SWIPE_MIN_DISTANCE = 120;
+		private static final int SWIPE_MAX_OFF_PATH = 250;
+		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
 
-class FilterGestureDetector extends SimpleOnGestureListener {
-	private static final int SWIPE_MIN_DISTANCE = 120;
-	private static final int SWIPE_MAX_OFF_PATH = 250;
-	private static final int SWIPE_THRESHOLD_VELOCITY = 200;	
-	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
+			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+				return false;
 
-		if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+			int index = actionbar.getSelectedNavigationIndex();
+			// right to left swipe
+			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+				Log.v(TAG, "Fling left");
+				if (index < 2)
+					index++;
+				actionbar.setSelectedNavigationItem(index);
+				return true;
+			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
+					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+				// left to right swipe
+				Log.v(TAG, "Fling right");
+				if (index > 0)
+					index--;
+				actionbar.setSelectedNavigationItem(index);
+				return true;
+			}
 			return false;
-
-		int index = actionbar.getSelectedNavigationIndex();
-		// right to left swipe
-		if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-				&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-			Log.v(TAG, "Fling left");
-			if (index<2) index++;
-			actionbar.setSelectedNavigationItem(index);
-			return true;
-		} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-				&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-			// left to right swipe
-			Log.v(TAG, "Fling right");
-			if (index>0) index--;
-			actionbar.setSelectedNavigationItem(index);
-			return true;
 		}
-		return false;
 	}
-}
+
+	public void selectAll() {
+		if (lv == null) {
+			return;
+		}
+		int size = lv.getCount();
+		for (int i = 0; i < size; i++) {
+			lv.setItemChecked(i, true);
+		}
+	}
+
+	public int title() {
+		return titleId;
+	}
+
+	public String getFilterName() {
+		// TODO Auto-generated method stub
+		return filterName;
+	}
 }

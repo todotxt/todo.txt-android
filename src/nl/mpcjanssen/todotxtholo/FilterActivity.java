@@ -17,9 +17,11 @@ import android.view.View.OnTouchListener;
 @SuppressWarnings("unused")
 public class FilterActivity extends Activity {
 
-	private FilterListFragment prioritiesFragment;
-	private FilterListFragment projectsFragment;
-	private FilterListFragment contextsFragment;
+
+	
+	private ArrayList<FilterListFragment> fragments = new ArrayList<FilterListFragment>();
+	FilterListFragment fragment;
+
 	private ActionBar actionbar;
 
 	private GestureDetector gestureDetector;
@@ -44,31 +46,36 @@ public class FilterActivity extends Activity {
 
 
 		//Create the fragments
-		prioritiesFragment = new FilterListFragment();
-		prioritiesFragment.setArguments(
-				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES),
-				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED),
-				R.layout.tab_priorities, R.id.prioritieslv, actionbar);
-		projectsFragment = new FilterListFragment();
-		projectsFragment.setArguments(
-				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS),
-				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED),
-				R.layout.tab_projects, R.id.projectslv, actionbar);
-		contextsFragment = new FilterListFragment();
-		contextsFragment.setArguments(
+		fragment = new FilterListFragment();		
+		fragment.setArguments(
 				getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS),
 				getIntent().getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED),
-				R.layout.tab_contexts, R.id.contextslv, actionbar);
+				Constants.EXTRA_CONTEXTS,
+				R.layout.tab_contexts, R.id.contextslv, R.string.filter_tab_contexts, actionbar);
+		fragments.add(fragment);
+		
+		fragment = new FilterListFragment();		
+		fragment.setArguments(
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS),
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED),
+				Constants.EXTRA_PROJECTS,
+				R.layout.tab_projects, R.id.projectslv, R.string.filter_tab_projects, actionbar);
+		fragments.add(fragment);
+
+		fragment = new FilterListFragment();
+		fragment.setArguments(
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES),
+				getIntent().getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED),
+				Constants.EXTRA_PRIORITIES,
+				R.layout.tab_priorities, R.id.prioritieslv, R.string.filter_tab_priorities, actionbar);
+		fragments.add(fragment);
 
 
 		// Add the fragments in the action_bar
-		actionbar.addTab(actionbar.newTab().setText(R.string.filter_tab_contexts)
-				.setTabListener(new MyTabsListener(contextsFragment)));
-		actionbar.addTab(actionbar.newTab().setText(R.string.filter_tab_projects)
-				.setTabListener(new MyTabsListener(projectsFragment)));
-		actionbar.addTab(actionbar.newTab().setText(R.string.filter_tab_priorities)
-				.setTabListener(new MyTabsListener(prioritiesFragment)));
-		
+		for (FilterListFragment fragment : fragments) {
+		actionbar.addTab(actionbar.newTab().setText(fragment.title())
+				.setTabListener(new MyTabsListener(fragment)));
+		}
 
 	}
 
@@ -86,10 +93,17 @@ public class FilterActivity extends Activity {
 		case R.id.menu_apply_filter:
 			applyFilter();
 			break;
+		case R.id.menu_select_all:
+			selectAll();
+			break;
 		}
 		return true;
 	}
 
+	private void selectAll() {
+		fragments.get(actionbar.getSelectedNavigationIndex()).selectAll();
+		
+	}
 	// Safe the active tab on configuration changes
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -109,12 +123,11 @@ public class FilterActivity extends Activity {
 
 		appliedFilters = new ArrayList<String>();
 
-		data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-				prioritiesFragment.getFilters());
-		data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-				projectsFragment.getFilters());
-		data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-				contextsFragment.getFilters());
+		for (FilterListFragment fragment : fragments) {
+		
+			data.putStringArrayListExtra(fragment.getFilterName(),
+				fragment.getFilters());		
+		}
 		data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,
 				appliedFilters);
 		setResult(Activity.RESULT_OK, data);
