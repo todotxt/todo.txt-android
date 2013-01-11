@@ -54,12 +54,8 @@ You should have received a copy of the GNU General Public License along with Tod
             android:exported="true"
             android:launchMode="singleTask" >
             <intent-filter>
-
-                <!-- Change this to be db- followed by your app key -->
-                <data android:scheme="db-PUT-APP-KEY-HERE" />
-
+                <data android:scheme="@string/dropbox_manifest_key" />
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
