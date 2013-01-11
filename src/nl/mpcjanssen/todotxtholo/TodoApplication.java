@@ -336,4 +336,8 @@ public class TodoApplication extends Application {
 		sendBroadcast(intent);
 	}
 
+	public boolean usePrio() {
+		return m_prefs.getBoolean("usepriopref",false);
+	}
+
 }

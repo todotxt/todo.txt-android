@@ -710,6 +710,11 @@ OnSharedPreferenceChangeListener {
 	
 	private void startSortDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		if (!m_app.usePrio()) {
+			String[] sorts =  getResources().getStringArray(R.array.sort);
+			
+		}
+		
 		builder.setSingleChoiceItems(R.array.sort, sort,
 				new OnClickListener() {
 					@Override

@@ -47,6 +47,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 public class AddTask extends Activity {
@@ -164,6 +165,8 @@ public class AddTask extends Activity {
 		
 		// priorities
 		priorities = (Spinner) findViewById(R.id.priority_spinner);
+		TextView priorityText = (TextView) findViewById(R.id.priority_text);
+		if (m_app.usePrio()) {
 		final ArrayList<String> prioArr = new ArrayList<String>();
 		prioArr.add(0,"-");
 		prioArr.addAll(Priority.rangeInCode(Priority.A, Priority.E));
@@ -191,6 +194,7 @@ public class AddTask extends Activity {
 						cursorPosition, currentText, textInputField.getText()
 								.toString()));
 			}
+			
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
@@ -198,7 +202,10 @@ public class AddTask extends Activity {
 		});
 
 		
-		
+		} else {
+			priorities.setVisibility(View.GONE);
+			priorityText.setVisibility(View.GONE);
+		}
 		// projects
 		projects = (Spinner) findViewById(R.id.project_spinner);
 		final ArrayList<String> projectsArr = taskBag.getProjects();

@@ -81,10 +81,12 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="TODOTXTPATH_defaultPath">/todo</string>
     <string name="DROPBOX_settings_header">Dropbox</string>
     <string name="DROPBOX_settings_summary">Settings for Dropbox synchronisation</string>
+
     <string name="todotxt_settings_header">Main</string>
     <string name="todotxt_settings_summary">Application wide settings</string>
-    <string name="about_settings_header">About</string>
-    <string name="about_settings_summary">Application information</string>
+    <string name="use_prio_pref_key">todotxtuseprio</string>
+    <string name="use_prio_pref_title">Enable priorities</string>
+    <string name="use_prio_pref_summary">GTD does not promote using of priorities, but you can use it if needed.</string>    
     <string name="prepend_date_pref_key">todotxtprependdate</string>
     <string name="prepend_date_pref_title">Date new tasks</string>
     <string name="prepend_date_pref_summary">Automatically add creation date to new tasks.</string>
@@ -97,7 +99,11 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="manual_sync_pref_key">workofflinepref</string>
     <string name="manual_sync_pref_title">Manual sync</string>
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
-	<string name="visit_website_title">Go to the website</string>
+
+    
+    <string name="about_settings_header">About</string>
+    <string name="about_settings_summary">Application information</string>
+   	<string name="visit_website_title">Go to the website</string>
 	<string name="visit_website_summary">Visit the Simpletask website</string>
 	<string name="visit_website_data">http://github.com/mpcjanssen/todo.txt-touch</string>	
     <!-- sync dialog -->
