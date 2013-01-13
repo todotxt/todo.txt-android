@@ -30,7 +30,6 @@ You should have received a copy of the GNU General Public License along with Tod
         android:targetSdkVersion="4" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -53,8 +52,7 @@ You should have received a copy of the GNU General Public License along with Tod
             android:launchMode="singleTask" >
             <intent-filter>
 
-                <!-- Change this to be db- followed by your app key -->
-                <data android:scheme="db-PUT-APP-KEY-HERE" />
+                <data android:scheme="@string/dropbox_manifest_key" />
 
                 <action android:name="android.intent.action.VIEW" />
 
