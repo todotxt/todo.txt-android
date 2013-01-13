@@ -53,7 +53,7 @@ You should have received a copy of the GNU General Public License along with Tod
             android:launchMode="singleTask" >
             <intent-filter>
 
-                <data android:scheme="@string/dropbox_consumer_key" />
+                <data android:scheme="@string/dropbox_manifest_key" />
 
                 <action android:name="android.intent.action.VIEW" />
 
