@@ -1,7 +1,7 @@
 /**
  * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
+ * Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
  *
@@ -18,7 +18,7 @@
  *
  * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
+ * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch.task;
 
