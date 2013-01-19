@@ -3,7 +3,7 @@
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
-Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
 
 LICENSE:
 
@@ -20,13 +20,14 @@ You should have received a copy of the GNU General Public License along with Tod
 
 @author Todo.txt contributors <todotxt@yahoogroups.com>
 @license http://www.gnu.org/licenses/gpl.html
-@copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 <resources>
 <!--
-First, copy this file to dropbox.xml, then delete this line and fill in the appropriate values 
-    <string name="dropbox_consumer_key">Enter your Dropbox app consumer key here</string>
-    <string name="dropbox_consumer_secret">Enter your Dropbox app consumer secret here</string>
-    <string name="dropbox_manifest_key">db-Enter your Dropbox app consumer key here</string>    
--->
+First, copy this file to dropbox.xml. Then uncomment out the following lines and fill in the appropriate values.
+IMPORTANT: Make sure the value of dropbox_manifest_key starts with db-, in the format db-APP_KEY_HERE
+    <string name="dropbox_consumer_key">Enter your Dropbox app key here</string>
+    <string name="dropbox_consumer_secret">Enter your Dropbox app secret here</string>
+	<string name="dropbox_manifest_key">db-Enter your Dropbox app key here</string>  
+-->    
 </resources>

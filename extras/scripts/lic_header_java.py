@@ -62,7 +62,7 @@ def update_source(filename, shortfn, copyright):
     isUTF = False
     nl = get_copyright_namelist(filename, False)
     filename_str = filename.replace(TODOTXTOUCH_HOME, "Todo.txt Touch")
-    copyright_str = " * " + filename_str + "\n *\n * Copyright (c) 2009-2012 " + nl +"\n"
+    copyright_str = " * " + filename_str + "\n *\n * Copyright (c) 2009-2013 " + nl +"\n"
 
     javaHeader = ""
     if (fdata.startswith(utfstr)):
@@ -120,7 +120,7 @@ def build_docblock(nla, nlc):
     
 def build_docblock_lic_copy(nl):
   global license_line
-  return " * @license %s\n * @copyright 2009-2012 %s\n" % (license_line, nl)
+  return " * @license %s\n * @copyright 2009-2013 %s\n" % (license_line, nl)
 
 def get_copyright_namelist(filename, emailsp):
 

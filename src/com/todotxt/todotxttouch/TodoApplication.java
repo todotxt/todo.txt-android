@@ -1,7 +1,7 @@
 /**
  * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
  *
- * Copyright (c) 2009-2012 Todo.txt contributors (http://todotxt.com)
+ * Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
  *
  * LICENSE:
  *
@@ -18,7 +18,7 @@
  *
  * @author Todo.txt contributors <todotxt@yahoogroups.com>
  * @license http://www.gnu.org/licenses/gpl.html
- * @copyright 2009-2012 Todo.txt contributors (http://todotxt.com)
+ * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
 package com.todotxt.todotxttouch;
 
@@ -43,8 +43,9 @@ public class TodoApplication extends Application {
 	private final static String TAG = TodoApplication.class.getSimpleName();
 	public SharedPreferences m_prefs;
 	private RemoteClientManager remoteClientManager;
-	public boolean m_pulling = false;
-	public boolean m_pushing = false;
+	private boolean m_pulling = false;
+	private boolean m_pushing = false;
+	private int pushQueue = 0;
 	private TaskBag taskBag;
 	private BroadcastReceiver m_broadcastReceiver;
 	public static Context appContext;
@@ -77,8 +78,18 @@ public class TodoApplication extends Application {
 
 	@Override
 	public void onTerminate() {
-		unregisterReceiver(m_broadcastReceiver);
+		if (null != m_broadcastReceiver) {
+			unregisterReceiver(m_broadcastReceiver);
+		}
 		super.onTerminate();
+	}
+	
+	/**
+	 * Are we currently pushing or pulling remote data?
+	 * @return true iff a remote operation currently in progress.
+	 */
+	public boolean syncInProgress() {
+		return m_pulling || m_pushing;
 	}
 
 	/**
@@ -99,6 +110,7 @@ public class TodoApplication extends Application {
 	 * Check network status, then push.
 	 */
 	private void pushToRemote(boolean force, boolean overwrite) {
+		pushQueue += 1;
 		setNeedToPush(true);
 		if (!force && isManualMode()) {
 			Log.i(TAG, "Working offline, don't push now");
@@ -107,12 +119,7 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Working online; should push if file revisions match");
 			backgroundPushToRemote(overwrite);
 		} else if (m_pulling) {
-			Log.d(TAG, "app is pulling right now. don't start push."); // TODO
-																		// remove
-																		// after
-																		// AsyncTask
-																		// bug
-																		// fixed
+			Log.d(TAG, "app is pulling right now. don't start push."); 
 		} else {
 			Log.i(TAG, "Not connected, don't push now");
 			showToast(R.string.toast_notconnected);
@@ -135,12 +142,7 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Working online; should pull file");
 			backgroundPullFromRemote();
 		} else if (m_pushing) {
-			Log.d(TAG, "app is pushing right now. don't start pull."); // TODO
-																		// remove
-																		// after
-																		// AsyncTask
-																		// bug
-																		// fixed
+			Log.d(TAG, "app is pushing right now. don't start pull."); 
 		} else {
 			Log.i(TAG, "Not connected, don't pull now");
 			showToast(R.string.toast_notconnected);
@@ -186,56 +188,73 @@ public class TodoApplication extends Application {
 	 */
 	void backgroundPushToRemote(final boolean overwrite) {
 		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
-			m_pushing = true;
-			updateSyncUI();
-
-			new AsyncTask<Void, Void, Integer>() {
-				static final int SUCCESS = 0;
-				static final int CONFLICT = 1;
-				static final int ERROR = 2;
-
-				@Override
-				protected Integer doInBackground(Void... params) {
-					try {
-						Log.d(TAG, "start taskBag.pushToRemote");
-						taskBag.pushToRemote(true, overwrite);
-					} catch (RemoteConflictException c) {
-						Log.e(TAG, c.getMessage());
-						return CONFLICT;
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage());
-						return ERROR;
-					}
-					return SUCCESS;
-				}
-
-				@Override
-				protected void onPostExecute(Integer result) {
-					Log.d(TAG, "post taskBag.pushToremote");
-					if (result == SUCCESS) {
-						Log.d(TAG, "taskBag.pushToRemote done");
-						m_pushing = false;
-						setNeedToPush(false);
-						updateSyncUI();
-						// Push is complete. Now do a pull in case the remote
-						// done.txt has changed.
-						pullFromRemote(true);
-					} else if (result == CONFLICT) {
-						// FIXME: need to know which file had conflict
-						sendBroadcast(new Intent(Constants.INTENT_SYNC_CONFLICT));
-					} else {
-						sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
-					}
-					super.onPostExecute(result);
-				}
-
-			}.execute();
-
+			if(!(m_pushing || m_pulling)) {
+				new AsyncPushTask(overwrite).execute();
+			}
 		} else {
 			Log.e(TAG, "NOT AUTHENTICATED!");
 			showToast("NOT AUTHENTICATED!");
 		}
+	}
 
+	private class AsyncPushTask extends AsyncTask<Void, Void, Integer> {
+		static final int SUCCESS = 0;
+		static final int CONFLICT = 1;
+		static final int ERROR = 2;
+
+		private boolean overwrite = false;
+		
+		public AsyncPushTask(boolean overwrite) {
+			this.overwrite = overwrite;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			m_pushing = true;
+			pushQueue = 0;
+			updateSyncUI(false);
+		}
+		
+		@Override
+		protected Integer doInBackground(Void... params) {
+			try {
+				Log.d(TAG, "start taskBag.pushToRemote");
+				taskBag.pushToRemote(true, overwrite);
+			} catch (RemoteConflictException c) {
+				Log.e(TAG, c.getMessage());
+				return CONFLICT;
+			} catch (Exception e) {
+				Log.e(TAG, e.getMessage());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			Log.d(TAG, "post taskBag.pushToremote");
+			m_pushing = false;
+			if (result == SUCCESS) {
+				if (pushQueue > 0) {
+					m_pushing = true;
+					Log.d(TAG, "pushQueue == " + pushQueue + ". Need to push again.");
+					new AsyncPushTask(false).execute();
+				} else {
+					Log.d(TAG, "taskBag.pushToRemote done");
+					setNeedToPush(false);
+					updateSyncUI(false);
+					// Push is complete. Now do a pull in case the remote
+					// done.txt has changed.
+					pullFromRemote(true);
+				}
+			} else if (result == CONFLICT) {
+				// FIXME: need to know which file had conflict
+				sendBroadcast(new Intent(Constants.INTENT_SYNC_CONFLICT));
+			} else {
+				sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
+			}
+			super.onPostExecute(result);
+		}
 	}
 
 	/**
@@ -245,9 +264,7 @@ public class TodoApplication extends Application {
 	private void backgroundPullFromRemote() {
 		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
 			m_pulling = true;
-			// Comment out next line to avoid resetting list position at top;
-			// should maintain position of last action
-			// updateSyncUI();
+			updateSyncUI(false);
 
 			new AsyncTask<Void, Void, Boolean>() {
 
@@ -266,10 +283,10 @@ public class TodoApplication extends Application {
 				@Override
 				protected void onPostExecute(Boolean result) {
 					Log.d(TAG, "post taskBag.pullFromRemote");
+					m_pulling = false;
 					if (result) {
 						Log.d(TAG, "taskBag.pullFromRemote done");
-						m_pulling = false;
-						updateSyncUI();
+						updateSyncUI(true);
 					} else {
 						sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
 					}
@@ -283,8 +300,9 @@ public class TodoApplication extends Application {
 		}
 	}
 
-	private void updateSyncUI() {
-		sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI));
+	private void updateSyncUI(boolean redrawList) {
+		sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI).putExtra(
+				"redrawList", redrawList));
 	}
 
 	private final class BroadcastReceiverExtension extends BroadcastReceiver {
@@ -308,7 +326,7 @@ public class TodoApplication extends Application {
 				showToast("Synchronizing Failed");
 				m_pulling = false;
 				m_pushing = false;
-				updateSyncUI();
+				updateSyncUI(true);
 			}
 		}
 	}
