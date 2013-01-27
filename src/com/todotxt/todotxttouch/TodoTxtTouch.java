@@ -382,6 +382,20 @@ public class TodoTxtTouch extends ListActivity implements
 
 		return super.onContextItemSelected(item);
 	}
+	
+	private void shareTasks() {
+		String shareText = "";
+		for (Task t : m_adapter.getItems()) {
+			shareText += t.inFileFormat() + "\n";
+		}
+		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+		shareIntent.setType("text/plain");
+		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+				"Todo.txt task");
+		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+		
+		startActivity(Intent.createChooser(shareIntent, "Share"));
+	}
 
 	private void shareTaskAt(final int pos) {
 		final Task task = m_adapter.getItem(pos);
@@ -647,6 +661,9 @@ public class TodoTxtTouch extends ListActivity implements
 			break;
 		case R.id.sort:
 			startSortDialog();
+			break;
+		case R.id.share:
+			shareTasks();
 			break;
 		default:
 			return super.onMenuItemSelected(featureId, item);
@@ -1103,6 +1120,13 @@ public class TodoTxtTouch extends ListActivity implements
 				}
 			}
 			return convertView;
+		}
+		
+		public List<Task> getItems() {
+			// Make a copy to prevent accidental modification of the adapter.
+			ArrayList<Task> tasks = new ArrayList<Task>();
+			tasks.addAll(items);
+			return tasks;
 		}
 	}
 
