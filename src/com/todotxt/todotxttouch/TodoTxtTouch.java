@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -1003,13 +1004,31 @@ public class TodoTxtTouch extends ListActivity implements
 		openContextMenu(getListView());
 	}
 
+	@SuppressLint("NewApi")
 	private void updateSyncUI(boolean redrawList) {
 		// show or hide refresh button
-		findViewById(R.id.btn_title_refresh).setVisibility(
+		// in on v14+ devices, the menu is updated
+		View refreshButton = findViewById(R.id.btn_title_refresh);
+		if (refreshButton==null) {
+			//v14+ device using the Holo action bar
+			View progress = getLayoutInflater().inflate(R.layout.main_progress, null);
+			
+			//options_menu can be null here because we can sync before the menu has been drawn
+			if (progress!=null && options_menu!=null) {
+				MenuItem refreshMenu = options_menu.findItem(R.id.sync);
+				if (m_app.syncInProgress()) {
+					refreshMenu.setActionView(progress);
+				} else {
+					refreshMenu.setActionView(null);
+				}
+			}		
+		} else {
+			refreshButton.setVisibility(
 				m_app.syncInProgress() ? View.GONE : View.VISIBLE);
 		// show or hide moving refresh indicator
 		findViewById(R.id.title_refresh_progress).setVisibility(
 				m_app.syncInProgress() ? View.VISIBLE : View.GONE);
+		}
 		if (redrawList) {
 			// hide action bar
 			findViewById(R.id.actionbar).setVisibility(View.GONE);

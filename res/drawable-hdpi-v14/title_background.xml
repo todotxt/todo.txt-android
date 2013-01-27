@@ -22,24 +22,11 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
-<resources>
-	<style name="TodoTxtTouchLight" parent="@android:style/Theme">
-		<item name="android:textColor">#000000</item>
-		<item name="android:background">#FFFFFF</item>
-		<item name="android:divider">#DBE9FF</item>
-		<item name="android:footerDividersEnabled">true</item>
-		<item name="android:dividerHeight">1px</item>
-		<item name="android:cacheColorHint">#FFFFFF</item>
-	</style>
-	<style name="TodoTxtTouchDark" parent="android:Theme">
-		<item name="android:textColor">#FFFFFF</item>
-		<item name="android:background">#000000</item>
-		<item name="android:divider">#DBE9FF</item>
-		<item name="android:footerDividersEnabled">true</item>
-		<item name="android:dividerHeight">1px</item>
-		<item name="android:cacheColorHint">#000000</item>
-	</style>
-	<style name="TodoTheme.Widget" parent="TodoTxtTouchDark">
-		<item name="android:background">@android:color/transparent</item>
-	</style>
-</resources>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:shape="rectangle"> 
+    <gradient 
+		android:startColor="@android:color/holo_green_light"
+		android:endColor="@android:color/holo_green_dark" 
+		android:angle="270" /> 
+</shape> 

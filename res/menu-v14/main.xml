@@ -22,24 +22,24 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
-<resources>
-	<style name="TodoTxtTouchLight" parent="@android:style/Theme">
-		<item name="android:textColor">#000000</item>
-		<item name="android:background">#FFFFFF</item>
-		<item name="android:divider">#DBE9FF</item>
-		<item name="android:footerDividersEnabled">true</item>
-		<item name="android:dividerHeight">1px</item>
-		<item name="android:cacheColorHint">#FFFFFF</item>
-	</style>
-	<style name="TodoTxtTouchDark" parent="android:Theme">
-		<item name="android:textColor">#FFFFFF</item>
-		<item name="android:background">#000000</item>
-		<item name="android:divider">#DBE9FF</item>
-		<item name="android:footerDividersEnabled">true</item>
-		<item name="android:dividerHeight">1px</item>
-		<item name="android:cacheColorHint">#000000</item>
-	</style>
-	<style name="TodoTheme.Widget" parent="TodoTxtTouchDark">
-		<item name="android:background">@android:color/transparent</item>
-	</style>
-</resources>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:title="@string/addtask" android:id="@+id/add_new"
+		android:icon="@drawable/ic_menu_add"
+		android:showAsAction="always" />
+	<item android:title="@string/sync" android:id="@+id/sync"
+		android:icon="@drawable/menu_sync" 
+		android:showAsAction="always"/>
+	<item android:title="@string/search" android:id="@+id/search"
+		android:icon="@android:drawable/ic_menu_search" 
+		android:showAsAction="ifRoom"/>
+	<item android:title="@string/filter" android:id="@+id/filter"
+		android:icon="@drawable/menu_filter" 
+		android:showAsAction="ifRoom"/>
+	<item android:title="@string/sort" android:id="@+id/sort"
+		android:icon="@android:drawable/ic_menu_sort_alphabetically" />
+	<item android:title="@string/preferences" android:id="@+id/preferences"
+		android:icon="@android:drawable/ic_menu_preferences" />
+	<item android:title="@string/share" android:id="@+id/share"
+	    android:icon="@android:drawable/ic_menu_share"/>
+</menu>
