@@ -72,7 +72,6 @@
   <string name="sync_conflict_dialog_title">Conflitto nel file</string>
   <string name="sync_conflict_dialog_msg">Oops! Su Dropbox c\'è una versione più recente del tuo file todo.txt. \nVuoi sincronizzare le tue modifiche locali, o scaricare la versione presente su Dropbox?</string>
   <string name="first_title_word">Todo.txt</string>
-  <string name="second_title_word">Touch</string>
   <string name="login_screen_button">Connettiti a Dropbox</string>
   <string name="delete_task_title">Elimina attività</string>
   <string name="delete_task_message">L\'operazione non potrà essere annullata. Continuare?</string>

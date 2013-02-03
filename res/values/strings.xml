@@ -101,9 +101,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="sync_conflict_dialog_title">File Conflict</string>
     <string name="sync_conflict_dialog_msg">Oops! There is a newer version of your todo.txt file in Dropbox. \nDo you want to upload your local changes, or download the Dropbox version?</string>
     <!-- login -->
-    <string name="first_title_word">Todo.txt</string>
-    <string name="second_title_word">Touch</string>
-    <string name="login_screen_button">Log in to Dropbox</string>
+    <string name="first_title_word">Welcome to Todo.txt</string>
+    <string name="login_screen_button">Connect to Dropbox</string>
     <!-- delete -->
     <string name="delete_task_title">Delete Task</string>
     <string name="delete_task_message">This cannot be undone. Are you sure?</string>
