@@ -57,12 +57,9 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
-		android:textSize="8pt"
-		android:padding="5dp"
 		android:drawableLeft="@drawable/dropbox_logo"
-		android:layout_margin="5dp"
-		android:text="@string/login_screen_button" 
-/>
+		android:text="@string/login_screen_button"
+ />
 </LinearLayout>
 	
 </RelativeLayout>
