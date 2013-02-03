@@ -89,7 +89,7 @@ public class Preferences extends PreferenceActivity {
 	protected Dialog onCreateDialog(int id) {
 		if (id == ABOUT_DIALOG) {
 			AlertDialog.Builder aboutAlert = new AlertDialog.Builder(this);
-			aboutAlert.setTitle("Todo.txt Touch v" + version);
+			aboutAlert.setTitle("Todo.txt v" + version);
 			aboutAlert
 					.setMessage("by Gina Trapani &\nthe Todo.txt community\n\nhttp://todotxt.com");
 			aboutAlert.setIcon(R.drawable.todotxt_touch_icon);
