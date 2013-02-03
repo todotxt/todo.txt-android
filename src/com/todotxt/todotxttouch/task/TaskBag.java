@@ -49,9 +49,9 @@ public interface TaskBag {
 
 	int size();
 
-	ArrayList<String> getProjects();
+	ArrayList<String> getProjects(boolean includeNone);
 
-	ArrayList<String> getContexts();
+	ArrayList<String> getContexts(boolean includeNone);
 
 	ArrayList<Priority> getPriorities();
 

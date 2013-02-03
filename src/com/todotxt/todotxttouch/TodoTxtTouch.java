@@ -1157,9 +1157,9 @@ public class TodoTxtTouch extends ListActivity implements
 		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
 				Priority.inCode(taskBag.getPriorities()));
 		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-				taskBag.getProjects());
+				taskBag.getProjects(true));
 		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-				taskBag.getContexts());
+				taskBag.getContexts(true));
 
 		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED,
 				Priority.inCode(m_prios));

@@ -50,7 +50,7 @@ class TaskBagImpl implements TaskBag {
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	private Date lastReload = null;
 	private Date lastSync = null;
-	
+
 	public TaskBagImpl(Preferences preferences,
 			LocalTaskRepository localRepository,
 			RemoteClientManager remoteClientManager) {
@@ -71,7 +71,7 @@ class TaskBagImpl implements TaskBag {
 	private void store() {
 		store(this.tasks);
 	}
-	
+
 	@Override
 	public void archive() {
 		try {
@@ -80,14 +80,15 @@ class TaskBagImpl implements TaskBag {
 			lastReload = null;
 			reload();
 		} catch (Exception e) {
-			throw new TaskPersistException(
-					"An error occurred while archiving", e);
+			throw new TaskPersistException("An error occurred while archiving",
+					e);
 		}
 	}
-	
+
 	@Override
 	public void reload() {
-		if (lastReload == null || localRepository.todoFileModifiedSince(lastReload)) {
+		if (lastReload == null
+				|| localRepository.todoFileModifiedSince(lastReload)) {
 			localRepository.init();
 			this.tasks = localRepository.load();
 			lastReload = new Date();
@@ -189,9 +190,7 @@ class TaskBagImpl implements TaskBag {
 				doneFile = LocalFileTaskRepository.DONE_TXT_FILE;
 			}
 			remoteClientManager.getRemoteClient().pushTodo(
-					LocalFileTaskRepository.TODO_TXT_FILE,
-					doneFile,
-					overwrite);
+					LocalFileTaskRepository.TODO_TXT_FILE, doneFile, overwrite);
 			lastSync = new Date();
 		}
 	}
@@ -214,7 +213,7 @@ class TaskBagImpl implements TaskBag {
 					store(remoteTasks);
 					reload();
 				}
-				
+
 				File doneFile = result.getDoneFile();
 				if (doneFile != null && doneFile.exists()) {
 					localRepository.loadDoneTasks(doneFile);
@@ -240,7 +239,7 @@ class TaskBagImpl implements TaskBag {
 	}
 
 	@Override
-	public ArrayList<String> getContexts() {
+	public ArrayList<String> getContexts(boolean includeNone) {
 		// TODO cache this after reloads?
 		Set<String> res = new HashSet<String>();
 		for (Task item : tasks) {
@@ -248,12 +247,14 @@ class TaskBagImpl implements TaskBag {
 		}
 		ArrayList<String> ret = new ArrayList<String>(res);
 		Collections.sort(ret);
-		ret.add(0, "-");
+		if (includeNone) {
+			ret.add(0, "-");
+		}
 		return ret;
 	}
 
 	@Override
-	public ArrayList<String> getProjects() {
+	public ArrayList<String> getProjects(boolean includeNone) {
 		// TODO cache this after reloads?
 		Set<String> res = new HashSet<String>();
 		for (Task item : tasks) {
@@ -261,14 +262,17 @@ class TaskBagImpl implements TaskBag {
 		}
 		ArrayList<String> ret = new ArrayList<String>(res);
 		Collections.sort(ret);
-		ret.add(0, "-");
+		if (includeNone) {
+			ret.add(0, "-");
+		}
 		return ret;
 	}
 
 	private static Task find(List<Task> tasks, Task task) {
 		for (Task task2 : tasks) {
-			if (task2 == task || (task2.getText().equals(task.getOriginalText())
-					&& task2.getPriority() == task.getOriginalPriority())) {
+			if (task2 == task
+					|| (task2.getText().equals(task.getOriginalText()) && task2
+							.getPriority() == task.getOriginalPriority())) {
 				return task2;
 			}
 		}

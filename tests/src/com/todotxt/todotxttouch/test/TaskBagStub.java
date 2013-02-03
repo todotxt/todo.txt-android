@@ -60,13 +60,13 @@ public class TaskBagStub implements TaskBag {
 	}
 
 	@Override
-	public ArrayList<String> getProjects() {
+	public ArrayList<String> getProjects(boolean includeNone) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ArrayList<String> getContexts() {
+	public ArrayList<String> getContexts(boolean includeNone) {
 		// TODO Auto-generated method stub
 		return null;
 	}
