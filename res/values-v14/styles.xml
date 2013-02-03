@@ -29,8 +29,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	</style>
 	
 
-	<style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-    	<item name="android:background">#ff669900</item>
+	<style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    	<item name="android:background">#006400</item>
 	</style>
 
 	<style name="TitleBar">

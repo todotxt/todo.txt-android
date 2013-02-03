@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    style="@style/TodoTheme.Widget"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:resizeMode="vertical" >
+
+    <LinearLayout
+        style="@style/widget_w1_TaskBar"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_gravity="top"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/empty"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="top"
+                android:paddingTop="5dip"
+                android:text="@string/main_no_items" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/todoWidget_IdTask1"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/todoWidget_PrioTask1"
+                    android:gravity="bottom"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/todoWidget_PrioTask1"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/todoWidget_IdTask1"
+                    android:paddingRight="4dip"
+                    android:paddingTop="5dip"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/todoWidget_TextTask1"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/todoWidget_PrioTask1"
+                    android:paddingLeft="4dip"
+                    android:paddingTop="5dip" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/todoWidget_IdTask2"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/todoWidget_PrioTask2"
+                    android:gravity="bottom"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/todoWidget_PrioTask2"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/todoWidget_IdTask2"
+                    android:paddingRight="4dip"
+                    android:paddingTop="5dip"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/todoWidget_TextTask2"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/todoWidget_PrioTask2"
+                    android:paddingLeft="4dip"
+                    android:paddingTop="5dip" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dip" >
+
+                <TextView
+                    android:id="@+id/todoWidget_IdTask3"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/todoWidget_PrioTask3"
+                    android:gravity="bottom"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/todoWidget_PrioTask3"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/todoWidget_IdTask3"
+                    android:paddingRight="4dip"
+                    android:paddingTop="5dip"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/todoWidget_TextTask3"
+                    style="@style/widget_w1_TaskText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/todoWidget_PrioTask3"
+                    android:paddingLeft="4dip"
+                    android:paddingTop="5dip" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="5dip"
+            android:gravity="center|top"
+            android:orientation="vertical"
+            android:paddingTop="5dip" >
+
+            <ImageView
+                android:id="@+id/widget_launchbutton"
+                style="@style/WidgetTitleBarLogo"
+                android:maxHeight="40dp"
+                android:maxWidth="40dp"
+                android:padding="5dip"
+                android:src="@drawable/widget_icon_launcher_40"
+                android:contentDescription="@string/app_label" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="fill_vertical|bottom"
+                android:gravity="bottom|center"
+                android:orientation="vertical" >
+
+                <ImageButton
+                    android:id="@+id/widget_addbutton"
+                    style="@style/TitleBarAction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dip"
+                    android:padding="5dip"
+                    android:src="@drawable/widget_add" 
+                    android:contentDescription="@string/addtask"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
