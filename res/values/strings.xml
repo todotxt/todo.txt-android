@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_label">Todo.txt Touch</string>
+    <string name="app_label">Todo.txt</string>
     <string name="added_task">Added task</string>
     <string name="add_task_failed">Could not add task</string>
     <string name="updated_task">Updated task</string>
