@@ -70,7 +70,7 @@
   <string name="sync_download_message">Stahuji todo.txt…</string>
   <string name="sync_conflict_dialog_title">Konflikt souborů</string>
   <string name="sync_conflict_dialog_msg">Pozor! V Dropboxu je novější verze souboru todo.txt \nChcete nahrát lokální změny, nebo stáhnout verzi z Dropboxu?</string>
-  <string name="first_title_word">Todo.txt</string>
+  <string name="welcome_message">Todo.txt</string>
   <string name="login_screen_button">Přihlásit do Dropboxu</string>
   <string name="delete_task_title">Smazat Úkol</string>
   <string name="delete_task_message">Tuto akci nelze vrátit zpět. Jste si jisti?</string>

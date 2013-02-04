@@ -67,7 +67,7 @@
   <string name="sync_download_message">todo.txt wird runtergeladen…</string>
   <string name="sync_conflict_dialog_title">Datei Konflikt</string>
   <string name="sync_conflict_dialog_msg">Es gibt eine neuere Version der todo.txt in der Dropbox. \nWollen Sie die lokalen Änderungen hoch-, oder die Dropbox Version hertunerladen?</string>
-  <string name="first_title_word">Todo.txt</string>
+  <string name="welcome_message">Todo.txt</string>
   <string name="login_screen_button">In Dropbox einloggen</string>
   <string name="delete_task_title">Task löschen</string>
   <string name="delete_task_message">Kann nicht rückgängig gemacht werden. Sind Sie sicher?</string>

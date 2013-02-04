@@ -70,7 +70,7 @@
   <string name="sync_conflict_dialog_title">Conflit sur le fichier</string>
   <string name="sync_conflict_dialog_msg">Aïe! Il y a une version plus récente de votre fichier todo.txt dans Dropbox.\n
 Envoyer vos modifications locales, ou récupérer la version de Dropbox?</string>
-  <string name="first_title_word">Todo.txt</string>
+  <string name="welcome_message">Todo.txt</string>
   <string name="login_screen_button">Se connecter à Dropbox</string>
   <string name="delete_task_title">Supprimer la tâche</string>
   <string name="delete_task_message">Cette action est impossible à annuler. Etes vous sûr ?</string>

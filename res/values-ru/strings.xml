@@ -70,7 +70,7 @@
   <string name="sync_download_message">Загрузка todo.txt…</string>
   <string name="sync_conflict_dialog_title">Конфликт файлов</string>
   <string name="sync_conflict_dialog_msg">Опаньки! Существует более новая версия вашего файла todo.txt в Dropbox. \nЖелаете выгрузить Ваши локальные изменения или загрузить версию из Dropbox?</string>
-  <string name="first_title_word">Сделать.txt</string>
+  <string name="welcome_message">Сделать.txt</string>
   <string name="login_screen_button">Войти в Dropbox</string>
   <string name="delete_task_title">Удаление Задания</string>
   <string name="delete_task_message">Это невозможно отменить. Вы уверены?</string>
