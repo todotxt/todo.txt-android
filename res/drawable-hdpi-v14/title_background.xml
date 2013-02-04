@@ -23,21 +23,10 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="@string/addtask" android:id="@+id/add_new"
-		android:icon="@android:drawable/ic_menu_add" />
-	<item android:title="@string/sync" android:id="@+id/sync"
-		android:icon="@drawable/menu_sync" />
-	<item android:title="@string/search" android:id="@+id/search"
-		android:icon="@android:drawable/ic_menu_search" />
-	<item android:title="@string/filter" android:id="@+id/filter"
-		android:icon="@drawable/menu_filter" />
-	<item android:title="@string/sort" android:id="@+id/sort"
-		android:icon="@android:drawable/ic_menu_sort_alphabetically" />
-	<item android:title="@string/share" android:id="@+id/share"
-	    android:icon="@android:drawable/ic_menu_share"/>
-		<item android:title="@string/preferences" android:id="@+id/preferences"
-		android:icon="@android:drawable/ic_menu_preferences" />
-	<item android:title="@string/share" android:id="@+id/share"
-	    android:icon="@android:drawable/ic_menu_share"/>
-</menu>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:shape="rectangle"> 
+    <gradient 
+		android:startColor="@android:color/holo_green_light"
+		android:endColor="@android:color/holo_green_dark" 
+		android:angle="270" /> 
+</shape> 

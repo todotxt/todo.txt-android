@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/home_root" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+
+
+	<LinearLayout style="@style/ActionBar" android:id="@+id/actionbar"
+		android:visibility="gone">
+
+		<ImageView android:id="@+id/actionbar_icon" android:contentDescription="@string/app_label"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical" android:layout_marginLeft="5dip"
+			android:layout_marginRight="5dip" android:src="@drawable/ic_actionbar_filter" />
+
+		<TextView android:id="@+id/filter_text" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+			android:textColor="@color/actionbar_label" />
+		<View style="@style/TitleBarSpring" />
+
+		<LinearLayout style="@style/ActionBarButtonSet"
+			android:scrollbars="horizontal">
+
+			<Button style="@style/ActionBarLeftButton" android:text="@string/refine"
+				android:onClick="onRefineClick" />
+			<ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator" />
+			<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator" />
+			<Button style="@style/ActionBarRightButton" android:text="@string/clear"
+				android:onClick="onClearClick" />
+		</LinearLayout>
+	</LinearLayout>
+	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator" />
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="0dip"
+		android:background="@color/white" android:layout_weight="1">
+		<ListView android:id="@+id/android:list"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:fastScrollEnabled="true"
+			style="@style/TodoTxtTouchLight" />
+
+		<TextView android:id="@+id/android:empty"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:text="@string/main_no_items" style="@style/TodoTxtTouchLight"
+			android:gravity="center_vertical|center_horizontal" />
+	</LinearLayout>
+</LinearLayout>

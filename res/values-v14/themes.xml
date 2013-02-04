@@ -22,22 +22,14 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+<resources>
+	<style name="TodoTxtTouchLight" parent="@android:style/Theme.Holo.Light">
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="@string/addtask" android:id="@+id/add_new"
-		android:icon="@android:drawable/ic_menu_add" />
-	<item android:title="@string/sync" android:id="@+id/sync"
-		android:icon="@drawable/menu_sync" />
-	<item android:title="@string/search" android:id="@+id/search"
-		android:icon="@android:drawable/ic_menu_search" />
-	<item android:title="@string/filter" android:id="@+id/filter"
-		android:icon="@drawable/menu_filter" />
-	<item android:title="@string/sort" android:id="@+id/sort"
-		android:icon="@android:drawable/ic_menu_sort_alphabetically" />
-	<item android:title="@string/share" android:id="@+id/share"
-	    android:icon="@android:drawable/ic_menu_share"/>
-		<item android:title="@string/preferences" android:id="@+id/preferences"
-		android:icon="@android:drawable/ic_menu_preferences" />
-	<item android:title="@string/share" android:id="@+id/share"
-	    android:icon="@android:drawable/ic_menu_share"/>
-</menu>
+	</style>
+	<style name="TodoTxtTouchDark" parent="@android:style/Theme.Holo">
+
+	</style>
+	<style name="TodoTheme.Widget" parent="TodoTxtTouchDark">
+		<item name="android:background">@android:color/transparent</item>
+	</style>
+</resources>
