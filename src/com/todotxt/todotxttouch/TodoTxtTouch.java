@@ -52,6 +52,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.text.SpannableString;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -383,7 +384,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 		return super.onContextItemSelected(item);
 	}
-	
+
 	private void shareTasks() {
 		String shareText = "";
 		for (Task t : m_adapter.getItems()) {
@@ -394,7 +395,7 @@ public class TodoTxtTouch extends ListActivity implements
 		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 				"Todo.txt task");
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
-		
+
 		startActivity(Intent.createChooser(shareIntent, "Share"));
 	}
 
@@ -1009,25 +1010,31 @@ public class TodoTxtTouch extends ListActivity implements
 		// show or hide refresh button
 		// in on v14+ devices, the menu is updated
 		View refreshButton = findViewById(R.id.btn_title_refresh);
-		if (refreshButton==null) {
-			//v14+ device using the Holo action bar
-			View progress = getLayoutInflater().inflate(R.layout.main_progress, null);
-			
-			//options_menu can be null here because we can sync before the menu has been drawn
-			if (progress!=null && options_menu!=null) {
+		if (refreshButton == null) {
+			// v14+ device using the Holo action bar
+			View progress = getLayoutInflater().inflate(R.layout.main_progress,
+					null);
+
+			// options_menu can be null here because we can sync before the menu
+			// has been drawn
+			if (progress != null && options_menu != null) {
 				MenuItem refreshMenu = options_menu.findItem(R.id.sync);
 				if (m_app.syncInProgress()) {
-					refreshMenu.setActionView(progress);
+					// refreshMenu.setActionView(progress);
+					// Use MenuItemCompat instead for v4/1.6 compatibility
+					MenuItemCompat.setActionView(refreshMenu, progress);
 				} else {
-					refreshMenu.setActionView(null);
+					// refreshMenu.setActionView(null);
+					// Use MenuItemCompat instead for v4/1.6 compatibility
+					MenuItemCompat.setActionView(refreshMenu, null);
 				}
-			}		
+			}
 		} else {
-			refreshButton.setVisibility(
-				m_app.syncInProgress() ? View.GONE : View.VISIBLE);
-		// show or hide moving refresh indicator
-		findViewById(R.id.title_refresh_progress).setVisibility(
-				m_app.syncInProgress() ? View.VISIBLE : View.GONE);
+			refreshButton.setVisibility(m_app.syncInProgress() ? View.GONE
+					: View.VISIBLE);
+			// show or hide moving refresh indicator
+			findViewById(R.id.title_refresh_progress).setVisibility(
+					m_app.syncInProgress() ? View.VISIBLE : View.GONE);
 		}
 		if (redrawList) {
 			// hide action bar
@@ -1140,7 +1147,7 @@ public class TodoTxtTouch extends ListActivity implements
 			}
 			return convertView;
 		}
-		
+
 		public List<Task> getItems() {
 			// Make a copy to prevent accidental modification of the adapter.
 			ArrayList<Task> tasks = new ArrayList<Task>();
