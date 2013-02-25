@@ -27,13 +27,13 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -266,14 +266,19 @@ public class AddTask extends Activity {
 		addBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// strip line breaks
-				final String input = textInputField.getText().toString()
-						.replaceAll("\\r\\n|\\r|\\n", " ");
-				addEditAsync(input);
+                onAddClick();
 			}
 
 		});
 	}
+
+    private void onAddClick() {
+        final EditText textInputField = (EditText) findViewById(R.id.taskText);
+        // strip line breaks
+        final String input = textInputField.getText().toString()
+                .replaceAll("\\r\\n|\\r|\\n", " ");
+        addEditAsync(input);
+    }
 
 	private void addEditAsync(final String input) {
 		new AsyncTask<Object, Void, Boolean>() {
@@ -344,7 +349,14 @@ public class AddTask extends Activity {
 		}
 	}
 
-	/** Handle priority spinner **/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add, menu);
+        return true;
+    }
+
+    /** Handle priority spinner **/
 	public void onPriorityClick(View v) {
 		priorities.performClick();
 	}
@@ -359,9 +371,30 @@ public class AddTask extends Activity {
 		contexts.performClick();
 	}
 
-	/** Handle help message **/
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add_new:
+                onAddClick();
+                break;
+            case R.id.menu_help:
+                onHelpClick(null);
+                break;
+            default:
+                return super.onMenuItemSelected(featureId, item);
+        }
+        return true;
+    }
+
+    /** Handle help message **/
 	public void onHelpClick(View v) {
-		Intent intent = new Intent(v.getContext(), HelpActivity.class);
+        Context context;
+        if (v == null) {
+            context = getApplicationContext();
+        } else {
+            context = v.getContext();
+        }
+		Intent intent = new Intent( context, HelpActivity.class);
 		startActivity(intent);
 	}
 }

@@ -644,7 +644,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
-		switch (item.getItemId()) {
+            switch (item.getItemId()) {
 		case R.id.add_new:
 			startAddTaskActivity();
 			break;

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/home_root" android:orientation="vertical"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+    <LinearLayout style="@style/TitleBar"
+            android:visibility="gone">
+        <ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo"
+                   android:contentDescription="@string/app_label"/>
+        <View style="@style/TitleBarSpring" />
+        <TextView style="@style/TitleBarLabel" android:id="@+id/title_bar_label"
+                  android:text="@string/newtask" />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:divider="?android:attr/dividerHorizontal"
+            style="?android:attr/buttonBarStyle"
+            android:showDividers="middle">
+    <Button
+            android:id="@+id/priority_btn"
+            android:onClick="onPriorityClick"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/btn_priority_short_prompt"
+            />
+
+
+    <Button
+            android:id="@+id/context_btn"
+            android:onClick="onContextClick"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/context_prompt"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+
+    <Button
+            android:id="@+id/project_btn"
+            android:onClick="onProjectClick"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/project_prompt"
+            style="?android:attr/borderlessButtonStyle"
+            />
+	</LinearLayout>
+	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator"/>
+
+	<EditText android:id="@+id/taskText" android:hint="@string/tasktexthint"
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1"
+		android:background="@color/white"
+		android:padding="5dip" android:capitalize="sentences" />
+	
+
+	<LinearLayout android:orientation="horizontal" 
+		android:layout_width="fill_parent"
+		android:layout_height="0dip"
+		android:background="@color/grey"
+		android:visibility="invisible">
+		<Spinner android:id="@+id/priorities" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:prompt="@string/priority_prompt"/>
+		<Spinner android:id="@+id/projects" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:prompt="@string/project_prompt" />
+		<Spinner android:id="@+id/contexts" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:prompt="@string/context_prompt" />
+	</LinearLayout>
+	
+	<ImageView style="@style/HorizontalRule"
+               android:visibility="gone"
+               android:contentDescription="@string/separator"/>
+	
+	<LinearLayout android:orientation="horizontal" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+        android:visibility="gone"
+		android:background="@drawable/actionbar_dark_background"
+		android:padding="3dip">
+		
+		<Button android:id="@+id/addTask" 
+			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"
+			android:text="@string/add" 
+			android:layout_weight="1"/>
+	
+		<Button android:id="@+id/cancel" 
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" 
+			android:text="@string/cancel" 
+			android:layout_weight="1"/>
+	</LinearLayout>
+</LinearLayout>
