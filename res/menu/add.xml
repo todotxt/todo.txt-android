@@ -24,5 +24,10 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+   <item android:title="@string/add_task_help_btn" android:id="@+id/menu_help"
+        android:icon="@drawable/ic_menu_help"
+        android:showAsAction="always"/>
+	<item android:title="@string/addtask" android:id="@+id/menu_add_new"
+		android:icon="@drawable/ic_menu_add"
+		android:showAsAction="always" />
 </menu>

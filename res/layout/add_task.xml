@@ -25,45 +25,44 @@ You should have received a copy of the GNU General Public License along with Tod
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/home_root" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:divider="?android:attr/dividerHorizontal"
+            style="?android:attr/buttonBarStyle"
+            android:showDividers="middle">
+    <Button
+            android:id="@+id/priority_btn"
+            android:onClick="onPriorityClick"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/btn_priority_short_prompt"
+            />
 
-	<LinearLayout style="@style/TitleBar">
-		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo" 
-		    android:contentDescription="@string/app_label"/>
-		<View style="@style/TitleBarSpring" />
-		<TextView style="@style/TitleBarLabel" android:id="@+id/title_bar_label"
-			android:text="@string/newtask" />
-	</LinearLayout>
-	
-	<LinearLayout style="@style/ActionBar"
-		android:id="@+id/subtitle_bar"
-		android:visibility="visible">
-		<LinearLayout style="@style/ActionBarButtonSet"
-			android:scrollbars="horizontal">
-			<Button style="@style/ActionBarLeftButton"
-				android:id="@+id/priority_btn"				
-				android:text="@string/add_task_priority_btn"
-				android:onClick="onPriorityClick"
-				android:drawableRight="@drawable/ic_actionbar_drop" />
-	        <ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator" />
-	       	<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator"/>
-			<Button style="@style/ActionBarCenterButton"
-				android:id="@+id/project_btn"
-				android:text="@string/add_task_project_btn"
-				android:onClick="onProjectClick"
-				android:drawableRight="@drawable/ic_actionbar_drop" />
-        	<ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator"/>
-        	<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator"/>
-			<Button style="@style/ActionBarRightButton"
-				android:id="@+id/context_btn"
-				android:text="@string/add_task_context_btn"
-				android:onClick="onContextClick" 
-				android:drawableRight="@drawable/ic_actionbar_drop" />
-		</LinearLayout>
-		<View style="@style/TitleBarSpring" />
-		<Button style="@style/ActionBarButton"
-			android:id="@+id/help_btn"
-			android:text="@string/add_task_help_btn" 
-			android:onClick="onHelpClick"/>
+
+    <Button
+            android:id="@+id/context_btn"
+            android:onClick="onContextClick"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/context_prompt"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+
+    <Button
+            android:id="@+id/project_btn"
+            android:onClick="onProjectClick"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/project_prompt"
+            style="?android:attr/borderlessButtonStyle"
+            />
 	</LinearLayout>
 	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator"/>
 
@@ -91,11 +90,14 @@ You should have received a copy of the GNU General Public License along with Tod
 			android:prompt="@string/context_prompt" />
 	</LinearLayout>
 	
-	<ImageView style="@style/HorizontalRule" android:contentDescription="@string/separator"/>
+	<ImageView style="@style/HorizontalRule"
+               android:visibility="gone"
+               android:contentDescription="@string/separator"/>
 	
 	<LinearLayout android:orientation="horizontal" 
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+        android:visibility="gone"
 		android:background="@drawable/actionbar_dark_background"
 		android:padding="3dip">
 		
