@@ -59,10 +59,6 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +68,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.view.LayoutInflater;
 
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.task.FilterFactory;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
@@ -82,7 +83,7 @@ import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 
-public class TodoTxtTouch extends ListActivity implements
+public class TodoTxtTouch extends SherlockListActivity implements
 		OnSharedPreferenceChangeListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
@@ -283,7 +284,7 @@ public class TodoTxtTouch extends ListActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
@@ -292,7 +293,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		MenuInflater inflater = getMenuInflater();
+		android.view.MenuInflater inflater = getMenuInflater();
 		AdapterView.AdapterContextMenuInfo menuInfoAdap = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		final int pos;
 		if (m_pos != Constants.INVALID_POSITION) {
@@ -333,7 +334,7 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(android.view.MenuItem item) {
 		Log.v(TAG, "onContextItemSelected");
 		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
@@ -644,7 +645,7 @@ public class TodoTxtTouch extends ListActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
-		switch (item.getItemId()) {
+            switch (item.getItemId()) {
 		case R.id.add_new:
 			startAddTaskActivity();
 			break;
@@ -1005,37 +1006,21 @@ public class TodoTxtTouch extends ListActivity implements
 		openContextMenu(getListView());
 	}
 
-	@SuppressLint("NewApi")
 	private void updateSyncUI(boolean redrawList) {
-		// show or hide refresh button
-		// in on v14+ devices, the menu is updated
-		View refreshButton = findViewById(R.id.btn_title_refresh);
-		if (refreshButton == null) {
-			// v14+ device using the Holo action bar
-			View progress = getLayoutInflater().inflate(R.layout.main_progress,
-					null);
+		View progress = getLayoutInflater().inflate(R.layout.main_progress,
+				null);
 
-			// options_menu can be null here because we can sync before the menu
-			// has been drawn
-			if (progress != null && options_menu != null) {
-				MenuItem refreshMenu = options_menu.findItem(R.id.sync);
-				if (m_app.syncInProgress()) {
-					// refreshMenu.setActionView(progress);
-					// Use MenuItemCompat instead for v4/1.6 compatibility
-					MenuItemCompat.setActionView(refreshMenu, progress);
-				} else {
-					// refreshMenu.setActionView(null);
-					// Use MenuItemCompat instead for v4/1.6 compatibility
-					MenuItemCompat.setActionView(refreshMenu, null);
-				}
+		// options_menu can be null here because we can sync before the menu
+		// has been drawn
+		if (progress != null && options_menu != null) {
+			MenuItem refreshMenu = options_menu.findItem(R.id.sync);
+			if (m_app.syncInProgress()) {
+				refreshMenu.setActionView(progress);
+			} else {
+				refreshMenu.setActionView(null);
 			}
-		} else {
-			refreshButton.setVisibility(m_app.syncInProgress() ? View.GONE
-					: View.VISIBLE);
-			// show or hide moving refresh indicator
-			findViewById(R.id.title_refresh_progress).setVisibility(
-					m_app.syncInProgress() ? View.VISIBLE : View.GONE);
 		}
+
 		if (redrawList) {
 			// hide action bar
 			findViewById(R.id.actionbar).setVisibility(View.GONE);

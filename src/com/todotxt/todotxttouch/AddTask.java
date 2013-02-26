@@ -25,8 +25,8 @@ package com.todotxt.todotxttouch;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +42,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.PriorityTextSplitter;
 import com.todotxt.todotxttouch.task.Task;
@@ -50,7 +54,7 @@ import com.todotxt.todotxttouch.util.CursorPositionCalculator;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 
-public class AddTask extends Activity {
+public class AddTask extends SherlockActivity {
 
 	private final static String TAG = AddTask.class.getSimpleName();
 
@@ -61,8 +65,6 @@ public class AddTask extends Activity {
 	private TodoApplication m_app;
 
 	private TaskBag taskBag;
-
-	private TextView titleBarLabel;
 
 	private String share_text;
 
@@ -96,9 +98,6 @@ public class AddTask extends Activity {
 			Log.d(TAG, share_text);
 		}
 
-		// title bar label
-		titleBarLabel = (TextView) findViewById(R.id.title_bar_label);
-
 		// text
 		final EditText textInputField = (EditText) findViewById(R.id.taskText);
 		textInputField.setGravity(Gravity.TOP);
@@ -116,10 +115,8 @@ public class AddTask extends Activity {
 			iniTask = m_backup;
 			textInputField.setText(task.inFileFormat());
 			setTitle(R.string.updatetask);
-			titleBarLabel.setText(R.string.updatetask);
 		} else {
 			setTitle(R.string.addtask);
-			titleBarLabel.setText(R.string.addtask);
 
 			if (textInputField.getText().length() == 0)
 			{
@@ -266,14 +263,19 @@ public class AddTask extends Activity {
 		addBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// strip line breaks
-				final String input = textInputField.getText().toString()
-						.replaceAll("\\r\\n|\\r|\\n", " ");
-				addEditAsync(input);
+                onAddClick();
 			}
 
 		});
 	}
+
+    private void onAddClick() {
+        final EditText textInputField = (EditText) findViewById(R.id.taskText);
+        // strip line breaks
+        final String input = textInputField.getText().toString()
+                .replaceAll("\\r\\n|\\r|\\n", " ");
+        addEditAsync(input);
+    }
 
 	private void addEditAsync(final String input) {
 		new AsyncTask<Object, Void, Boolean>() {
@@ -344,7 +346,14 @@ public class AddTask extends Activity {
 		}
 	}
 
-	/** Handle priority spinner **/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.add, menu);
+        return true;
+    }
+
+    /** Handle priority spinner **/
 	public void onPriorityClick(View v) {
 		priorities.performClick();
 	}
@@ -359,9 +368,30 @@ public class AddTask extends Activity {
 		contexts.performClick();
 	}
 
-	/** Handle help message **/
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_add_new:
+                onAddClick();
+                break;
+            case R.id.menu_help:
+                onHelpClick(null);
+                break;
+            default:
+                return super.onMenuItemSelected(featureId, item);
+        }
+        return true;
+    }
+
+    /** Handle help message **/
 	public void onHelpClick(View v) {
-		Intent intent = new Intent(v.getContext(), HelpActivity.class);
+        Context context;
+        if (v == null) {
+            context = getApplicationContext();
+        } else {
+            context = v.getContext();
+        }
+		Intent intent = new Intent( context, HelpActivity.class);
 		startActivity(intent);
 	}
 }

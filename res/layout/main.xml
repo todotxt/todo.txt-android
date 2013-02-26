@@ -22,27 +22,11 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/home_root" android:orientation="vertical"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-	<LinearLayout style="@style/TitleBar">
-		<ImageView style="@style/TitleBarLogo" android:src="@drawable/title_logo"
-			android:contentDescription="@string/app_label"/>
-		<View style="@style/TitleBarSpring" />
-		<ImageView style="@style/TitleBarSeparator" android:contentDescription="@string/separator" />
 
-		<ImageButton style="@style/TitleBarAction" android:id="@+id/btn_title_refresh"
-			android:contentDescription="@string/refresh" android:src="@drawable/ic_title_sync"
-			android:onClick="onSyncClick" />
-
-		<ProgressBar style="@style/TitleBarProgressIndicator"
-			android:id="@+id/title_refresh_progress" android:visibility="gone" />
-		<ImageView style="@style/TitleBarSeparator" android:contentDescription="@string/separator"/>
-		<ImageButton style="@style/TitleBarAction" android:src="@drawable/ic_title_add"
-			android:onClick="onAddTaskClick" android:contentDescription="@string/addtask"/>
-	</LinearLayout>
 
 	<LinearLayout style="@style/ActionBar" android:id="@+id/actionbar"
 		android:visibility="gone">
