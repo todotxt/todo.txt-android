@@ -124,6 +124,8 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Not connected, don't push now");
 			showToast(R.string.toast_notconnected);
 		}
+
+        broadcastWidgetUpdate();
 	}
 
 	/**
@@ -147,6 +149,8 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Not connected, don't pull now");
 			showToast(R.string.toast_notconnected);
 		}
+
+        broadcastWidgetUpdate();
 	}
 
 	public TaskBag getTaskBag() {
