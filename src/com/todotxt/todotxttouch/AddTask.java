@@ -138,6 +138,8 @@ public class AddTask extends Activity {
 		textInputField.setSelection(textInputField.getText().toString()
 				.length());
 		
+		textInputField.requestFocus();
+		
 		// priorities
 		priorities = (Spinner) findViewById(R.id.priorities);
 		final ArrayList<String> prioArr = new ArrayList<String>();
