@@ -156,6 +156,7 @@ public class AddTask extends SherlockActivity {
 		textInputField.setSelection(textInputField.getText().toString()
 				.length());
 
+		textInputField.requestFocus();
 	}
 
 	private void showProjectMenu() {
