@@ -1,0 +1,42 @@
+<!--suppress ALL -->
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/menu_add_prio"
+            android:orderInCategory="100"
+            android:showAsAction="ifRoom"
+            android:title="@string/priority_prompt"
+            android:icon="@drawable/ic_action_abprio"
+            />
+    <item
+            android:id="@+id/menu_add_list"
+            android:orderInCategory="100"
+            android:showAsAction="ifRoom"
+            android:title="@string/context_prompt"
+            android:icon="@drawable/ic_action_abcontext"
+            />
+
+    <item
+            android:id="@+id/menu_add_tag"
+            android:orderInCategory="100"
+            android:showAsAction="ifRoom"
+            android:title="@string/project_prompt"
+            android:icon="@drawable/ic_action_abproject"
+            />
+
+
+    <item
+            android:id="@+id/menu_save_task"
+            android:orderInCategory="100"
+            android:showAsAction="ifRoom"
+            android:title="@string/add"
+            android:icon="@drawable/content_save"
+            />
+    <item
+            android:id="@+id/menu_add_task_help"
+            android:orderInCategory="100"
+            android:showAsAction="never"
+            android:title="@string/add_task_help_btn"
+            />
+</menu>
