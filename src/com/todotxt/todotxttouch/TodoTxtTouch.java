@@ -63,14 +63,18 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.ActionMode.Callback;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -122,6 +126,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
 
+	private ActionMode mMode;
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -178,7 +185,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 
-		getListView().setOnCreateContextMenuListener(this);
+		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		initializeTasks();
 
@@ -205,6 +212,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		};
 
 		getListView().setOnTouchListener(gestureListener);
+
 	}
 
 	private void initializeTasks() {
@@ -236,6 +244,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	protected void onResume() {
 		super.onResume();
 		setFilteredTasks(true);
+		// Show contextactionbar if there is a selection
+		showContextActionBarIfNeeded();
 	}
 
 	@Override
@@ -930,6 +940,49 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			setFilteredTasks(false);
 		}
 	}
+	
+	void showContextActionBarIfNeeded() {
+		int checkedItemsCount = getListView().getCheckItemIds().length;
+		if (mMode!=null && checkedItemsCount==0) {
+			mMode.finish();
+			return;
+		} else if (checkedItemsCount==0) {
+			return;
+		}
+		if (mMode==null) {
+			mMode = startActionMode(new Callback () {
+
+				@Override
+				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					// TODO Auto-generated method stub
+					getSupportMenuInflater().inflate(R.menu.main_long, menu);
+					return true;
+				}
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+
+				@Override
+				public boolean onActionItemClicked(ActionMode mode,
+						MenuItem item) {
+					// TODO Auto-generated method stub
+					return false;
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode mode) {
+					getListView().clearChoices();
+					m_adapter.notifyDataSetChanged();
+					mMode = null;					
+				}
+				
+			});
+		}
+		mMode.setTitle(checkedItemsCount + " selected");		
+	}
 
 	void clearFilter() {
 		m_prios = new ArrayList<Priority>(); // Collections.emptyList();
@@ -1002,9 +1055,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		m_pos = position;
-		openContextMenu(getListView());
+		l.setItemChecked(position, l.isItemChecked(position));
+		showContextActionBarIfNeeded();
 	}
+
+	
+	
 
 
 	private void updateSyncUI(boolean redrawList) {
@@ -1041,6 +1097,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			setFilteredTasks(false);
 		}
 	}
+
 
 	public class TaskAdapter extends ArrayAdapter<Task> {
 		private List<Task> items;
