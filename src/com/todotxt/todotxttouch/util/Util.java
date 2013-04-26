@@ -27,6 +27,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -57,6 +60,7 @@ import android.widget.Toast;
 
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoException;
+import com.todotxt.todotxttouch.task.Task;
 
 public class Util {
 
@@ -388,4 +392,19 @@ public class Util {
 				&& cm.getActiveNetworkInfo().isConnected();
 	}
 
+	public static String join(Collection<?> s, String delimiter) {
+		StringBuilder builder = new StringBuilder();
+		if (s == null) {
+			return "";
+		}
+		Iterator<?> iter = s.iterator();
+		while (iter.hasNext()) {
+			builder.append(iter.next());
+			if (!iter.hasNext()) {
+				break;
+			}
+			builder.append(delimiter);
+		}
+		return builder.toString();
+	}
 }
