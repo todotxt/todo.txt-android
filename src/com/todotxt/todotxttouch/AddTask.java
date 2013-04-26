@@ -36,18 +36,19 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Util;
 
-public class AddTask extends Activity {
+public class AddTask extends SherlockActivity {
 
 	private final static String TAG = AddTask.class.getSimpleName();
 
@@ -65,7 +66,7 @@ public class AddTask extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.add_task, menu);
+		getSupportMenuInflater().inflate(R.menu.add_task, menu);
 		return true;
 	}
 

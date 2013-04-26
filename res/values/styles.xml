@@ -23,23 +23,27 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<resources>
-	<style name="Theme.TodoTxt" parent="android:style/Theme.Light">
-		<item name="android:windowNoTitle">true</item>
-		<item name="android:windowContentOverlay">@null</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+	<style name="Theme.TodoTxt" parent="Theme.Sherlock.Light.DarkActionBar">
+    	<item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>
+    	<item name="actionBarStyle">@style/MyActionBar</item>
+	</style>
+	
+
+	<style name="MyActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+    	<item name="android:background">#006400</item>
+    	<item name="background">#006400</item>
 	</style>
 
 	<style name="TitleBar">
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:layout_height">@dimen/title_height</item>
 		<item name="android:orientation">horizontal</item>
-		<item name="android:background">@drawable/title_background</item>
 	</style>
 
 	<style name="TitleBarAction">
 		<item name="android:layout_width">@dimen/title_height</item>
 		<item name="android:layout_height">fill_parent</item>
-		<item name="android:background">@drawable/title_button</item>
 	</style>
 
 	<style name="TitleBarProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
@@ -56,16 +60,12 @@ You should have received a copy of the GNU General Public License along with Tod
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_marginTop">10dip</item>
 		<item name="android:layout_marginBottom">0dip</item>
-		<item name="android:background">@drawable/title_bar_separator</item>
 	</style>
 	<style name="TitleBarLabel">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">fill_parent</item>
 		<item name="android:layout_marginRight">10dip</item>
 		<item name="android:gravity">bottom</item>
-		"
-		<item name="android:textColor">@color/white</item>
-		<item name="android:textStyle">italic|bold</item>
 	</style>
 
 	<style name="TitleBarLogo">
