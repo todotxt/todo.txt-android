@@ -55,6 +55,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.text.SpannableString;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
@@ -941,12 +942,26 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 	}
 	
+	private ArrayList<Task> getCheckedTasks () {
+		ArrayList<Task> result = new ArrayList<Task>();
+		SparseBooleanArray checkedItems = getListView().getCheckedItemPositions();
+		for (int i = 0 ; i < checkedItems.size() ; i++) {
+			if (checkedItems.valueAt(i)) {
+				result.add(m_adapter.getItem(checkedItems.keyAt(i)));
+			}
+		}		
+		return result;
+	}
+	
 	void showContextActionBarIfNeeded() {
-		int checkedItemsCount = getListView().getCheckItemIds().length;
-		if (mMode!=null && checkedItemsCount==0) {
+		ListView lv = getListView();
+		
+		ArrayList<Task> checkedTasks = getCheckedTasks();
+		int checkedCount = checkedTasks.size();
+		if (mMode!=null && checkedCount==0) {
 			mMode.finish();
 			return;
-		} else if (checkedItemsCount==0) {
+		} else if (checkedCount==0) {
 			return;
 		}
 		if (mMode==null) {
@@ -981,7 +996,40 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				
 			});
 		}
-		mMode.setTitle(checkedItemsCount + " selected");		
+		mMode.setTitle(checkedCount + " " + getString(R.string.selected));
+		Menu menu = mMode.getMenu();
+		MenuItem updateAction = menu.findItem(R.id.update);
+		MenuItem completeAction = menu.findItem(R.id.done);
+		MenuItem uncompleteAction = menu.findItem(R.id.uncomplete);
+		
+		// Only show update action with a single task selected
+		if (checkedCount==1) {			
+			updateAction.setVisible(true);
+			Task task = checkedTasks.get(0);
+			if (task.isCompleted()) {
+				completeAction.setVisible(false);
+			} else {
+				uncompleteAction.setVisible(false);
+			}
+			
+			for (URL url : task.getLinks()) {
+				menu.add(Menu.CATEGORY_SECONDARY, R.id.url, Menu.NONE,
+						url.toString());
+			}
+			for (String s1 : task.getMailAddresses()) {
+				menu.add(Menu.CATEGORY_SECONDARY, R.id.mail, Menu.NONE, s1);
+			}
+			for (String s : task.getPhoneNumbers()) {
+				menu.add(Menu.CATEGORY_SECONDARY, R.id.phone_number,
+						Menu.NONE, s);
+			}
+		} else {
+			updateAction.setVisible(false);
+			completeAction.setVisible(true);
+			uncompleteAction.setVisible(true);
+			menu.removeGroup(Menu.CATEGORY_SECONDARY);
+		}
+		
 	}
 
 	void clearFilter() {

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -23,13 +22,47 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="@string/done" android:id="@+id/done" />
-	<item android:title="@string/priority" android:id="@+id/priority" />
-	<item android:title="@string/update" android:id="@+id/update" />
-	<item android:title="@string/delete" android:id="@+id/delete" />
-	<item android:title="@string/share" android:id="@+id/share" />
-	<item android:visible="false" android:id="@+id/url"></item>
-	<item android:id="@+id/mail" android:visible="false"></item>
-	<item android:id="@+id/phone_number" android:visible="false"></item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/update"
+        android:icon="@drawable/ic_action_edit"
+        android:showAsAction="ifRoom"
+        android:title="@string/update"/>
+    <item
+        android:id="@+id/done"
+        android:icon="@drawable/ic_action_complete"
+        android:showAsAction="ifRoom"
+        android:title="@string/done"/>
+    <item
+        android:id="@+id/uncomplete"
+        android:icon="@drawable/ic_action_uncomplete"
+        android:showAsAction="ifRoom"
+        android:title="@string/unComplete"/>
+    <item
+        android:id="@+id/priority"
+        android:icon="@drawable/ic_action_prioritize"
+        android:showAsAction="ifRoom"
+        android:title="@string/priority"/>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_action_share"
+        android:showAsAction="ifRoom"
+        android:title="@string/share"/>
+
+    <!-- Never show delete as an action to prevent accidental deletion -->
+    <item
+        android:id="@+id/delete"
+        android:showAsAction="never"
+        android:title="@string/delete"/>
+
+    <item
+        android:id="@+id/url"
+        android:visible="false"/>
+    <item
+        android:id="@+id/mail"
+        android:visible="false"/>
+    <item
+        android:id="@+id/phone_number"
+        android:visible="false"/>
 </menu>
