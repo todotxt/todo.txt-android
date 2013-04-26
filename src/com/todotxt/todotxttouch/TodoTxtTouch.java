@@ -25,16 +25,12 @@ package com.todotxt.todotxttouch;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -53,26 +49,21 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.text.SpannableString;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.ActionMode;
@@ -116,7 +107,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private ArrayList<String> m_projects = new ArrayList<String>();
 	private String m_search;
 
-	private int m_pos = Constants.INVALID_POSITION;
 	private Sort sort = Sort.PRIORITY_DESC;
 	private BroadcastReceiver m_broadcastReceiver;
 
@@ -183,10 +173,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		setListAdapter(this.m_adapter);
 
-		// FIXME adapter implements Filterable?
 		ListView lv = getListView();
-		lv.setTextFilterEnabled(true);
 
+		lv.setTextFilterEnabled(true);
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		initializeTasks();
@@ -207,6 +196,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					MotionEvent cancelEvent = MotionEvent.obtain(event);
 					cancelEvent.setAction(MotionEvent.ACTION_CANCEL);
 					v.onTouchEvent(cancelEvent);
+					cancelEvent.recycle();
 					return true;
 				}
 				return false;
@@ -599,6 +589,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	 * Called when we can't sync due to a merge conflict. Prompts the user to
 	 * force an upload or download.
 	 */
+	@SuppressWarnings("deprecation")
 	private void handleSyncConflict() {
 		showDialog(SYNC_CONFLICT_DIALOG);
 	}
@@ -614,6 +605,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	 * @param force
 	 *            true to force pull
 	 */
+	@SuppressWarnings("deprecation")
 	private void syncClient(boolean force) {
 		if (isManualMode()) {
 			Log.v(TAG,
@@ -697,6 +689,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			d = Util.createMultiChoiceDialog(this,
 					pStrs.toArray(new String[size]), values, null, null,
 					new OnMultiChoiceDialogListener() {
+						@SuppressWarnings("deprecation")
 						@Override
 						public void onClick(boolean[] selected) {
 							m_prios.clear();
@@ -710,6 +703,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						}
 					});
 			d.setOnCancelListener(new OnCancelListener() {
+				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					removeDialog(R.id.priority);
@@ -836,14 +830,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-					// TODO Auto-generated method stub
 					getSupportMenuInflater().inflate(R.menu.main_long, menu);
 					return true;
 				}
 
 				@Override
 				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-					// TODO Auto-generated method stub
 					return false;
 				}
 
@@ -1068,6 +1060,25 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			super(context, textViewResourceId, tasks);
 			this.items = tasks;
 			this.m_inflater = inflater;
+		}
+
+		@Override
+		public Filter getFilter() {
+			return new Filter() {
+
+				@Override
+				protected FilterResults performFiltering(CharSequence search) {
+					m_search = search.toString();
+					return null;
+				}
+
+				@Override
+				protected void publishResults(CharSequence arg0,
+						FilterResults arg1) {
+					setFilteredTasks(false);
+				}
+
+			};
 		}
 
 		@Override
