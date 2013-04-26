@@ -1205,7 +1205,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	public void startFilterActivity() {
-		Intent i = new Intent(this, Filter.class);
+		Intent i = new Intent(this, FilterActivity.class);
 
 		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
 				Priority.inCode(taskBag.getPriorities()));

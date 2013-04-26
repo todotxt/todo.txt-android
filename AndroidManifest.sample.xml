@@ -78,7 +78,7 @@ You should have received a copy of the GNU General Public License along with Tod
             </intent-filter>
         </activity>
         <activity
-            android:name=".Filter"
+            android:name=".FilterActivity"
             android:label="Filter"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
