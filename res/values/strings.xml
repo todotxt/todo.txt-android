@@ -51,6 +51,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="clear">Clear</string>
+    <string name="selected">Selected</string>
     <string name="areyousure">Are you sure?</string>
     <string name="tasktexthint">Draft chapter 1 +Novel @typewriter\n\n</string>
     <string name="add_task_help"><b>Projects</b> start with a + sign and contain no spaces, like +KitchenRemodel or
