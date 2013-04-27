@@ -538,8 +538,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		case R.id.share:
 			shareTasks(m_adapter.getItems());
 			break;
-		case R.id.switchcontext:
-			switchContext();
+		case R.id.quickfilter:
+			quickFilter();
 			break;
 		default:
 			return super.onMenuItemSelected(featureId, item);
@@ -552,20 +552,46 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		startActivity(intent);
 	}
 	
-    private void switchContext() {   	
+    private void quickFilter() {   	
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final ArrayList<String> contexts = taskBag.getContexts(false);
+		final ArrayList <String> filterItems = new ArrayList<String>(); 
+		ArrayList<String> contexts = taskBag.getContexts(false);		
 		Collections.sort(contexts);
+		for (String item : contexts) {
+			filterItems.add("@" + item);
+		}
+		
+		ArrayList<String> projects = taskBag.getProjects(false);		
+		Collections.sort(projects);
+		for (String item : projects) {
+			filterItems.add("+" + item);
+		}
+		if (filterItems.size()==0) {
+			showToast(R.string.noquickfilter);
+			return;
+		}
 
-		builder.setItems(contexts.toArray(new String[0]),
+		builder.setItems(filterItems.toArray(new String[0]),
 				new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface arg0, int which) {
-		                m_contexts = new ArrayList<String>();
-		                m_contexts.add(contexts.get(which));
-		                if (!m_filters.contains(Constants.EXTRA_CONTEXTS)) {
-		                	m_filters.add(getString(R.string.filter_tab_contexts));
-		                }
+						// filtering on context or project?
+						String itemTitle = filterItems.get(which);
+						if(itemTitle.substring(0,1).equals("@")) {
+							m_contexts = new ArrayList<String>();
+			                m_contexts.add(itemTitle.substring(1));
+			                if (!m_filters.contains(getString(R.string.filter_tab_contexts))) {
+			                	m_filters.add(getString(R.string.filter_tab_contexts));
+			                }
+						} else {
+							m_projects = new ArrayList<String>();
+			                m_projects.add(itemTitle.substring(1));
+			                if (!m_filters.contains(getString(R.string.filter_tab_projects))) {
+			                	m_filters.add(getString(R.string.filter_tab_projects));
+			                }
+						}
+		                
+		                
 		                setFilteredTasks(false);
 					}
 				});
