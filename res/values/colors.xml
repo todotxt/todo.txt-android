@@ -32,6 +32,9 @@ You should have received a copy of the GNU General Public License along with Tod
 	<color name="grey">#888888</color>
     <color name="black_trans">#bb000000</color>
     
+    <!-- holo colors -->
+    <color name="activated_background">#33B5E5</color>
+    
     <!--  action bar colors -->
     <color name="actionbar_label">#FF666666</color>
     <color name="actionbar_btn_default_light">#FFFFFFFF</color>

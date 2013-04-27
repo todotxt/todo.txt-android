@@ -27,13 +27,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -52,27 +49,28 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.text.SpannableString;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.util.SparseBooleanArray;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.ActionMode.Callback;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.task.FilterFactory;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
@@ -82,7 +80,7 @@ import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 
-public class TodoTxtTouch extends ListActivity implements
+public class TodoTxtTouch extends SherlockListActivity implements
 		OnSharedPreferenceChangeListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
@@ -109,7 +107,6 @@ public class TodoTxtTouch extends ListActivity implements
 	private ArrayList<String> m_projects = new ArrayList<String>();
 	private String m_search;
 
-	private int m_pos = Constants.INVALID_POSITION;
 	private Sort sort = Sort.PRIORITY_DESC;
 	private BroadcastReceiver m_broadcastReceiver;
 
@@ -121,6 +118,9 @@ public class TodoTxtTouch extends ListActivity implements
 	private GestureDetector gestureDetector;
 	private View.OnTouchListener gestureListener;
 
+	private ActionMode mMode;
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -173,11 +173,10 @@ public class TodoTxtTouch extends ListActivity implements
 
 		setListAdapter(this.m_adapter);
 
-		// FIXME adapter implements Filterable?
 		ListView lv = getListView();
-		lv.setTextFilterEnabled(true);
 
-		getListView().setOnCreateContextMenuListener(this);
+		lv.setTextFilterEnabled(true);
+		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
 		initializeTasks();
 
@@ -197,6 +196,7 @@ public class TodoTxtTouch extends ListActivity implements
 					MotionEvent cancelEvent = MotionEvent.obtain(event);
 					cancelEvent.setAction(MotionEvent.ACTION_CANCEL);
 					v.onTouchEvent(cancelEvent);
+					cancelEvent.recycle();
 					return true;
 				}
 				return false;
@@ -204,6 +204,7 @@ public class TodoTxtTouch extends ListActivity implements
 		};
 
 		getListView().setOnTouchListener(gestureListener);
+
 	}
 
 	private void initializeTasks() {
@@ -235,6 +236,8 @@ public class TodoTxtTouch extends ListActivity implements
 	protected void onResume() {
 		super.onResume();
 		setFilteredTasks(true);
+		// Show contextactionbar if there is a selection
+		showContextActionBarIfNeeded();
 	}
 
 	@Override
@@ -283,111 +286,15 @@ public class TodoTxtTouch extends ListActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		MenuInflater inflater = getMenuInflater();
-		AdapterView.AdapterContextMenuInfo menuInfoAdap = (AdapterView.AdapterContextMenuInfo) menuInfo;
-		final int pos;
-		if (m_pos != Constants.INVALID_POSITION) {
-			pos = m_pos;
-		} else {
-			pos = menuInfoAdap.position;
-		}
-		final Task task = m_adapter.getItem(pos);
-		if (task.isCompleted()) {
-			inflater.inflate(R.menu.context_completed, menu);
-		} else {
-			addVariableMenuItems(menu, task);
-			inflater.inflate(R.menu.main_long, menu);
-		}
-	}
-
-	/**
-	 * Adds menu items to the context menu depending on the tasks content
-	 * 
-	 * @param menu
-	 *            The menu to add items to
-	 * @param task
-	 *            The task this menu is created for
-	 */
-	private void addVariableMenuItems(ContextMenu menu, final Task task) {
-		ListIterator<URL> i = task.getLinks().listIterator();
-		while (i.hasNext()) {
-			menu.add(Menu.NONE, R.id.url, Menu.NONE, i.next().toString());
-		}
-		ListIterator<String> j = task.getMailAddresses().listIterator();
-		while (j.hasNext()) {
-			menu.add(Menu.NONE, R.id.mail, Menu.NONE, j.next());
-		}
-		ListIterator<String> i3 = task.getPhoneNumbers().listIterator();
-		while (i3.hasNext()) {
-			menu.add(Menu.NONE, R.id.phone_number, Menu.NONE, i3.next());
-		}
-	}
-
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		Log.v(TAG, "onContextItemSelected");
-		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item
-				.getMenuInfo();
-		int menuid = item.getItemId();
-		final int pos;
-		if (m_pos != Constants.INVALID_POSITION) {
-			pos = m_pos;
-			m_pos = Constants.INVALID_POSITION;
-		} else {
-			pos = menuInfo.position;
-		}
-		if (menuid == R.id.update) {
-			Log.v(TAG, "update");
-			editTaskAt(pos);
-		} else if (menuid == R.id.delete) {
-			Log.v(TAG, "delete");
-			deleteTaskAt(pos);
-		} else if (menuid == R.id.done) {
-			Log.v(TAG, "done");
-			completeTaskAt(pos);
-		} else if (menuid == R.id.unComplete) {
-			Log.v(TAG, "undo Complete");
-			undoCompleteTaskAt(pos);
-		} else if (menuid == R.id.priority) {
-			Log.v(TAG, "priority");
-			prioritizeTaskAt(pos);
-		} else if (menuid == R.id.share) {
-			Log.v(TAG, "share");
-			shareTaskAt(pos);
-		} else if (menuid == R.id.url) {
-			Log.v(TAG, "url: " + item.getTitle().toString());
-			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getTitle()
-					.toString()));
-			startActivity(i);
-		} else if (menuid == R.id.mail) {
-			Log.v(TAG, "mail: " + item.getTitle().toString());
-			Intent i = new Intent(Intent.ACTION_SEND, Uri.parse(item.getTitle()
-					.toString()));
-			i.putExtra(android.content.Intent.EXTRA_EMAIL, new String[] { item
-					.getTitle().toString() });
-			i.setType("text/plain");
-		} else if (menuid == R.id.phone_number) {
-			Log.v(TAG, "phone_number");
-			Intent i = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"
-					+ item.getTitle().toString()));
-			startActivity(i);
-		}
-
-		return super.onContextItemSelected(item);
-	}
-
-	private void shareTasks() {
+	private void shareTasks(List<Task> tasks) {
 		String shareText = "";
-		for (Task t : m_adapter.getItems()) {
+		for (Task t : tasks) {
 			shareText += t.inFileFormat() + "\n";
 		}
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -399,19 +306,7 @@ public class TodoTxtTouch extends ListActivity implements
 		startActivity(Intent.createChooser(shareIntent, "Share"));
 	}
 
-	private void shareTaskAt(final int pos) {
-		final Task task = m_adapter.getItem(pos);
-
-		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
-		shareIntent.setType("text/plain");
-		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-				"Todo.txt task");
-		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, task.getText());
-
-		startActivity(Intent.createChooser(shareIntent, "Share"));
-	}
-
-	private void prioritizeTaskAt(final int pos) {
+	private void prioritizeTasks(final ArrayList<Task> tasks) {
 		final String[] prioArr = Priority
 				.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -419,7 +314,6 @@ public class TodoTxtTouch extends ListActivity implements
 		builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, final int which) {
-				final Task task = m_adapter.getItem(pos);
 				dialog.dismiss();
 				new AsyncTask<Object, Void, Boolean>() {
 					protected void onPreExecute() {
@@ -429,12 +323,15 @@ public class TodoTxtTouch extends ListActivity implements
 					@Override
 					protected Boolean doInBackground(Object... params) {
 						try {
-							Task task = (Task) params[0];
+							@SuppressWarnings("unchecked")
+							ArrayList<Task> tasks = (ArrayList<Task>) params[0];
 							String[] prioArr = (String[]) params[1];
 							int which = (Integer) params[2];
-							task.setPriority(Priority
-									.toPriority(prioArr[which]));
-							taskBag.update(task);
+							for (Task task : tasks) {
+								task.setPriority(Priority
+										.toPriority(prioArr[which]));
+								taskBag.update(task);
+							}
 							m_app.broadcastWidgetUpdate();
 							return true;
 						} catch (Exception e) {
@@ -446,29 +343,21 @@ public class TodoTxtTouch extends ListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
-						if (result) {
+						if (!result) {
 							Util.showToastLong(TodoTxtTouch.this,
-									"Prioritized task " + task.getText());
-							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_TO_REMOTE));
-						} else {
-							Util.showToastLong(
-									TodoTxtTouch.this,
-									"Could not prioritize task "
-											+ task.inFileFormat());
+									"Could not prioritize tasks");
 						}
 					}
-				}.execute(task, prioArr, which);
+				}.execute(tasks, prioArr, which);
 			}
 		});
 		builder.show();
 	}
 
-	private void undoCompleteTaskAt(final int pos) {
+	private void undoCompleteTasks(final ArrayList<Task> tasks) {
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				final Task task = m_adapter.getItem(pos);
 				new AsyncTask<Object, Void, Boolean>() {
 					protected void onPreExecute() {
 						m_ProgressDialog = showProgressDialog("Marking Task Not Complete");
@@ -477,9 +366,12 @@ public class TodoTxtTouch extends ListActivity implements
 					@Override
 					protected Boolean doInBackground(Object... params) {
 						try {
-							Task task = (Task) params[0];
-							task.markIncomplete();
-							taskBag.update(task);
+							@SuppressWarnings("unchecked")
+							ArrayList<Task> tasks = (ArrayList<Task>) params[0];
+							for (Task task : tasks) {
+								task.markIncomplete();
+								taskBag.update(task);
+							}
 							return true;
 						} catch (Exception e) {
 							Log.e(TAG, e.getMessage(), e);
@@ -490,84 +382,66 @@ public class TodoTxtTouch extends ListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
-						if (result) {
+						if (!result) {
 							Util.showToastLong(TodoTxtTouch.this,
-									"Task marked as not completed");
-							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_TO_REMOTE));
-						} else {
-							Util.showToastLong(TodoTxtTouch.this,
-									"Could not mark task as not completed");
+									"Could not mark tasks as not completed");
 						}
 					}
-				}.execute(task);
+				}.execute(tasks);
 			}
 		};
 		Util.showConfirmationDialog(this, R.string.areyousure, listener,
 				R.string.unComplete);
 	}
 
-	private void completeTaskAt(final int pos) {
-		final Task task = m_adapter.getItem(pos);
-		if (task.isCompleted()) {
-			Util.showToastLong(TodoTxtTouch.this, "Task already complete");
-		} else {
-			task.markComplete(new Date());
-			// Log.v(TAG, "Completing task with this text: " + task.getText());
-			new AsyncTask<Object, Void, Boolean>() {
+	private void completeTasks(ArrayList<Task> tasks) {
+		// Log.v(TAG, "Completing task with this text: " + task.getText());
+		new AsyncTask<Object, Void, Boolean>() {
 
-				protected void onPreExecute() {
-					m_ProgressDialog = showProgressDialog("Marking Task Complete");
-				}
+			protected void onPreExecute() {
+				m_ProgressDialog = showProgressDialog("Marking Task Complete");
+			}
 
-				@Override
-				protected Boolean doInBackground(Object... params) {
-					try {
-						Task task = (Task) params[0];
+			@Override
+			protected Boolean doInBackground(Object... params) {
+				try {
+					@SuppressWarnings("unchecked")
+					ArrayList<Task> tasks = (ArrayList<Task>) params[0];
+					for (Task task : tasks) {
 						task.markComplete(new Date());
 						taskBag.update(task);
-						if (m_app.m_prefs.getBoolean("todotxtautoarchive",
-								false)) {
-							taskBag.archive();
-						}
-						return true;
-					} catch (Exception e) {
-						Log.e(TAG, e.getMessage(), e);
-						return false;
 					}
+					if (m_app.m_prefs.getBoolean("todotxtautoarchive", false)) {
+						taskBag.archive();
+					}
+					m_app.broadcastWidgetUpdate();
+					return true;
+				} catch (Exception e) {
+					Log.e(TAG, e.getMessage(), e);
+					return false;
 				}
+			}
 
-				protected void onPostExecute(Boolean result) {
-					TodoTxtTouch.currentActivityPointer
-							.dismissProgressDialog(true);
-					if (result) {
-						Util.showToastLong(TodoTxtTouch.this, "Completed task "
-								+ task.inFileFormat());
-						sendBroadcast(new Intent(
-								Constants.INTENT_START_SYNC_TO_REMOTE));
-					} else {
-						Util.showToastLong(
-								TodoTxtTouch.this,
-								"Could not complete task "
-										+ task.inFileFormat());
-					}
+			protected void onPostExecute(Boolean result) {
+				TodoTxtTouch.currentActivityPointer.dismissProgressDialog(true);
+				if (!result) {
+					Util.showToastLong(TodoTxtTouch.this,
+							"Could not complete tasks");
 				}
-			}.execute(task);
-		}
+			}
+		}.execute(tasks);
 	}
 
-	private void editTaskAt(final int pos) {
-		final Task backup = m_adapter.getItem(pos);
+	private void editTask(Task task) {
 		Intent intent = new Intent(this, AddTask.class);
-		intent.putExtra(Constants.EXTRA_TASK, (Serializable) backup);
+		intent.putExtra(Constants.EXTRA_TASK, (Serializable) task);
 		startActivity(intent);
 	}
 
-	private void deleteTaskAt(final int pos) {
+	private void deleteTasks(final ArrayList<Task> tasks) {
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				final Task task = m_adapter.getItem(pos);
 
 				new AsyncTask<Object, Void, Boolean>() {
 
@@ -575,10 +449,13 @@ public class TodoTxtTouch extends ListActivity implements
 						m_ProgressDialog = showProgressDialog("Deleting");
 					}
 
+					@SuppressWarnings("unchecked")
 					@Override
 					protected Boolean doInBackground(Object... params) {
 						try {
-							taskBag.delete((Task) params[0]);
+							for (Task task : (ArrayList<Task>) params[0]) {
+								taskBag.delete(task);
+							}
 							m_app.broadcastWidgetUpdate();
 							return true;
 						} catch (Exception e) {
@@ -590,19 +467,12 @@ public class TodoTxtTouch extends ListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
-						if (result) {
+						if (!result) {
 							Util.showToastLong(TodoTxtTouch.this,
-									"Deleted task " + task.inFileFormat());
-							sendBroadcast(new Intent(
-									Constants.INTENT_START_SYNC_TO_REMOTE));
-						} else {
-							Util.showToastLong(
-									TodoTxtTouch.this,
-									"Could not delete task "
-											+ task.inFileFormat());
+									"Could not delete tasks ");
 						}
 					}
-				}.execute(task);
+				}.execute(tasks);
 			}
 		};
 		Util.showDeleteConfirmationDialog(this, listener);
@@ -665,7 +535,7 @@ public class TodoTxtTouch extends ListActivity implements
 			startSortDialog();
 			break;
 		case R.id.share:
-			shareTasks();
+			shareTasks(m_adapter.getItems());
 			break;
 		default:
 			return super.onMenuItemSelected(featureId, item);
@@ -719,6 +589,7 @@ public class TodoTxtTouch extends ListActivity implements
 	 * Called when we can't sync due to a merge conflict. Prompts the user to
 	 * force an upload or download.
 	 */
+	@SuppressWarnings("deprecation")
 	private void handleSyncConflict() {
 		showDialog(SYNC_CONFLICT_DIALOG);
 	}
@@ -734,6 +605,7 @@ public class TodoTxtTouch extends ListActivity implements
 	 * @param force
 	 *            true to force pull
 	 */
+	@SuppressWarnings("deprecation")
 	private void syncClient(boolean force) {
 		if (isManualMode()) {
 			Log.v(TAG,
@@ -817,6 +689,7 @@ public class TodoTxtTouch extends ListActivity implements
 			d = Util.createMultiChoiceDialog(this,
 					pStrs.toArray(new String[size]), values, null, null,
 					new OnMultiChoiceDialogListener() {
+						@SuppressWarnings("deprecation")
 						@Override
 						public void onClick(boolean[] selected) {
 							m_prios.clear();
@@ -830,6 +703,7 @@ public class TodoTxtTouch extends ListActivity implements
 						}
 					});
 			d.setOnCancelListener(new OnCancelListener() {
+				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					removeDialog(R.id.priority);
@@ -930,6 +804,144 @@ public class TodoTxtTouch extends ListActivity implements
 		}
 	}
 
+	private ArrayList<Task> getCheckedTasks() {
+		ArrayList<Task> result = new ArrayList<Task>();
+		SparseBooleanArray checkedItems = getListView()
+				.getCheckedItemPositions();
+		for (int i = 0; i < checkedItems.size(); i++) {
+			if (checkedItems.valueAt(i)) {
+				result.add(m_adapter.getItem(checkedItems.keyAt(i)));
+			}
+		}
+		return result;
+	}
+
+	void showContextActionBarIfNeeded() {
+		ArrayList<Task> checkedTasks = getCheckedTasks();
+		int checkedCount = checkedTasks.size();
+		if (mMode != null && checkedCount == 0) {
+			mMode.finish();
+			return;
+		} else if (checkedCount == 0) {
+			return;
+		}
+		if (mMode == null) {
+			mMode = startActionMode(new Callback() {
+
+				@Override
+				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					getSupportMenuInflater().inflate(R.menu.main_long, menu);
+					return true;
+				}
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+					return false;
+				}
+
+				@Override
+				public boolean onActionItemClicked(ActionMode mode,
+						MenuItem item) {
+					ArrayList<Task> checkedTasks = getCheckedTasks();
+					int menuid = item.getItemId();
+					Intent intent;
+					switch (menuid) {
+					case R.id.update:
+						if (checkedTasks.size() == 1) {
+							editTask(checkedTasks.get(0));
+						} else {
+							Log.w(TAG,
+									"More than one task was selected while hanling update menu");
+						}
+						break;
+					case R.id.done:
+						completeTasks(checkedTasks);
+						break;
+					case R.id.priority:
+						prioritizeTasks(checkedTasks);
+						break;
+					case R.id.share:
+						shareTasks(checkedTasks);
+						break;
+					case R.id.uncomplete:
+						undoCompleteTasks(checkedTasks);
+						break;
+					case R.id.delete:
+						deleteTasks(checkedTasks);
+						break;
+					case R.id.url:
+						Log.v(TAG, "url: " + item.getTitle().toString());
+						intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item
+								.getTitle().toString()));
+						startActivity(intent);
+						break;
+					case R.id.mail:
+						Log.v(TAG, "mail: " + item.getTitle().toString());
+						intent = new Intent(Intent.ACTION_SEND, Uri.parse(item
+								.getTitle().toString()));
+						intent.putExtra(android.content.Intent.EXTRA_EMAIL,
+								new String[] { item.getTitle().toString() });
+						intent.setType("text/plain");
+						startActivity(intent);
+						break;
+					case R.id.phone_number:
+						Log.v(TAG, "phone_number");
+						intent = new Intent(Intent.ACTION_DIAL,
+								Uri.parse("tel:" + item.getTitle().toString()));
+						startActivity(intent);
+						break;
+					default:
+						Log.w(TAG, "unrecognized menuItem: " + menuid);
+					}
+					mMode.finish();
+					return true;
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode mode) {
+					getListView().clearChoices();
+					m_adapter.notifyDataSetChanged();
+					mMode = null;
+				}
+
+			});
+		}
+		mMode.setTitle(checkedCount + " " + getString(R.string.selected));
+		Menu menu = mMode.getMenu();
+		MenuItem updateAction = menu.findItem(R.id.update);
+		MenuItem completeAction = menu.findItem(R.id.done);
+		MenuItem uncompleteAction = menu.findItem(R.id.uncomplete);
+
+		// Only show update action with a single task selected
+		if (checkedCount == 1) {
+			updateAction.setVisible(true);
+			Task task = checkedTasks.get(0);
+			if (task.isCompleted()) {
+				completeAction.setVisible(false);
+			} else {
+				uncompleteAction.setVisible(false);
+			}
+
+			for (URL url : task.getLinks()) {
+				menu.add(Menu.CATEGORY_SECONDARY, R.id.url, Menu.NONE,
+						url.toString());
+			}
+			for (String s1 : task.getMailAddresses()) {
+				menu.add(Menu.CATEGORY_SECONDARY, R.id.mail, Menu.NONE, s1);
+			}
+			for (String s : task.getPhoneNumbers()) {
+				menu.add(Menu.CATEGORY_SECONDARY, R.id.phone_number, Menu.NONE,
+						s);
+			}
+		} else {
+			updateAction.setVisible(false);
+			completeAction.setVisible(true);
+			uncompleteAction.setVisible(true);
+			menu.removeGroup(Menu.CATEGORY_SECONDARY);
+		}
+
+	}
+
 	void clearFilter() {
 		m_prios = new ArrayList<Priority>(); // Collections.emptyList();
 		m_contexts = new ArrayList<String>(); // Collections.emptyList();
@@ -1001,41 +1013,37 @@ public class TodoTxtTouch extends ListActivity implements
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		m_pos = position;
-		openContextMenu(getListView());
+		l.setItemChecked(position, l.isItemChecked(position));
+		showContextActionBarIfNeeded();
 	}
 
-	@SuppressLint("NewApi")
 	private void updateSyncUI(boolean redrawList) {
-		// show or hide refresh button
-		// in on v14+ devices, the menu is updated
-		View refreshButton = findViewById(R.id.btn_title_refresh);
-		if (refreshButton == null) {
-			// v14+ device using the Holo action bar
-			View progress = getLayoutInflater().inflate(R.layout.main_progress,
-					null);
 
-			// options_menu can be null here because we can sync before the menu
-			// has been drawn
-			if (progress != null && options_menu != null) {
-				MenuItem refreshMenu = options_menu.findItem(R.id.sync);
+		View progress = getLayoutInflater().inflate(R.layout.main_progress,
+				null);
+
+		// options_menu can be null here because we can sync before the menu
+		// has been drawn
+		if (progress != null && options_menu != null) {
+			MenuItem refreshMenu = options_menu.findItem(R.id.sync);
+			int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+			// Using indeterminate progress looks bad on Gingerbread and below
+			if (currentapiVersion >= android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
 				if (m_app.syncInProgress()) {
-					// refreshMenu.setActionView(progress);
-					// Use MenuItemCompat instead for v4/1.6 compatibility
-					MenuItemCompat.setActionView(refreshMenu, progress);
+					refreshMenu.setActionView(progress);
 				} else {
-					// refreshMenu.setActionView(null);
-					// Use MenuItemCompat instead for v4/1.6 compatibility
-					MenuItemCompat.setActionView(refreshMenu, null);
+					refreshMenu.setActionView(null);
+				}
+			} else {
+				if (m_app.syncInProgress()) {
+					refreshMenu.setEnabled(false);
+				} else {
+					refreshMenu.setEnabled(true);
 				}
 			}
-		} else {
-			refreshButton.setVisibility(m_app.syncInProgress() ? View.GONE
-					: View.VISIBLE);
-			// show or hide moving refresh indicator
-			findViewById(R.id.title_refresh_progress).setVisibility(
-					m_app.syncInProgress() ? View.VISIBLE : View.GONE);
+
 		}
+
 		if (redrawList) {
 			// hide action bar
 			findViewById(R.id.actionbar).setVisibility(View.GONE);
@@ -1052,6 +1060,25 @@ public class TodoTxtTouch extends ListActivity implements
 			super(context, textViewResourceId, tasks);
 			this.items = tasks;
 			this.m_inflater = inflater;
+		}
+
+		@Override
+		public Filter getFilter() {
+			return new Filter() {
+
+				@Override
+				protected FilterResults performFiltering(CharSequence search) {
+					m_search = search.toString();
+					return null;
+				}
+
+				@Override
+				protected void publishResults(CharSequence arg0,
+						FilterResults arg1) {
+					setFilteredTasks(false);
+				}
+
+			};
 		}
 
 		@Override
@@ -1178,7 +1205,7 @@ public class TodoTxtTouch extends ListActivity implements
 	}
 
 	public void startFilterActivity() {
-		Intent i = new Intent(this, Filter.class);
+		Intent i = new Intent(this, FilterActivity.class);
 
 		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
 				Priority.inCode(taskBag.getPriorities()));
@@ -1217,7 +1244,9 @@ public class TodoTxtTouch extends ListActivity implements
 				// if task is complete, undo complete
 				final Task task = m_adapter.getItem(pos);
 				if (task.isCompleted()) {
-					undoCompleteTaskAt(pos);
+					ArrayList<Task> tasks = new ArrayList<Task>();
+					tasks.add(task);
+					undoCompleteTasks(tasks);
 				}
 				return true;
 			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
@@ -1227,7 +1256,9 @@ public class TodoTxtTouch extends ListActivity implements
 				// if task is incomplete, mark as complete
 				final Task task = m_adapter.getItem(pos);
 				if (!task.isCompleted()) {
-					completeTaskAt(pos);
+					ArrayList<Task> tasks = new ArrayList<Task>();
+					tasks.add(task);
+					completeTasks(tasks);
 				}
 				return true;
 			}
