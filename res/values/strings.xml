@@ -39,6 +39,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="refresh">Refresh</string>
     <string name="add">Add</string>
     <string name="addtask">Add Task</string>
+    <string name="switchcontext">Switch Context</string>
     <string name="updatetask">Update Task</string>
     <string name="newtask">New Task</string>
     <string name="done">Complete</string>
