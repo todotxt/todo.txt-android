@@ -45,17 +45,15 @@ You should have received a copy of the GNU General Public License along with Tod
         android:showAsAction="ifRoom"
         android:title="@string/priority"/>
     <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_action_delete"
+        android:showAsAction="ifRoom"
+        android:title="@string/delete"/>
+    <item
         android:id="@+id/share"
         android:icon="@drawable/ic_action_share"
         android:showAsAction="ifRoom"
         android:title="@string/share"/>
-
-    <!-- Never show delete as an action to prevent accidental deletion -->
-    <item
-        android:id="@+id/delete"
-        android:showAsAction="never"
-        android:title="@string/delete"/>
-
     <item
         android:id="@+id/url"
         android:visible="false"/>
