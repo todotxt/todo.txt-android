@@ -965,6 +965,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	void clearFilter() {
+		// Filter cleared, exit CAB if active
+		if (mMode!=null) {
+			mMode.finish();
+		}
 		m_prios = new ArrayList<Priority>(); // Collections.emptyList();
 		m_contexts = new ArrayList<String>(); // Collections.emptyList();
 		m_projects = new ArrayList<String>(); // Collections.emptyList();
