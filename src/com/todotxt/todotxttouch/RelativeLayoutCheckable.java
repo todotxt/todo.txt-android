@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Checkable;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class RelativeLayoutCheckable extends RelativeLayout implements Checkable {
 
