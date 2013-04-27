@@ -44,8 +44,6 @@ You should have received a copy of the GNU General Public License along with Tod
 		<LinearLayout style="@style/ActionBarButtonSet"
 			android:scrollbars="horizontal">
 
-			<Button style="@style/ActionBarLeftButton" android:text="@string/refine"
-				android:onClick="onRefineClick" />
 			<ImageView style="@style/ActionBarSeparator" android:contentDescription="@string/separator" />
 			<ImageView style="@style/ActionBarSeparatorWhite" android:contentDescription="@string/separator" />
 			<Button style="@style/ActionBarRightButton" android:text="@string/clear"

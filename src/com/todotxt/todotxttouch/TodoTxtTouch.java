@@ -25,6 +25,7 @@ package com.todotxt.todotxttouch;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -537,6 +538,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		case R.id.share:
 			shareTasks(m_adapter.getItems());
 			break;
+		case R.id.switchcontext:
+			switchContext();
+			break;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
@@ -547,6 +551,29 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		Intent intent = new Intent(this, AddTask.class);
 		startActivity(intent);
 	}
+	
+    private void switchContext() {   	
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final ArrayList<String> contexts = taskBag.getContexts(false);
+		Collections.sort(contexts);
+
+		builder.setItems(contexts.toArray(new String[0]),
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface arg0, int which) {
+		                m_contexts = new ArrayList<String>();
+		                m_contexts.add(contexts.get(which));
+		                if (!m_filters.contains(Constants.EXTRA_CONTEXTS)) {
+		                	m_filters.add(getString(R.string.filter_tab_contexts));
+		                }
+		                setFilteredTasks(false);
+					}
+				});
+
+		// Create the AlertDialog
+		AlertDialog dialog = builder.create();
+		dialog.show();
+    }
 
 	private void startSortDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -785,11 +812,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	public void onSyncClick(View v) {
 		Log.v(TAG, "titlebar: sync");
 		syncClient(false);
-	}
-
-	/** Handle refine filter click **/
-	public void onRefineClick(View v) {
-		startFilterActivity();
 	}
 
 	/** Handle clear filter click **/
