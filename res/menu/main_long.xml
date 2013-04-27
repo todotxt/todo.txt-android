@@ -41,7 +41,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:title="@string/unComplete"/>
     <item
         android:id="@+id/priority"
-        android:icon="@drawable/ic_action_prioritize"
+        android:icon="@drawable/ic_action_abprio"
         android:showAsAction="ifRoom"
         android:title="@string/priority"/>
     <item
