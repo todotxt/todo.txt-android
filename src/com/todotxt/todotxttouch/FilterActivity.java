@@ -40,6 +40,7 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+@SuppressWarnings("deprecation")
 public class FilterActivity extends TabActivity {
 
 	private final static String TAG = FilterActivity.class.getSimpleName();

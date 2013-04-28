@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 public class HelpActivity extends Activity {
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

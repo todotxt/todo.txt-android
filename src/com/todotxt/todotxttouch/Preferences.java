@@ -47,6 +47,7 @@ public class Preferences extends PreferenceActivity {
 
 	private String version;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,6 +73,7 @@ public class Preferences extends PreferenceActivity {
 		super.onResume();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen screen,
 			Preference preference) {

@@ -44,6 +44,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <application
         android:name=".TodoApplication"
+        android:allowBackup="true"
         android:icon="@drawable/todotxt_touch_icon"
         android:label="@string/app_label" android:theme="@style/Theme.TodoTxt">
          <activity

@@ -32,6 +32,7 @@ public class TodoTxtTouchTest extends
 	// TODO: Remove
 	private TodoTxtTouch m_activity;
 
+	@SuppressWarnings("deprecation")
 	public TodoTxtTouchTest() {
 		super("com.todotxt.todotxttouch", TodoTxtTouch.class);
 	}
