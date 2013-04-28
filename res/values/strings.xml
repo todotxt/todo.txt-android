@@ -129,6 +129,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="context_prompt">Context</string>
     <string name="refine">Refine</string>
     <string name="separator">Separator</string>
+    <string name="contextproject_prompt">Contexts and Projects</string>
 
     <!-- launcher shortcut -->
     <string name="shortcut_addtask_name">Add Task</string>

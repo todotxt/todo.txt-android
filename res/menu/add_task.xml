@@ -10,22 +10,12 @@
             android:icon="@drawable/ic_action_abprio"
             />
     <item
-            android:id="@+id/menu_add_list"
-            android:orderInCategory="100"
-            android:showAsAction="ifRoom"
-            android:title="@string/context_prompt"
-            android:icon="@drawable/ic_action_abcontext"
-            />
-
-    <item
             android:id="@+id/menu_add_tag"
             android:orderInCategory="100"
             android:showAsAction="ifRoom"
-            android:title="@string/project_prompt"
-            android:icon="@drawable/ic_action_abproject"
+            android:title="@string/contextproject_prompt"
+            android:icon="@drawable/ic_action_filter"
             />
-
-
     <item
             android:id="@+id/menu_save_task"
             android:orderInCategory="100"
