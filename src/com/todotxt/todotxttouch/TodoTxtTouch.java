@@ -344,7 +344,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
-						if (!result) {
+						if (result) {
+							sendBroadcast(new Intent(
+									Constants.INTENT_START_SYNC_TO_REMOTE));
+						} else {
 							Util.showToastLong(TodoTxtTouch.this,
 									"Could not prioritize tasks");
 						}
@@ -383,7 +386,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
-						if (!result) {
+						if (result) {
+							sendBroadcast(new Intent(
+									Constants.INTENT_START_SYNC_TO_REMOTE));
+						} else {
 							Util.showToastLong(TodoTxtTouch.this,
 									"Could not mark tasks as not completed");
 						}
@@ -425,7 +431,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 			protected void onPostExecute(Boolean result) {
 				TodoTxtTouch.currentActivityPointer.dismissProgressDialog(true);
-				if (!result) {
+				if (result) {
+					sendBroadcast(new Intent(
+							Constants.INTENT_START_SYNC_TO_REMOTE));
+				} else {
 					Util.showToastLong(TodoTxtTouch.this,
 							"Could not complete tasks");
 				}
@@ -468,7 +477,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
-						if (!result) {
+						if (result) {
+							sendBroadcast(new Intent(
+									Constants.INTENT_START_SYNC_TO_REMOTE));
+						} else {
 							Util.showToastLong(TodoTxtTouch.this,
 									"Could not delete tasks ");
 						}
