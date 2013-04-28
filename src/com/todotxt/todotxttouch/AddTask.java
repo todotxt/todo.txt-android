@@ -172,7 +172,7 @@ public class AddTask extends SherlockActivity {
 			allProjectsContexts.add("+" + item);
 		}
 		if (allProjectsContexts.size() == 0) {
-			Util.showToastLong(this, R.string.noquickfilter);
+			Util.showToastLong(this, R.string.nocontextsprojectsadd);
 			return;
 		}
 		builder.setItems(allProjectsContexts.toArray(new String[0]),
@@ -186,6 +186,7 @@ public class AddTask extends SherlockActivity {
 
 		// Create the AlertDialog
 		AlertDialog dialog = builder.create();
+		dialog.setTitle(R.string.addcontextproject);
 		dialog.show();
 	}
 
@@ -208,6 +209,7 @@ public class AddTask extends SherlockActivity {
 
 		// Create the AlertDialog
 		AlertDialog dialog = builder.create();
+		dialog.setTitle(R.string.assignpriority);
 		dialog.show();
 	}
 

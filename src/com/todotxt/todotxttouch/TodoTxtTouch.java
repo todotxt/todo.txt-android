@@ -567,7 +567,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			filterItems.add("+" + item);
 		}
 		if (filterItems.size()==0) {
-			showToast(R.string.noquickfilter);
+			showToast(R.string.nocontextsprojectsfilter);
 			return;
 		}
 
@@ -598,6 +598,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		// Create the AlertDialog
 		AlertDialog dialog = builder.create();
+		dialog.setTitle(R.string.filterbycontextproject);
 		dialog.show();
     }
 
