@@ -23,6 +23,7 @@
 package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -81,11 +82,8 @@ public class AddTask extends SherlockActivity {
 		case R.id.menu_add_prio:
 			showPrioMenu(findViewById(R.id.menu_add_prio));
 			break;
-		case R.id.menu_add_list:
-			showContextMenu(findViewById(R.id.menu_add_list));
-			break;
 		case R.id.menu_add_tag:
-			showProjectMenu();
+			showProjectContextMenu();
 			break;
 		}
 		return true;
@@ -159,20 +157,36 @@ public class AddTask extends SherlockActivity {
 		textInputField.requestFocus();
 	}
 
-	private void showProjectMenu() {
+	private void showProjectContextMenu() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final ArrayList<String> projects = taskBag.getProjects(false);
+		final ArrayList<String> allProjectsContexts = new ArrayList<String>();
+		ArrayList<String> contexts = taskBag.getContexts(false);
+		Collections.sort(contexts);
+		for (String item : contexts) {
+			allProjectsContexts.add("@" + item);
+		}
 
-		builder.setItems(projects.toArray(new String[0]),
+		ArrayList<String> projects = taskBag.getProjects(false);
+		Collections.sort(projects);
+		for (String item : projects) {
+			allProjectsContexts.add("+" + item);
+		}
+		if (allProjectsContexts.size() == 0) {
+			Util.showToastLong(this, R.string.nocontextsprojectsadd);
+			return;
+		}
+		builder.setItems(allProjectsContexts.toArray(new String[0]),
 				new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface arg0, int which) {
-						replaceTextAtSelection("+" + projects.get(which) + " ");
+						replaceTextAtSelection(allProjectsContexts.get(which)
+								+ " ");
 					}
 				});
 
 		// Create the AlertDialog
 		AlertDialog dialog = builder.create();
+		dialog.setTitle(R.string.addcontextproject);
 		dialog.show();
 	}
 
@@ -195,23 +209,7 @@ public class AddTask extends SherlockActivity {
 
 		// Create the AlertDialog
 		AlertDialog dialog = builder.create();
-		dialog.show();
-	}
-
-	private void showContextMenu(View v) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		final ArrayList<String> contexts = taskBag.getContexts(false);
-
-		builder.setItems(contexts.toArray(new String[0]),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int which) {
-						replaceTextAtSelection("@" + contexts.get(which) + " ");
-					}
-				});
-		// Create the AlertDialog
-		AlertDialog dialog = builder.create();
+		dialog.setTitle(R.string.assignpriority);
 		dialog.show();
 	}
 
