@@ -7,7 +7,7 @@
             android:orderInCategory="100"
             android:showAsAction="ifRoom"
             android:title="@string/priority_prompt"
-            android:icon="@drawable/ic_action_abprio"
+            android:icon="@drawable/ic_action_prioritize"
             />
     <item
             android:id="@+id/menu_add_tag"
