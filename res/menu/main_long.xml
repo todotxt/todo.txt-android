@@ -24,11 +24,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
-        android:id="@+id/share"
-        android:icon="@drawable/ic_action_share"
-        android:showAsAction="ifRoom"
-        android:title="@string/share"/>
-    <item
         android:id="@+id/delete"
         android:icon="@drawable/ic_action_delete"
         android:showAsAction="ifRoom"
@@ -41,7 +36,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <item
         android:id="@+id/update"
         android:icon="@drawable/ic_action_edit"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/update"/>
     <item
         android:id="@+id/uncomplete"
@@ -51,8 +46,13 @@ You should have received a copy of the GNU General Public License along with Tod
     <item
         android:id="@+id/done"
         android:icon="@drawable/ic_action_complete"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/done"/>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_action_share"
+        android:showAsAction="never"
+        android:title="@string/share"/>
     <item
         android:id="@+id/url"
         android:visible="false"/>
