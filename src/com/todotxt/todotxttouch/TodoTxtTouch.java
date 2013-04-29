@@ -311,14 +311,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		final String[] prioArr = Priority
 				.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Select priority");
+		builder.setTitle(getString(R.string.select_priority));
 		builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, final int which) {
 				dialog.dismiss();
 				new AsyncTask<Object, Void, Boolean>() {
 					protected void onPreExecute() {
-						m_ProgressDialog = showProgressDialog("Prioritizing Task");
+						m_ProgressDialog = showProgressDialog(getString(R.string.progress_prioritize));
 					}
 
 					@Override
@@ -349,7 +349,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 									Constants.INTENT_START_SYNC_TO_REMOTE));
 						} else {
 							Util.showToastLong(TodoTxtTouch.this,
-									"Could not prioritize tasks");
+									getString(R.string.error_prioritize));
 						}
 					}
 				}.execute(tasks, prioArr, which);
@@ -364,7 +364,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			public void onClick(DialogInterface dialog, int which) {
 				new AsyncTask<Object, Void, Boolean>() {
 					protected void onPreExecute() {
-						m_ProgressDialog = showProgressDialog("Marking Task Not Complete");
+						m_ProgressDialog = showProgressDialog(getString(R.string.progress_uncomplete));
 					}
 
 					@Override
@@ -391,7 +391,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 									Constants.INTENT_START_SYNC_TO_REMOTE));
 						} else {
 							Util.showToastLong(TodoTxtTouch.this,
-									"Could not mark tasks as not completed");
+									getString(R.string.error_uncomplete));
 						}
 					}
 				}.execute(tasks);
@@ -406,7 +406,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		new AsyncTask<Object, Void, Boolean>() {
 
 			protected void onPreExecute() {
-				m_ProgressDialog = showProgressDialog("Marking Task Complete");
+				m_ProgressDialog = showProgressDialog(getString(R.string.progress_complete));
 			}
 
 			@Override
@@ -436,7 +436,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							Constants.INTENT_START_SYNC_TO_REMOTE));
 				} else {
 					Util.showToastLong(TodoTxtTouch.this,
-							"Could not complete tasks");
+							getString(R.string.error_complete));
 				}
 			}
 		}.execute(tasks);
@@ -456,7 +456,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				new AsyncTask<Object, Void, Boolean>() {
 
 					protected void onPreExecute() {
-						m_ProgressDialog = showProgressDialog("Deleting");
+						m_ProgressDialog = showProgressDialog(getString(R.string.progress_delete));
 					}
 
 					@SuppressWarnings("unchecked")
@@ -482,7 +482,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 									Constants.INTENT_START_SYNC_TO_REMOTE));
 						} else {
 							Util.showToastLong(TodoTxtTouch.this,
-									"Could not delete tasks ");
+									getString(R.string.error_delete));
 						}
 					}
 				}.execute(tasks);
@@ -495,7 +495,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		new AsyncTask<Void, Void, Boolean>() {
 
 			protected void onPreExecute() {
-				m_ProgressDialog = showProgressDialog("Archiving Tasks");
+				m_ProgressDialog = showProgressDialog(getString(R.string.progress_archive));
 			}
 
 			@Override
@@ -513,12 +513,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				TodoTxtTouch.currentActivityPointer.dismissProgressDialog(true);
 				if (result) {
 					Util.showToastLong(TodoTxtTouch.this,
-							"Archived completed tasks");
+							getString(R.string.confirm_archive));
 					sendBroadcast(new Intent(
 							Constants.INTENT_START_SYNC_TO_REMOTE));
 				} else {
 					Util.showToastLong(TodoTxtTouch.this,
-							"Could not archive tasks");
+							getString(R.string.error_archive));
 				}
 			}
 		}.execute();
@@ -738,7 +738,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_DialogText = message;
 		m_DialogActive = true;
 		return (m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
-				message, "Please wait...", true));
+				message, getString(R.string.wait_progress), true));
 	}
 
 	@Override
@@ -915,7 +915,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							editTask(checkedTasks.get(0));
 						} else {
 							Log.w(TAG,
-									"More than one task was selected while hanling update menu");
+									"More than one task was selected while handling update menu");
 						}
 						break;
 					case R.id.done:

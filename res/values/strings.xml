@@ -66,7 +66,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="assignpriority">Prioritize this task</string>
 	<string name="filterbycontextproject">Filter by @context or +project</string>
 
-    <!-- preferences -->
+    <!-- settings -->
     <string name="ARCHIVE_settings_header">done.txt</string>
     <string name="auto_archive_pref_key">todotxtautoarchive</string>
     <string name="auto_archive_pref_title">Auto archive</string>
@@ -151,4 +151,18 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="dates_months_ago">%d months ago</string>
     <string name="dates_one_month_ago">1 month ago</string>
 
+    <!--  contextual action bar progress and error messages -->
+    <string name="progress_uncomplete">Marking Task Not Complete</string>
+	<string name="progress_complete">Marking Task Complete</string>
+	<string name="progress_archive">Archiving Tasks</string>
+	<string name="progress_delete">Deleting</string>
+	<string name="progress_prioritize">Prioritizing tasks</string>
+	<string name="confirm_archive">Archived completed tasks</string>
+	<string name="select_priority">Select priority</string>
+	<string name="error_prioritize">Could not prioritize tasks</string>
+	<string name="error_uncomplete">Could not mark tasks as not completed</string>
+	<string name="error_complete">Could not complete tasks</string>
+	<string name="error_delete">Could not delete tasks</string>
+	<string name="error_archive">Could not archive tasks</string>
+	<string name="wait_progress">Please wait&&;#8230;</string>
 </resources>
