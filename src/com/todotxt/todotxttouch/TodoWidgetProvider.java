@@ -43,7 +43,7 @@ import com.todotxt.todotxttouch.task.TaskBag;
 public class TodoWidgetProvider extends AppWidgetProvider {
 
 	private static final String TAG = TodoWidgetProvider.class.getName();
-	private static final int TASKS_TO_DISPLAY = 3;
+	private static final int TASKS_TO_DISPLAY = 15;
 
 	private static final int TASK_ID = 0;
 	private static final int TASK_PRIO = 1;

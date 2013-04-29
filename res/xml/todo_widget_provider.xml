@@ -27,4 +27,5 @@ You should have received a copy of the GNU General Public License along with Tod
 	android:minWidth="294dp"
 	android:minHeight="40dp"
 	android:initialLayout="@layout/widget"
+	android:resizeMode="horizontal|vertical"
 	android:updatePeriodMillis="1000" />
