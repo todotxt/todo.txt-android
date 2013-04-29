@@ -164,5 +164,5 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="error_complete">Could not complete tasks</string>
 	<string name="error_delete">Could not delete tasks</string>
 	<string name="error_archive">Could not archive tasks</string>
-	<string name="wait_progress">Please wait&&;#8230;</string>
+	<string name="wait_progress">Please wait&#8230;</string>
 </resources>
