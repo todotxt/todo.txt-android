@@ -27,10 +27,8 @@ You should have received a copy of the GNU General Public License along with Tod
                                  android:id="@+id/home_root"
                                  android:layout_width="fill_parent"
                                  android:layout_height="fill_parent"
-                                 android:divider="?android:attr/dividerVertical"
                                  android:showDividers="middle"
                                  android:orientation="vertical">
-
 
     <EditText
             android:id="@+id/taskText"
@@ -40,16 +38,5 @@ You should have received a copy of the GNU General Public License along with Tod
             android:hint="@string/tasktexthint"
             android:gravity="top"
             android:inputType="textCapSentences|textMultiLine"/>
-    <TextView
-            android:id="@+id/taskView"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textIsSelectable="true"
-            android:autoLink="all"
-            android:gravity="top"
-            android:layout_margin="3sp"
-            style="@android:style/TextAppearance.Holo.Widget.EditText"
-            android:visibility="gone"/>
 
 </LinearLayout>
