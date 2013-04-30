@@ -33,6 +33,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Layout;
+import android.text.Selection;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -202,16 +204,35 @@ public class AddTask extends SherlockActivity {
 		dialog.show();
 	}
 
+	public int getCurrentCursorLine(EditText editText)
+	{    
+	    int selectionStart = Selection.getSelectionStart(editText.getText());
+	    Layout layout = editText.getLayout();
+
+	    if (!(selectionStart == -1)) {
+	        return layout.getLineForOffset(selectionStart);
+	    }
+	    
+	    return -1;
+	}
+	
 	private void replacePriority(CharSequence newPrio) {
 		// save current selection and length
 		int start = textInputField.getSelectionStart();
 		int end = textInputField.getSelectionEnd();
 		int length = textInputField.getText().length();
 		int sizeDelta;
-
-		Task t = new Task(0, textInputField.getText().toString());
-		t.setPriority(Priority.toPriority(newPrio.toString()));
-		textInputField.setText(t.inFileFormat());
+		ArrayList<String> lines = new ArrayList<String>();
+		for (String line : textInputField.getText().toString().split("\\r\\n|\\r|\\n")) {
+			lines.add(line);
+		}
+		int currentLine = getCurrentCursorLine(textInputField);
+		if (currentLine!=-1) {
+			Task t = new Task(0, lines.get(currentLine));			
+			t.setPriority(Priority.toPriority(newPrio.toString()));
+			lines.set(currentLine, t.inFileFormat());
+			textInputField.setText(Util.join(lines, "\n"));
+		}
 
 		// restore selection
 		sizeDelta = textInputField.getText().length() - length;
