@@ -33,6 +33,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.Layout;
+import android.text.Selection;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -47,7 +49,7 @@ import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Util;
 
 public class AddTask extends SherlockActivity {
-
+			
 	private final static String TAG = AddTask.class.getSimpleName();
 
 	private ProgressDialog m_ProgressDialog = null;
@@ -72,8 +74,7 @@ public class AddTask extends SherlockActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_save_task:
-			final String input = textInputField.getText().toString()
-					.replaceAll("\\r\\n|\\r|\\n", " ");
+			final String input = textInputField.getText().toString();
 			addEditAsync(input);
 			break;
 		case R.id.menu_add_task_help:
@@ -159,27 +160,17 @@ public class AddTask extends SherlockActivity {
 
 	private void showProjectContextMenu() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final ArrayList<String> allProjectsContexts = new ArrayList<String>();
-		ArrayList<String> contexts = taskBag.getContexts(false);
-		Collections.sort(contexts);
-		for (String item : contexts) {
-			allProjectsContexts.add("@" + item);
-		}
-
-		ArrayList<String> projects = taskBag.getProjects(false);
-		Collections.sort(projects);
-		for (String item : projects) {
-			allProjectsContexts.add("+" + item);
-		}
-		if (allProjectsContexts.size() == 0) {
+		final ArrayList<String> labels = new ArrayList<String>();
+		labels.addAll(labelsInTaskbagAndText());
+		if (labels.size() == 0) {
 			Util.showToastLong(this, R.string.nocontextsprojectsadd);
 			return;
 		}
-		builder.setItems(allProjectsContexts.toArray(new String[0]),
+		builder.setItems(labels.toArray(new String[0]),
 				new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface arg0, int which) {
-						replaceTextAtSelection(allProjectsContexts.get(which)
+						replaceTextAtSelection(labels.get(which)
 								+ " ");
 					}
 				});
@@ -213,16 +204,35 @@ public class AddTask extends SherlockActivity {
 		dialog.show();
 	}
 
+	public int getCurrentCursorLine(EditText editText)
+	{    
+	    int selectionStart = Selection.getSelectionStart(editText.getText());
+	    Layout layout = editText.getLayout();
+
+	    if (!(selectionStart == -1)) {
+	        return layout.getLineForOffset(selectionStart);
+	    }
+	    
+	    return -1;
+	}
+	
 	private void replacePriority(CharSequence newPrio) {
 		// save current selection and length
 		int start = textInputField.getSelectionStart();
 		int end = textInputField.getSelectionEnd();
 		int length = textInputField.getText().length();
 		int sizeDelta;
-
-		Task t = new Task(0, textInputField.getText().toString());
-		t.setPriority(Priority.toPriority(newPrio.toString()));
-		textInputField.setText(t.inFileFormat());
+		ArrayList<String> lines = new ArrayList<String>();
+		for (String line : textInputField.getText().toString().split("\\r\\n|\\r|\\n")) {
+			lines.add(line);
+		}
+		int currentLine = getCurrentCursorLine(textInputField);
+		if (currentLine!=-1) {
+			Task t = new Task(0, lines.get(currentLine));			
+			t.setPriority(Priority.toPriority(newPrio.toString()));
+			lines.set(currentLine, t.inFileFormat());
+			textInputField.setText(Util.join(lines, "\n"));
+		}
 
 		// restore selection
 		sizeDelta = textInputField.getText().length() - length;
@@ -256,10 +266,13 @@ public class AddTask extends SherlockActivity {
 					Task task = (Task) params[0];
 					String input = (String) params[1];
 					if (task != null) {
+						input = input.replaceAll("\\r\\n|\\r|\\n", " ");
 						task.update(input);
 						taskBag.update(task);
 					} else {
-						taskBag.addAsTask(input);
+						for (String text : input.split("\\r\\n|\\r|\\n")) {
+							taskBag.addAsTask(text);
+						}
 					}
 
 					// make widgets update
@@ -316,5 +329,29 @@ public class AddTask extends SherlockActivity {
 	public void onHelpClick() {
 		Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
 		startActivity(intent);
+	}
+	
+	private ArrayList<String> labelsInTaskbagAndText() {
+		/* Returns the defined labels in the taskbag
+		 * and the current task being added.
+		 * This way when adding multiple tasks labels from 
+		 * previous lines will be available fordropdown
+		 */		
+		ArrayList<String>labels = new ArrayList<String>();		
+		Task temp = new Task(1,textInputField.getText().toString());
+		
+		ArrayList<String> contexts = taskBag.getContexts(false);
+		contexts.addAll(temp.getContexts());
+		Collections.sort(contexts);
+		for (String item : contexts) {
+			labels.add("@" + item);
+		}
+		ArrayList<String> projects = taskBag.getProjects(false);
+		projects.addAll(temp.getProjects());
+		Collections.sort(projects);
+		for (String item : projects) {
+			labels.add("+" + item);
+		}
+		return labels;				
 	}
 }
