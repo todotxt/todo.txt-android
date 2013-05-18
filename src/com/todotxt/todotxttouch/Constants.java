@@ -31,6 +31,7 @@ public class Constants {
 	public static final String PREF_DONE_REV = "done_rev";
 	public static final String PREF_MANUAL_MODE = "workofflinepref";
 	public static final String PREF_NEED_TO_PUSH = "need_to_push";
+	public static final String PREF_PERIODIC_SYNC = "sync_period";
 	public static final String DROPBOX_MODUS = "dropbox";
 
 	public final static long INVALID_ID = -1;
@@ -47,6 +48,7 @@ public class Constants {
 	public final static String EXTRA_APPLIED_FILTERS = "APPLIED_FITERS";
 	public final static String EXTRA_FORCE_SYNC = "FORCE_SYNC";
 	public final static String EXTRA_OVERWRITE = "OVERWRITE";
+	public static final String EXTRA_SUPPRESS_TOAST = "SUPPRESS_TOAST";
 
 	public final static String INTENT_ACTION_ARCHIVE = "com.todotxt.todotxttouch.ACTION_ARCHIVE";
 	public final static String INTENT_ACTION_LOGOUT = "com.todotxt.todotxttouch.ACTION_LOGOUT";

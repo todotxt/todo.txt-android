@@ -40,8 +40,8 @@ You should have received a copy of the GNU General Public License along with Tod
         android:resizeable="true"
         android:smallScreens="true" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".TodoApplication"
@@ -143,6 +143,11 @@ You should have received a copy of the GNU General Public License along with Tod
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/todo_widget_provider" />
+        </receiver> 
+        <receiver android:name=".PeriodicSyncStarter" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
         <receiver
             android:name="com.todotxt.todotxttouch.widget.ListWidgetProvider"
@@ -166,6 +171,7 @@ You should have received a copy of the GNU General Public License along with Tod
             android:enabled="@bool/api_14_or_above"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".SyncerService"/>
     </application>
 
 </manifest>
