@@ -30,5 +30,21 @@ You should have received a copy of the GNU General Public License along with Tod
 		<item>Line descending</item>
 		<item>Text (A-Z)</item>
 	</string-array>
+	
+	<string-array name="periodic_sync_lengths">
+	    <item>Disabled</item>
+		<item>15 minutes</item>
+		<item>1 hour</item>
+		<item>12 hours</item>
+		<item>1 day</item>
+	</string-array>
+	
+	<string-array name="periodic_sync_values"> <!-- values from AlarmManager.INTERVAL_* -->
+		<item>0</item>
+		<item>900000</item>
+		<item>3600000</item>
+		<item>43200000</item>
+		<item>86400000</item>
+	</string-array>
 
 </resources>

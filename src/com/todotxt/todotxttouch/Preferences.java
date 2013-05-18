@@ -30,7 +30,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
@@ -40,6 +43,8 @@ public class Preferences extends PreferenceActivity {
 	private Preference aboutDialog;
 	private Preference logoutDialog;
 	private Preference archiveDialog;
+	private ListPreference periodicSync;
+	private CheckBoxPreference manualOnly; 
 	private static final int ABOUT_DIALOG = 1;
 	private static final int LOGOUT_DIALOG = 2;
 	private static final int ARCHIVE_DIALOG = 3;
@@ -67,10 +72,32 @@ public class Preferences extends PreferenceActivity {
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
 		archiveDialog = findPreference("archive_now");
+		periodicSync = (ListPreference) findPreference(getString(R.string.periodic_sync_pref_key));
+		manualOnly = (CheckBoxPreference) findPreference(getString(R.string.manual_sync_pref_key));
+		setPeriodicSummary(periodicSync.getValue());
+		periodicSync.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                setPeriodicSummary(newValue);
+                return true;
+            }
+        });
+	}
+	
+	private void setPeriodicSummary(Object newValue) {
+	    // Sync preference summary with selected entry. Ugly but this is the only way that works.
+	    periodicSync.setSummary(periodicSync.getEntries()[periodicSync.findIndexOfValue((String)newValue)]);
 	}
 
+	@Override
+	protected void onPause() {
+	    super.onPause();
+	    PeriodicSyncStarter.setupPeriodicSyncer(this);
+	}
+	
 	protected void onResume() {
-		super.onResume();
+		super.onResume();		
 	}
 
 	@SuppressWarnings("deprecation")
@@ -83,6 +110,11 @@ public class Preferences extends PreferenceActivity {
 			showDialog(LOGOUT_DIALOG);
 		} else if (preference == archiveDialog) {
 			showDialog(ARCHIVE_DIALOG);
+		} else if (preference == manualOnly) {
+		    // When manual sync gets checked we want don't want periodic sync
+		    periodicSync.setEnabled(!manualOnly.isChecked());
+		    periodicSync.setValue("0"); // Disable
+		    setPeriodicSummary(periodicSync.getValue());
 		}
 		return true;
 	}
@@ -156,4 +188,5 @@ public class Preferences extends PreferenceActivity {
 		}
 		return null;
 	}
+	
 }
