@@ -303,6 +303,9 @@ public class TodoApplication extends Application {
 	private void updateSyncUI(boolean redrawList) {
 		sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI).putExtra(
 				"redrawList", redrawList));
+		if(redrawList) {
+			broadcastWidgetUpdate();
+		}
 	}
 
 	private final class BroadcastReceiverExtension extends BroadcastReceiver {
