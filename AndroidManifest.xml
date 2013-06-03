@@ -52,17 +52,8 @@ You should have received a copy of the GNU General Public License along with Tod
             android:configChanges="orientation|keyboard"
             android:launchMode="singleTask" >
             <intent-filter>
-
-                <!-- For Android 1.6 compatibility, we cannot reference a string resource here 
-                On 1.6, when auth'ing to Dropbox, it throws a 
-                java.lang.IllegalStateException: URL scheme in your app's manifest is not set up correctly.
                 <data android:scheme="@string/dropbox_consumer_key" />
-                -->
-				<!-- Change this to be db- followed by your Dropbox app key -->
-				 <data android:scheme="db-PUT-APP-KEY-HERE" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
