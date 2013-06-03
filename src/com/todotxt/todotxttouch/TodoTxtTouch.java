@@ -236,7 +236,19 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+
 		setFilteredTasks(true);
+
+		// Select the specified item if one was passed in to this activity
+		// e.g. from the widget
+		Intent intent = this.getIntent();
+		if (intent.hasExtra(Constants.EXTRA_TASK)) {
+			int position = getPositionFromId(intent.getLongExtra(
+					Constants.EXTRA_TASK, 0));
+			intent.removeExtra(Constants.EXTRA_TASK);
+			getListView().setItemChecked(position, true);
+		}
+
 		// Show contextactionbar if there is a selection
 		showContextActionBarIfNeeded();
 	}
@@ -866,6 +878,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			clearFilter();
 			setFilteredTasks(false);
 		}
+	}
+
+	private int getPositionFromId(long id) {
+		for (int position = 0; position < m_adapter.getCount(); position++) {
+			Task task = m_adapter.getItem(position);
+			if (task.getId() == id) {
+				return position;
+			}
+		}
+		return 0;
 	}
 
 	private ArrayList<Task> getCheckedTasks() {
