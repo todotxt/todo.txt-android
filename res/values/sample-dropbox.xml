@@ -25,7 +25,8 @@ You should have received a copy of the GNU General Public License along with Tod
 <resources>
 <!--
 First, copy this file to dropbox.xml. Then uncomment out the following lines and fill in the appropriate values.
-    <string name="dropbox_consumer_key">Enter your Dropbox app key here</string>
+The dropbox_consumer_key value must start with 'db-'
+    <string name="dropbox_consumer_key">db-Enter your Dropbox app key here</string>
     <string name="dropbox_consumer_secret">Enter your Dropbox app secret here</string>
 -->    
 </resources>

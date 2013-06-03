@@ -115,6 +115,7 @@ class DropboxRemoteClient implements RemoteClient {
 	public boolean authenticate() {
 		String consumerKey = todoApplication.getResources()
 				.getText(R.string.dropbox_consumer_key).toString();
+		consumerKey = consumerKey.replaceFirst("^db-", "");
 		String consumerSecret = todoApplication.getText(
 				R.string.dropbox_consumer_secret).toString();
 
