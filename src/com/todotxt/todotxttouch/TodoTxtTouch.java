@@ -53,12 +53,10 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
@@ -77,9 +75,12 @@ import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
+import com.todotxt.todotxttouch.task.TaskPersistException;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
+
+import de.timroes.swipetodismiss.SwipeDismissList;
 
 public class TodoTxtTouch extends SherlockListActivity implements
 		OnSharedPreferenceChangeListener {
@@ -116,12 +117,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private static final int SYNC_CHOICE_DIALOG = 100;
 	private static final int SYNC_CONFLICT_DIALOG = 101;
 
-	private GestureDetector gestureDetector;
-	private View.OnTouchListener gestureListener;
+	private SwipeDismissList m_swipeList;
 
 	private ActionMode mMode;
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -179,6 +178,58 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		lv.setTextFilterEnabled(true);
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
+		// TODO:
+		// send pull requests for any changes made to library
+		// run unit tests (write new ones for unarchive)
+		 
+		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
+			// Gets called whenever the user deletes an item.
+			public SwipeDismissList.Undoable onDismiss(AbsListView listView,
+					final int position) {
+				final Task task = m_adapter.getItem(position);
+				m_adapter.remove(task);
+				ArrayList<Task> tasks = new ArrayList<Task>();
+				tasks.add(task);
+				final boolean wasComplete = task.isCompleted();
+				final String popupTitle = listView.getResources().getString(
+						wasComplete ? R.string.swipe_action_unComplete
+								: R.string.swipe_action_complete);
+
+				if (wasComplete) {
+					undoCompleteTasks(tasks, false);
+				} else {
+					completeTasks(tasks);
+				}
+
+				// Return an Undoable implementing every method
+				return new SwipeDismissList.Undoable() {
+					// Method is called when user undoes this deletion
+					public void undo() {
+						// Reinsert item to list
+						ArrayList<Task> tasks = new ArrayList<Task>();
+						tasks.add(task);
+						if (wasComplete) {
+							completeTasks(tasks);
+						} else {
+							undoCompleteTasks(tasks, false);
+						}
+					}
+
+					@Override
+					public String getTitle() {
+						return popupTitle;
+					}
+
+				};
+			}
+		};
+
+		m_swipeList = new SwipeDismissList(lv, callback,
+				SwipeDismissList.UndoMode.SINGLE_UNDO);
+		m_swipeList.setPopupYOffset(56);
+		m_swipeList.setAutoHideDelay(250);
+		m_swipeList.setSwipeLayout(R.id.swipe_view);
+
 		initializeTasks();
 
 		// Show search results
@@ -188,23 +239,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			Log.v(TAG, "Searched for " + m_search);
 			setFilteredTasks(false);
 		}
-
-		gestureDetector = new GestureDetector(new TodoTxtGestureDetector());
-		gestureListener = new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (gestureDetector.onTouchEvent(event)) {
-					MotionEvent cancelEvent = MotionEvent.obtain(event);
-					cancelEvent.setAction(MotionEvent.ACTION_CANCEL);
-					v.onTouchEvent(cancelEvent);
-					cancelEvent.recycle();
-					return true;
-				}
-				return false;
-			}
-		};
-
-		getListView().setOnTouchListener(gestureListener);
 
 	}
 
@@ -231,6 +265,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		super.onDestroy();
 		m_app.m_prefs.unregisterOnSharedPreferenceChangeListener(this);
 		unregisterReceiver(m_broadcastReceiver);
+	}
+
+	@Override
+	protected void onStop() {
+		m_swipeList.discardUndo();
+		super.onStop();
 	}
 
 	@Override
@@ -370,7 +410,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		builder.show();
 	}
 
-	private void undoCompleteTasks(final ArrayList<Task> tasks) {
+	private void undoCompleteTasks(final ArrayList<Task> tasks,
+			final boolean showConfirm) {
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -386,7 +427,17 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							ArrayList<Task> tasks = (ArrayList<Task>) params[0];
 							for (Task task : tasks) {
 								task.markIncomplete();
-								taskBag.update(task);
+								task.setPriority(task.getOriginalPriority());
+								try {
+									taskBag.update(task);
+								} catch(TaskPersistException tpe) {
+									if (m_app.m_prefs.getBoolean("todotxtautoarchive", false)) {
+										// if the task was not found, and archiving is enabled
+										// we need to add it to the list (in the original position)
+										// and remove it from the done.txt file
+										taskBag.unarchive(task);
+									}
+								}
 							}
 							return true;
 						} catch (Exception e) {
@@ -409,8 +460,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}.execute(tasks);
 			}
 		};
-		Util.showConfirmationDialog(this, R.string.areyousure, listener,
-				R.string.unComplete);
+		if (showConfirm) {
+			Util.showConfirmationDialog(this, R.string.areyousure, listener,
+					R.string.unComplete);
+		} else {
+			listener.onClick(null, 0);
+		}
 	}
 
 	private void completeTasks(ArrayList<Task> tasks) {
@@ -539,6 +594,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
+		m_swipeList.discardUndo();
 		switch (item.getItemId()) {
 		case R.id.add_new:
 			startAddTaskActivity();
@@ -754,8 +810,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	@Override
-	protected Dialog onCreateDialog(int id) {
+	protected Dialog onCreateDialog(final int id) {
 		final Dialog d;
+		m_swipeList.discardUndo();
 
 		if (R.id.priority == id) {
 			final List<Priority> pStrs = taskBag.getPriorities();
@@ -816,7 +873,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							showToast(getString(R.string.sync_download_message));
 						}
 					});
-			return upDownChoice.show();
+			upDownChoice.setOnCancelListener(new OnCancelListener() {
+				
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					updateSyncUI(false);
+					removeDialog(id);
+				}
+			});
+			return upDownChoice.create();
 		} else if (id == SYNC_CONFLICT_DIALOG) {
 			Log.v(TAG, "Time to show the sync conflict dialog");
 			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
@@ -845,7 +911,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							showToast(getString(R.string.sync_download_message));
 						}
 					});
-			return upDownChoice.show();
+			upDownChoice.setOnCancelListener(new OnCancelListener() {
+				
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					updateSyncUI(false);
+					removeDialog(id);
+				}
+			});
+			return upDownChoice.create();
 		} else {
 			return null;
 		}
@@ -912,6 +987,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			return;
 		}
 		if (mMode == null) {
+			m_swipeList.setEnabled(false);
 			mMode = startActionMode(new Callback() {
 
 				@Override
@@ -950,7 +1026,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						shareTasks(checkedTasks);
 						break;
 					case R.id.uncomplete:
-						undoCompleteTasks(checkedTasks);
+						undoCompleteTasks(checkedTasks, true);
 						break;
 					case R.id.delete:
 						deleteTasks(checkedTasks);
@@ -987,6 +1063,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				public void onDestroyActionMode(ActionMode mode) {
 					getListView().clearChoices();
 					m_adapter.notifyDataSetChanged();
+					m_swipeList.setEnabled(true);
 					mMode = null;
 				}
 
@@ -1103,6 +1180,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
+		m_swipeList.discardUndo();
 		l.setItemChecked(position, l.isItemChecked(position));
 		showContextActionBarIfNeeded();
 	}
@@ -1142,13 +1220,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> {
-		private List<Task> items;
 		private LayoutInflater m_inflater;
 
 		public TaskAdapter(Context context, int textViewResourceId,
 				List<Task> tasks, LayoutInflater inflater) {
 			super(context, textViewResourceId, tasks);
-			this.items = tasks;
 			this.m_inflater = inflater;
 		}
 
@@ -1174,13 +1250,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		@Override
 		public void clear() {
 			super.clear();
-			items.clear();
 		}
 
 		@Override
 		public long getItemId(int position) {
-			if (!items.isEmpty()) {
-				return items.get(position).getId();
+			if (!this.isEmpty()) {
+				return this.getItem(position).getId();
 			} else {
 				// Seemed to be an emulator only bug; having an item "selected"
 				// (scroll-wheel etc) when sync'ing results in FC from index out
@@ -1249,17 +1324,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
 						holder.taskage.setText(task.getRelativeAge());
 						holder.taskage.setVisibility(View.VISIBLE);
-					} else {
-						holder.tasktext.setPadding(
-								holder.tasktext.getPaddingLeft(),
-								holder.tasktext.getPaddingTop(),
-								holder.tasktext.getPaddingRight(), 4);
 					}
-				} else {
-					holder.tasktext.setPadding(
-							holder.tasktext.getPaddingLeft(),
-							holder.tasktext.getPaddingTop(),
-							holder.tasktext.getPaddingRight(), 4);
 				}
 			}
 			return convertView;
@@ -1268,7 +1333,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		public List<Task> getItems() {
 			// Make a copy to prevent accidental modification of the adapter.
 			ArrayList<Task> tasks = new ArrayList<Task>();
-			tasks.addAll(items);
+			for (int position = 0; position < this.getCount(); position++) {
+				tasks.add(this.getItem(position));
+			}
 			return tasks;
 		}
 	}
@@ -1313,46 +1380,4 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		startActivityIfNeeded(i, REQUEST_FILTER);
 	}
 
-	class TodoTxtGestureDetector extends SimpleOnGestureListener {
-		private static final int SWIPE_MIN_DISTANCE = 120;
-		private static final int SWIPE_MAX_OFF_PATH = 250;
-		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-				return false;
-
-			ListView lv = getListView();
-			int pos = lv.pointToPosition((int) e1.getX(), (int) e1.getY());
-
-			// right to left swipe - mark task complete
-			if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE
-					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-				Log.v(TAG, "Fling left");
-				// if task is complete, undo complete
-				final Task task = m_adapter.getItem(pos);
-				if (task.isCompleted()) {
-					ArrayList<Task> tasks = new ArrayList<Task>();
-					tasks.add(task);
-					undoCompleteTasks(tasks);
-				}
-				return true;
-			} else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE
-					&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-				// left to right swipe - uncomplete task
-				Log.v(TAG, "Fling right");
-				// if task is incomplete, mark as complete
-				final Task task = m_adapter.getItem(pos);
-				if (!task.isCompleted()) {
-					ArrayList<Task> tasks = new ArrayList<Task>();
-					tasks.add(task);
-					completeTasks(tasks);
-				}
-				return true;
-			}
-			return false;
-		}
-	}
 }

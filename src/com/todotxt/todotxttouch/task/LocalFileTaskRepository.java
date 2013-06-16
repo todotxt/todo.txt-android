@@ -120,7 +120,28 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	}
 
 	@Override
-	public void loadDoneTasks(File file) {
+	public ArrayList<Task> loadDoneTasks() {
+		init();
+		if (!DONE_TXT_FILE.exists()) {
+			Log.i(TAG, DONE_TXT_FILE.getAbsolutePath() + " does not exist");
+			return new ArrayList<Task>();
+		} else {
+			try {
+				return TaskIo.loadTasksFromFile(DONE_TXT_FILE);
+			} catch (IOException e) {
+				throw new TodoException("Error loading done tasks from local file", e);
+			}
+		}
+	}
+
+	@Override
+	public void storeDoneTasks(ArrayList<Task> tasks) {
+		TaskIo.writeToFile(tasks, DONE_TXT_FILE, false,
+				preferences.isUseWindowsLineBreaksEnabled());
+	}
+
+	@Override
+	public void storeDoneTasks(File file) {
 		Util.renameFile(file, DONE_TXT_FILE, true);
 	}
 

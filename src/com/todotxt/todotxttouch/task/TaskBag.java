@@ -35,6 +35,8 @@ public interface TaskBag {
 
 	void archive();
 
+	void unarchive(Task task);
+
 	void reload();
 
 	void addAsTask(String input);

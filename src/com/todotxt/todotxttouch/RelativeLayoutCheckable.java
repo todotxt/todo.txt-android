@@ -24,7 +24,9 @@ public class RelativeLayoutCheckable extends RelativeLayout implements Checkable
 	    public void setChecked(boolean checked) {
 	        this.checked = checked; 
 
-	        this.setBackgroundColor(checked ? getResources().getColor(R.color.activated_background) : getResources().getColor(R.color.abs__background_holo_light));
+	        this.setBackgroundColor(checked ? getResources().getColor(R.color.activated_background) : getResources().getColor(R.color.grey));
+	        //FIXME: this is a hack to get a grey background when swiping without breaking highlight when selected:
+	        this.findViewById(R.id.swipe_view).setBackgroundColor(checked ? getResources().getColor(android.R.color.transparent) : getResources().getColor(R.color.white));
 	    }
 
 	    @Override

@@ -42,7 +42,11 @@ interface LocalTaskRepository {
 
 	void archive(ArrayList<Task> tasks);
 
-	void loadDoneTasks(File file);
+	ArrayList<Task> loadDoneTasks();
+
+	void storeDoneTasks(ArrayList<Task> tasks);
+
+	void storeDoneTasks(File file);
 
 	boolean todoFileModifiedSince(Date date);
 

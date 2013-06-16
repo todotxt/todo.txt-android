@@ -86,6 +86,28 @@ class TaskBagImpl implements TaskBag {
 	}
 
 	@Override
+	public void unarchive(Task task) {
+		try {
+			reload();
+			tasks.add((int)task.getId(), task);
+			store();
+			removeArchivedTask(task);
+		} catch (Exception e) {
+			throw new TaskPersistException("An error occurred while adding {"
+					+ task + "}", e);
+		}
+	}
+	
+	private void removeArchivedTask(Task task) {
+		ArrayList<Task> doneTasks = localRepository.loadDoneTasks();
+		Task found = find(doneTasks, task);
+		if (found != null) {
+			doneTasks.remove(found);
+			localRepository.storeDoneTasks(doneTasks);
+		}
+	}
+	
+	@Override
 	public void reload() {
 		if (lastReload == null
 				|| localRepository.todoFileModifiedSince(lastReload)) {
@@ -216,7 +238,7 @@ class TaskBagImpl implements TaskBag {
 
 				File doneFile = result.getDoneFile();
 				if (doneFile != null && doneFile.exists()) {
-					localRepository.loadDoneTasks(doneFile);
+					localRepository.storeDoneTasks(doneFile);
 				}
 				lastSync = new Date();
 			}
@@ -269,14 +291,24 @@ class TaskBagImpl implements TaskBag {
 	}
 
 	private static Task find(List<Task> tasks, Task task) {
+		Task partialMatch = null;
 		for (Task task2 : tasks) {
-			if (task2 == task
-					|| (task2.getText().equals(task.getOriginalText()) && task2
-							.getPriority() == task.getOriginalPriority())) {
+			if (task2 == task) {
 				return task2;
 			}
+			if (task2.getText().equals(task.getOriginalText())) {
+				if (task2.getPriority() == task.getOriginalPriority()) {
+					return task2;
+				}
+
+				// We prefer to find an exact match (both text and priority are
+				// the same), but it is possible that priority has been lost
+				// because the task has been completed, so we will consider
+				// partial matches as a last resort.
+				partialMatch = task2;
+			}
 		}
-		return null;
+		return partialMatch;
 	}
 
 	public static class Preferences {

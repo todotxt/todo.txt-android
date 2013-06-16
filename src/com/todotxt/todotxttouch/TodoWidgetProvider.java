@@ -132,6 +132,8 @@ public class TodoWidgetProvider extends AppWidgetProvider {
 					break;
 				case D:
 					color = R.color.gold;
+				default:
+					break;
 				}
 
 				remoteViews.setTextViewText(id[i][TASK_PRIO], task

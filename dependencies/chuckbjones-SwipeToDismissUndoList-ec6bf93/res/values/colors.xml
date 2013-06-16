@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<color name="btn_pressed">#ff33b5e5</color>
+	<color name="btn_focused">#ff0099cc</color>
+	<color name="btn_normal">#00000000</color>
+	
+	<color name="popup_bg_color">#EE666666</color>
+	<color name="separator_color">#BBBBBB</color>
+	<color name="popup_text_color">#FFFFFF</color>
+</resources>
