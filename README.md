@@ -1,11 +1,11 @@
-# Todo.txt Touch
+# Todo.txt for Android
 
 An Android application by [Gina Trapani](http://ginatrapani.org) and [the Todo.txt community](http://groups.yahoo.com/group/todotxt/) designed to manage your [todo.txt file](http://todotxt.com) stored in [Dropbox](http://dropbox.com).
 
-[Purchase Todo.txt Touch in the Android Market](https://market.android.com/details?id=com.todotxt.todotxttouch) or [download the apk](https://github.com/ginatrapani/todo.txt-touch/downloads), but be aware this app is in development and there are several [known bugs and todo items](https://github.com/ginatrapani/todo.txt-touch/issues). 
+[Purchase Todo.txt on Google Play](https://play.google.com/store/apps/details?id=com.todotxt.todotxttouch), the [Amazon Appstore](http://www.amazon.com/o/ASIN/B004MNQTVU/ref=nosim/lifehackerboo-20), or download and compile the source code yourself. Be aware this app is in active development and there are several [known bugs and todo items](https://github.com/ginatrapani/todo.txt-android/issues). 
 
-Todo.txt Touch requires that you have a Dropbox account in order to be able to capture the todo.txt file elsewhere than just on your Android device.  Eventually, we hope to support other cloud sources.
+Todo.txt for Android requires that you have a Dropbox account in order to sync your file across devices.
 
-There are already a multitude of decent task managers for Android, but Todo.txt Touch is a minimalist, plain-text focused solution we built to learn by collaborating on Android development. 
+There are already a multitude of decent task managers for Android, but Todo.txt is a minimalist, plain-text focused solution we built to learn by collaborating on Android development. 
 
 Interested in joining in? Fork the project and talk to us on the [Todo.txt mailing list](http://groups.yahoo.com/group/todotxt/).
