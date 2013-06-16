@@ -10,4 +10,4 @@ bin/
 gen/
 res/values/dropbox.xml
 proguard.cfg
-/AndroidManifest.xml
+

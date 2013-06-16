@@ -44,7 +44,7 @@ import com.todotxt.todotxttouch.util.Util;
 
 class DropboxRemoteClient implements RemoteClient {
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
-	
+
 	private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";
 	private static final String DONE_TXT_REMOTE_FILE_NAME = "done.txt";
 	private static final AccessType ACCESS_TYPE = AccessType.DROPBOX;
@@ -117,6 +117,7 @@ class DropboxRemoteClient implements RemoteClient {
 				.getText(R.string.dropbox_consumer_key).toString();
 		String consumerSecret = todoApplication.getText(
 				R.string.dropbox_consumer_secret).toString();
+		consumerKey = consumerKey.replaceFirst("^db-", "");
 
 		AppKeyPair appKeys = new AppKeyPair(consumerKey, consumerSecret);
 		AndroidAuthSession session = new AndroidAuthSession(appKeys,
@@ -195,7 +196,7 @@ class DropboxRemoteClient implements RemoteClient {
 		ArrayList<DropboxFile> dropboxFiles = new ArrayList<DropboxFile>(2);
 		dropboxFiles.add(todoFile);
 		dropboxFiles.add(doneFile);
-		
+
 		DropboxFileDownloader downloader = new DropboxFileDownloader(
 				dropboxApi, dropboxFiles);
 		downloader.pullFiles();
