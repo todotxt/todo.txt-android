@@ -11,3 +11,9 @@ gen/
 res/values/dropbox.xml
 proguard.cfg
 
+
+# IntelliJ Idea/Android Studio files
+*.iml
+*.ipr
+*.iws
+.idea/
