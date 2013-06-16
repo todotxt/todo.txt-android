@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/TodoTxtTouch"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="/TodoTxtTouch/libs/dropbox-android-sdk-1.5.4.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
