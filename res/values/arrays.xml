@@ -32,11 +32,11 @@ You should have received a copy of the GNU General Public License along with Tod
 	</string-array>
 	
 	<string-array name="periodic_sync_lengths">
-	    <item>Disabled</item>
-		<item>15 minutes</item>
-		<item>1 hour</item>
-		<item>12 hours</item>
-		<item>1 day</item>
+	    <item>Never</item>
+		<item>Every 15 minutes</item>
+		<item>Every hour</item>
+		<item>Twice a day</item>
+		<item>Once a day</item>
 	</string-array>
 	
 	<string-array name="periodic_sync_values"> <!-- values from AlarmManager.INTERVAL_* -->

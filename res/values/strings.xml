@@ -96,7 +96,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="manual_sync_pref_title">Manual sync</string>
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
     <string name="periodic_sync_pref_key">sync_period</string>
-    <string name="periodic_sync_pref_title">Sync every</string>
+    <string name="periodic_sync_pref_title">Background sync</string>
 
 
     <!-- sync dialog -->
