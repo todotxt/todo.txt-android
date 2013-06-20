@@ -65,7 +65,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="addcontextproject">Add @context or +project</string>
 	<string name="assignpriority">Prioritize this task</string>
 	<string name="filterbycontextproject">Filter by @context or +project</string>
-
+	<string name="taskadded">Task added</string>
+	
     <!-- settings -->
     <string name="ARCHIVE_settings_header">done.txt</string>
     <string name="auto_archive_pref_key">todotxtautoarchive</string>

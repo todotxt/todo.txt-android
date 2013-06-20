@@ -105,10 +105,10 @@ You should have received a copy of the GNU General Public License along with Tod
             android:targetActivity=".AddTask" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-
+				<action android:name="com.google.android.gm.action.AUTO_SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/plain" />
+                <data android:mimeType="text/*" />
             </intent-filter>
         </activity-alias>
 
