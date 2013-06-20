@@ -49,7 +49,7 @@ import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Util;
 
 public class AddTask extends SherlockActivity {
-			
+
 	private final static String TAG = AddTask.class.getSimpleName();
 
 	private ProgressDialog m_ProgressDialog = null;
@@ -68,6 +68,14 @@ public class AddTask extends SherlockActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.add_task, menu);
 		return true;
+	}
+
+	private void noteToSelf(Intent intent) {
+		String task = intent.getStringExtra(Intent.EXTRA_TEXT);
+		taskBag.addAsTask(task);
+		m_app.setNeedToPush(true);
+		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		m_app.showToast(R.string.taskadded);
 	}
 
 	@Override
@@ -114,8 +122,12 @@ public class AddTask extends SherlockActivity {
 			share_text = (String) intent
 					.getCharSequenceExtra(Intent.EXTRA_TEXT);
 			Log.d(TAG, share_text);
+		} else if ("com.google.android.gm.action.AUTO_SEND".equals(action)) {
+			// Called as note to self from google search/now
+			noteToSelf(intent);
+			finish();
+			return;
 		}
-
 		// text
 		textInputField = (EditText) findViewById(R.id.taskText);
 		textInputField.setGravity(Gravity.TOP);
@@ -166,14 +178,12 @@ public class AddTask extends SherlockActivity {
 			Util.showToastLong(this, R.string.nocontextsprojectsadd);
 			return;
 		}
-		builder.setItems(labels.toArray(new String[0]),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int which) {
-						replaceTextAtSelection(labels.get(which)
-								+ " ");
-					}
-				});
+		builder.setItems(labels.toArray(new String[0]), new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int which) {
+				replaceTextAtSelection(labels.get(which) + " ");
+			}
+		});
 
 		// Create the AlertDialog
 		AlertDialog dialog = builder.create();
@@ -204,18 +214,17 @@ public class AddTask extends SherlockActivity {
 		dialog.show();
 	}
 
-	public int getCurrentCursorLine(EditText editText)
-	{    
-	    int selectionStart = Selection.getSelectionStart(editText.getText());
-	    Layout layout = editText.getLayout();
+	public int getCurrentCursorLine(EditText editText) {
+		int selectionStart = Selection.getSelectionStart(editText.getText());
+		Layout layout = editText.getLayout();
 
-	    if (!(selectionStart == -1)) {
-	        return layout.getLineForOffset(selectionStart);
-	    }
-	    
-	    return -1;
+		if (!(selectionStart == -1)) {
+			return layout.getLineForOffset(selectionStart);
+		}
+
+		return -1;
 	}
-	
+
 	private void replacePriority(CharSequence newPrio) {
 		// save current selection and length
 		int start = textInputField.getSelectionStart();
@@ -223,12 +232,13 @@ public class AddTask extends SherlockActivity {
 		int length = textInputField.getText().length();
 		int sizeDelta;
 		ArrayList<String> lines = new ArrayList<String>();
-		for (String line : textInputField.getText().toString().split("\\r\\n|\\r|\\n")) {
+		for (String line : textInputField.getText().toString()
+				.split("\\r\\n|\\r|\\n")) {
 			lines.add(line);
 		}
 		int currentLine = getCurrentCursorLine(textInputField);
-		if (currentLine!=-1) {
-			Task t = new Task(0, lines.get(currentLine));			
+		if (currentLine != -1) {
+			Task t = new Task(0, lines.get(currentLine));
 			t.setPriority(Priority.toPriority(newPrio.toString()));
 			lines.set(currentLine, t.inFileFormat());
 			textInputField.setText(Util.join(lines, "\n"));
@@ -330,16 +340,16 @@ public class AddTask extends SherlockActivity {
 		Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
 		startActivity(intent);
 	}
-	
+
 	private ArrayList<String> labelsInTaskbagAndText() {
-		/* Returns the defined labels in the taskbag
-		 * and the current task being added.
-		 * This way when adding multiple tasks labels from 
-		 * previous lines will be available fordropdown
-		 */		
-		ArrayList<String>labels = new ArrayList<String>();		
-		Task temp = new Task(1,textInputField.getText().toString());
-		
+		/*
+		 * Returns the defined labels in the taskbag and the current task being
+		 * added. This way when adding multiple tasks labels from previous lines
+		 * will be available fordropdown
+		 */
+		ArrayList<String> labels = new ArrayList<String>();
+		Task temp = new Task(1, textInputField.getText().toString());
+
 		ArrayList<String> contexts = taskBag.getContexts(false);
 		contexts.addAll(temp.getContexts());
 		Collections.sort(contexts);
@@ -352,6 +362,6 @@ public class AddTask extends SherlockActivity {
 		for (String item : projects) {
 			labels.add("+" + item);
 		}
-		return labels;				
+		return labels;
 	}
 }
