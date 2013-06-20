@@ -69,6 +69,15 @@ public class AddTask extends SherlockActivity {
 		getSupportMenuInflater().inflate(R.menu.add_task, menu);
 		return true;
 	}
+	
+	private void noteToSelf (Intent intent) {
+		String task = intent.getStringExtra(Intent.EXTRA_TEXT);
+        taskBag.addAsTask(task);
+        m_app.setNeedToPush(true);
+        sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        m_app.showToast(R.string.taskadded);
+    }
+
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -98,6 +107,8 @@ public class AddTask extends SherlockActivity {
 
 		m_app = (TodoApplication) getApplication();
 		taskBag = m_app.getTaskBag();
+		
+		
 
 		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_WITH_REMOTE));
 
@@ -114,8 +125,12 @@ public class AddTask extends SherlockActivity {
 			share_text = (String) intent
 					.getCharSequenceExtra(Intent.EXTRA_TEXT);
 			Log.d(TAG, share_text);
+		} else if ("com.google.android.gm.action.AUTO_SEND".equals(action)) {
+	        // Called as note to self from google search/now
+	        noteToSelf(intent);
+	        finish();
+	        return;
 		}
-
 		// text
 		textInputField = (EditText) findViewById(R.id.taskText);
 		textInputField.setGravity(Gravity.TOP);
