@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -54,6 +55,7 @@ import android.text.SpannableString;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -83,7 +85,7 @@ import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 import de.timroes.swipetodismiss.SwipeDismissList;
 
 public class TodoTxtTouch extends SherlockListActivity implements
-		OnSharedPreferenceChangeListener {
+		OnSharedPreferenceChangeListener, PullToRefreshAttacher.OnRefreshListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
@@ -118,6 +120,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private static final int SYNC_CONFLICT_DIALOG = 101;
 
 	private SwipeDismissList m_swipeList;
+	private PullToRefreshAttacher m_pullToRefreshAttacher;
 
 	private ActionMode mMode;
 
@@ -229,6 +232,21 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_swipeList.setPopupYOffset(56);
 		m_swipeList.setAutoHideDelay(250);
 		m_swipeList.setSwipeLayout(R.id.swipe_view);
+		
+		m_pullToRefreshAttacher = new PullToRefreshAttacher(this);
+		m_pullToRefreshAttacher.setRefreshableView(lv, this);
+
+		// Delegate OnTouch calls to both libraries that want to receive them
+		lv.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View view, MotionEvent motionEvent) {
+				if (!m_swipeList.onTouch(view, motionEvent)) {
+					// Only allow pull to refresh if not swiping list item
+					m_pullToRefreshAttacher.onTouch(view, motionEvent);
+				}
+				return false;
+			}
+		});
 
 		initializeTasks();
 
@@ -598,10 +616,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		switch (item.getItemId()) {
 		case R.id.add_new:
 			startAddTaskActivity();
-			break;
-		case R.id.sync:
-			Log.v(TAG, "onMenuItemSelected: sync");
-			syncClient(false);
 			break;
 		case R.id.search:
 			onSearchRequested();
@@ -1186,37 +1200,19 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	private void updateSyncUI(boolean redrawList) {
-
-		View progress = getLayoutInflater().inflate(R.layout.main_progress,
-				null);
-
-		// options_menu can be null here because we can sync before the menu
-		// has been drawn
-		if (progress != null && options_menu != null) {
-			MenuItem refreshMenu = options_menu.findItem(R.id.sync);
-			int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-			// Using indeterminate progress looks bad on Gingerbread and below
-			if (currentapiVersion >= android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
-				if (m_app.syncInProgress()) {
-					refreshMenu.setActionView(progress);
-				} else {
-					refreshMenu.setActionView(null);
-				}
-			} else {
-				if (m_app.syncInProgress()) {
-					refreshMenu.setEnabled(false);
-				} else {
-					refreshMenu.setEnabled(true);
-				}
-			}
-
-		}
+		
+		m_pullToRefreshAttacher.setRefreshComplete();
 
 		if (redrawList) {
 			// hide action bar
 			findViewById(R.id.actionbar).setVisibility(View.GONE);
 			setFilteredTasks(false);
 		}
+	}
+	
+	@Override
+	public void onRefreshStarted(View view) {
+		syncClient(false);
 	}
 
 	public class TaskAdapter extends ArrayAdapter<Task> {

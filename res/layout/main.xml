@@ -56,7 +56,7 @@ You should have received a copy of the GNU General Public License along with Tod
 		android:layout_width="fill_parent" android:layout_height="0dip"
 		android:background="@color/white" android:layout_weight="1">
 		<ListView android:id="@+id/android:list"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
 			android:fastScrollEnabled="true"
 			style="@style/TodoTxtTouchLight" />
 
