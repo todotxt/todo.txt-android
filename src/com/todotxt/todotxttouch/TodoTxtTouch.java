@@ -1200,10 +1200,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	private void updateSyncUI(boolean redrawList) {
-		
-		m_pullToRefreshAttacher.setRefreshComplete();
 
 		if (redrawList) {
+			m_pullToRefreshAttacher.setRefreshComplete();
 			// hide action bar
 			findViewById(R.id.actionbar).setVisibility(View.GONE);
 			setFilteredTasks(false);
