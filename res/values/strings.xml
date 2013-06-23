@@ -25,7 +25,7 @@ You should have received a copy of the GNU General Public License along with Tod
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="app_label">Todo.txt</string>
-    <string name="added_task">Added task(s)</string>
+    <string name="added_task">Added tasks</string>
     <string name="add_task_failed">Could not add task</string>
     <string name="updated_task">Updated task</string>
     <string name="update_task_failed">Could not update task</string>
@@ -38,7 +38,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
     <string name="add">Add</string>
-    <string name="addtask">Add Task(s)</string>
+    <string name="addtask">Add tasks</string>
     <string name="quickfilter">Quick Filter</string>
     <string name="nocontextsprojectsadd">Enter a project into your task using the format +YourProject or a context using @YourContext.</string>
     <string name="nocontextsprojectsfilter">There are no contexts or projects in your todo.txt to filter on.</string>
@@ -49,7 +49,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="update">Update</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
-    <string name="unComplete">Undo Complete</string>
+    <string name="unComplete">Undo complete</string>
     <string name="swipe_action_complete">Completed task.</string>
     <string name="swipe_action_unComplete">Marked task incomplete.</string>
     <string name="ok">OK</string>
@@ -58,7 +58,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="clear">Clear</string>
     <string name="selected">selected</string>
     <string name="areyousure">Are you sure?</string>
-    <string name="tasktexthint">Draft chapter 1 +Novel @typewriter\n\n</string>
+    <string name="tasktexthint">Draft chapter 1 +Novel @typewriter\nCall literary agent @phone</string>
     <string name="add_task_help"><b>Projects</b> start with a + sign and contain no spaces, like +WebsiteRedesign or
 		+Novel.\n\n<b>Contexts</b> (where you will complete a task) start with an @ sign, like @phone or
 		@GroceryStore.\n\n
@@ -156,9 +156,9 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="dates_one_month_ago">1 month ago</string>
 
     <!--  contextual action bar progress and error messages -->
-    <string name="progress_uncomplete">Marking Task Not Complete</string>
-	<string name="progress_complete">Marking Task Complete</string>
-	<string name="progress_archive">Archiving Tasks</string>
+    <string name="progress_uncomplete">Marking task incomplete</string>
+	<string name="progress_complete">Marking task complete</string>
+	<string name="progress_archive">Archiving tasks</string>
 	<string name="progress_delete">Deleting</string>
 	<string name="progress_prioritize">Prioritizing tasks</string>
 	<string name="confirm_archive">Archived completed tasks</string>
