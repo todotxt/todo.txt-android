@@ -50,8 +50,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="delete">Delete</string>
     <string name="share">Share</string>
     <string name="unComplete">Undo Complete</string>
-    <string name="swipe_action_complete">Task Completed</string>
-    <string name="swipe_action_unComplete">Task Uncompleted</string>
+    <string name="swipe_action_complete">Completed task.</string>
+    <string name="swipe_action_unComplete">Marked task incomplete.</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
