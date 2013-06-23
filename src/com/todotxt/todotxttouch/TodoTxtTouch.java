@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.DefaultHeaderTransformer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -234,6 +235,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_swipeList.setSwipeLayout(R.id.swipe_view);
 		
 		m_pullToRefreshAttacher = new PullToRefreshAttacher(this);
+        DefaultHeaderTransformer ht = (DefaultHeaderTransformer) m_pullToRefreshAttacher
+                .getHeaderTransformer();
+        ht.setPullText(getString(R.string.pull_to_refresh));
+        ht.setRefreshingText(getString(R.string.syncing));
 		m_pullToRefreshAttacher.setRefreshableView(lv, this);
 
 		// Delegate OnTouch calls to both libraries that want to receive them
