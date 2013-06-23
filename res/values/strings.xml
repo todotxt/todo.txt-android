@@ -42,8 +42,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="quickfilter">Quick Filter</string>
     <string name="nocontextsprojectsadd">Enter a project into your task using the format +YourProject or a context using @YourContext.</string>
     <string name="nocontextsprojectsfilter">There are no contexts or projects in your todo.txt to filter on.</string>
-    <string name="updatetask">Update Task</string>
-    <string name="newtask">New Task</string>
+    <string name="updatetask">Update task</string>
     <string name="done">Complete</string>
     <string name="priority">Prioritize</string>
     <string name="update">Update</string>
@@ -77,7 +76,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="archive_now_pref_key">todotxtarchivenow</string>
     <string name="archive_now_pref_title">Archive now</string>
     <string name="archive_now_pref_summary">Move completed tasks from todo.txt to done.txt.</string>
-    <string name="archive_now_title">Archive Tasks</string>
+    <string name="archive_now_title">Archive tasks</string>
     <string name="archive_now_explainer">This cannot be undone. Are you sure?</string>
     <string name="dropbox_logout_pref_title">Log out</string>
     <string name="dropbox_logout_pref_summary">Log out of Dropbox.</string>
@@ -116,7 +115,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="welcome_message">Welcome to Todo.txt</string>
     <string name="login_screen_button">Connect to Dropbox</string>
     <!-- delete -->
-    <string name="delete_task_title">Delete Task</string>
+    <string name="delete_task_title">Delete task</string>
     <string name="delete_task_message">This cannot be undone. Are you sure?</string>
     <string name="delete_task_confirm">Delete</string>
     <!-- search -->
