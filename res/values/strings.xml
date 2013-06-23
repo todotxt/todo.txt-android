@@ -169,4 +169,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="error_delete">Could not delete tasks</string>
 	<string name="error_archive">Could not archive tasks</string>
 	<string name="wait_progress">Please wait&#8230;</string>
+	
+	<!-- pull-to-refresh -->
+	<string name="pull_to_refresh">Pull to refresh</string>
+	<string name="syncing">Syncing with Dropbox…</string>
 </resources>

@@ -23,7 +23,7 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 	<style name="Theme.TodoTxt" parent="Theme.Sherlock.Light.DarkActionBar">
     	<item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>
     	<item name="actionBarStyle">@style/MyActionBar</item>
@@ -175,4 +175,10 @@ You should have received a copy of the GNU General Public License along with Tod
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:background">@drawable/horizontal_rule</item>
 	</style>
+	
+	<style name="Widget.Holo.ProgressBar.Horizontal.Center"
+        parent="@style/Widget.Sherlock.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_holo_center</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo</item>
+    </style>
 </resources>
