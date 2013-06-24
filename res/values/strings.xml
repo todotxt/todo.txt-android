@@ -39,8 +39,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="refresh">Refresh</string>
     <string name="add">Add</string>
     <string name="addtask">Add tasks</string>
-    <string name="quickfilter">Quick Filter</string>
-    <string name="nocontextsprojectsadd">Enter a project into your task using the format +YourProject or a context using @YourContext.</string>
+    <string name="quickfilter">Quick filter</string>
     <string name="nocontextsprojectsfilter">There are no contexts or projects in your todo.txt to filter on.</string>
     <string name="updatetask">Update task</string>
     <string name="done">Complete</string>
@@ -58,11 +57,9 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="selected">selected</string>
     <string name="areyousure">Are you sure?</string>
     <string name="tasktexthint">Draft chapter 1 +Novel @typewriter\nCall literary agent @phone</string>
-    <string name="add_task_help"><b>Projects</b> start with a + sign and contain no spaces, like +WebsiteRedesign or
-		+Novel.\n\n<b>Contexts</b> (where you will complete a task) start with an @ sign, like @phone or
-		@GroceryStore.\n\n
-		A task can include any number of projects or
-		contexts. When adding tasks every line will become a separate task.</string>
+    <string name="add_task_help">Enter a project into your task using the format +YourProject or a context using @YourContext.\n\n<b>Projects</b> start with a + sign and contain no spaces, like +WebsiteRedesign or
+		+Novel.\n\n<b>Contexts</b> (where or with what you will complete a task) start with an @ sign, like @phone or
+		@GroceryStore.</string>
 	<string name="addcontextproject">Add @context or +project</string>
 	<string name="assignpriority">Prioritize this task</string>
 	<string name="filterbycontextproject">Filter by @context or +project</string>
@@ -137,7 +134,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="context_prompt">Context</string>
     <string name="refine">Refine</string>
     <string name="separator">Separator</string>
-    <string name="contextproject_prompt">Contexts and Projects</string>
+    <string name="contextproject_prompt">Contexts and projects</string>
 
     <!-- launcher shortcut -->
     <string name="shortcut_addtask_name">Add Task</string>

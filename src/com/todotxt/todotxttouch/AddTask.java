@@ -85,9 +85,6 @@ public class AddTask extends SherlockActivity {
 			final String input = textInputField.getText().toString();
 			addEditAsync(input);
 			break;
-		case R.id.menu_add_task_help:
-			onHelpClick();
-			break;
 		case R.id.menu_add_prio:
 			showPrioMenu(findViewById(R.id.menu_add_prio));
 			break;
@@ -175,7 +172,7 @@ public class AddTask extends SherlockActivity {
 		final ArrayList<String> labels = new ArrayList<String>();
 		labels.addAll(labelsInTaskbagAndText());
 		if (labels.size() == 0) {
-			Util.showToastLong(this, R.string.nocontextsprojectsadd);
+			onHelpClick();
 			return;
 		}
 		builder.setItems(labels.toArray(new String[0]), new OnClickListener() {

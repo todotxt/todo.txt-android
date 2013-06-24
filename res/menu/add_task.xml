@@ -1,32 +1,23 @@
-<!--suppress ALL -->
+<!-- suppress ALL -->
 
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:id="@+id/menu_add_prio"
-            android:orderInCategory="100"
-            android:showAsAction="ifRoom"
-            android:title="@string/priority_prompt"
-            android:icon="@drawable/ic_action_prioritize"
-            />
+        android:id="@+id/menu_add_prio"
+        android:icon="@drawable/ic_action_prioritize"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/priority_prompt"/>
     <item
-            android:id="@+id/menu_add_tag"
-            android:orderInCategory="100"
-            android:showAsAction="ifRoom"
-            android:title="@string/contextproject_prompt"
-            android:icon="@drawable/ic_action_filter"
-            />
+        android:id="@+id/menu_add_tag"
+        android:icon="@drawable/ic_action_filter"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/contextproject_prompt"/>
     <item
-            android:id="@+id/menu_save_task"
-            android:orderInCategory="100"
-            android:showAsAction="ifRoom"
-            android:title="@string/add"
-            android:icon="@drawable/content_save"
-            />
-    <item
-            android:id="@+id/menu_add_task_help"
-            android:orderInCategory="100"
-            android:showAsAction="never"
-            android:title="@string/add_task_help_btn"
-            />
+        android:id="@+id/menu_save_task"
+        android:icon="@drawable/navigation_accept"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/add"/>
 </menu>

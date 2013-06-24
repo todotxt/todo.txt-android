@@ -82,7 +82,6 @@ You should have received a copy of the GNU General Public License along with Tod
             android:name=".AddTask"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/addtask"
-            android:uiOptions="splitActionBarWhenNarrow"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -114,11 +113,10 @@ You should have received a copy of the GNU General Public License along with Tod
 
         <activity
             android:name=".HelpActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".TodoTxtTouch"
-            android:configChanges="keyboardHidden|orientation"
-            android:uiOptions="splitActionBarWhenNarrow" >
+            android:configChanges="keyboardHidden|orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

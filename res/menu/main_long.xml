@@ -23,16 +23,12 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <item
-        android:id="@+id/delete"
-        android:icon="@drawable/ic_action_delete"
-        android:showAsAction="ifRoom"
-        android:title="@string/delete"/>
-    <item
-        android:id="@+id/priority"
-        android:icon="@drawable/ic_action_prioritize"
-        android:showAsAction="ifRoom"
-        android:title="@string/priority"/>
+        android:id="@+id/done"
+        android:icon="@drawable/ic_action_complete"
+        android:showAsAction="always"
+        android:title="@string/done"/>
     <item
         android:id="@+id/update"
         android:icon="@drawable/ic_action_edit"
@@ -41,13 +37,18 @@ You should have received a copy of the GNU General Public License along with Tod
     <item
         android:id="@+id/uncomplete"
         android:icon="@drawable/ic_action_uncomplete"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:title="@string/unComplete"/>
     <item
-        android:id="@+id/done"
-        android:icon="@drawable/ic_action_complete"
-        android:showAsAction="always"
-        android:title="@string/done"/>
+        android:id="@+id/priority"
+        android:icon="@drawable/ic_action_prioritize"
+        android:showAsAction="never"
+        android:title="@string/priority"/>
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_action_delete"
+        android:showAsAction="never"
+        android:title="@string/delete"/>
     <item
         android:id="@+id/share"
         android:icon="@drawable/ic_action_share"
@@ -62,4 +63,5 @@ You should have received a copy of the GNU General Public License along with Tod
     <item
         android:id="@+id/phone_number"
         android:visible="false"/>
+
 </menu>
