@@ -86,7 +86,8 @@ import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 import de.timroes.swipetodismiss.SwipeDismissList;
 
 public class TodoTxtTouch extends SherlockListActivity implements
-		OnSharedPreferenceChangeListener, PullToRefreshAttacher.OnRefreshListener {
+		OnSharedPreferenceChangeListener,
+		PullToRefreshAttacher.OnRefreshListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
@@ -185,7 +186,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// TODO:
 		// send pull requests for any changes made to library
 		// run unit tests (write new ones for unarchive)
-		 
+
 		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
 			// Gets called whenever the user deletes an item.
 			public SwipeDismissList.Undoable onDismiss(AbsListView listView,
@@ -233,12 +234,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_swipeList.setPopupYOffset(56);
 		m_swipeList.setAutoHideDelay(250);
 		m_swipeList.setSwipeLayout(R.id.swipe_view);
-		
+
 		m_pullToRefreshAttacher = new PullToRefreshAttacher(this);
-        DefaultHeaderTransformer ht = (DefaultHeaderTransformer) m_pullToRefreshAttacher
-                .getHeaderTransformer();
-        ht.setPullText(getString(R.string.pull_to_refresh));
-        ht.setRefreshingText(getString(R.string.syncing));
+		DefaultHeaderTransformer ht = (DefaultHeaderTransformer) m_pullToRefreshAttacher
+				.getHeaderTransformer();
+		ht.setPullText(getString(R.string.pull_to_refresh));
+		ht.setRefreshingText(getString(R.string.syncing));
 		m_pullToRefreshAttacher.setRefreshableView(lv, this);
 
 		// Delegate OnTouch calls to both libraries that want to receive them
@@ -368,6 +369,17 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		return super.onCreateOptionsMenu(menu);
 	}
 
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		try {
+			return super.dispatchTouchEvent(ev);
+		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+			Log.e(TAG, "Caught exception in dispatchTouchEvent", e);
+
+		}
+		return true;
+	}
+
 	private void shareTasks(List<Task> tasks) {
 		String shareText = "";
 		for (Task t : tasks) {
@@ -453,10 +465,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 								task.setPriority(task.getOriginalPriority());
 								try {
 									taskBag.update(task);
-								} catch(TaskPersistException tpe) {
-									if (m_app.m_prefs.getBoolean("todotxtautoarchive", false)) {
-										// if the task was not found, and archiving is enabled
-										// we need to add it to the list (in the original position)
+								} catch (TaskPersistException tpe) {
+									if (m_app.m_prefs.getBoolean(
+											"todotxtautoarchive", false)) {
+										// if the task was not found, and
+										// archiving is enabled
+										// we need to add it to the list (in the
+										// original position)
 										// and remove it from the done.txt file
 										taskBag.unarchive(task);
 									}
@@ -893,7 +908,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						}
 					});
 			upDownChoice.setOnCancelListener(new OnCancelListener() {
-				
+
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
@@ -931,7 +946,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						}
 					});
 			upDownChoice.setOnCancelListener(new OnCancelListener() {
-				
+
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
@@ -1213,7 +1228,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			setFilteredTasks(false);
 		}
 	}
-	
+
 	@Override
 	public void onRefreshStarted(View view) {
 		syncClient(false);
@@ -1338,6 +1353,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			}
 			return tasks;
 		}
+
 	}
 
 	private static class ViewHolder {
@@ -1379,5 +1395,4 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		startActivityIfNeeded(i, REQUEST_FILTER);
 	}
-
 }
