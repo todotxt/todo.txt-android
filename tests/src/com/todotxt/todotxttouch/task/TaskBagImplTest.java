@@ -48,10 +48,6 @@ public class TaskBagImplTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void loadDoneTasks(File file) {
-		}
-
-		@Override
 		public ArrayList<Task> load() {
 			return null;
 		}
@@ -67,6 +63,19 @@ public class TaskBagImplTest extends AndroidTestCase {
 
 		@Override
 		public void archive(ArrayList<Task> tasks) {
+		}
+
+		@Override
+		public ArrayList<Task> loadDoneTasks() {
+			return null;
+		}
+
+		@Override
+		public void storeDoneTasks(ArrayList<Task> tasks) {
+		}
+
+		@Override
+		public void storeDoneTasks(File file) {
 		}
 	};
 
@@ -322,4 +331,54 @@ public class TaskBagImplTest extends AndroidTestCase {
 
 	}
 
+	public void testUnarchive() {
+		LocalTaskRepository repo = new TestLocalTaskRepository() {
+			public ArrayList<Task> load() {
+				return list1;
+			}
+			public ArrayList<Task> loadDoneTasks() {
+				return list2;
+			}
+		};
+
+		list2.add(task1);
+		
+		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+
+		assertEquals(0, taskBag.size());
+
+		taskBag.unarchive(task1);
+
+		assertEquals(1, taskBag.size());
+		assertEquals(0, list2.size());
+
+		assertEquals(taskBag.getTasks().get(0).getText(), input1);
+
+	}
+
+	public void testUnarchiveOnNonExistentTask() {
+		LocalTaskRepository repo = new TestLocalTaskRepository() {
+			public ArrayList<Task> load() {
+				return list1;
+			}
+			public ArrayList<Task> loadDoneTasks() {
+				return list2;
+			}
+		};
+
+		list2.add(task1);
+		
+		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+
+		assertEquals(0, taskBag.size());
+
+		taskBag.unarchive(task2);
+
+		assertEquals(1, taskBag.size());
+		assertEquals(1, list2.size());
+
+		assertEquals(taskBag.getTasks().get(0).getText(), input2);
+		assertEquals(list2.get(0).getText(), input1);
+
+	}
 }

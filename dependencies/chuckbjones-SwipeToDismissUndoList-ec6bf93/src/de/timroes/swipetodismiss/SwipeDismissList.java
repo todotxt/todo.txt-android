@@ -497,6 +497,7 @@ public final class SwipeDismissList implements View.OnTouchListener {
 					final View downView = mDownView; // mDownView gets null'd before animation ends
 					final int downPosition = mDownPosition;
 					++mDismissAnimationRefCount;
+					mPaused = true;
 					animate(mDownView)
 						.translationX(dismissRight ? mViewWidth : -mViewWidth)
 						.alpha(0)
@@ -676,6 +677,7 @@ public final class SwipeDismissList implements View.OnTouchListener {
 
 					mPendingDismisses.clear();
 				}
+				mPaused = false;
 			}
 		});
 

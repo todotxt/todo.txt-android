@@ -34,12 +34,11 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
-import com.todotxt.todotxttouch.TodoTxtTouch;
 import com.todotxt.todotxttouch.util.Util;
 
 public class DropboxFileUploader {
 
-	final static String TAG = TodoTxtTouch.class.getSimpleName();
+	final static String TAG = DropboxFileUploader.class.getSimpleName();
 	
 	private DropboxAPI<?> dropboxApi;
 	private DropboxFileStatus status;

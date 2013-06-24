@@ -104,4 +104,10 @@ public class TaskBagStub implements TaskBag {
 	}
 	public int pullFromRemoteCalled = 0;
 
+	@Override
+	public void unarchive(Task task) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -39,11 +39,10 @@ import com.dropbox.client2.session.Session.AccessType;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
-import com.todotxt.todotxttouch.TodoTxtTouch;
 import com.todotxt.todotxttouch.util.Util;
 
 class DropboxRemoteClient implements RemoteClient {
-	final static String TAG = TodoTxtTouch.class.getSimpleName();
+	final static String TAG = DropboxRemoteClient.class.getSimpleName();
 
 	private static final String TODO_TXT_REMOTE_FILE_NAME = "todo.txt";
 	private static final String DONE_TXT_REMOTE_FILE_NAME = "done.txt";

@@ -89,7 +89,14 @@ class TaskBagImpl implements TaskBag {
 	public void unarchive(Task task) {
 		try {
 			reload();
-			tasks.add((int)task.getId(), task);
+			int index = (int)task.getId();
+			if (index >= tasks.size()) {
+				index = tasks.size() - 1;
+			}
+			if (index < 0) {
+				index = 0;
+			}
+			tasks.add(index, task);
 			store();
 			removeArchivedTask(task);
 		} catch (Exception e) {

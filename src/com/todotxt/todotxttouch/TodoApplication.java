@@ -72,7 +72,8 @@ public class TodoApplication extends Application {
 
 		// initialize tasks so widget gets tasks after application redeployment
 		taskBag.reload();
-		Log.d("\n\n\n TODO APPLICATION1\n\n\n", taskBag.toString());
+		Log.d("TODO APPLICATION1", taskBag.toString());
+		Log.d("TODO APPLICATION1", this.toString());
 
 	}
 

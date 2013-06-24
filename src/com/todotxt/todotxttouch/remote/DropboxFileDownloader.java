@@ -33,12 +33,11 @@ import android.util.Log;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
-import com.todotxt.todotxttouch.TodoTxtTouch;
 import com.todotxt.todotxttouch.util.Util;
 
 public class DropboxFileDownloader {
 
-	final static String TAG = TodoTxtTouch.class.getSimpleName();
+	final static String TAG = DropboxFileDownloader.class.getSimpleName();
 
 	private DropboxAPI<?> dropboxApi;
 	private DropboxFileStatus status;

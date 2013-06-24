@@ -183,14 +183,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		lv.setTextFilterEnabled(true);
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-		// TODO:
-		// send pull requests for any changes made to library
-		// run unit tests (write new ones for unarchive)
-
 		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
 			// Gets called whenever the user deletes an item.
 			public SwipeDismissList.Undoable onDismiss(AbsListView listView,
 					final int position) {
+				m_swipeList.setEnabled(false);
 				final Task task = m_adapter.getItem(position);
 				m_adapter.remove(task);
 				ArrayList<Task> tasks = new ArrayList<Task>();
@@ -203,7 +200,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				if (wasComplete) {
 					undoCompleteTasks(tasks, false);
 				} else {
-					completeTasks(tasks);
+					completeTasks(tasks, false);
 				}
 
 				// Return an Undoable implementing every method
@@ -214,7 +211,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						ArrayList<Task> tasks = new ArrayList<Task>();
 						tasks.add(task);
 						if (wasComplete) {
-							completeTasks(tasks);
+							completeTasks(tasks, false);
 						} else {
 							undoCompleteTasks(tasks, false);
 						}
@@ -452,7 +449,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			public void onClick(DialogInterface dialog, int which) {
 				new AsyncTask<Object, Void, Boolean>() {
 					protected void onPreExecute() {
-						m_ProgressDialog = showProgressDialog(getString(R.string.progress_uncomplete));
+						if (showConfirm) {
+							m_ProgressDialog = showProgressDialog(getString(R.string.progress_uncomplete));
+						}
 					}
 
 					@Override
@@ -506,12 +505,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 	}
 
-	private void completeTasks(ArrayList<Task> tasks) {
+	private void completeTasks(ArrayList<Task> tasks, final boolean showProgress) {
 		// Log.v(TAG, "Completing task with this text: " + task.getText());
 		new AsyncTask<Object, Void, Boolean>() {
 
 			protected void onPreExecute() {
-				m_ProgressDialog = showProgressDialog(getString(R.string.progress_complete));
+				if (showProgress) {
+					m_ProgressDialog = showProgressDialog(getString(R.string.progress_complete));
+				}
 			}
 
 			@Override
@@ -1011,10 +1012,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		return result;
 	}
 
+	boolean inActionMode() {
+		return mMode != null;
+	}
+
 	void showContextActionBarIfNeeded() {
 		ArrayList<Task> checkedTasks = getCheckedTasks();
 		int checkedCount = checkedTasks.size();
-		if (mMode != null && checkedCount == 0) {
+		if (inActionMode() && checkedCount == 0) {
 			mMode.finish();
 			return;
 		} else if (checkedCount == 0) {
@@ -1051,7 +1056,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						}
 						break;
 					case R.id.done:
-						completeTasks(checkedTasks);
+						completeTasks(checkedTasks, true);
 						break;
 					case R.id.priority:
 						prioritizeTasks(checkedTasks);
@@ -1141,7 +1146,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	void clearFilter() {
 		// Filter cleared, exit CAB if active
-		if (mMode != null) {
+		if (inActionMode()) {
 			mMode.finish();
 		}
 		m_prios = new ArrayList<Priority>(); // Collections.emptyList();
@@ -1210,6 +1215,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				actionbar.setVisibility(View.GONE);
 			}
 		}
+
+		m_swipeList.setEnabled(!inActionMode());
 	}
 
 	@Override
