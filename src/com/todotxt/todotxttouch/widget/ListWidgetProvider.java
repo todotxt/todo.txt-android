@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -125,9 +126,13 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		rv.setOnClickPendingIntent(R.id.listwidget_header, pendingIntent);
 
 		// Set click listener for the 'add' button
-		clickIntent = new Intent(context, AddTask.class);
-		pendingIntent = PendingIntent.getActivity(context, 0, clickIntent, 0);
-		rv.setOnClickPendingIntent(R.id.listwidget_additem, pendingIntent);
+		PendingIntent taskStackBuilderPendingIntent = TaskStackBuilder
+				.from(context)
+				.addNextIntent(new Intent(context, TodoTxtTouch.class))
+				.addNextIntent(new Intent(context, AddTask.class))
+				.getPendingIntent(0, 0);
+		rv.setOnClickPendingIntent(R.id.listwidget_additem,
+				taskStackBuilderPendingIntent);
 
 		// Bind a click listener template for the contents of the list.
 		// Note that we
