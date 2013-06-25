@@ -81,6 +81,9 @@ public class AddTask extends SherlockActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
 		case R.id.menu_save_task:
 			final String input = textInputField.getText().toString();
 			addEditAsync(input);
@@ -100,6 +103,8 @@ public class AddTask extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.add_task);
+		
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		m_app = (TodoApplication) getApplication();
 		taskBag = m_app.getTaskBag();
