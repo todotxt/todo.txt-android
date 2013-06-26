@@ -266,11 +266,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		lv.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getX()>25.0) {
-				    if (!m_swipeList.onTouch(view, motionEvent)) {
-					    // Only allow pull to refresh if not swiping list item
-					    m_pullToRefreshAttacher.onTouch(view, motionEvent);
-				    }
+                // Don't listen to gestures on the left area of the list
+                // to prevent interference with the DrawerLayout
+                ViewConfiguration vc = ViewConfiguration.get(view.getContext());
+                int deadZoneX = vc.getScaledTouchSlop()+10;
+                if(motionEvent.getX()<deadZoneX) {
+                    return false;
+                }
+                if (!m_swipeList.onTouch(view, motionEvent)) {
+                    // Only allow pull to refresh if not swiping list item
+                    m_pullToRefreshAttacher.onTouch(view, motionEvent);
                 }
                 return false;
 			}
@@ -446,7 +451,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-				"Todo.txt task");
+                "Todo.txt task");
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
 
 		startActivity(Intent.createChooser(shareIntent, "Share"));
