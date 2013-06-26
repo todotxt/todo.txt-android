@@ -235,6 +235,13 @@ public class AddTask extends SherlockActivity {
 		}
 		int currentLine = getCurrentCursorLine(textInputField);
 		if (currentLine != -1) {
+			// for unknown reasons, sometimes when there's only one line,
+			// currentLine comes back 1 or greater and lines.get(currentLine)
+			// throws java.lang.IndexOutOfBoundsException
+			// in those cases, set it to 0
+			if (lines.size() == 1) {
+				currentLine = 0;
+			}
 			Task t = new Task(0, lines.get(currentLine));
 			t.setPriority(Priority.toPriority(newPrio.toString()));
 			lines.set(currentLine, t.inFileFormat());
