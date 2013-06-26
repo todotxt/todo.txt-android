@@ -45,15 +45,20 @@ You should have received a copy of the GNU General Public License along with Tod
         android:title="@string/sort"
         android:showAsAction="never"/>
     <item
-        android:id="@+id/share"
-        android:icon="@drawable/social_share"
-        android:showAsAction="never"
-        android:title="@string/share"/>
-    <item
         android:id="@+id/filter"
         android:icon="@drawable/menu_filter"
         android:showAsAction="never"
         android:title="@string/filter"/>
+    <item
+        android:id="@+id/archive"
+        android:icon="@drawable/ic_action_archive"
+        android:showAsAction="never"
+        android:title="@string/archive"/>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/social_share"
+        android:showAsAction="never"
+        android:title="@string/share"/>
     <item
         android:id="@+id/preferences"
         android:icon="@drawable/action_settings"

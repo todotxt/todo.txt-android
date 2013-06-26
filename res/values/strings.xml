@@ -47,6 +47,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="update">Update</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
+	<string name="archive">Archive</string>
     <string name="unComplete">Undo complete</string>
     <string name="swipe_action_complete">Completed task.</string>
     <string name="swipe_action_unComplete">Marked task incomplete.</string>
