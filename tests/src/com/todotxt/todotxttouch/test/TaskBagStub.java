@@ -1,13 +1,13 @@
 package com.todotxt.todotxttouch.test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import com.todotxt.todotxttouch.task.Filter;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class TaskBagStub implements TaskBag {
 
@@ -17,7 +17,12 @@ public class TaskBagStub implements TaskBag {
 
 	}
 
-	@Override
+    @Override
+    public void unarchive(Task task) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
 	public void reload() {
 		// TODO Auto-generated method stub
 

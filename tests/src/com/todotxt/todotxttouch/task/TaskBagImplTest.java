@@ -22,13 +22,13 @@
  */
 package com.todotxt.todotxttouch.task;
 
+import android.preference.PreferenceManager;
+import android.test.AndroidTestCase;
+
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
-
-import android.preference.PreferenceManager;
-import android.test.AndroidTestCase;
 
 public class TaskBagImplTest extends AndroidTestCase {
 
@@ -48,10 +48,6 @@ public class TaskBagImplTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void loadDoneTasks(File file) {
-		}
-
-		@Override
 		public ArrayList<Task> load() {
 			return null;
 		}
@@ -68,7 +64,22 @@ public class TaskBagImplTest extends AndroidTestCase {
 		@Override
 		public void archive(ArrayList<Task> tasks) {
 		}
-	};
+
+        @Override
+        public ArrayList<Task> loadDoneTasks() {
+            return null;
+        }
+
+        @Override
+        public void storeDoneTasks(ArrayList<Task> tasks) {
+           return;
+        }
+
+        @Override
+        public void storeDoneTasks(File file) {
+            return;
+        }
+    };
 
 	private String input1 = "A Simple test with no curve balls";
 	private String input2 = "Another test with no curve balls";
