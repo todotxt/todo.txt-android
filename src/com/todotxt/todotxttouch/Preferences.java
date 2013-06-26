@@ -42,12 +42,10 @@ public class Preferences extends PreferenceActivity {
 
 	private Preference aboutDialog;
 	private Preference logoutDialog;
-	private Preference archiveDialog;
 	private ListPreference periodicSync;
-	private CheckBoxPreference manualOnly; 
+	private CheckBoxPreference manualOnly;
 	private static final int ABOUT_DIALOG = 1;
 	private static final int LOGOUT_DIALOG = 2;
-	private static final int ARCHIVE_DIALOG = 3;
 	public static final int RESULT_SYNC_LIST = 2;
 
 	private String version;
@@ -71,33 +69,36 @@ public class Preferences extends PreferenceActivity {
 		}
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
-		archiveDialog = findPreference("archive_now");
 		periodicSync = (ListPreference) findPreference(getString(R.string.periodic_sync_pref_key));
 		manualOnly = (CheckBoxPreference) findPreference(getString(R.string.manual_sync_pref_key));
 		setPeriodicSummary(periodicSync.getValue());
-		periodicSync.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                setPeriodicSummary(newValue);
-                return true;
-            }
-        });
+		periodicSync
+				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+					@Override
+					public boolean onPreferenceChange(Preference preference,
+							Object newValue) {
+						setPeriodicSummary(newValue);
+						return true;
+					}
+				});
 	}
-	
+
 	private void setPeriodicSummary(Object newValue) {
-	    // Sync preference summary with selected entry. Ugly but this is the only way that works.
-	    periodicSync.setSummary(periodicSync.getEntries()[periodicSync.findIndexOfValue((String)newValue)]);
+		// Sync preference summary with selected entry. Ugly but this is the
+		// only way that works.
+		periodicSync.setSummary(periodicSync.getEntries()[periodicSync
+				.findIndexOfValue((String) newValue)]);
 	}
 
 	@Override
 	protected void onPause() {
-	    super.onPause();
-	    PeriodicSyncStarter.setupPeriodicSyncer(this);
+		super.onPause();
+		PeriodicSyncStarter.setupPeriodicSyncer(this);
 	}
-	
+
 	protected void onResume() {
-		super.onResume();		
+		super.onResume();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -108,13 +109,11 @@ public class Preferences extends PreferenceActivity {
 			showDialog(ABOUT_DIALOG);
 		} else if (preference == logoutDialog) {
 			showDialog(LOGOUT_DIALOG);
-		} else if (preference == archiveDialog) {
-			showDialog(ARCHIVE_DIALOG);
 		} else if (preference == manualOnly) {
-		    // When manual sync gets checked we want don't want periodic sync
-		    periodicSync.setEnabled(!manualOnly.isChecked());
-		    periodicSync.setValue("0"); // Disable
-		    setPeriodicSummary(periodicSync.getValue());
+			// When manual sync gets checked we want don't want periodic sync
+			periodicSync.setEnabled(!manualOnly.isChecked());
+			periodicSync.setValue("0"); // Disable
+			setPeriodicSummary(periodicSync.getValue());
 		}
 		return true;
 	}
@@ -165,28 +164,8 @@ public class Preferences extends PreferenceActivity {
 					});
 			logoutAlert.setNegativeButton(R.string.cancel, null);
 			return logoutAlert.show();
-		} else if (id == ARCHIVE_DIALOG) {
-			AlertDialog.Builder archiveAlert = new AlertDialog.Builder(this);
-			archiveAlert.setTitle(R.string.archive_now_title);
-			archiveAlert.setMessage(R.string.archive_now_explainer);
-			archiveAlert.setPositiveButton(R.string.archive_now_pref_title,
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							Preferences.this.setResult(RESULT_OK);
-
-							// produce a archive intent and broadcast it
-							Intent broadcastArchiveIntent = new Intent();
-							broadcastArchiveIntent
-									.setAction("com.todotxt.todotxttouch.ACTION_ARCHIVE");
-							sendBroadcast(broadcastArchiveIntent);
-							finish();
-						}
-					});
-			archiveAlert.setNegativeButton(R.string.cancel, null);
-			return archiveAlert.show();
 		}
 		return null;
 	}
-	
+
 }
