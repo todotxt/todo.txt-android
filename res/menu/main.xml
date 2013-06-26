@@ -30,14 +30,9 @@ You should have received a copy of the GNU General Public License along with Tod
         android:showAsAction="always"
         android:title="@string/addtask"/>
     <item
-        android:id="@+id/quickfilter"
-        android:icon="@drawable/ic_action_filter"
-        android:showAsAction="always"
-        android:title="@string/quickfilter"/>
-    <item
         android:id="@+id/search"
         android:icon="@drawable/ic_action_search"
-        android:showAsAction="ifRoom"
+        android:showAsAction="always"
         android:title="@string/search"/>
     <item
         android:id="@+id/sort"
