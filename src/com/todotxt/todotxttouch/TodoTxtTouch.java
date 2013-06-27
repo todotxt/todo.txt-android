@@ -269,7 +269,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
                 // Don't listen to gestures on the left area of the list
                 // to prevent interference with the DrawerLayout
                 ViewConfiguration vc = ViewConfiguration.get(view.getContext());
-                int deadZoneX = vc.getScaledTouchSlop()+10;
+                int deadZoneX = vc.getScaledTouchSlop();
                 if(motionEvent.getX()<deadZoneX) {
                     return false;
                 }
