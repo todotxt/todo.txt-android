@@ -436,6 +436,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
 	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(R.id.archive).setVisible(
+				!m_app.m_prefs.getBoolean("todotxtautoarchive", false));
+		return super.onPrepareOptionsMenu(menu);
+	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -1013,7 +1020,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			AlertDialog.Builder archiveAlert = new AlertDialog.Builder(this);
 			archiveAlert.setTitle(R.string.archive_now_title);
 			archiveAlert.setMessage(R.string.archive_now_explainer);
-			archiveAlert.setPositiveButton(R.string.archive_now_pref_title,
+			archiveAlert.setPositiveButton(R.string.archive_now_title,
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
