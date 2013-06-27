@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
 import android.util.Log;
@@ -43,6 +44,7 @@ import android.util.SparseBooleanArray;
 import android.view.*;
 import android.widget.*;
 import android.widget.Filter;
+
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.ActionMode.Callback;
@@ -53,6 +55,7 @@ import com.todotxt.todotxttouch.task.*;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
+
 import de.timroes.swipetodismiss.SwipeDismissList;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.DefaultHeaderTransformer;
@@ -190,7 +193,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
            @Override
            public void onDrawerSlide (View drawerView, float slideOffset) {
                // Redraw menu to show or hide menu items
-               invalidateOptionsMenu();
+        	   supportInvalidateOptionsMenu();
                super.onDrawerSlide(drawerView, slideOffset);
            }
         };
