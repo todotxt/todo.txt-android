@@ -120,6 +120,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
 	private static final int SYNC_CONFLICT_DIALOG = 101;
+	private static final int ARCHIVE_DIALOG = 103;
 
 	private SwipeDismissList m_swipeList;
 	private PullToRefreshAttacher m_pullToRefreshAttacher;
@@ -364,6 +365,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		inflater.inflate(R.menu.main, menu);
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(R.id.archive).setVisible(
+				!m_app.m_prefs.getBoolean("todotxtautoarchive", false));
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -655,6 +663,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			break;
 		case R.id.quickfilter:
 			quickFilter();
+			break;
+		case R.id.archive:
+			showDialog(ARCHIVE_DIALOG);
 			break;
 		default:
 			return super.onMenuItemSelected(featureId, item);
@@ -956,6 +967,25 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}
 			});
 			return upDownChoice.create();
+		} else if (id == ARCHIVE_DIALOG) {
+			AlertDialog.Builder archiveAlert = new AlertDialog.Builder(this);
+			archiveAlert.setTitle(R.string.archive_now_title);
+			archiveAlert.setMessage(R.string.archive_now_explainer);
+			archiveAlert.setPositiveButton(R.string.archive_now_title,
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							TodoTxtTouch.this.setResult(RESULT_OK);
+
+							// produce a archive intent and broadcast it
+							Intent broadcastArchiveIntent = new Intent();
+							broadcastArchiveIntent
+									.setAction("com.todotxt.todotxttouch.ACTION_ARCHIVE");
+							sendBroadcast(broadcastArchiveIntent);
+						}
+					});
+			archiveAlert.setNegativeButton(R.string.cancel, null);
+			return archiveAlert.show();
 		} else {
 			return null;
 		}
