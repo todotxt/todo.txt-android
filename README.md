@@ -6,6 +6,6 @@ The official Todo.txt Android application by [Gina Trapani](http://ginatrapani.o
 
 Using Todo.txt for Android requires a [Dropbox](http://dropbox.com) account in order to sync your file across devices.
 
-There are a multitude of todo list managers for Android. Todo.txt is a minimalist, plain-text focused solution we built to learn by collaborating on Android development. 
+There are multitudes of todo list managers for Android. Todo.txt is a minimalist, plain-text focused solution we built to learn by collaborating on Android development. 
 
 Interested in joining in? Fork the project and talk to us on the [Todo.txt mailing list](http://groups.yahoo.com/group/todotxt/).
