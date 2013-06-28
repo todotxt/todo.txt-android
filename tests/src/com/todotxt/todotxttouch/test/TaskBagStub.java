@@ -17,12 +17,7 @@ public class TaskBagStub implements TaskBag {
 
 	}
 
-    @Override
-    public void unarchive(Task task) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
+	@Override
 	public void reload() {
 		// TODO Auto-generated method stub
 
@@ -94,6 +89,7 @@ public class TaskBagStub implements TaskBag {
 		++pushToRemoteCalled;
 
 	}
+
 	public int pushToRemoteCalled = 0;
 
 	@Override
@@ -107,12 +103,13 @@ public class TaskBagStub implements TaskBag {
 		// TODO Auto-generated method stub
 		++pullFromRemoteCalled;
 	}
+
 	public int pullFromRemoteCalled = 0;
 
 	@Override
 	public void unarchive(Task task) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

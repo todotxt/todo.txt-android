@@ -66,33 +66,19 @@ public class TaskBagImplTest extends AndroidTestCase {
 		}
 
 		@Override
+		public void storeDoneTasks(File file) {
+		}
+
+		@Override
 		public ArrayList<Task> loadDoneTasks() {
 			return null;
 		}
 
 		@Override
 		public void storeDoneTasks(ArrayList<Task> tasks) {
+			return;
 		}
-
-		@Override
-		public void storeDoneTasks(File file) {
-		}
-
-        @Override
-        public ArrayList<Task> loadDoneTasks() {
-            return null;
-        }
-
-        @Override
-        public void storeDoneTasks(ArrayList<Task> tasks) {
-           return;
-        }
-
-        @Override
-        public void storeDoneTasks(File file) {
-            return;
-        }
-    };
+	};
 
 	private String input1 = "A Simple test with no curve balls";
 	private String input2 = "Another test with no curve balls";
@@ -101,13 +87,14 @@ public class TaskBagImplTest extends AndroidTestCase {
 	ArrayList<Task> list1;
 	ArrayList<Task> list2;
 	TaskBagImpl.Preferences prefs;
-	
+
 	protected void setUp() throws Exception {
 		task1 = new Task(1, input1);
 		task2 = new Task(2, input2);
 		list1 = new ArrayList<Task>(2);
 		list2 = new ArrayList<Task>(2);
-		prefs = new TaskBagImpl.Preferences(PreferenceManager.getDefaultSharedPreferences(getContext()));
+		prefs = new TaskBagImpl.Preferences(
+				PreferenceManager.getDefaultSharedPreferences(getContext()));
 	}
 
 	public void testReload() {
@@ -229,7 +216,7 @@ public class TaskBagImplTest extends AndroidTestCase {
 		};
 
 		list1.add(task1);
-		
+
 		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
 		assertEquals(0, taskBag.size());
@@ -253,7 +240,7 @@ public class TaskBagImplTest extends AndroidTestCase {
 
 		list1.add(task1);
 		list1.add(task2);
-		
+
 		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
 		assertEquals(0, taskBag.size());
@@ -277,13 +264,13 @@ public class TaskBagImplTest extends AndroidTestCase {
 		};
 
 		list1.add(task1);
-		
+
 		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
 		assertEquals(0, taskBag.size());
 
 		task2.update(newText);
-		
+
 		boolean thrown = false;
 		try {
 			taskBag.update(task2);
@@ -306,7 +293,7 @@ public class TaskBagImplTest extends AndroidTestCase {
 
 		list1.add(task1);
 		list1.add(task2);
-		
+
 		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
 		assertEquals(0, taskBag.size());
@@ -327,7 +314,7 @@ public class TaskBagImplTest extends AndroidTestCase {
 		};
 
 		list1.add(task1);
-		
+
 		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
 		assertEquals(0, taskBag.size());
@@ -351,13 +338,14 @@ public class TaskBagImplTest extends AndroidTestCase {
 			public ArrayList<Task> load() {
 				return list1;
 			}
+
 			public ArrayList<Task> loadDoneTasks() {
 				return list2;
 			}
 		};
 
 		list2.add(task1);
-		
+
 		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
 		assertEquals(0, taskBag.size());
@@ -376,13 +364,14 @@ public class TaskBagImplTest extends AndroidTestCase {
 			public ArrayList<Task> load() {
 				return list1;
 			}
+
 			public ArrayList<Task> loadDoneTasks() {
 				return list2;
 			}
 		};
 
 		list2.add(task1);
-		
+
 		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
 		assertEquals(0, taskBag.size());
