@@ -33,13 +33,9 @@
 		+Kniha.\n\n<b>Kontexty</b> (v jakých se bude úkol dít) začínají zavináčem @ , např: @telefon nebo
 		@NákupníCentrum.\n\n
 		Úkol může obsahovat více projektů nebo kontextů.</string>
-  <string name="ARCHIVE_settings_header">done.txt</string>
   <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Auto archivovat</string>
   <string name="auto_archive_pref_summary">Automaticky archivuje dokončené úkoly do done.txt</string>
-  <string name="archive_now_pref_key">todotxtarchivenow</string>
-  <string name="archive_now_pref_title">Archivovat teď</string>
-  <string name="archive_now_pref_summary">Přesunout dokončené úkoly z todo.txt do done.txt.</string>
   <string name="archive_now_title">Archivovat Úkoly</string>
   <string name="archive_now_explainer">Tuto akci nelze vrátit zpět. Jste si jisti?</string>
   <string name="dropbox_logout_pref_title">Odhlásit</string>

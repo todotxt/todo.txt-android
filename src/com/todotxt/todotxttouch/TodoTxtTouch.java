@@ -349,6 +349,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		menu.findItem(R.id.search).setVisible(!drawerOpen);
 		menu.findItem(R.id.sort).setVisible(!drawerOpen);
 		menu.findItem(R.id.share).setVisible(!drawerOpen);
+		menu.findItem(R.id.archive).setVisible(
+				!m_app.m_prefs.getBoolean("todotxtautoarchive", false));
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -435,13 +437,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		inflater.inflate(R.menu.main, menu);
 		this.options_menu = menu;
 		return super.onCreateOptionsMenu(menu);
-	}
-	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.archive).setVisible(
-				!m_app.m_prefs.getBoolean("todotxtautoarchive", false));
-		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override

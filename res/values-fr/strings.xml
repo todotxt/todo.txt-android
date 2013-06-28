@@ -32,13 +32,9 @@
   <string name="add_task_help">Les <b>Projets</b> commencent avec le symbole <b>+</b> et ne peuvent contenir d\'espaces, comme par exemple +RefaireLaCuisine ou
 		+LireRomans.\n\nLes <b>Contextes</b> (dans lesquelles vous définirez une tâche) commencent par le symbole @, comme par exemple @téléphone ou @Boulangerie.\n\n
 		Une tâche peut inclure une quantité indéfinie de projets ou de contextes.</string>
-  <string name="ARCHIVE_settings_header">finit.txt</string>
   <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Auto archiver</string>
   <string name="auto_archive_pref_summary">Archiver automatiquement les tâches dans done.txt lorsque elles sont terminées.</string>
-  <string name="archive_now_pref_key">todotxtarchivenow</string>
-  <string name="archive_now_pref_title">Archiver maintenant</string>
-  <string name="archive_now_pref_summary">Déplacer les tâches achevées de todo.txt à finit.txt.</string>
   <string name="archive_now_title">Archiver les tâches</string>
   <string name="archive_now_explainer">Cette action est irréversible. Êtes-vous sûr?</string>
   <string name="dropbox_logout_pref_title">Se déconnecter</string>

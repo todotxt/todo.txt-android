@@ -47,7 +47,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="update">Update</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
-	<string name="archive">Archive</string>
+    <string name="archive">Archive</string>
     <string name="unComplete">Undo complete</string>
     <string name="swipe_action_complete">Completed task.</string>
     <string name="swipe_action_unComplete">Marked task incomplete.</string>
@@ -61,21 +61,17 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="add_task_help">Enter a project into your task using the format +YourProject or a context using @YourContext.\n\n<b>Projects</b> start with a + sign and contain no spaces, like +WebsiteRedesign or
 		+Novel.\n\n<b>Contexts</b> (where or with what you will complete a task) start with an @ sign, like @phone or
 		@GroceryStore.</string>
-	<string name="addcontextproject">Add @context or +project</string>
-	<string name="assignpriority">Prioritize this task</string>
-	<string name="filterbycontextproject">Filter by @context or +project</string>
-	<string name="taskadded">Added task to todo.txt</string>
-	
+    <string name="addcontextproject">Add @context or +project</string>
+    <string name="assignpriority">Prioritize this task</string>
+    <string name="filterbycontextproject">Filter by @context or +project</string>
+    <string name="taskadded">Added task to todo.txt</string>
+
     <!-- settings -->
-    <string name="ARCHIVE_settings_header">done.txt</string>
     <string name="auto_archive_pref_key">todotxtautoarchive</string>
     <string name="auto_archive_pref_title">Auto archive</string>
     <string name="auto_archive_pref_summary">Automatically archive tasks to done.txt on completion.</string>
-    <string name="archive_now_pref_key">todotxtarchivenow</string>
-    <string name="archive_now_pref_title">Archive now</string>
-    <string name="archive_now_pref_summary">Move completed tasks from todo.txt to done.txt.</string>
     <string name="archive_now_title">Archive tasks</string>
-    <string name="archive_now_explainer">This action move completed tasks from todo.txt to done.txt. It cannot be undone. Are you sure?</string>
+    <string name="archive_now_explainer">Move completed tasks to done.txt? This cannot be undone.</string>
     <string name="dropbox_logout_pref_title">Log out</string>
     <string name="dropbox_logout_pref_summary">Log out of Dropbox.</string>
     <string name="dropbox_logout_explainer">Are you sure you wish to log out of Dropbox?</string>
@@ -97,7 +93,6 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
     <string name="periodic_sync_pref_key">sync_period</string>
     <string name="periodic_sync_pref_title">Background sync</string>
-
 
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>
@@ -153,22 +148,23 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="dates_months_ago">%d months ago</string>
     <string name="dates_one_month_ago">1 month ago</string>
 
-    <!--  contextual action bar progress and error messages -->
+    <!-- contextual action bar progress and error messages -->
     <string name="progress_uncomplete">Marking task incomplete</string>
-	<string name="progress_complete">Marking task complete</string>
-	<string name="progress_archive">Archiving tasks</string>
-	<string name="progress_delete">Deleting</string>
-	<string name="progress_prioritize">Prioritizing tasks</string>
-	<string name="confirm_archive">Archived completed tasks</string>
-	<string name="select_priority">Select priority</string>
-	<string name="error_prioritize">Could not prioritize tasks</string>
-	<string name="error_uncomplete">Could not mark tasks as not completed</string>
-	<string name="error_complete">Could not complete tasks</string>
-	<string name="error_delete">Could not delete tasks</string>
-	<string name="error_archive">Could not archive tasks</string>
-	<string name="wait_progress">Please wait&#8230;</string>
-	
-	<!-- pull-to-refresh -->
-	<string name="pull_to_refresh">Pull to refresh</string>
-	<string name="syncing">Syncing with Dropbox…</string>
+    <string name="progress_complete">Marking task complete</string>
+    <string name="progress_archive">Archiving tasks</string>
+    <string name="progress_delete">Deleting</string>
+    <string name="progress_prioritize">Prioritizing tasks</string>
+    <string name="confirm_archive">Archived completed tasks</string>
+    <string name="select_priority">Select priority</string>
+    <string name="error_prioritize">Could not prioritize tasks</string>
+    <string name="error_uncomplete">Could not mark tasks as not completed</string>
+    <string name="error_complete">Could not complete tasks</string>
+    <string name="error_delete">Could not delete tasks</string>
+    <string name="error_archive">Could not archive tasks</string>
+    <string name="wait_progress">Please wait&#8230;</string>
+
+    <!-- pull-to-refresh -->
+    <string name="pull_to_refresh">Pull to refresh</string>
+    <string name="syncing">Syncing with Dropbox…</string>
+
 </resources>

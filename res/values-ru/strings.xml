@@ -33,13 +33,9 @@
  начинаются со знака + и не содержат пробела как, например  +РемонтКухни или +Книга.\n\n
 <b>Контексты</b>
  (где вы будете выполнять задание) начинаются со знака @ как, например, @телефон или @ПродуктовыйМагазин.\n\n		Задание может включать любое количество проектов или контекстов.</string>
-  <string name="ARCHIVE_settings_header">выполнено.txt</string>
   <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Автоматическое архивирование</string>
   <string name="auto_archive_pref_summary">Автоматически архивировать задания в done.txt по завершению.</string>
-  <string name="archive_now_pref_key">todotxtarchivenow</string>
-  <string name="archive_now_pref_title">Архивировать сейчас</string>
-  <string name="archive_now_pref_summary">Переместить завершенные задания из todo.txt в done.txt.</string>
   <string name="archive_now_title">Архивировать Задания</string>
   <string name="archive_now_explainer">Это изменение невозможно отменить. Вы уверены?</string>
   <string name="dropbox_logout_pref_title">Выйти</string>

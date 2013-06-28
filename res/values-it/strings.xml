@@ -34,13 +34,9 @@
  iniziano con un segno + e non contengono spazi, come +RistrutturazioneCucina o		+Romanzi.\n\nI 
 <b>Contesti</b>
  (i luoghi dove completerai le tue attività) iniziano con un segno @, come @telefono o		@Supermercato.\n\n		Un\'attività può includere un qualsiasi numero di progetti o contesti.</string>
-  <string name="ARCHIVE_settings_header">completato.txt</string>
   <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Archivia automaticamente</string>
   <string name="auto_archive_pref_summary">Archivia automaticamente le attività completate nel file done.txt.</string>
-  <string name="archive_now_pref_key">todotxtarchivenow</string>
-  <string name="archive_now_pref_title">Archivia ora</string>
-  <string name="archive_now_pref_summary">Sposta le attività completate da todo.txt a done.txt.</string>
   <string name="archive_now_title">Archivia attività</string>
   <string name="archive_now_explainer">L\'operazione non potrà essere annullata. Continuare?</string>
   <string name="dropbox_logout_pref_title">Disconnetti</string>

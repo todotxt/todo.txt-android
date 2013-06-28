@@ -30,13 +30,9 @@
   <string name="areyousure">Sind Sie sicher?</string>
   <string name="tasktexthint">Task hier beschreiben. Neue Projekt Namen mit + und Kontexte mit @. Zum Beispiel:\n\nArzt anrufen @fon +Gesundheit</string>
   <string name="add_task_help"><b>Projekte</b> fangen mit einem + Zeichen und haben keine Leerzeichen, Bsp. +BuchSchreiben oder +Messe\n\n<b>Kontexte</b> (wo Sie den Task abschliessen möchten) fangen mit einem @ Zeichen an, Bsp. @Telefon oder @Firma\n\nEin Task kann mehrere Projekte oder Kontexte haben.</string>
-  <string name="ARCHIVE_settings_header">Archivieren</string>
   <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Auto Archivieren</string>
   <string name="auto_archive_pref_summary">Archiviere Tasks automatisch wenn erledigt.</string>
-  <string name="archive_now_pref_key">todotxtarchivenow</string>
-  <string name="archive_now_pref_title">Jetzt archivieren</string>
-  <string name="archive_now_pref_summary">Verschiebe alle erledigten Tasks von todo.txt zu done.txt</string>
   <string name="archive_now_title">Tasks archivieren</string>
   <string name="archive_now_explainer">Sind die sicher das Sie die erledigten Tasks archivieren möchten?</string>
   <string name="dropbox_logout_pref_title">Ausloggen</string>
