@@ -65,6 +65,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
@@ -93,7 +94,8 @@ import de.timroes.swipetodismiss.SwipeDismissList;
 
 public class TodoTxtTouch extends SherlockListActivity implements
 		OnSharedPreferenceChangeListener,
-		PullToRefreshAttacher.OnRefreshListener {
+		PullToRefreshAttacher.OnRefreshListener,
+		OnScrollListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
@@ -138,6 +140,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private ListView m_drawerList;
 	private DrawerLayout m_drawerLayout;
 	private ActionBarDrawerToggle m_drawerToggle;
+
+	private boolean mListScrolling = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -297,13 +301,19 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				if (motionEvent.getX() < deadZoneX) {
 					return false;
 				}
-				if (!m_swipeList.onTouch(view, motionEvent)) {
-					// Only allow pull to refresh if not swiping list item
-					m_pullToRefreshAttacher.onTouch(view, motionEvent);
+				
+				// Only listen to item swipes if we are not scrolling the listview
+				if (!mListScrolling && m_swipeList.onTouch(view, motionEvent)) {
+					return false;
 				}
+				
+				m_pullToRefreshAttacher.onTouch(view, motionEvent);
 				return false;
 			}
 		});
+		// We must set the scrollListener after the onTouchListener,
+		// otherwise it will not fire
+		lv.setOnScrollListener(this);
 
 		initializeTasks();
 
@@ -317,6 +327,34 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	}
 
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// Store the scrolling state of the listview
+		Log.v(TAG, "Scrolling state: " + scrollState);
+		switch (scrollState) {
+		case OnScrollListener.SCROLL_STATE_IDLE:
+			mListScrolling = false;
+			break;
+		case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+			// List is scrolling under the direct touch of the user
+			mListScrolling = true;
+			break;
+		case OnScrollListener.SCROLL_STATE_FLING:
+			// The user did a 'fling' on the list and it's still
+			// scrolling
+			mListScrolling = true;
+			break;
+		}
+
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// Do nothing
+
+	}
+	
 	private void updateDrawerList() {
 		m_lists = contextsAndProjects();
 		m_drawerList.setAdapter(new ArrayAdapter<String>(this,
@@ -341,6 +379,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 	}
 
+	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content
