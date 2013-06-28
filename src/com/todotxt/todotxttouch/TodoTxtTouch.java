@@ -477,10 +477,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-				"Todo.txt task");
+				R.string.share_subject);
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
 
-		startActivity(Intent.createChooser(shareIntent, "Share"));
+		startActivity(Intent.createChooser(shareIntent,
+				getString(R.string.share_title)));
 	}
 
 	private void prioritizeTasks(final ArrayList<Task> tasks) {

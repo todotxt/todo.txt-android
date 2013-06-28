@@ -136,6 +136,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="shortcut_addtask_name">Add Task</string>
     <!-- share -->
     <string name="share_addtask_name">Add to Todo.txt</string>
+    <string name="share_subject">Todo.txt task</string>
+    <string name="share_title">Share</string>
 
     <!-- online/offline toasts -->
     <string name="toast_login_notconnected">Cannot log in:\nNo internet connection.</string>
