@@ -187,7 +187,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}
 				// Taskbag might have changed, update drawer adapter
 				// to reflect new/removed contexts and projects
-				updateDrawerList();
+				updateNavigationDrawer();
 			}
 		};
 		registerReceiver(m_broadcastReceiver, intentFilter);
@@ -204,7 +204,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 		// Set the adapter for the list view
-		updateDrawerList();
+		updateNavigationDrawer();
 
 
 		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
@@ -295,7 +295,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	}
 
-	private void updateDrawerList() {
+	private void updateNavigationDrawer() {
 		m_lists = contextsAndProjects();
 		if (m_lists.size()==0) {
 			// No contexts or projects, disable navigation drawer
