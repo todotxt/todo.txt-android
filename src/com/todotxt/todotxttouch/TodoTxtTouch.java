@@ -164,9 +164,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				// Taskbag might have changed, update drawer adapter
-				// to reflect new/removed contexts and projects
-				updateDrawerList();
 				if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_ACTION_ARCHIVE)) {
 					// archive
@@ -188,6 +185,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						ConnectivityManager.CONNECTIVITY_ACTION)) {
 					handleConnectivityChange(context);
 				}
+				// Taskbag might have changed, update drawer adapter
+				// to reflect new/removed contexts and projects
+				updateDrawerList();
 			}
 		};
 		registerReceiver(m_broadcastReceiver, intentFilter);
@@ -206,28 +206,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Set the adapter for the list view
 		updateDrawerList();
 
-		// Set the list's click listener
-		m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-		m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		m_drawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-		R.string.quickfilter, /* "open drawer" description */
-		R.string.app_label /* "close drawer" description */
-		) {
-			@Override
-			public void onDrawerSlide(View drawerView, float slideOffset) {
-				// Redraw menu to show or hide menu items
-				supportInvalidateOptionsMenu();
-				super.onDrawerSlide(drawerView, slideOffset);
-			}
-		};
-
-		// Set the drawer toggle as the DrawerListener
-		m_drawerLayout.setDrawerListener(m_drawerToggle);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setHomeButtonEnabled(true);
-		m_drawerToggle.syncState();
 
 		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
 			// Gets called whenever the user deletes an item.
@@ -319,8 +297,39 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private void updateDrawerList() {
 		m_lists = contextsAndProjects();
-		m_drawerList.setAdapter(new ArrayAdapter<String>(this,
+		if (m_lists.size()==0) {
+			// No contexts or projects, disable navigation drawer
+			m_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			getSupportActionBar().setHomeButtonEnabled(false);
+		} else {
+			m_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
+			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
 				R.layout.drawer_list_item, m_lists));
+
+			// Set the list's click listener
+			m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+			m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+			m_drawerLayout, /* DrawerLayout object */
+			R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+			R.string.quickfilter, /* "open drawer" description */
+			R.string.app_label /* "close drawer" description */
+			) {
+				@Override
+				public void onDrawerSlide(View drawerView, float slideOffset) {
+					// Redraw menu to show or hide menu items
+					supportInvalidateOptionsMenu();
+					super.onDrawerSlide(drawerView, slideOffset);
+				}
+			};
+
+			// Set the drawer toggle as the DrawerListener
+			m_drawerLayout.setDrawerListener(m_drawerToggle);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setHomeButtonEnabled(true);
+			m_drawerToggle.syncState();
+		}
 	}
 
 	private void initializeTasks() {
