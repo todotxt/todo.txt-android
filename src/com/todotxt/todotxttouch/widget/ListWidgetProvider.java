@@ -22,12 +22,6 @@
  */
 package com.todotxt.todotxttouch.widget;
 
-import com.todotxt.todotxttouch.AddTask;
-import com.todotxt.todotxttouch.Constants;
-import com.todotxt.todotxttouch.LoginScreen;
-import com.todotxt.todotxttouch.R;
-import com.todotxt.todotxttouch.TodoTxtTouch;
-
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -42,6 +36,12 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
+
+import com.todotxt.todotxttouch.AddTask;
+import com.todotxt.todotxttouch.Constants;
+import com.todotxt.todotxttouch.LoginScreen;
+import com.todotxt.todotxttouch.R;
+import com.todotxt.todotxttouch.TodoTxtTouch;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class ListWidgetProvider extends AppWidgetProvider {
@@ -127,7 +127,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		// Set click listener for the 'add' button
 		PendingIntent taskStackBuilderPendingIntent = TaskStackBuilder
-				.from(context)
+				.create(context)
 				.addNextIntent(new Intent(context, TodoTxtTouch.class))
 				.addNextIntent(new Intent(context, AddTask.class))
 				.getPendingIntent(0, 0);

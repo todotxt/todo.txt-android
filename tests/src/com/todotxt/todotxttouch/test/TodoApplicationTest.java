@@ -3,14 +3,12 @@ package com.todotxt.todotxttouch.test;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import com.todotxt.todotxttouch.Constants;
+import android.test.ApplicationTestCase;
+import android.util.Log;
+
 import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.task.TaskBag;
-
-import android.content.Intent;
-import android.test.ApplicationTestCase;
-import android.util.Log;
 
 public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 

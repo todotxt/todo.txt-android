@@ -22,10 +22,28 @@
  */
 package com.todotxt.todotxttouch;
 
-import android.app.*;
-import android.content.*;
+import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.DefaultHeaderTransformer;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
@@ -36,14 +54,24 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.*;
-import android.widget.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.ActionMode;
@@ -51,21 +79,17 @@ import com.actionbarsherlock.view.ActionMode.Callback;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.todotxt.todotxttouch.task.*;
+import com.todotxt.todotxttouch.task.FilterFactory;
+import com.todotxt.todotxttouch.task.Priority;
+import com.todotxt.todotxttouch.task.Sort;
+import com.todotxt.todotxttouch.task.Task;
+import com.todotxt.todotxttouch.task.TaskBag;
+import com.todotxt.todotxttouch.task.TaskPersistException;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.DefaultHeaderTransformer;
-
-import java.io.Serializable;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 
 public class TodoTxtTouch extends SherlockListActivity implements
 		OnSharedPreferenceChangeListener,
@@ -108,11 +132,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private ActionMode mMode;
 
-    // Drawer variables
-    private ArrayList<String> m_lists;
-    private ListView m_drawerList;
-    private DrawerLayout m_drawerLayout;
-    private ActionBarDrawerToggle m_drawerToggle;
+	// Drawer variables
+	private ArrayList<String> m_lists;
+	private ListView m_drawerList;
+	private DrawerLayout m_drawerLayout;
+	private ActionBarDrawerToggle m_drawerToggle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -139,9 +163,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-                // Taskbag might have changed, update drawer adapter
-                // to reflect new/removed contexts and projects
-                updateDrawerList();
+				// Taskbag might have changed, update drawer adapter
+				// to reflect new/removed contexts and projects
+				updateDrawerList();
 				if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_ACTION_ARCHIVE)) {
 					// archive
@@ -174,36 +198,35 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		lv.setTextFilterEnabled(true);
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        // Setup Navigation drawer
-        m_drawerList = (ListView) findViewById(R.id.left_drawer);
-        m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		// Setup Navigation drawer
+		m_drawerList = (ListView) findViewById(R.id.left_drawer);
+		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        // Set the adapter for the list view
-        updateDrawerList();
+		// Set the adapter for the list view
+		updateDrawerList();
 
-        // Set the list's click listener
-        m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
+		// Set the list's click listener
+		m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-                m_drawerLayout, /* DrawerLayout object */
-                R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-                R.string.quickfilter, /* "open drawer" description */
-                R.string.app_label /* "close drawer" description */
-        ) {
-           @Override
-           public void onDrawerSlide (View drawerView, float slideOffset) {
-               // Redraw menu to show or hide menu items
-        	   supportInvalidateOptionsMenu();
-               super.onDrawerSlide(drawerView, slideOffset);
-           }
-        };
+		m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+		m_drawerLayout, /* DrawerLayout object */
+		R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+		R.string.quickfilter, /* "open drawer" description */
+		R.string.app_label /* "close drawer" description */
+		) {
+			@Override
+			public void onDrawerSlide(View drawerView, float slideOffset) {
+				// Redraw menu to show or hide menu items
+				supportInvalidateOptionsMenu();
+				super.onDrawerSlide(drawerView, slideOffset);
+			}
+		};
 
-        // Set the drawer toggle as the DrawerListener
-        m_drawerLayout.setDrawerListener(m_drawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        m_drawerToggle.syncState();
-
+		// Set the drawer toggle as the DrawerListener
+		m_drawerLayout.setDrawerListener(m_drawerToggle);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
+		m_drawerToggle.syncState();
 
 		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
 			// Gets called whenever the user deletes an item.
@@ -262,22 +285,22 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_pullToRefreshAttacher.setRefreshableView(lv, this);
 
 		// Delegate OnTouch calls to both libraries that want to receive them
-        // Don't forward swipes when swiping on the left
+		// Don't forward swipes when swiping on the left
 		lv.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View view, MotionEvent motionEvent) {
-                // Don't listen to gestures on the left area of the list
-                // to prevent interference with the DrawerLayout
-                ViewConfiguration vc = ViewConfiguration.get(view.getContext());
-                int deadZoneX = vc.getScaledTouchSlop();
-                if(motionEvent.getX()<deadZoneX) {
-                    return false;
-                }
-                if (!m_swipeList.onTouch(view, motionEvent)) {
-                    // Only allow pull to refresh if not swiping list item
-                    m_pullToRefreshAttacher.onTouch(view, motionEvent);
-                }
-                return false;
+				// Don't listen to gestures on the left area of the list
+				// to prevent interference with the DrawerLayout
+				ViewConfiguration vc = ViewConfiguration.get(view.getContext());
+				int deadZoneX = vc.getScaledTouchSlop();
+				if (motionEvent.getX() < deadZoneX) {
+					return false;
+				}
+				if (!m_swipeList.onTouch(view, motionEvent)) {
+					// Only allow pull to refresh if not swiping list item
+					m_pullToRefreshAttacher.onTouch(view, motionEvent);
+				}
+				return false;
 			}
 		});
 
@@ -293,13 +316,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	}
 
-    private void updateDrawerList() {
-        m_lists = contextsAndProjects();
-        m_drawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, m_lists));
-    }
+	private void updateDrawerList() {
+		m_lists = contextsAndProjects();
+		m_drawerList.setAdapter(new ArrayAdapter<String>(this,
+				R.layout.drawer_list_item, m_lists));
+	}
 
-    private void initializeTasks() {
+	private void initializeTasks() {
 		boolean firstrun = m_app.m_prefs.getBoolean(Constants.PREF_FIRSTRUN,
 				true);
 
@@ -317,16 +340,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 	}
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content
-        boolean drawerOpen = m_drawerLayout.isDrawerVisible(Gravity.LEFT);
-        menu.findItem(R.id.add_new).setVisible(!drawerOpen);
-        menu.findItem(R.id.search).setVisible(!drawerOpen);
-        menu.findItem(R.id.sort).setVisible(!drawerOpen);
-        menu.findItem(R.id.share).setVisible(!drawerOpen);
-        return super.onPrepareOptionsMenu(menu);
-    }
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// If the nav drawer is open, hide action items related to the content
+		boolean drawerOpen = m_drawerLayout.isDrawerVisible(Gravity.LEFT);
+		menu.findItem(R.id.add_new).setVisible(!drawerOpen);
+		menu.findItem(R.id.search).setVisible(!drawerOpen);
+		menu.findItem(R.id.sort).setVisible(!drawerOpen);
+		menu.findItem(R.id.share).setVisible(!drawerOpen);
+		return super.onPrepareOptionsMenu(menu);
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -413,24 +436,24 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		return super.onCreateOptionsMenu(menu);
 	}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        m_drawerToggle.onConfigurationChanged(newConfig);
-    }
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		m_drawerToggle.onConfigurationChanged(newConfig);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
 
-            if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
-                m_drawerLayout.closeDrawer(m_drawerList);
-            } else {
-                m_drawerLayout.openDrawer(m_drawerList);
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
+			if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
+				m_drawerLayout.closeDrawer(m_drawerList);
+			} else {
+				m_drawerLayout.openDrawer(m_drawerList);
+			}
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -451,7 +474,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-                "Todo.txt task");
+				"Todo.txt task");
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
 
 		startActivity(Intent.createChooser(shareIntent, "Share"));
@@ -730,8 +753,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		startActivity(intent);
 	}
 
-	private ArrayList<String> contextsAndProjects () {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	private ArrayList<String> contextsAndProjects() {
 		final ArrayList<String> filterItems = new ArrayList<String>();
 		ArrayList<String> contexts = taskBag.getContexts(false);
 		Collections.sort(contexts);
@@ -744,21 +766,21 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		for (String item : projects) {
 			filterItems.add("+" + item);
 		}
-        return filterItems;
+		return filterItems;
 	}
 
 	private void startSortDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setSingleChoiceItems(R.array.sort, sort.getId(),
-                new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.v(TAG, "onClick " + which);
-                        sort = Sort.getById(which);
-                        dialog.dismiss();
-                        setFilteredTasks(false);
-                    }
-                });
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Log.v(TAG, "onClick " + which);
+						sort = Sort.getById(which);
+						dialog.dismiss();
+						setFilteredTasks(false);
+					}
+				});
 		builder.show();
 	}
 
@@ -1430,33 +1452,31 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		startActivityIfNeeded(i, REQUEST_FILTER);
 	}
 
-    private class DrawerItemClickListener implements
-            AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            TextView tv = (TextView) view;
-            String itemTitle = tv.getText().toString();
-            Log.v(TAG, "Clicked on drawer " + itemTitle);
-            if (itemTitle.substring(0, 1).equals("@")) {
-                m_contexts = new ArrayList<String>();
-                m_contexts.add(itemTitle.substring(1));
-                if (!m_filters
-                        .contains(getString(R.string.filter_tab_contexts))) {
-                    m_filters
-                            .add(getString(R.string.filter_tab_contexts));
-                }
-            } else {
-                m_projects = new ArrayList<String>();
-                m_projects.add(itemTitle.substring(1));
-                if (!m_filters
-                        .contains(getString(R.string.filter_tab_projects))) {
-                    m_filters
-                            .add(getString(R.string.filter_tab_projects));
-                }
-            }
-            m_drawerLayout.closeDrawer(m_drawerList);
-            setFilteredTasks(false);
-        }
-    }
+	private class DrawerItemClickListener implements
+			AdapterView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			TextView tv = (TextView) view;
+			String itemTitle = tv.getText().toString();
+			Log.v(TAG, "Clicked on drawer " + itemTitle);
+			if (itemTitle.substring(0, 1).equals("@")) {
+				m_contexts = new ArrayList<String>();
+				m_contexts.add(itemTitle.substring(1));
+				if (!m_filters
+						.contains(getString(R.string.filter_tab_contexts))) {
+					m_filters.add(getString(R.string.filter_tab_contexts));
+				}
+			} else {
+				m_projects = new ArrayList<String>();
+				m_projects.add(itemTitle.substring(1));
+				if (!m_filters
+						.contains(getString(R.string.filter_tab_projects))) {
+					m_filters.add(getString(R.string.filter_tab_projects));
+				}
+			}
+			m_drawerLayout.closeDrawer(m_drawerList);
+			setFilteredTasks(false);
+		}
+	}
 }
