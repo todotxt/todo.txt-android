@@ -432,7 +432,8 @@ public final class SwipeDismissList implements View.OnTouchListener {
 				if (mPaused || !mEnabled) {
 					return false;
 				}
-
+				resetSwipeState();
+				
 				// TODO: ensure this is a finger, and set a flag
 
 				// Find the child view that was touched (perform a hit test)
@@ -516,13 +517,7 @@ public final class SwipeDismissList implements View.OnTouchListener {
 						.setDuration(mAnimationTime)
 						.setListener(null);
 				}
-				mVelocityTracker.recycle();
-				mVelocityTracker = null;
-				mDownX = 0;
-				mDownY = 0;
-				mDownView = null;
-				mDownPosition = ListView.INVALID_POSITION;
-				mSwiping = false;
+				resetSwipeState();
 				break;
 			}
 
@@ -572,6 +567,18 @@ public final class SwipeDismissList implements View.OnTouchListener {
 			}
 		}
 		return false;
+	}
+
+	private void resetSwipeState() {
+		if (mVelocityTracker != null) {
+			mVelocityTracker.recycle();
+		}
+		mVelocityTracker = null;
+		mDownX = 0;
+		mDownY = 0;
+		mDownView = null;
+		mDownPosition = ListView.INVALID_POSITION;
+		mSwiping = false;
 	}
 
 	/**
