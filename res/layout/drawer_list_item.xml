@@ -13,14 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
+<com.todotxt.todotxttouch.RelativeLayoutCheckable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<TextView 
+    android:id="@+id/left_drawer_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:gravity="center_vertical"
     android:paddingLeft="16dip"
     android:paddingRight="16dip"
-    android:textColor="#fff"
-    android:minHeight="48dp"/>
+    android:minHeight="48dp"
+    style="@style/TodoTxtTouchLight"
+            />
+</com.todotxt.todotxttouch.RelativeLayoutCheckable>

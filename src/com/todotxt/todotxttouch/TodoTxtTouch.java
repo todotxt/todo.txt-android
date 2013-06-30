@@ -342,9 +342,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			getSupportActionBar().setHomeButtonEnabled(false);
 		} else {
 			m_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
+			m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.drawer_list_item, m_lists));
-
+				R.layout.drawer_list_item, R.id.left_drawer_text, m_lists));
+			setDrawerChoices();
+			
 			// Set the list's click listener
 			m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -917,6 +919,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
 				m_filters = data
 						.getStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS);
+				setDrawerChoices();
 				setFilteredTasks(false);
 			}
 		} else if (requestCode == REQUEST_PREFERENCES) {
@@ -1277,6 +1280,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		m_projects = new ArrayList<String>(); // Collections.emptyList();
 		m_filters = new ArrayList<String>();
 		m_search = "";
+		setDrawerChoices();
 	}
 
 	void setFilteredTasks(boolean reload) {
@@ -1531,26 +1535,58 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			TextView tv = (TextView) view;
+			TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
 			String itemTitle = tv.getText().toString();
 			Log.v(TAG, "Clicked on drawer " + itemTitle);
-			if (itemTitle.substring(0, 1).equals("@")) {
+			if (itemTitle.substring(0, 1).equals("@") && !m_contexts.remove(itemTitle.substring(1))) {
 				m_contexts = new ArrayList<String>();
 				m_contexts.add(itemTitle.substring(1));
-				if (!m_filters
-						.contains(getString(R.string.filter_tab_contexts))) {
-					m_filters.add(getString(R.string.filter_tab_contexts));
-				}
-			} else {
+			} else if (itemTitle.substring(0, 1).equals("+") && !m_projects.remove(itemTitle.substring(1))) {
 				m_projects = new ArrayList<String>();
 				m_projects.add(itemTitle.substring(1));
-				if (!m_filters
-						.contains(getString(R.string.filter_tab_projects))) {
-					m_filters.add(getString(R.string.filter_tab_projects));
-				}
 			}
+			
+			setDrawerChoices();
 			m_drawerLayout.closeDrawer(m_drawerList);
 			setFilteredTasks(false);
 		}
+	}
+	
+	private void setDrawerChoices() {
+		m_drawerList.clearChoices();
+		boolean haveContexts = false;
+		boolean haveProjects = false;
+
+		for(int i = 0; i < m_lists.size(); i++) {
+			String item = m_lists.get(i).substring(1);
+			if(m_contexts.contains(item)) {
+				m_drawerList.setItemChecked(i, true);
+				haveContexts = true;
+			}
+			else if(m_projects.contains(item)) {
+				m_drawerList.setItemChecked(i, true);
+				haveProjects = true;
+			}
+		}
+		
+		if(haveContexts) {
+			if (!m_filters
+					.contains(getString(R.string.filter_tab_contexts))) {
+				m_filters.add(getString(R.string.filter_tab_contexts));
+			}
+		} else {
+			m_filters.remove(getString(R.string.filter_tab_contexts));
+		}
+
+		if(haveProjects) {
+			if (!m_filters
+					.contains(getString(R.string.filter_tab_projects))) {
+				m_filters.add(getString(R.string.filter_tab_projects));
+			}
+		} else {
+			m_filters.remove(getString(R.string.filter_tab_projects));
+		}
+
+		((ArrayAdapter<?>)m_drawerList.getAdapter()).notifyDataSetChanged();
 	}
 }
