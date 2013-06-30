@@ -28,7 +28,6 @@
   <string name="close">Zavřít</string>
   <string name="clear">Vymazat</string>
   <string name="areyousure">Určitě?</string>
-  <string name="tasktexthint">Volat domů @telefon +OblíbenéMísto\n\n</string>
   <string name="add_task_help"><b>Projekty</b> začínají plusem + a neobsahují žádné mezery, např. +PřestavbaKuchyně nebo
 		+Kniha.\n\n<b>Kontexty</b> (v jakých se bude úkol dít) začínají zavináčem @ , např: @telefon nebo
 		@NákupníCentrum.\n\n

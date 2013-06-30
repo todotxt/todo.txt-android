@@ -280,38 +280,6 @@ public class Util {
 		void onClick(String input);
 	}
 
-	public static void showInputDialog(Context cxt, int titleid, int msgid,
-			String defaulttext, int lines,
-			final InputDialogListener oklistener, int icon) {
-		LayoutInflater factory = LayoutInflater.from(cxt);
-		final View textEntryView = factory.inflate(R.layout.inputdialog, null);
-		final TextView textinput = (TextView) textEntryView
-				.findViewById(R.id.input);
-		textinput.setText(defaulttext);
-		textinput.setLines(lines);
-		AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
-		if (icon > 0) {
-			builder.setIcon(icon);
-		}
-		builder.setTitle(titleid);
-		builder.setMessage(msgid);
-		builder.setView(textEntryView);
-		builder.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						String input = textinput.getText().toString();
-						oklistener.onClick(input);
-					}
-				});
-		builder.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				});
-		builder.setCancelable(true);
-		builder.show();
-	}
-
 	public interface LoginDialogListener {
 		void onClick(String username, String password);
 	}

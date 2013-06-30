@@ -35,7 +35,6 @@ You should have received a copy of the GNU General Public License along with Tod
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="@string/tasktexthint"
             android:gravity="top"
             android:inputType="textCapSentences|textMultiLine"/>
 

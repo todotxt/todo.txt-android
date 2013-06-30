@@ -24,6 +24,7 @@ package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -103,7 +104,7 @@ public class AddTask extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.add_task);
-		
+
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		m_app = (TodoApplication) getApplication();
@@ -133,6 +134,32 @@ public class AddTask extends SherlockActivity {
 		// text
 		textInputField = (EditText) findViewById(R.id.taskText);
 		textInputField.setGravity(Gravity.TOP);
+
+		// Set up fortune hint text
+		Random rand = new Random();
+		int fortune_hint_index = Math.abs(rand.nextInt()) % 5;
+		int fortune_hint_text;
+		switch (fortune_hint_index) {
+		case 0:
+			fortune_hint_text = R.string.tasktexthint0;
+			break;
+		case 1:
+			fortune_hint_text = R.string.tasktexthint1;
+			break;
+		case 2:
+			fortune_hint_text = R.string.tasktexthint2;
+			break;
+		case 3:
+			fortune_hint_text = R.string.tasktexthint3;
+			break;
+		case 4:
+			fortune_hint_text = R.string.tasktexthint4;
+			break;
+		default:
+			fortune_hint_text = R.string.tasktexthint2;
+		}
+
+		textInputField.setHint(fortune_hint_text);
 
 		if (share_text != null) {
 			textInputField.setText(share_text);

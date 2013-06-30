@@ -28,7 +28,6 @@
   <string name="close">Fermer</string>
   <string name="clear">Nettoyer</string>
   <string name="areyousure">Etes vous sûr ?</string>
-  <string name="tasktexthint">Appeler Maman au @téléphone +PaixFamiliale\n\n</string>
   <string name="add_task_help">Les <b>Projets</b> commencent avec le symbole <b>+</b> et ne peuvent contenir d\'espaces, comme par exemple +RefaireLaCuisine ou
 		+LireRomans.\n\nLes <b>Contextes</b> (dans lesquelles vous définirez une tâche) commencent par le symbole @, comme par exemple @téléphone ou @Boulangerie.\n\n
 		Une tâche peut inclure une quantité indéfinie de projets ou de contextes.</string>

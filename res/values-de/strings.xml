@@ -28,7 +28,6 @@
   <string name="close">Schliessen</string>
   <string name="clear">Löschen</string>
   <string name="areyousure">Sind Sie sicher?</string>
-  <string name="tasktexthint">Task hier beschreiben. Neue Projekt Namen mit + und Kontexte mit @. Zum Beispiel:\n\nArzt anrufen @fon +Gesundheit</string>
   <string name="add_task_help"><b>Projekte</b> fangen mit einem + Zeichen und haben keine Leerzeichen, Bsp. +BuchSchreiben oder +Messe\n\n<b>Kontexte</b> (wo Sie den Task abschliessen möchten) fangen mit einem @ Zeichen an, Bsp. @Telefon oder @Firma\n\nEin Task kann mehrere Projekte oder Kontexte haben.</string>
   <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Auto Archivieren</string>

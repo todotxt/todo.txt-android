@@ -28,7 +28,6 @@
   <string name="close">Закрыть</string>
   <string name="clear">Очистить</string>
   <string name="areyousure">Вы уверены?</string>
-  <string name="tasktexthint">Позвонить Маме @телефон +СемейныеДела\n\n</string>
   <string name="add_task_help"><b>Проекты</b>
  начинаются со знака + и не содержат пробела как, например  +РемонтКухни или +Книга.\n\n
 <b>Контексты</b>
