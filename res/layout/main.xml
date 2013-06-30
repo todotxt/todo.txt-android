@@ -112,7 +112,6 @@ You should have received a copy of the GNU General Public License along with Tod
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dip"
-            android:background="#111"/>
+            style="@style/TodoTxtTouchLight"
+            android:background="#f3f3f3"/>
 </android.support.v4.widget.DrawerLayout>
