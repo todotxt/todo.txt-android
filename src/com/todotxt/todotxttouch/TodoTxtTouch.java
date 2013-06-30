@@ -773,6 +773,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}.execute();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
@@ -1080,8 +1081,22 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							sendBroadcast(broadcastArchiveIntent);
 						}
 					});
-			archiveAlert.setNegativeButton(R.string.cancel, null);
-			return archiveAlert.show();
+			archiveAlert.setNegativeButton(R.string.cancel,
+					new DialogInterface.OnClickListener() {
+						@SuppressWarnings("deprecation")
+						public void onClick(DialogInterface arg0, int arg1) {
+							removeDialog(id);
+						}
+					});
+			archiveAlert.setOnCancelListener(new OnCancelListener() {
+
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					removeDialog(id);
+				}
+			});
+			return archiveAlert.create();
 		} else {
 			return null;
 		}
