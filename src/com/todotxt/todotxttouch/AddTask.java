@@ -87,7 +87,11 @@ public class AddTask extends SherlockActivity {
 			break;
 		case R.id.menu_save_task:
 			final String input = textInputField.getText().toString();
-			addEditAsync(input);
+			if (input.trim().equalsIgnoreCase("")) {
+				Util.showToastLong(this, R.string.add_empty_task);
+			} else {
+				addEditAsync(input);
+			}
 			break;
 		case R.id.menu_add_prio:
 			showPrioMenu(findViewById(R.id.menu_add_prio));
