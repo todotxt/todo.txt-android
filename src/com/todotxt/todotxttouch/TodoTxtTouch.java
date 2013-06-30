@@ -94,8 +94,7 @@ import de.timroes.swipetodismiss.SwipeDismissList;
 
 public class TodoTxtTouch extends SherlockListActivity implements
 		OnSharedPreferenceChangeListener,
-		PullToRefreshAttacher.OnRefreshListener,
-		OnScrollListener {
+		PullToRefreshAttacher.OnRefreshListener, OnScrollListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
@@ -210,7 +209,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Set the adapter for the list view
 		updateNavigationDrawer();
 
-
 		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
 			// Gets called whenever the user deletes an item.
 			public SwipeDismissList.Undoable onDismiss(AbsListView listView,
@@ -279,12 +277,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				if (motionEvent.getX() < deadZoneX) {
 					return false;
 				}
-				
-				// Only listen to item swipes if we are not scrolling the listview
+
+				// Only listen to item swipes if we are not scrolling the
+				// listview
 				if (!mListScrolling && m_swipeList.onTouch(view, motionEvent)) {
 					return false;
 				}
-				
+
 				m_pullToRefreshAttacher.onTouch(view, motionEvent);
 				return false;
 			}
@@ -332,21 +331,23 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Do nothing
 
 	}
-	
+
 	private void updateNavigationDrawer() {
 		m_lists = contextsAndProjects();
-		if (m_lists.size()==0) {
+		if (m_lists.size() == 0) {
 			// No contexts or projects, disable navigation drawer
-			m_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+			m_drawerLayout.setDrawerLockMode(
+					DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 			getSupportActionBar().setHomeButtonEnabled(false);
 		} else {
-			m_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
+			m_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
+					Gravity.LEFT);
 			m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.drawer_list_item, R.id.left_drawer_text, m_lists));
+					R.layout.drawer_list_item, R.id.left_drawer_text, m_lists));
 			setDrawerChoices();
-			
+
 			// Set the list's click listener
 			m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -390,7 +391,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 	}
 
-	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content
@@ -787,9 +787,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		case R.id.preferences:
 			startPreferencesActivity();
 			break;
-		case R.id.filter:
-			startFilterActivity();
-			break;
+		// case R.id.filter:
+		// startFilterActivity();
+		// break;
 		case R.id.sort:
 			startSortDialog();
 			break;
@@ -1320,7 +1320,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					filterTitle += m_filters.get(i) + " ";
 				}
 				if (!Strings.isEmptyOrNull(m_search)) {
-					filterTitle += "Keyword";
+					filterTitle += R.string.filter_tab_search;
 				}
 				actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
 
@@ -1538,55 +1538,54 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
 			String itemTitle = tv.getText().toString();
 			Log.v(TAG, "Clicked on drawer " + itemTitle);
-			if (itemTitle.substring(0, 1).equals("@") && !m_contexts.remove(itemTitle.substring(1))) {
+			if (itemTitle.substring(0, 1).equals("@")
+					&& !m_contexts.remove(itemTitle.substring(1))) {
 				m_contexts = new ArrayList<String>();
 				m_contexts.add(itemTitle.substring(1));
-			} else if (itemTitle.substring(0, 1).equals("+") && !m_projects.remove(itemTitle.substring(1))) {
+			} else if (itemTitle.substring(0, 1).equals("+")
+					&& !m_projects.remove(itemTitle.substring(1))) {
 				m_projects = new ArrayList<String>();
 				m_projects.add(itemTitle.substring(1));
 			}
-			
+
 			setDrawerChoices();
 			m_drawerLayout.closeDrawer(m_drawerList);
 			setFilteredTasks(false);
 		}
 	}
-	
+
 	private void setDrawerChoices() {
 		m_drawerList.clearChoices();
 		boolean haveContexts = false;
 		boolean haveProjects = false;
 
-		for(int i = 0; i < m_lists.size(); i++) {
+		for (int i = 0; i < m_lists.size(); i++) {
 			String item = m_lists.get(i).substring(1);
-			if(m_contexts.contains(item)) {
+			if (m_contexts.contains(item)) {
 				m_drawerList.setItemChecked(i, true);
 				haveContexts = true;
-			}
-			else if(m_projects.contains(item)) {
+			} else if (m_projects.contains(item)) {
 				m_drawerList.setItemChecked(i, true);
 				haveProjects = true;
 			}
 		}
-		
-		if(haveContexts) {
-			if (!m_filters
-					.contains(getString(R.string.filter_tab_contexts))) {
+
+		if (haveContexts) {
+			if (!m_filters.contains(getString(R.string.filter_tab_contexts))) {
 				m_filters.add(getString(R.string.filter_tab_contexts));
 			}
 		} else {
 			m_filters.remove(getString(R.string.filter_tab_contexts));
 		}
 
-		if(haveProjects) {
-			if (!m_filters
-					.contains(getString(R.string.filter_tab_projects))) {
+		if (haveProjects) {
+			if (!m_filters.contains(getString(R.string.filter_tab_projects))) {
 				m_filters.add(getString(R.string.filter_tab_projects));
 			}
 		} else {
 			m_filters.remove(getString(R.string.filter_tab_projects));
 		}
 
-		((ArrayAdapter<?>)m_drawerList.getAdapter()).notifyDataSetChanged();
+		((ArrayAdapter<?>) m_drawerList.getAdapter()).notifyDataSetChanged();
 	}
 }
