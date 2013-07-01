@@ -123,7 +123,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		Resources resources = m_app.getResources();
 		rv.setTextColor(R.id.listwidget_taskprio, resources.getColor(color));
 
-		if (m_app.m_prefs.getBoolean("todotxtprependdate", false)
+		if (m_app.m_prefs.getBoolean("todotxtprependdate", true)
 				&& !task.isCompleted()
 				&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
 			rv.setTextViewText(R.id.listwidget_taskage, task.getRelativeAge());

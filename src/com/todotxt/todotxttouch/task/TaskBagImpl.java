@@ -330,7 +330,7 @@ class TaskBagImpl implements TaskBag {
 		}
 
 		public boolean isPrependDateEnabled() {
-			return sharedPreferences.getBoolean("todotxtprependdate", false);
+			return sharedPreferences.getBoolean("todotxtprependdate", true);
 		}
 
 		public boolean isWorkOfflineEnabled() {

@@ -74,7 +74,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <!-- settings -->
     <string name="auto_archive_pref_key">todotxtautoarchive</string>
     <string name="auto_archive_pref_title">Auto archive</string>
-    <string name="auto_archive_pref_summary">Automatically archive tasks to done.txt on completion.</string>
+    <string name="auto_archive_pref_summary">Automatically archive complete tasks to done.txt.</string>
     <string name="archive_now_title">Archive tasks</string>
     <string name="archive_now_explainer">Move completed tasks to done.txt? This cannot be undone.</string>
     <string name="dropbox_logout_pref_title">Log out</string>
@@ -97,7 +97,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="manual_sync_pref_title">Manual sync</string>
     <string name="manual_sync_pref_summary">Don\'t automatically upload every change to Dropbox.</string>
     <string name="periodic_sync_pref_key">sync_period</string>
-    <string name="periodic_sync_pref_title">Background sync</string>
+    <string name="periodic_sync_pref_title">Automatic sync</string>
 
     <!-- sync dialog -->
     <string name="sync_dialog_title">Manual Sync</string>

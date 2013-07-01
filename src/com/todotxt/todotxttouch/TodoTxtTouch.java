@@ -1483,7 +1483,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}
 
 				holder.taskage.setVisibility(View.GONE);
-				if (m_app.m_prefs.getBoolean("todotxtprependdate", false)) {
+				if (m_app.m_prefs.getBoolean("todotxtprependdate", true)) {
 					if (!task.isCompleted()
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
 						holder.taskage.setText(task.getRelativeAge());

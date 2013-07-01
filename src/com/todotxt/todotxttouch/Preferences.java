@@ -47,6 +47,7 @@ public class Preferences extends PreferenceActivity {
 	private static final int ABOUT_DIALOG = 1;
 	private static final int LOGOUT_DIALOG = 2;
 	public static final int RESULT_SYNC_LIST = 2;
+	TodoApplication m_app;
 
 	private String version;
 
@@ -55,6 +56,11 @@ public class Preferences extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
+
+		m_app = (TodoApplication) getApplication();
+		((CheckBoxPreference) this.getPreferenceManager().findPreference(
+				"todotxtprependdate")).setChecked(m_app.m_prefs.getBoolean(
+				"todotxtprependdate", true));
 
 		PackageInfo packageInfo;
 		try {
