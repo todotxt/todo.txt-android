@@ -829,6 +829,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private void startSortDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.sort_dialog_header);
 		builder.setSingleChoiceItems(R.array.sort, sort.getId(),
 				new OnClickListener() {
 					@Override

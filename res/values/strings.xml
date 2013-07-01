@@ -31,6 +31,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="updated_task">Updated task</string>
     <string name="update_task_failed">Could not update task</string>
     <string name="sort">Sort</string>
+    <string name="sort_dialog_header">Sort tasks</string>
     <string name="filter">Filter</string>
     <string name="main_no_items">No tasks to display.</string>
     <string name="set_preferences">Settings</string>
