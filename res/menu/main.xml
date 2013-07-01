@@ -49,7 +49,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <item
         android:id="@+id/archive"
         android:icon="@drawable/ic_action_archive"
-        android:showAsAction="ifRoom"
+        android:showAsAction="never"
         android:title="@string/archive"/>
     <item
         android:id="@+id/share"
