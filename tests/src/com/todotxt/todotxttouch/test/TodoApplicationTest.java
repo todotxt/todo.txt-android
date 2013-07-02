@@ -3,6 +3,8 @@ package com.todotxt.todotxttouch.test;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.test.ApplicationTestCase;
 import android.util.Log;
 
@@ -11,9 +13,32 @@ import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.task.TaskBag;
 
 public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
+	LooperThread looper;
+
+	class LooperThread extends Thread {
+		public Handler mHandler;
+
+		public void run() {
+			Looper.prepare();
+			mHandler = new Handler();
+			Looper.loop();
+		}
+	}
 
 	public TodoApplicationTest() {
 		super(TodoApplication.class);
+		looper = new LooperThread();
+		looper.start();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		looper.join(100);
+		Handler h = looper.mHandler;
+		Looper l = h.getLooper();
+		l.quit();
+		looper.join();
+		super.finalize();
 	}
 
 	protected void setUp() throws Exception {
@@ -30,7 +55,6 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		} catch (Exception e) {
 			fail(e.toString());
 		}
-
 	}
 
 	protected void tearDown() throws Exception {
@@ -47,37 +71,51 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		}
 	}
 
-	private void startPush(TodoApplication app) {
-		try {
-			Class<?> parameterTypes[] = new Class[3];
-			parameterTypes[0] = boolean.class;
-			parameterTypes[1] = boolean.class;
-			parameterTypes[2] = boolean.class;
-			//pushToRemote(force_sync, overwrite, suppressToast)
-			Method method = TodoApplication.class.getDeclaredMethod("pushToRemote", parameterTypes);
-			method.setAccessible(true);
-			method.invoke(app, false, false, false);
-		} catch (Exception e) {
-			fail(e.toString());
-		}
+	private void startPush(final TodoApplication app) {
+		looper.mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Class<?> parameterTypes[] = new Class[3];
+					parameterTypes[0] = boolean.class;
+					parameterTypes[1] = boolean.class;
+					parameterTypes[2] = boolean.class;
+					// pushToRemote(force_sync, overwrite, suppressToast)
+					Method method = TodoApplication.class.getDeclaredMethod(
+							"pushToRemote", parameterTypes);
+					method.setAccessible(true);
+					method.invoke(app, false, false, false);
+				} catch (Exception e) {
+					Log.e("TEST", "Failed to run pushToRemote", e);
+					fail(e.toString());
+				}
+			}
+		});
 	}
-	
-	private void startPull(TodoApplication app) {
-		try {
-			Class<?> parameterTypes[] = new Class[2];
-			parameterTypes[0] = boolean.class;
-			parameterTypes[1] = boolean.class;
-			Method method = TodoApplication.class.getDeclaredMethod("pullFromRemote", parameterTypes);
-			method.setAccessible(true);
-			method.invoke(app, false, false);
-		} catch (Exception e) {
-			fail(e.toString());
-		}
+
+	private void startPull(final TodoApplication app) {
+		looper.mHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Class<?> parameterTypes[] = new Class[2];
+					parameterTypes[0] = boolean.class;
+					parameterTypes[1] = boolean.class;
+					Method method = TodoApplication.class.getDeclaredMethod(
+							"pullFromRemote", parameterTypes);
+					method.setAccessible(true);
+					method.invoke(app, false, false);
+				} catch (Exception e) {
+					Log.e("TEST", "Failed to run pullFromRemote", e);
+					fail(e.toString());
+				}
+			}
+		});
 	}
-	
+
 	public class Waiter {
 		private static final long sleepInterval = 60;
-		private static final long maxWait = 5000;
+		private static final long maxWait = 15000;
 
 		public boolean doWait() {
 			long elapsed = 0;
@@ -105,9 +143,9 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		final TaskBagStub bag = new TaskBagStub();
 		setTaskBag(app, bag);
 
-		//app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
-		
+
 		new Waiter() {
 			public boolean test() {
 				return bag.pullFromRemoteCalled == 1;
@@ -126,8 +164,8 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		final TaskBagStub bag = new TaskBagStub();
 		setTaskBag(app, bag);
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
 		startPush(app);
 
@@ -161,7 +199,7 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		};
 		setTaskBag(app, bag);
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
 
 		new Waiter() {
@@ -170,11 +208,11 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 			};
 		}.doWait();
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
 		startPush(app);
 		startPush(app);
@@ -211,7 +249,7 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		};
 		setTaskBag(app, bag);
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
 
 		new Waiter() {
@@ -220,18 +258,21 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 			};
 		}.doWait();
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
 		startPush(app);
 
 		// This pull should not be called
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
+		// app.sendBroadcast(new
+		// Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
 		startPull(app);
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		startPush(app);
+		startPush(app);
 		startPush(app);
 
 		new Waiter() {
@@ -264,7 +305,7 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		};
 		setTaskBag(app, bag);
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
 
 		new Waiter() {
@@ -273,11 +314,11 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 			};
 		}.doWait();
 
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		startPush(app);
 		startPush(app);
 		startPush(app);
@@ -291,7 +332,8 @@ public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
 		}.doWait();
 
 		// This pull should be called
-//		app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
+		// app.sendBroadcast(new
+		// Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
 		startPull(app);
 
 		new Waiter() {
