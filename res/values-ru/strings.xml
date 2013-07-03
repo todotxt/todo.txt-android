@@ -50,9 +50,6 @@
   <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Добавление даты новым заданиям</string>
   <string name="prepend_date_pref_summary">Автоматически добавлять дату создания новым заданиям.</string>
-  <string name="line_breaks_pref_key">настройки перевода строки</string>
-  <string name="line_breaks_pref_title">Символы переноса строк Windows</string>
-  <string name="line_breaks_pref_summary">Использовать в текстовом файле символы переноса строк Windows.</string>
   <string name="manual_sync_pref_key">workofflinepref</string>
   <string name="manual_sync_pref_title">Ручная синхронизация</string>
   <string name="manual_sync_pref_summary">Не загружать автоматически каждое изменение в Dropbox.</string>

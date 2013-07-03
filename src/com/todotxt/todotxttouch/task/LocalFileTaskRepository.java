@@ -48,11 +48,6 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	final static File DONE_TXT_FILE = new File(
 			Environment.getExternalStorageDirectory(),
 			"data/com.todotxt.todotxttouch/done.txt");
-	private final TaskBagImpl.Preferences preferences;
-
-	public LocalFileTaskRepository(TaskBagImpl.Preferences preferences) {
-		this.preferences = preferences;
-	}
 
 	@Override
 	public void init() {
@@ -89,14 +84,11 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 
 	@Override
 	public void store(ArrayList<Task> tasks) {
-		TaskIo.writeToFile(tasks, TODO_TXT_FILE,
-				preferences.isUseWindowsLineBreaksEnabled());
+		TaskIo.writeToFile(tasks, TODO_TXT_FILE);
 	}
 
 	@Override
 	public void archive(ArrayList<Task> tasks) {
-		boolean windowsLineBreaks = preferences.isUseWindowsLineBreaksEnabled();
-
 		ArrayList<Task> completedTasks = new ArrayList<Task>(tasks.size());
 		ArrayList<Task> incompleteTasks = new ArrayList<Task>(tasks.size());
 
@@ -109,14 +101,12 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 		}
 
 		// append completed tasks to done.txt
-		TaskIo.writeToFile(completedTasks, DONE_TXT_FILE, true,
-				windowsLineBreaks);
+		TaskIo.writeToFile(completedTasks, DONE_TXT_FILE, true);
 
 		// write incomplete tasks back to todo.txt
 		// TODO: remove blank lines (if we ever add support for
 		// PRESERVE_BLANK_LINES)
-		TaskIo.writeToFile(incompleteTasks, TODO_TXT_FILE, false,
-				windowsLineBreaks);
+		TaskIo.writeToFile(incompleteTasks, TODO_TXT_FILE, false);
 	}
 
 	@Override
@@ -136,8 +126,7 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 
 	@Override
 	public void storeDoneTasks(ArrayList<Task> tasks) {
-		TaskIo.writeToFile(tasks, DONE_TXT_FILE, false,
-				preferences.isUseWindowsLineBreaksEnabled());
+		TaskIo.writeToFile(tasks, DONE_TXT_FILE, false);
 	}
 
 	@Override

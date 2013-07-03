@@ -37,8 +37,7 @@ public class TaskBagFactory {
 		TaskBagImpl.Preferences taskBagPreferences = new TaskBagImpl.Preferences(
 				sharedPreferences);
 
-		LocalFileTaskRepository localFileTaskRepository = new LocalFileTaskRepository(
-				taskBagPreferences);
+		LocalFileTaskRepository localFileTaskRepository = new LocalFileTaskRepository();
 
 		return new TaskBagImpl(taskBagPreferences, localFileTaskRepository,
 				application.getRemoteClientManager());

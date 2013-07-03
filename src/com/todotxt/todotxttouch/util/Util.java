@@ -51,10 +51,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.todotxt.todotxttouch.R;
