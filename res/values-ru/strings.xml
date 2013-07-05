@@ -50,9 +50,6 @@
   <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Добавление даты новым заданиям</string>
   <string name="prepend_date_pref_summary">Автоматически добавлять дату создания новым заданиям.</string>
-  <string name="manual_sync_pref_key">workofflinepref</string>
-  <string name="manual_sync_pref_title">Ручная синхронизация</string>
-  <string name="manual_sync_pref_summary">Не загружать автоматически каждое изменение в Dropbox.</string>
   <string name="sync_dialog_title">Ручная синхронизация</string>
   <string name="sync_dialog_msg">Хотите загрузить или выгрузить ваш todo.txt файл?</string>
   <string name="sync_dialog_upload">Выгрузить в Dropbox</string>

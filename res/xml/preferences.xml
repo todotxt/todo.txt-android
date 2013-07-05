@@ -42,8 +42,6 @@
 		<EditTextPreference android:summary="@string/TODOTXTPATH_summary"
 			android:defaultValue="@string/TODOTXTPATH_defaultPath" android:title="@string/TODOTXTPATH_title"
 			android:key="@string/TODOTXTPATH_key" />
-		<CheckBoxPreference android:key="@string/manual_sync_pref_key"
-			android:title="@string/manual_sync_pref_title" android:summary="@string/manual_sync_pref_summary" />
 		<ListPreference android:key="@string/periodic_sync_pref_key"
 		    android:title="@string/periodic_sync_pref_title" android:entries="@array/periodic_sync_lengths"
 		    android:entryValues="@array/periodic_sync_values" android:defaultValue="0" />

@@ -49,9 +49,6 @@
   <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Dater les nouvelles tâches</string>
   <string name="prepend_date_pref_summary">Ajouter automatiquement la date de création aux nouvelles tâches.</string>
-  <string name="manual_sync_pref_key">workofflinepref</string>
-  <string name="manual_sync_pref_title">Synchronisation manuelle</string>
-  <string name="manual_sync_pref_summary">Ne pas téléverser tous les changements à Dropbox automatiquement.</string>
   <string name="sync_dialog_title">Synchronisation manuelle</string>
   <string name="sync_dialog_msg">Voulez-vous envoyer ou recevoir votre fichier todo.txt ?</string>
   <string name="sync_dialog_upload">Envoyer sur Dropbox</string>

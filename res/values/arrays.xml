@@ -32,7 +32,8 @@ You should have received a copy of the GNU General Public License along with Tod
 	</string-array>
 	
 	<string-array name="periodic_sync_lengths">
-	    <item>Never</item>
+	    <item>Never (work offline)</item>
+		<item>When using app</item>
 		<item>Every 15 minutes</item>
 		<item>Every hour</item>
 		<item>Twice a day</item>
@@ -40,6 +41,7 @@ You should have received a copy of the GNU General Public License along with Tod
 	</string-array>
 	
 	<string-array name="periodic_sync_values"> <!-- values from AlarmManager.INTERVAL_* -->
+		<item>-1</item>
 		<item>0</item>
 		<item>900000</item>
 		<item>3600000</item>

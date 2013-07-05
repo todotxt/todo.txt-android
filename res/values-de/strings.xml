@@ -47,9 +47,6 @@
   <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Neue Tasks mit Datum</string>
   <string name="prepend_date_pref_summary">Heutiges Datum automatisch neuen Tasks hinzufügen.</string>
-  <string name="manual_sync_pref_key">workofflinepref</string>
-  <string name="manual_sync_pref_title">Manuelle Syncronisierung</string>
-  <string name="manual_sync_pref_summary">Lade nicht automatisch jede Änderung zu Dropbox.</string>
   <string name="sync_dialog_title">Manueller Sync</string>
   <string name="sync_dialog_msg">Möchten Sie die todo.txt-Datei hoch- oder runterladen?</string>
   <string name="sync_dialog_upload">Änderungen hochladen</string>
