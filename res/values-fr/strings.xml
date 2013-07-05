@@ -52,9 +52,6 @@
   <string name="line_breaks_pref_key">linebreakspref</string>
   <string name="line_breaks_pref_title">Saut de ligne Windows</string>
   <string name="line_breaks_pref_summary">Utiliser le saut de ligne Windows dans le fichier texte.</string>
-  <string name="manual_sync_pref_key">workofflinepref</string>
-  <string name="manual_sync_pref_title">Synchronisation manuelle</string>
-  <string name="manual_sync_pref_summary">Ne pas téléverser tous les changements à Dropbox automatiquement.</string>
   <string name="sync_dialog_title">Synchronisation manuelle</string>
   <string name="sync_dialog_msg">Voulez-vous envoyer ou recevoir votre fichier todo.txt ?</string>
   <string name="sync_dialog_upload">Envoyer sur Dropbox</string>

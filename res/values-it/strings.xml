@@ -54,9 +54,6 @@
   <string name="line_breaks_pref_key">linebreakspref</string>
   <string name="line_breaks_pref_title">Compatibilità Windows</string>
   <string name="line_breaks_pref_summary">Nei file di testo usa un terminatore di riga compatibile con Windows.</string>
-  <string name="manual_sync_pref_key">workofflinepref</string>
-  <string name="manual_sync_pref_title">Sincronizza manualmente</string>
-  <string name="manual_sync_pref_summary">Non sincronizzare automaticamente su Dropbox ogni modifica effettuata.</string>
   <string name="sync_dialog_title">Sincronizza manualmente</string>
   <string name="sync_dialog_msg">Vuoi sincronizzare o scaricare il tuo file todo.txt?</string>
   <string name="sync_dialog_upload">Sincronizza su Dropbox</string>
