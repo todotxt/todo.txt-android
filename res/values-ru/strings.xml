@@ -53,9 +53,6 @@
   <string name="line_breaks_pref_key">настройки перевода строки</string>
   <string name="line_breaks_pref_title">Символы переноса строк Windows</string>
   <string name="line_breaks_pref_summary">Использовать в текстовом файле символы переноса строк Windows.</string>
-  <string name="manual_sync_pref_key">workofflinepref</string>
-  <string name="manual_sync_pref_title">Ручная синхронизация</string>
-  <string name="manual_sync_pref_summary">Не загружать автоматически каждое изменение в Dropbox.</string>
   <string name="sync_dialog_title">Ручная синхронизация</string>
   <string name="sync_dialog_msg">Хотите загрузить или выгрузить ваш todo.txt файл?</string>
   <string name="sync_dialog_upload">Выгрузить в Dropbox</string>

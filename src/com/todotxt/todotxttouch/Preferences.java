@@ -43,7 +43,6 @@ public class Preferences extends PreferenceActivity {
 	private Preference aboutDialog;
 	private Preference logoutDialog;
 	private ListPreference periodicSync;
-	private CheckBoxPreference manualOnly;
 	private static final int ABOUT_DIALOG = 1;
 	private static final int LOGOUT_DIALOG = 2;
 	public static final int RESULT_SYNC_LIST = 2;
@@ -76,7 +75,6 @@ public class Preferences extends PreferenceActivity {
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
 		periodicSync = (ListPreference) findPreference(getString(R.string.periodic_sync_pref_key));
-		manualOnly = (CheckBoxPreference) findPreference(getString(R.string.manual_sync_pref_key));
 		setPeriodicSummary(periodicSync.getValue());
 		periodicSync
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -115,11 +113,6 @@ public class Preferences extends PreferenceActivity {
 			showDialog(ABOUT_DIALOG);
 		} else if (preference == logoutDialog) {
 			showDialog(LOGOUT_DIALOG);
-		} else if (preference == manualOnly) {
-			// When manual sync gets checked we want don't want periodic sync
-			periodicSync.setEnabled(!manualOnly.isChecked());
-			periodicSync.setValue("0"); // Disable
-			setPeriodicSummary(periodicSync.getValue());
 		}
 		return true;
 	}

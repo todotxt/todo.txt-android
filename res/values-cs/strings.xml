@@ -53,9 +53,6 @@
   <string name="line_breaks_pref_key">linebreakspref</string>
   <string name="line_breaks_pref_title">Zalamování řádků jako ve Windows</string>
   <string name="line_breaks_pref_summary">Zalamovat řádky v textovém souboru jako v systému Windows.</string>
-  <string name="manual_sync_pref_key">workofflinepref</string>
-  <string name="manual_sync_pref_title">Ruční synchronizace</string>
-  <string name="manual_sync_pref_summary">Nenahrávat každou změnu do Dopboxu automaticky.</string>
   <string name="sync_dialog_title">Ruční synchronizace</string>
   <string name="sync_dialog_msg">Chcete nahrát nebo stáhnout soubor todo.txt?</string>
   <string name="sync_dialog_upload">Nahrát do Dropboxu</string>

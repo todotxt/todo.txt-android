@@ -164,7 +164,13 @@ public class TodoApplication extends Application {
 	}
 
 	public boolean isManualMode() {
-		return m_prefs.getBoolean(Constants.PREF_MANUAL_MODE, false);
+		try {
+			long period = Long.parseLong(m_prefs.getString(
+					Constants.PREF_PERIODIC_SYNC, "0"));
+			return period < 0;
+		} catch (NumberFormatException ex) {
+			return false;
+		}
 	}
 
 	public boolean needToPush() {
@@ -352,13 +358,14 @@ public class TodoApplication extends Application {
 		sendBroadcast(intent);
 	}
 
-    public long getSyncPeriod() {
-        try {
-            long period = Long.parseLong(m_prefs.getString(Constants.PREF_PERIODIC_SYNC, "0"));
-            return period;
-        } catch (NumberFormatException ex) {
-            return 0L;
-        }
-    }
+	public long getSyncPeriod() {
+		try {
+			long period = Long.parseLong(m_prefs.getString(
+					Constants.PREF_PERIODIC_SYNC, "0"));
+			return period > 0 ? period : 0;
+		} catch (NumberFormatException ex) {
+			return 0L;
+		}
+	}
 
 }
