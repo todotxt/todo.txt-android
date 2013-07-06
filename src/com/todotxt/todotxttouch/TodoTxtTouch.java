@@ -440,7 +440,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		//outState.putInt("sort", sort.getId());
+		// outState.putInt("sort", sort.getId());
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
 
@@ -451,7 +451,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
 		super.onRestoreInstanceState(state);
-		//sort = Sort.getById(state.getInt("sort"));
+		// sort = Sort.getById(state.getInt("sort"));
 		m_DialogActive = state.getBoolean("DialogActive");
 		m_DialogText = state.getString("DialogText");
 		if (m_DialogActive) {
@@ -769,6 +769,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// case R.id.filter:
 		// startFilterActivity();
 		// break;
+		case R.id.sync:
+			Log.v(TAG, "onMenuItemSelected: sync");
+			syncClient(false);
+			break;
 		case R.id.sort:
 			startSortDialog();
 			break;
@@ -1262,8 +1266,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		m_adapter.clear();
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
-				m_app.m_prios, m_app.m_contexts, m_app.m_projects, m_app.m_search, false), m_app.sort
-				.getComparator())) {
+				m_app.m_prios, m_app.m_contexts, m_app.m_projects,
+				m_app.m_search, false), m_app.sort.getComparator())) {
 			m_adapter.add(task);
 		}
 
@@ -1339,25 +1343,25 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			this.m_inflater = inflater;
 		}
 
-//		@Override
-//		public Filter getFilter() {
-//			return new Filter() {
-//
-//				@Override
-//				protected FilterResults performFiltering(CharSequence search) {
-//					m_search = search.toString();
-//					storeFilters();
-//					return null;
-//				}
-//
-//				@Override
-//				protected void publishResults(CharSequence arg0,
-//						FilterResults arg1) {
-//					setFilteredTasks(false);
-//				}
-//
-//			};
-//		}
+		// @Override
+		// public Filter getFilter() {
+		// return new Filter() {
+		//
+		// @Override
+		// protected FilterResults performFiltering(CharSequence search) {
+		// m_search = search.toString();
+		// storeFilters();
+		// return null;
+		// }
+		//
+		// @Override
+		// protected void publishResults(CharSequence arg0,
+		// FilterResults arg1) {
+		// setFilteredTasks(false);
+		// }
+		//
+		// };
+		// }
 
 		@Override
 		public void clear() {
@@ -1486,8 +1490,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED,
 				Priority.inCode(m_app.m_prios));
-		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED, m_app.m_projects);
-		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_app.m_contexts);
+		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED,
+				m_app.m_projects);
+		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED,
+				m_app.m_contexts);
 		i.putExtra(Constants.EXTRA_SEARCH, m_app.m_search);
 
 		startActivityIfNeeded(i, REQUEST_FILTER);
@@ -1510,7 +1516,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				m_app.m_projects = new ArrayList<String>();
 				m_app.m_projects.add(itemTitle.substring(1));
 			}
-			
+
 			setDrawerChoices();
 			m_app.storeFilters();
 			m_drawerLayout.closeDrawer(m_drawerList);
@@ -1536,7 +1542,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 
 		if (haveContexts) {
-			if (!m_app.m_filters.contains(getString(R.string.filter_tab_contexts))) {
+			if (!m_app.m_filters
+					.contains(getString(R.string.filter_tab_contexts))) {
 				m_app.m_filters.add(getString(R.string.filter_tab_contexts));
 			}
 		} else {
@@ -1544,7 +1551,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 
 		if (haveProjects) {
-			if (!m_app.m_filters.contains(getString(R.string.filter_tab_projects))) {
+			if (!m_app.m_filters
+					.contains(getString(R.string.filter_tab_projects))) {
 				m_app.m_filters.add(getString(R.string.filter_tab_projects));
 			}
 		} else {

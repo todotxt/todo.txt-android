@@ -47,6 +47,11 @@ You should have received a copy of the GNU General Public License along with Tod
         android:title="@string/filter"/>
     -->
     <item
+        android:id="@+id/sync"
+        android:icon="@drawable/ic_action_sync"
+        android:showAsAction="never"
+        android:title="@string/sync"/>
+    <item
         android:id="@+id/archive"
         android:icon="@drawable/ic_action_archive"
         android:showAsAction="never"
