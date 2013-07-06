@@ -79,7 +79,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="archive_now_title">Archive tasks</string>
     <string name="archive_now_explainer">Move completed tasks to done.txt? This cannot be undone.</string>
     <string name="dropbox_logout_pref_title">Log out</string>
-    <string name="dropbox_logout_pref_summary">Log out of Dropbox.</string>
+    <string name="dropbox_logout_pref_summary">Disconnect from Dropbox.</string>
     <string name="dropbox_logout_explainer">Are you sure you wish to log out of Dropbox?</string>
     <string name="TODOTXTPATH_key">todotxtpath</string>
     <string name="TODOTXTPATH_title">File location</string>
