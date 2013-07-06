@@ -27,6 +27,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +56,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoException;
 
@@ -369,5 +372,12 @@ public class Util {
 			builder.append(delimiter);
 		}
 		return builder.toString();
+	}
+	
+	public static ArrayList<String> split(String s, String delimeter) {
+		if (Strings.isBlank(s)) {
+			return new ArrayList<String>();
+		}
+		return new ArrayList<String>(Arrays.asList(s.split(delimeter)));
 	}
 }

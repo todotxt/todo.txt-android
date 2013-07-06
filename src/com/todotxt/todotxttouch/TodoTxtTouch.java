@@ -68,7 +68,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -88,7 +87,6 @@ import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskPersistException;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
-import com.todotxt.todotxttouch.util.Util.OnMultiChoiceDialogListener;
 
 import de.timroes.swipetodismiss.SwipeDismissList;
 
@@ -114,16 +112,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private TaskAdapter m_adapter;
 	TodoApplication m_app;
 
-	// filter variables
-	private ArrayList<Priority> m_prios = new ArrayList<Priority>();
-	private ArrayList<String> m_contexts = new ArrayList<String>();
-	private ArrayList<String> m_projects = new ArrayList<String>();
-	private String m_search;
-
-	private Sort sort = Sort.PRIORITY_DESC;
 	private BroadcastReceiver m_broadcastReceiver;
-
-	private ArrayList<String> m_filters = new ArrayList<String>();
 
 	private static final int SYNC_CHOICE_DIALOG = 100;
 	private static final int SYNC_CONFLICT_DIALOG = 101;
@@ -297,8 +286,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Show search results
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			m_search = intent.getStringExtra(SearchManager.QUERY);
-			Log.v(TAG, "Searched for " + m_search);
+			m_app.m_search = intent.getStringExtra(SearchManager.QUERY);
+			Log.v(TAG, "Searched for " + m_app.m_search);
+			m_app.storeFilters();
 			setFilteredTasks(false);
 		}
 
@@ -420,7 +410,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		m_app.getStoredSort();
+		m_app.getStoredFilters();
 		setFilteredTasks(true);
 
 		// Select the specified item if one was passed in to this activity
@@ -449,15 +440,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt("sort", sort.getId());
+		//outState.putInt("sort", sort.getId());
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
-
-		outState.putStringArrayList("m_prios", Priority.inCode(m_prios));
-		outState.putStringArrayList("m_contexts", m_contexts);
-		outState.putStringArrayList("m_projects", m_projects);
-		outState.putStringArrayList("m_filters", m_filters);
-		outState.putString("m_search", m_search);
 
 		dismissProgressDialog(false);
 		super.onSaveInstanceState(outState);
@@ -466,19 +451,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
 		super.onRestoreInstanceState(state);
-		sort = Sort.getById(state.getInt("sort"));
+		//sort = Sort.getById(state.getInt("sort"));
 		m_DialogActive = state.getBoolean("DialogActive");
 		m_DialogText = state.getString("DialogText");
 		if (m_DialogActive) {
 			showProgressDialog(m_DialogText);
 		}
-
-		m_prios = Priority.toPriority(state.getStringArrayList("m_prios"));
-		m_contexts = state.getStringArrayList("m_contexts");
-		m_projects = state.getStringArrayList("m_projects");
-		m_filters = state.getStringArrayList("m_filters");
-		m_search = state.getString("m_search");
-		setFilteredTasks(false);
 	}
 
 	@Override
@@ -830,12 +808,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private void startSortDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.sort_dialog_header);
-		builder.setSingleChoiceItems(R.array.sort, sort.getId(),
+		builder.setSingleChoiceItems(R.array.sort, m_app.sort.getId(),
 				new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Log.v(TAG, "onClick " + which);
-						sort = Sort.getById(which);
+						m_app.sort = Sort.getById(which);
+						m_app.storeSort();
 						dialog.dismiss();
 						setFilteredTasks(false);
 					}
@@ -912,16 +891,17 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + " i=" + data);
 		if (requestCode == REQUEST_FILTER) {
 			if (resultCode == Activity.RESULT_OK) {
-				m_prios = Priority.toPriority(data
+				m_app.m_prios = Priority.toPriority(data
 						.getStringArrayListExtra(Constants.EXTRA_PRIORITIES));
-				m_projects = data
+				m_app.m_projects = data
 						.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
-				m_contexts = data
+				m_app.m_contexts = data
 						.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
-				m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
-				m_filters = data
+				m_app.m_search = data.getStringExtra(Constants.EXTRA_SEARCH);
+				m_app.m_filters = data
 						.getStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS);
 				setDrawerChoices();
+				m_app.storeFilters();
 				setFilteredTasks(false);
 			}
 		} else if (requestCode == REQUEST_PREFERENCES) {
@@ -955,44 +935,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected Dialog onCreateDialog(final int id) {
-		final Dialog d;
 		m_swipeList.discardUndo();
 
-		if (R.id.priority == id) {
-			final List<Priority> pStrs = taskBag.getPriorities();
-			int size = pStrs.size();
-			boolean[] values = new boolean[size];
-			for (Priority prio : m_prios) {
-				int index = pStrs.indexOf(prio);
-				if (index != -1) {
-					values[index] = true;
-				}
-			}
-			d = Util.createMultiChoiceDialog(this,
-					pStrs.toArray(new String[size]), values, null, null,
-					new OnMultiChoiceDialogListener() {
-						@SuppressWarnings("deprecation")
-						@Override
-						public void onClick(boolean[] selected) {
-							m_prios.clear();
-							for (int i = 0; i < selected.length; i++) {
-								if (selected[i]) {
-									m_prios.add(pStrs.get(i));
-								}
-							}
-							setFilteredTasks(false);
-							removeDialog(R.id.priority);
-						}
-					});
-			d.setOnCancelListener(new OnCancelListener() {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void onCancel(DialogInterface dialog) {
-					removeDialog(R.id.priority);
-				}
-			});
-			return d;
-		} else if (id == SYNC_CHOICE_DIALOG) {
+		if (id == SYNC_CHOICE_DIALOG) {
 			Log.v(TAG, "Time to show the sync choice dialog");
 			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
 			upDownChoice.setTitle(R.string.sync_dialog_title);
@@ -1107,9 +1052,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	public void onAddTaskClick(View v) {
 		Intent i = new Intent(this, AddTask.class);
 
-		i.putExtra(Constants.EXTRA_PRIORITIES_SELECTED, m_prios);
-		i.putExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_contexts);
-		i.putExtra(Constants.EXTRA_PROJECTS_SELECTED, m_projects);
+		i.putExtra(Constants.EXTRA_PRIORITIES_SELECTED, m_app.m_prios);
+		i.putExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_app.m_contexts);
+		i.putExtra(Constants.EXTRA_PROJECTS_SELECTED, m_app.m_projects);
 
 		startActivity(i);
 	}
@@ -1291,11 +1236,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		if (inActionMode()) {
 			mMode.finish();
 		}
-		m_prios = new ArrayList<Priority>(); // Collections.emptyList();
-		m_contexts = new ArrayList<String>(); // Collections.emptyList();
-		m_projects = new ArrayList<String>(); // Collections.emptyList();
-		m_filters = new ArrayList<String>();
-		m_search = "";
+		m_app.m_prios = new ArrayList<Priority>(); // Collections.emptyList();
+		m_app.m_contexts = new ArrayList<String>(); // Collections.emptyList();
+		m_app.m_projects = new ArrayList<String>(); // Collections.emptyList();
+		m_app.m_filters = new ArrayList<String>();
+		m_app.m_search = "";
+		m_app.storeFilters();
 		setDrawerChoices();
 	}
 
@@ -1316,7 +1262,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		m_adapter.clear();
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
-				m_prios, m_contexts, m_projects, m_search, false), sort
+				m_app.m_prios, m_app.m_contexts, m_app.m_projects, m_app.m_search, false), m_app.sort
 				.getComparator())) {
 			m_adapter.add(task);
 		}
@@ -1328,28 +1274,28 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
 
 		if (filterText != null) {
-			if (m_filters.size() > 0) {
+			if (m_app.m_filters.size() > 0) {
 				String filterTitle = getString(R.string.title_filter_applied)
 						+ " ";
-				int count = m_filters.size();
+				int count = m_app.m_filters.size();
 				for (int i = 0; i < count; i++) {
-					filterTitle += m_filters.get(i) + " ";
+					filterTitle += m_app.m_filters.get(i) + " ";
 				}
-				if (!Strings.isEmptyOrNull(m_search)) {
-					filterTitle += R.string.filter_tab_search;
+				if (!Strings.isEmptyOrNull(m_app.m_search)) {
+					filterTitle += getString(R.string.filter_tab_search);
 				}
 				actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
 
 				actionbar.setVisibility(View.VISIBLE);
 				filterText.setText(filterTitle);
 
-			} else if (!Strings.isEmptyOrNull(m_search)) {
+			} else if (!Strings.isEmptyOrNull(m_app.m_search)) {
 				if (filterText != null) {
 
 					actionbar_icon
 							.setImageResource(R.drawable.ic_actionbar_search);
 					filterText.setText(getString(R.string.title_search_results)
-							+ " " + m_search);
+							+ " " + m_app.m_search);
 
 					actionbar.setVisibility(View.VISIBLE);
 				}
@@ -1393,24 +1339,25 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			this.m_inflater = inflater;
 		}
 
-		@Override
-		public Filter getFilter() {
-			return new Filter() {
-
-				@Override
-				protected FilterResults performFiltering(CharSequence search) {
-					m_search = search.toString();
-					return null;
-				}
-
-				@Override
-				protected void publishResults(CharSequence arg0,
-						FilterResults arg1) {
-					setFilteredTasks(false);
-				}
-
-			};
-		}
+//		@Override
+//		public Filter getFilter() {
+//			return new Filter() {
+//
+//				@Override
+//				protected FilterResults performFiltering(CharSequence search) {
+//					m_search = search.toString();
+//					storeFilters();
+//					return null;
+//				}
+//
+//				@Override
+//				protected void publishResults(CharSequence arg0,
+//						FilterResults arg1) {
+//					setFilteredTasks(false);
+//				}
+//
+//			};
+//		}
 
 		@Override
 		public void clear() {
@@ -1538,10 +1485,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				taskBag.getContexts(true));
 
 		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED,
-				Priority.inCode(m_prios));
-		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED, m_projects);
-		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_contexts);
-		i.putExtra(Constants.EXTRA_SEARCH, m_search);
+				Priority.inCode(m_app.m_prios));
+		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED, m_app.m_projects);
+		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED, m_app.m_contexts);
+		i.putExtra(Constants.EXTRA_SEARCH, m_app.m_search);
 
 		startActivityIfNeeded(i, REQUEST_FILTER);
 	}
@@ -1555,16 +1502,17 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			String itemTitle = tv.getText().toString();
 			Log.v(TAG, "Clicked on drawer " + itemTitle);
 			if (itemTitle.substring(0, 1).equals("@")
-					&& !m_contexts.remove(itemTitle.substring(1))) {
-				m_contexts = new ArrayList<String>();
-				m_contexts.add(itemTitle.substring(1));
+					&& !m_app.m_contexts.remove(itemTitle.substring(1))) {
+				m_app.m_contexts = new ArrayList<String>();
+				m_app.m_contexts.add(itemTitle.substring(1));
 			} else if (itemTitle.substring(0, 1).equals("+")
-					&& !m_projects.remove(itemTitle.substring(1))) {
-				m_projects = new ArrayList<String>();
-				m_projects.add(itemTitle.substring(1));
+					&& !m_app.m_projects.remove(itemTitle.substring(1))) {
+				m_app.m_projects = new ArrayList<String>();
+				m_app.m_projects.add(itemTitle.substring(1));
 			}
-
+			
 			setDrawerChoices();
+			m_app.storeFilters();
 			m_drawerLayout.closeDrawer(m_drawerList);
 			setFilteredTasks(false);
 		}
@@ -1576,30 +1524,31 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		boolean haveProjects = false;
 
 		for (int i = 0; i < m_lists.size(); i++) {
+			char sigil = m_lists.get(i).charAt(0);
 			String item = m_lists.get(i).substring(1);
-			if (m_contexts.contains(item)) {
+			if (sigil == '@' && m_app.m_contexts.contains(item)) {
 				m_drawerList.setItemChecked(i, true);
 				haveContexts = true;
-			} else if (m_projects.contains(item)) {
+			} else if (sigil == '+' && m_app.m_projects.contains(item)) {
 				m_drawerList.setItemChecked(i, true);
 				haveProjects = true;
 			}
 		}
 
 		if (haveContexts) {
-			if (!m_filters.contains(getString(R.string.filter_tab_contexts))) {
-				m_filters.add(getString(R.string.filter_tab_contexts));
+			if (!m_app.m_filters.contains(getString(R.string.filter_tab_contexts))) {
+				m_app.m_filters.add(getString(R.string.filter_tab_contexts));
 			}
 		} else {
-			m_filters.remove(getString(R.string.filter_tab_contexts));
+			m_app.m_filters.remove(getString(R.string.filter_tab_contexts));
 		}
 
 		if (haveProjects) {
-			if (!m_filters.contains(getString(R.string.filter_tab_projects))) {
-				m_filters.add(getString(R.string.filter_tab_projects));
+			if (!m_app.m_filters.contains(getString(R.string.filter_tab_projects))) {
+				m_app.m_filters.add(getString(R.string.filter_tab_projects));
 			}
 		} else {
-			m_filters.remove(getString(R.string.filter_tab_projects));
+			m_app.m_filters.remove(getString(R.string.filter_tab_projects));
 		}
 
 		((ArrayAdapter<?>) m_drawerList.getAdapter()).notifyDataSetChanged();
