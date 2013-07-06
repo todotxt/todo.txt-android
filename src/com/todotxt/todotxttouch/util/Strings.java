@@ -133,7 +133,7 @@ public final class Strings {
 	}
 
 	/**
-	 * Checks the passed in string to see if it is null or an blank string
+	 * Checks the passed in string to see if it is null or an empty string
 	 * 
 	 * @param s
 	 *            the string to check
@@ -142,4 +142,17 @@ public final class Strings {
 	public static boolean isEmptyOrNull(String s) {
 		return s == null || s.length() == 0;
 	}
+	
+	/**
+	 * Checks the passed in string to see if it is null, empty, or blank;
+	 * where 'blank' is defined as consisting entirely of whitespace.
+	 * 
+	 * @param s
+	 *            the string to check
+	 * @return true if null or "" or all whitespace
+	 */
+	public static boolean isBlank(String s) {
+		return isEmptyOrNull(s) || s.trim().length() == 0;
+	}
+	
 }
