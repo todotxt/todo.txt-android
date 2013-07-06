@@ -27,6 +27,7 @@ import java.util.List;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
+import com.todotxt.todotxttouch.task.FilterFactory;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Strings;
@@ -68,7 +69,9 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	@Override
 	public void onDataSetChanged() {
 		taskBag = m_app.getTaskBag();
-		tasks = taskBag.getTasks();
+		tasks = taskBag.getTasks(FilterFactory.generateAndFilter(m_app.m_prios,
+				m_app.m_contexts, m_app.m_projects, m_app.m_search, false),
+				m_app.sort.getComparator());
 	}
 
 	@Override

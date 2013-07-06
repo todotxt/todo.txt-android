@@ -22,6 +22,8 @@
  */
 package com.todotxt.todotxttouch;
 
+import java.util.ArrayList;
+
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,6 +37,8 @@ import android.util.Log;
 
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.remote.RemoteConflictException;
+import com.todotxt.todotxttouch.task.Priority;
+import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 import com.todotxt.todotxttouch.util.Util;
@@ -49,6 +53,14 @@ public class TodoApplication extends Application {
 	private TaskBag taskBag;
 	private BroadcastReceiver m_broadcastReceiver;
 	private static Context appContext;
+
+	// filter variables
+	public ArrayList<Priority> m_prios = new ArrayList<Priority>();
+	public ArrayList<String> m_contexts = new ArrayList<String>();
+	public ArrayList<String> m_projects = new ArrayList<String>();
+	public String m_search;
+	public ArrayList<String> m_filters = new ArrayList<String>();
+	public Sort sort = Sort.PRIORITY_DESC;
 
 	@Override
 	public void onCreate() {
@@ -366,6 +378,38 @@ public class TodoApplication extends Application {
 		} catch (NumberFormatException ex) {
 			return 0L;
 		}
+	}
+
+	public void storeSort() {
+		Editor editor = m_prefs.edit();
+		editor.putInt(Constants.PREF_SORT, sort.getId());
+		editor.commit();
+		broadcastWidgetUpdate();
+	}
+	
+	public void getStoredSort() {
+		sort = Sort.getById(m_prefs.getInt(Constants.PREF_SORT, Sort.PRIORITY_DESC.getId()));
+	}
+	
+	public void storeFilters() {
+		Editor editor = m_prefs.edit();
+		editor.putString(Constants.PREF_FILTER_PRIOS, Util.join(Priority.inCode(m_prios), " "));
+		editor.putString(Constants.PREF_FILTER_CONTEXTS, Util.join(m_contexts, " "));
+		editor.putString(Constants.PREF_FILTER_PROJECTS, Util.join(m_projects, " "));
+		editor.putString(Constants.PREF_FILTER_SEARCH, m_search);
+		//split on tab just in case there is a space in the text
+		editor.putString(Constants.PREF_FILTER_SUMMARY, Util.join(m_filters, "\t"));
+		editor.commit();
+		broadcastWidgetUpdate();
+	}
+
+	public void getStoredFilters() {
+		m_prios = Priority.toPriority(Util.split(m_prefs.getString(Constants.PREF_FILTER_PRIOS, ""), " "));
+		m_contexts = Util.split(m_prefs.getString(Constants.PREF_FILTER_CONTEXTS, ""), " ");
+		m_projects = Util.split(m_prefs.getString(Constants.PREF_FILTER_PROJECTS, ""), " ");
+		m_search = m_prefs.getString(Constants.PREF_FILTER_SEARCH, "");
+		//split on tab just in case there is a space in the text
+		m_filters = Util.split(m_prefs.getString(Constants.PREF_FILTER_SUMMARY, ""), "\t");
 	}
 
 }
