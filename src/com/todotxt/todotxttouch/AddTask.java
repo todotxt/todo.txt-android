@@ -34,8 +34,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.Layout;
-import android.text.Selection;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -247,17 +245,6 @@ public class AddTask extends SherlockActivity {
 		dialog.show();
 	}
 
-	public int getCurrentCursorLine(EditText editText) {
-		int selectionStart = Selection.getSelectionStart(editText.getText());
-		Layout layout = editText.getLayout();
-
-		if (!(selectionStart == -1)) {
-			return layout.getLineForOffset(selectionStart);
-		}
-
-		return -1;
-	}
-
 	private void replacePriority(CharSequence newPrio) {
 		// save current selection and length
 		int start = textInputField.getSelectionStart();
@@ -269,25 +256,27 @@ public class AddTask extends SherlockActivity {
 				.split("\\r\\n|\\r|\\n")) {
 			lines.add(line);
 		}
-		int currentLine = getCurrentCursorLine(textInputField);
-		if (currentLine != -1) {
-			// for unknown reasons, sometimes when there's only one line,
-			// currentLine comes back 1 or greater and lines.get(currentLine)
-			// throws java.lang.IndexOutOfBoundsException
-			// in those cases, set it to 0
-			if (lines.size() == 1) {
-				currentLine = 0;
-			}
-			Task t = new Task(0, lines.get(currentLine));
-			t.setPriority(Priority.toPriority(newPrio.toString()));
-			lines.set(currentLine, t.inFileFormat());
-			textInputField.setText(Util.join(lines, "\n"));
+
+		// figure out what task the cursor is on
+		CharSequence enteredText = textInputField.getText().toString();
+		CharSequence textToCursor = enteredText.subSequence(0, start);
+		ArrayList<String> linesBeforeCursor = new ArrayList<String>();
+		for (String line : textToCursor.toString().split("\\r\\n|\\r|\\n")) {
+			linesBeforeCursor.add(line);
 		}
+		int currentLine = 0;
+		if (linesBeforeCursor.size() > 0) {
+			currentLine = linesBeforeCursor.size() - 1;
+		}
+
+		Task t = new Task(0, lines.get(currentLine));
+		t.setPriority(Priority.toPriority(newPrio.toString()));
+		lines.set(currentLine, t.inFileFormat());
+		textInputField.setText(Util.join(lines, "\n"));
 
 		// restore selection
 		sizeDelta = textInputField.getText().length() - length;
 		textInputField.setSelection(start + sizeDelta, end + sizeDelta);
-
 	}
 
 	private void replaceTextAtSelection(CharSequence title) {
