@@ -49,9 +49,6 @@
   <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Dater les nouvelles tâches</string>
   <string name="prepend_date_pref_summary">Ajouter automatiquement la date de création aux nouvelles tâches.</string>
-  <string name="line_breaks_pref_key">linebreakspref</string>
-  <string name="line_breaks_pref_title">Saut de ligne Windows</string>
-  <string name="line_breaks_pref_summary">Utiliser le saut de ligne Windows dans le fichier texte.</string>
   <string name="manual_sync_pref_key">workofflinepref</string>
   <string name="manual_sync_pref_title">Synchronisation manuelle</string>
   <string name="manual_sync_pref_summary">Ne pas téléverser tous les changements à Dropbox automatiquement.</string>

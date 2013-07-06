@@ -64,9 +64,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="prepend_date_pref_key">todotxtprependdate</string>
 	<string name="prepend_date_pref_title">日付を追加</string>
 	<string name="prepend_date_pref_summary">タスクを追加するときに自動で今日の日付をセットします。</string>
-	<string name="line_breaks_pref_key">linebreakspref</string>
-	<string name="line_breaks_pref_title">Windows用改行コード</string>
-	<string name="line_breaks_pref_summary">テキストファイルの改行コードをWindows用に設定します。</string>
 	<!-- login -->
 	<string name="login_screen_button">Dropbox にログイン</string>
 	<!-- delete -->

@@ -44,28 +44,32 @@ import com.todotxt.todotxttouch.task.Task;
 public class TaskIo {
 	private final static String TAG = TaskIo.class.getSimpleName();
 
-	public static ArrayList<Task> loadTasksFromStream(InputStream is)
-			throws IOException {
-		ArrayList<Task> items = new ArrayList<Task>();
-		BufferedReader in = null;
-		try {
-			in = new BufferedReader(new InputStreamReader(is));
-			String line;
-			long counter = 0L;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
-				if (line.length() > 0) {
-					items.add(new Task(counter, line));
+	private static boolean sWindowsLineBreaks = false;
+	
+	private static String readLine(BufferedReader r) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		boolean eol = false;
+		int c;
+		
+		while(!eol && (c = r.read()) >= 0) {
+			sb.append((char)c);
+			eol = (c == '\r' || c == '\n');
+			
+			// check for \r\n
+			if (c == '\r') {
+				r.mark(1);
+				c = r.read();
+				if (c != '\n') {
+					r.reset();
+				} else {
+					sWindowsLineBreaks = true;
+					sb.append((char)c);
 				}
-				counter++;
 			}
-		} finally {
-			Util.closeStream(in);
-			Util.closeStream(is);
 		}
-		return items;
+		return sb.length() == 0 ? null : sb.toString();
 	}
-
+	
 	public static ArrayList<Task> loadTasksFromFile(File file)
 			throws IOException {
 		ArrayList<Task> items = new ArrayList<Task>();
@@ -78,7 +82,8 @@ public class TaskIo {
 				in = new BufferedReader(new InputStreamReader(is));
 				String line;
 				long counter = 0L;
-				while ((line = in.readLine()) != null) {
+				sWindowsLineBreaks = false;
+				while ((line = readLine(in)) != null) {
 					line = line.trim();
 					if (line.length() > 0) {
 						items.add(new Task(counter, line));
@@ -93,13 +98,12 @@ public class TaskIo {
 		return items;
 	}
 
-	public static void writeToFile(List<Task> tasks, File file,
-			boolean useWindowsBreaks) {
-		writeToFile(tasks, file, false, useWindowsBreaks);
+	public static void writeToFile(List<Task> tasks, File file) {
+		writeToFile(tasks, file, false);
 	}
 
 	public static void writeToFile(List<Task> tasks, File file,
-			boolean append, boolean useWindowsBreaks) {
+			boolean append) {
 		try {
 			if (!Util.isDeviceWritable()) {
 				throw new IOException("Device is not writable!");
@@ -109,7 +113,7 @@ public class TaskIo {
 			for (int i = 0; i < tasks.size(); ++i) {
 				String fileFormat = tasks.get(i).inFileFormat();
 				fw.write(fileFormat);
-				if (useWindowsBreaks) {
+				if (sWindowsLineBreaks) {
 					// Log.v(TAG, "Using Windows line breaks");
 					fw.write("\r\n");
 				} else {
