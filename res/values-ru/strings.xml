@@ -32,7 +32,6 @@
  начинаются со знака + и не содержат пробела как, например  +РемонтКухни или +Книга.\n\n
 <b>Контексты</b>
  (где вы будете выполнять задание) начинаются со знака @ как, например, @телефон или @ПродуктовыйМагазин.\n\n		Задание может включать любое количество проектов или контекстов.</string>
-  <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Автоматическое архивирование</string>
   <string name="auto_archive_pref_summary">Автоматически архивировать задания в done.txt по завершению.</string>
   <string name="archive_now_title">Архивировать Задания</string>
@@ -40,14 +39,12 @@
   <string name="dropbox_logout_pref_title">Выйти</string>
   <string name="dropbox_logout_pref_summary">Выйти из Dropbox.</string>
   <string name="dropbox_logout_explainer">Вы уверены что хотите выйти из Dropbox?</string>
-  <string name="TODOTXTPATH_key">todotxtpath</string>
   <string name="TODOTXTPATH_title">Местонахождение файла</string>
   <string name="TODOTXTPATH_summary">Папка Dropbox где хранится файл todo.txt.</string>
   <string name="TODOTXTPATH_defaultPath">/сделать</string>
   <string name="DROPBOX_settings_header">Dropbox</string>
   <string name="todotxt_settings_header">сделать.txt</string>
   <string name="about_settings_header">О программе</string>
-  <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Добавление даты новым заданиям</string>
   <string name="prepend_date_pref_summary">Автоматически добавлять дату создания новым заданиям.</string>
   <string name="sync_dialog_title">Ручная синхронизация</string>

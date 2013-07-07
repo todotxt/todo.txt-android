@@ -46,7 +46,7 @@ public class PeriodicSyncStarter extends BroadcastReceiver {
 		PendingIntent pi = PendingIntent.getService(context, 0, i,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		alarms.cancel(pi); // Cancel any previously started
-		long syncPeriod = a.getSyncPeriod();
+		long syncPeriod = a.m_prefs.getSyncPeriod();
 		if (syncPeriod > 0) {
 			// Wake up and synchronize after after inexact fixed delay
 			alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0,

@@ -53,7 +53,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="dropbox_logout_pref_title">ログアウト</string>
 	<string name="dropbox_logout_pref_summary">Dropbox からログアウトします。</string>
 	<string name="dropbox_logout_explainer">本当に Dropbox からログアウトしてよろしいですか?</string>
-	<string name="TODOTXTPATH_key">todotxtpath</string>
 	<string name="TODOTXTPATH_title">ファイルの場所</string>
 	<string name="TODOTXTPATH_summary">todo.txt ファイルを置く Dropbox 上のフォルダを指定します。</string>
 	<string name="TODOTXTPATH_defaultPath">/todo</string>
@@ -61,7 +60,6 @@ You should have received a copy of the GNU General Public License along with Tod
 	<string name="todotxt_settings_header">todo.txt</string>
 	<string name="about_settings_header">About</string>
 
-	<string name="prepend_date_pref_key">todotxtprependdate</string>
 	<string name="prepend_date_pref_title">日付を追加</string>
 	<string name="prepend_date_pref_summary">タスクを追加するときに自動で今日の日付をセットします。</string>
 	<!-- login -->

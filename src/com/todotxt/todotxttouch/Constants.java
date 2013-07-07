@@ -24,19 +24,6 @@ package com.todotxt.todotxttouch;
 
 public class Constants {
 
-	public static final String PREF_FIRSTRUN = "firstrun";
-	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";
-	public static final String PREF_ACCESSTOKEN_SECRET = "accesstokensecret";
-	public static final String PREF_TODO_REV = "todo_rev";
-	public static final String PREF_DONE_REV = "done_rev";
-	public static final String PREF_NEED_TO_PUSH = "need_to_push";
-	public static final String PREF_SORT = "sort";
-	public static final String PREF_FILTER_PRIOS = "filter_prios";
-	public static final String PREF_FILTER_CONTEXTS = "filter_contexts";
-	public static final String PREF_FILTER_PROJECTS = "filter_projects";
-	public static final String PREF_FILTER_SEARCH = "filter_search";
-	public static final String PREF_FILTER_SUMMARY = "filter_summary";
-	public static final String PREF_PERIODIC_SYNC = "sync_period";
 	public static final String DROPBOX_MODUS = "dropbox";
 
 	public final static long INVALID_ID = -1;

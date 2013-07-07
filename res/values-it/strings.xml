@@ -33,7 +33,6 @@
  iniziano con un segno + e non contengono spazi, come +RistrutturazioneCucina o		+Romanzi.\n\nI 
 <b>Contesti</b>
  (i luoghi dove completerai le tue attività) iniziano con un segno @, come @telefono o		@Supermercato.\n\n		Un\'attività può includere un qualsiasi numero di progetti o contesti.</string>
-  <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Archivia automaticamente</string>
   <string name="auto_archive_pref_summary">Archivia automaticamente le attività completate nel file done.txt.</string>
   <string name="archive_now_title">Archivia attività</string>
@@ -41,14 +40,12 @@
   <string name="dropbox_logout_pref_title">Disconnetti</string>
   <string name="dropbox_logout_pref_summary">Disconnetti da Dropbox.</string>
   <string name="dropbox_logout_explainer">Sei sicuro di volerti disconnettere da Dropbox?</string>
-  <string name="TODOTXTPATH_key">todotxtpath</string>
   <string name="TODOTXTPATH_title">Cartella di destinazione</string>
   <string name="TODOTXTPATH_summary">La cartella di Dropbox dove salvare todo.txt.</string>
   <string name="TODOTXTPATH_defaultPath">/todo</string>
   <string name="DROPBOX_settings_header">Dropbox</string>
   <string name="todotxt_settings_header">todo.txt</string>
   <string name="about_settings_header">Informazioni</string>
-  <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Datare nuove attività</string>
   <string name="prepend_date_pref_summary">Aggiungi automaticamente la data di creazione alle nuove attività.</string>
   <string name="sync_dialog_title">Sincronizza manualmente</string>

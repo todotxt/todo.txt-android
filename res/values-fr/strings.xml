@@ -31,7 +31,6 @@
   <string name="add_task_help">Les <b>Projets</b> commencent avec le symbole <b>+</b> et ne peuvent contenir d\'espaces, comme par exemple +RefaireLaCuisine ou
 		+LireRomans.\n\nLes <b>Contextes</b> (dans lesquelles vous définirez une tâche) commencent par le symbole @, comme par exemple @téléphone ou @Boulangerie.\n\n
 		Une tâche peut inclure une quantité indéfinie de projets ou de contextes.</string>
-  <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Auto archiver</string>
   <string name="auto_archive_pref_summary">Archiver automatiquement les tâches dans done.txt lorsque elles sont terminées.</string>
   <string name="archive_now_title">Archiver les tâches</string>
@@ -39,14 +38,12 @@
   <string name="dropbox_logout_pref_title">Se déconnecter</string>
   <string name="dropbox_logout_pref_summary">Se déconnecter de Dropbox.</string>
   <string name="dropbox_logout_explainer">Etes-vous sûr de vouloir vous déconnecter de Dropbox?</string>
-  <string name="TODOTXTPATH_key">todotxtpath</string>
   <string name="TODOTXTPATH_title">Emplacement du fichier</string>
   <string name="TODOTXTPATH_summary">Le dossier Dropbox où est placé todo.txt.</string>
   <string name="TODOTXTPATH_defaultPath">/todo</string>
   <string name="DROPBOX_settings_header">Dropbox</string>
   <string name="todotxt_settings_header">todo.txt</string>
   <string name="about_settings_header">A propos</string>
-  <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Dater les nouvelles tâches</string>
   <string name="prepend_date_pref_summary">Ajouter automatiquement la date de création aux nouvelles tâches.</string>
   <string name="sync_dialog_title">Synchronisation manuelle</string>

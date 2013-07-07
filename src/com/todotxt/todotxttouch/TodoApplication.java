@@ -29,8 +29,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -45,7 +43,7 @@ import com.todotxt.todotxttouch.util.Util;
 
 public class TodoApplication extends Application {
 	private final static String TAG = TodoApplication.class.getSimpleName();
-	public SharedPreferences m_prefs;
+	public TodoPreferences m_prefs;
 	private RemoteClientManager remoteClientManager;
 	private boolean m_pulling = false;
 	private boolean m_pushing = false;
@@ -66,7 +64,7 @@ public class TodoApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		TodoApplication.appContext = getApplicationContext();
-		m_prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		m_prefs = new TodoPreferences(appContext, PreferenceManager.getDefaultSharedPreferences(this));
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
 
@@ -110,7 +108,7 @@ public class TodoApplication extends Application {
 	 * now. Otherwise, pull.
 	 */
 	private void syncWithRemote(boolean force, boolean suppressToast) {
-		if (needToPush()) {
+		if (m_prefs.needToPush()) {
 			Log.d(TAG, "needToPush = true; pushing.");
 			pushToRemote(force, false, suppressToast);
 		} else {
@@ -124,8 +122,8 @@ public class TodoApplication extends Application {
 	 */
 	private void pushToRemote(boolean force, boolean overwrite, boolean suppressToast) {
 		pushQueue += 1;
-		setNeedToPush(true);
-		if (!force && isManualMode()) {
+		m_prefs.storeNeedToPush(true);
+		if (!force && m_prefs.isManualModeEnabled()) {
 			Log.i(TAG, "Working offline, don't push now");
 		} else if (getRemoteClientManager().getRemoteClient().isAvailable()
 				&& !m_pulling) {
@@ -145,12 +143,12 @@ public class TodoApplication extends Application {
 	 * Check network status, then pull.
 	 */
 	private void pullFromRemote(boolean force, boolean suppressToast) {
-		if (!force && isManualMode()) {
+		if (!force && m_prefs.isManualModeEnabled()) {
 			Log.i(TAG, "Working offline, don't pull now");
 			return;
 		}
 
-		setNeedToPush(false);
+		m_prefs.storeNeedToPush(false);
 
 		if (getRemoteClientManager().getRemoteClient().isAvailable()
 				&& !m_pushing) {
@@ -173,26 +171,6 @@ public class TodoApplication extends Application {
 
 	public RemoteClientManager getRemoteClientManager() {
 		return remoteClientManager;
-	}
-
-	public boolean isManualMode() {
-		try {
-			long period = Long.parseLong(m_prefs.getString(
-					Constants.PREF_PERIODIC_SYNC, "0"));
-			return period < 0;
-		} catch (NumberFormatException ex) {
-			return false;
-		}
-	}
-
-	public boolean needToPush() {
-		return m_prefs.getBoolean(Constants.PREF_NEED_TO_PUSH, false);
-	}
-
-	public void setNeedToPush(boolean needToPush) {
-		Editor editor = m_prefs.edit();
-		editor.putBoolean(Constants.PREF_NEED_TO_PUSH, needToPush);
-		editor.commit();
 	}
 
 	public static Context getAppContetxt() {
@@ -267,7 +245,7 @@ public class TodoApplication extends Application {
 					new AsyncPushTask(false, suppressToast).execute();
 				} else {
 					Log.d(TAG, "taskBag.pushToRemote done");
-					setNeedToPush(false);
+					m_prefs.storeNeedToPush(false);
 					updateSyncUI(false);
 					// Push is complete. Now do a pull in case the remote
 					// done.txt has changed.
@@ -370,46 +348,27 @@ public class TodoApplication extends Application {
 		sendBroadcast(intent);
 	}
 
-	public long getSyncPeriod() {
-		try {
-			long period = Long.parseLong(m_prefs.getString(
-					Constants.PREF_PERIODIC_SYNC, "0"));
-			return period > 0 ? period : 0;
-		} catch (NumberFormatException ex) {
-			return 0L;
-		}
-	}
-
 	public void storeSort() {
-		Editor editor = m_prefs.edit();
-		editor.putInt(Constants.PREF_SORT, sort.getId());
-		editor.commit();
+		m_prefs.storeSort(sort);
 		broadcastWidgetUpdate();
 	}
 	
 	public void getStoredSort() {
-		sort = Sort.getById(m_prefs.getInt(Constants.PREF_SORT, Sort.PRIORITY_DESC.getId()));
+		sort = m_prefs.getSort();
 	}
 	
 	public void storeFilters() {
-		Editor editor = m_prefs.edit();
-		editor.putString(Constants.PREF_FILTER_PRIOS, Util.join(Priority.inCode(m_prios), " "));
-		editor.putString(Constants.PREF_FILTER_CONTEXTS, Util.join(m_contexts, " "));
-		editor.putString(Constants.PREF_FILTER_PROJECTS, Util.join(m_projects, " "));
-		editor.putString(Constants.PREF_FILTER_SEARCH, m_search);
-		//split on tab just in case there is a space in the text
-		editor.putString(Constants.PREF_FILTER_SUMMARY, Util.join(m_filters, "\t"));
-		editor.commit();
+		m_prefs.storeFilters(m_prios, m_contexts, m_projects, m_search, m_filters);
 		broadcastWidgetUpdate();
 	}
 
 	public void getStoredFilters() {
-		m_prios = Priority.toPriority(Util.split(m_prefs.getString(Constants.PREF_FILTER_PRIOS, ""), " "));
-		m_contexts = Util.split(m_prefs.getString(Constants.PREF_FILTER_CONTEXTS, ""), " ");
-		m_projects = Util.split(m_prefs.getString(Constants.PREF_FILTER_PROJECTS, ""), " ");
-		m_search = m_prefs.getString(Constants.PREF_FILTER_SEARCH, "");
+		m_prios = m_prefs.getFilteredPriorities();
+		m_contexts = m_prefs.getFilteredContexts();
+		m_projects = m_prefs.getFilteredProjects();
+		m_search = m_prefs.getSearch();
 		//split on tab just in case there is a space in the text
-		m_filters = Util.split(m_prefs.getString(Constants.PREF_FILTER_SUMMARY, ""), "\t");
+		m_filters = m_prefs.getFilterSummaries();
 	}
 
 }
