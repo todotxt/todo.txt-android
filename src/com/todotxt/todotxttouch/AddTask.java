@@ -42,7 +42,9 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -162,6 +164,18 @@ public class AddTask extends SherlockActivity {
 
 		// Set the adapter for the list view
 		updateNavigationDrawer();
+		if (m_drawerLayout==null) {
+			// Tablet landscape mode
+			textInputField.setOnKeyListener(new OnKeyListener() {
+
+				@Override
+				public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
+					updateNavigationDrawer();
+					return false;
+				}
+				
+			});
+		}
 		
 		// Set up fortune hint text
 		Random rand = new Random();
