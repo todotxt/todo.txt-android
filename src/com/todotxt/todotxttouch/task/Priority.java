@@ -23,7 +23,9 @@
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public enum Priority {
 	NONE("-", "   ", "", ""), A("A", "A", "A", "(A)"), B("B", "B", "B", "(B)"), C(
@@ -104,7 +106,7 @@ public enum Priority {
 		return result;
 	}
 
-	public static ArrayList<String> inCode(List<Priority> priorities) {
+	public static ArrayList<String> inCode(Collection<Priority> priorities) {
 		ArrayList<String> strings = new ArrayList<String>();
 		for (Priority p : priorities) {
 			strings.add(p.getCode());
@@ -126,7 +128,7 @@ public enum Priority {
 		}
 
 		for (Priority p : Priority.values()) {
-			if (p.code.equals(s.toUpperCase())) {
+			if (p.code.equals(s.toUpperCase(Locale.US))) {
 				return p;
 			}
 		}

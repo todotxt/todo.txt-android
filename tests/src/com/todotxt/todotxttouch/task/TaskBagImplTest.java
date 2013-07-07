@@ -30,6 +30,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.todotxt.todotxttouch.TodoPreferences;
+
 public class TaskBagImplTest extends AndroidTestCase {
 
 	class TestLocalTaskRepository implements LocalTaskRepository {
@@ -86,14 +88,14 @@ public class TaskBagImplTest extends AndroidTestCase {
 	private Task task2;
 	ArrayList<Task> list1;
 	ArrayList<Task> list2;
-	TaskBagImpl.Preferences prefs;
+	TodoPreferences prefs;
 
 	protected void setUp() throws Exception {
 		task1 = new Task(1, input1);
 		task2 = new Task(2, input2);
 		list1 = new ArrayList<Task>(2);
 		list2 = new ArrayList<Task>(2);
-		prefs = new TaskBagImpl.Preferences(
+		prefs = new TodoPreferences(getContext(),
 				PreferenceManager.getDefaultSharedPreferences(getContext()));
 	}
 

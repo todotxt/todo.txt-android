@@ -72,7 +72,7 @@ public class AddTask extends SherlockActivity {
 	private void noteToSelf(Intent intent) {
 		String task = intent.getStringExtra(Intent.EXTRA_TEXT);
 		taskBag.addAsTask(task);
-		m_app.setNeedToPush(true);
+		m_app.m_prefs.storeNeedToPush(true);
 		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
 		m_app.showToast(R.string.taskadded);
 	}
