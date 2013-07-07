@@ -43,12 +43,13 @@ public class LoginScreen extends Activity {
 	private TodoApplication m_app;
 	private Button m_LoginButton;
 	private BroadcastReceiver m_broadcastReceiver;
-	private boolean m_loginStarted;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Log.i(TAG, "LoginScreen onCreate");
+		
 		setContentView(R.layout.login);
 
 		m_app = (TodoApplication) getApplication();
@@ -61,9 +62,7 @@ public class LoginScreen extends Activity {
 		m_broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Intent i = new Intent(context, TodoTxtTouch.class);
-				startActivity(i);
-				finish();
+				switchToTodolist();
 			}
 		};
 		registerReceiver(m_broadcastReceiver, intentFilter);
@@ -91,21 +90,21 @@ public class LoginScreen extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (m_loginStarted) {
-			finishLogin();
-		}
+		Log.i(TAG, "LoginScreen onResume");
+		finishLogin();
 	}
 
 	private void finishLogin() {
 		RemoteClient remoteClient = m_app.getRemoteClientManager()
 				.getRemoteClient();
-		remoteClient.finishLogin();
-		if (remoteClient.isAuthenticated()) {
+		if (remoteClient.finishLogin() && remoteClient.isAuthenticated()) {
+			Log.i(TAG, "LoginScreen: login complete: about to start the app.");
 			Intent broadcastLoginIntent = new Intent(
 					"com.todotxt.todotxttouch.ACTION_LOGIN");
 			sendBroadcast(broadcastLoginIntent);
+		} else {
+			Log.i(TAG, "LoginScreen: not logged in. Showing login screen.");
 		}
-		m_loginStarted = false;
 	}
 
 	@Override
@@ -124,7 +123,6 @@ public class LoginScreen extends Activity {
 			Util.showToastLong(m_app, R.string.toast_login_notconnected);
 		} else {
 			client.startLogin();
-			m_loginStarted = true;
 		}
 	}
 

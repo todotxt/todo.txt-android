@@ -224,8 +224,10 @@ class DropboxRemoteClient implements RemoteClient {
 	@Override
 	public boolean finishLogin() {
 		if (dropboxApi.getSession().authenticationSuccessful()) {
+			Log.i(TAG, "Dropbox authentication successful.");
 			try {
 				dropboxApi.getSession().finishAuthentication();
+				Log.i(TAG, "Dropbox authentication complete.");
 
 				AccessTokenPair tokens = dropboxApi.getSession()
 						.getAccessTokenPair();
@@ -237,6 +239,7 @@ class DropboxRemoteClient implements RemoteClient {
 			}
 			return true;
 		}
+		Log.i(TAG, "Dropbox authentication not successful.");
 		return false;
 	}
 
