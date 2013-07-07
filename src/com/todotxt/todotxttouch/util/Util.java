@@ -56,7 +56,6 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoException;
 

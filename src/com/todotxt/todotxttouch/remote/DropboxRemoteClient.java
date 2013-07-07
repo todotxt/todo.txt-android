@@ -26,8 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Environment;
 import android.util.Log;
 
@@ -39,6 +37,7 @@ import com.dropbox.client2.session.Session.AccessType;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
+import com.todotxt.todotxttouch.TodoPreferences;
 import com.todotxt.todotxttouch.util.Util;
 
 class DropboxRemoteClient implements RemoteClient {
@@ -56,10 +55,10 @@ class DropboxRemoteClient implements RemoteClient {
 
 	private DropboxAPI<AndroidAuthSession> dropboxApi;
 	private TodoApplication todoApplication;
-	private SharedPreferences sharedPreferences;
+	private TodoPreferences sharedPreferences;
 
 	public DropboxRemoteClient(TodoApplication todoApplication,
-			SharedPreferences sharedPreferences) {
+			TodoPreferences sharedPreferences) {
 		this.todoApplication = todoApplication;
 		this.sharedPreferences = sharedPreferences;
 	}
@@ -78,9 +77,8 @@ class DropboxRemoteClient implements RemoteClient {
 		String key = null;
 		String secret = null;
 
-		key = sharedPreferences.getString(Constants.PREF_ACCESSTOKEN_KEY, null);
-		secret = sharedPreferences.getString(Constants.PREF_ACCESSTOKEN_SECRET,
-				null);
+		key = sharedPreferences.getAccessToken();
+		secret = sharedPreferences.getAccessTokenSecret();
 		if (key != null && secret != null) {
 			return new AccessTokenPair(key, secret);
 		}
@@ -94,10 +92,7 @@ class DropboxRemoteClient implements RemoteClient {
 	 * @param accessTokenSecret
 	 */
 	void storeKeys(String accessTokenKey, String accessTokenSecret) {
-		Editor editor = sharedPreferences.edit();
-		editor.putString(Constants.PREF_ACCESSTOKEN_KEY, accessTokenKey);
-		editor.putString(Constants.PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
-		editor.commit();
+		sharedPreferences.storeAccessToken(accessTokenKey, accessTokenSecret);
 	}
 
 	/**
@@ -105,9 +100,7 @@ class DropboxRemoteClient implements RemoteClient {
 	 * it
 	 */
 	private void clearAuthToken() {
-		Editor editor = sharedPreferences.edit();
-		editor.clear();
-		editor.commit();
+		sharedPreferences.clear();
 	}
 
 	@Override
@@ -147,36 +140,6 @@ class DropboxRemoteClient implements RemoteClient {
 		return dropboxApi.getSession().isLinked();
 	}
 
-	/**
-	 * Store the current 'rev' from the metadata retrieved from Dropbox.
-	 * 
-	 * @param key
-	 *            Name of the key in sharedPreferences under which to store the
-	 *            rev value.
-	 * @param rev
-	 *            The value of the rev to be stored.
-	 */
-	private void storeRev(String key, String rev) {
-		Log.d(TAG, "Storing rev. key=" + key + ". val=" + rev);
-		Editor prefsEditor = sharedPreferences.edit();
-		prefsEditor.putString(key, rev);
-		if (!prefsEditor.commit()) {
-			Log.e(TAG, "Failed to store rev key! key=" + key + ". val=" + rev);
-		}
-	}
-
-	/**
-	 * Load the last 'rev' stored from Dropbox.
-	 * 
-	 * @param key
-	 *            Name of the key in sharedPreferences from which to retrieve
-	 *            the rev value.
-	 * @return The value of the rev to be retrieved.
-	 */
-	private String loadRev(String key) {
-		return sharedPreferences.getString(key, null);
-	}
-
 	@Override
 	public PullTodoResult pullTodo() {
 		if (!isAvailable()) {
@@ -188,10 +151,10 @@ class DropboxRemoteClient implements RemoteClient {
 
 		DropboxFile todoFile = new DropboxFile(
 				getTodoFileRemotePathAndFilename(), TODO_TXT_TMP_FILE,
-				loadRev(Constants.PREF_TODO_REV));
+				sharedPreferences.getFileRevision(TodoPreferences.PREF_TODO_REV));
 		DropboxFile doneFile = new DropboxFile(
 				getDoneFileRemotePathAndFilename(), DONE_TXT_TMP_FILE,
-				loadRev(Constants.PREF_DONE_REV));
+				sharedPreferences.getFileRevision(TodoPreferences.PREF_DONE_REV));
 		ArrayList<DropboxFile> dropboxFiles = new ArrayList<DropboxFile>(2);
 		dropboxFiles.add(todoFile);
 		dropboxFiles.add(doneFile);
@@ -204,11 +167,11 @@ class DropboxRemoteClient implements RemoteClient {
 		File downloadedDoneFile = null;
 		if (todoFile.getStatus() == DropboxFileStatus.SUCCESS) {
 			downloadedTodoFile = todoFile.getLocalFile();
-			storeRev(Constants.PREF_TODO_REV, todoFile.getLoadedMetadata().rev);
+			sharedPreferences.storeFileRevision(TodoPreferences.PREF_TODO_REV, todoFile.getLoadedMetadata().rev);
 		}
 		if (doneFile.getStatus() == DropboxFileStatus.SUCCESS) {
 			downloadedDoneFile = doneFile.getLocalFile();
-			storeRev(Constants.PREF_DONE_REV, doneFile.getLoadedMetadata().rev);
+			sharedPreferences.storeFileRevision(TodoPreferences.PREF_DONE_REV, doneFile.getLoadedMetadata().rev);
 		}
 
 		return new PullTodoResult(downloadedTodoFile, downloadedDoneFile);
@@ -220,13 +183,13 @@ class DropboxRemoteClient implements RemoteClient {
 		if (todoFile != null) {
 			dropboxFiles.add(new DropboxFile(
 					getTodoFileRemotePathAndFilename(), todoFile,
-					loadRev(Constants.PREF_TODO_REV)));
+					sharedPreferences.getFileRevision(TodoPreferences.PREF_TODO_REV)));
 		}
 
 		if (doneFile != null) {
 			dropboxFiles.add(new DropboxFile(
 					getDoneFileRemotePathAndFilename(), doneFile,
-					loadRev(Constants.PREF_DONE_REV)));
+					sharedPreferences.getFileRevision(TodoPreferences.PREF_DONE_REV)));
 		}
 
 		DropboxFileUploader uploader = new DropboxFileUploader(dropboxApi,
@@ -237,14 +200,14 @@ class DropboxRemoteClient implements RemoteClient {
 			if (dropboxFiles.size() > 0) {
 				DropboxFile todoDropboxFile = dropboxFiles.get(0);
 				if (todoDropboxFile.getStatus() == DropboxFileStatus.SUCCESS) {
-					storeRev(Constants.PREF_TODO_REV,
+					sharedPreferences.storeFileRevision(TodoPreferences.PREF_TODO_REV,
 							todoDropboxFile.getLoadedMetadata().rev);
 				}
 			}
 			if (dropboxFiles.size() > 1) {
 				DropboxFile doneDropboxFile = dropboxFiles.get(1);
 				if (doneDropboxFile.getStatus() == DropboxFileStatus.SUCCESS) {
-					storeRev(Constants.PREF_DONE_REV,
+					sharedPreferences.storeFileRevision(TodoPreferences.PREF_DONE_REV,
 							doneDropboxFile.getLoadedMetadata().rev);
 				}
 			}
@@ -261,8 +224,10 @@ class DropboxRemoteClient implements RemoteClient {
 	@Override
 	public boolean finishLogin() {
 		if (dropboxApi.getSession().authenticationSuccessful()) {
+			Log.i(TAG, "Dropbox authentication successful.");
 			try {
 				dropboxApi.getSession().finishAuthentication();
+				Log.i(TAG, "Dropbox authentication complete.");
 
 				AccessTokenPair tokens = dropboxApi.getSession()
 						.getAccessTokenPair();
@@ -274,6 +239,7 @@ class DropboxRemoteClient implements RemoteClient {
 			}
 			return true;
 		}
+		Log.i(TAG, "Dropbox authentication not successful.");
 		return false;
 	}
 
@@ -290,8 +256,7 @@ class DropboxRemoteClient implements RemoteClient {
 	}
 
 	String getRemotePath() {
-		return sharedPreferences.getString("todotxtpath", todoApplication
-				.getResources().getString(R.string.TODOTXTPATH_defaultPath));
+		return sharedPreferences.getTodoFilePath();
 	}
 
 	String getTodoFileRemotePathAndFilename() {

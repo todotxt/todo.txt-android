@@ -32,7 +32,6 @@
 		+Kniha.\n\n<b>Kontexty</b> (v jakých se bude úkol dít) začínají zavináčem @ , např: @telefon nebo
 		@NákupníCentrum.\n\n
 		Úkol může obsahovat více projektů nebo kontextů.</string>
-  <string name="auto_archive_pref_key">todotxtautoarchive</string>
   <string name="auto_archive_pref_title">Auto archivovat</string>
   <string name="auto_archive_pref_summary">Automaticky archivuje dokončené úkoly do done.txt</string>
   <string name="archive_now_title">Archivovat Úkoly</string>
@@ -40,14 +39,12 @@
   <string name="dropbox_logout_pref_title">Odhlásit</string>
   <string name="dropbox_logout_pref_summary">Odhlásit z Dropboxu.</string>
   <string name="dropbox_logout_explainer">Opravdu se chcete odhlásit z Dropboxu?</string>
-  <string name="TODOTXTPATH_key">todotxtpath</string>
   <string name="TODOTXTPATH_title">Umístění souboru</string>
   <string name="TODOTXTPATH_summary">Dropbox složka, ve které je soubor todo.txt uložen.</string>
   <string name="TODOTXTPATH_defaultPath">/todo</string>
   <string name="DROPBOX_settings_header">Dropbox</string>
   <string name="todotxt_settings_header">todo.txt</string>
   <string name="about_settings_header">O programu</string>
-  <string name="prepend_date_pref_key">todotxtprependdate</string>
   <string name="prepend_date_pref_title">Datovaní nových úkolů</string>
   <string name="prepend_date_pref_summary">Automaticky přidat datum k nově vytvořeným úkolům</string>
   <string name="sync_dialog_title">Ruční synchronizace</string>
