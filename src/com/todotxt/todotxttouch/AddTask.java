@@ -54,6 +54,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
@@ -88,8 +89,9 @@ public class AddTask extends SherlockActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.add_task, menu);
-		return true;
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	private void noteToSelf(Intent intent) {
@@ -104,7 +106,15 @@ public class AddTask extends SherlockActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finish();
+			if (m_drawerLayout != null) {
+				if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
+					m_drawerLayout.closeDrawer(m_drawerList);
+				} else {
+					m_drawerLayout.openDrawer(m_drawerList);
+				}
+			} else {
+				finish();
+			}
 			break;
 		case R.id.menu_save_task:
 			final String input = textInputField.getText().toString();
@@ -126,8 +136,6 @@ public class AddTask extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.add_task);
-
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		m_app = (TodoApplication) getApplication();
 		taskBag = m_app.getTaskBag();
@@ -279,6 +287,8 @@ public class AddTask extends SherlockActivity {
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 				getSupportActionBar().setHomeButtonEnabled(true);
 				m_drawerToggle.syncState();
+			} else {
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			}
 			m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
