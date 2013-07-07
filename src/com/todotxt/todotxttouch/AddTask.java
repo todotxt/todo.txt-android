@@ -24,23 +24,37 @@ package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.Configuration;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
@@ -63,10 +77,21 @@ public class AddTask extends SherlockActivity {
 
 	private String share_text;
 
+	private ListView m_drawerList;
+
+	private DrawerLayout m_drawerLayout;
+
+	private LinearLayout m_tabletDrawerLayout;
+
+	private ActionBarDrawerToggle m_drawerToggle;
+
+	private ArrayList<String> m_lists;
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.add_task, menu);
-		return true;
+		MenuInflater inflater = getSupportMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	private void noteToSelf(Intent intent) {
@@ -81,7 +106,15 @@ public class AddTask extends SherlockActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finish();
+			if (m_drawerLayout != null) {
+				if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
+					m_drawerLayout.closeDrawer(m_drawerList);
+				} else {
+					m_drawerLayout.openDrawer(m_drawerList);
+				}
+			} else {
+				finish();
+			}
 			break;
 		case R.id.menu_save_task:
 			final String input = textInputField.getText().toString();
@@ -94,9 +127,6 @@ public class AddTask extends SherlockActivity {
 		case R.id.menu_add_prio:
 			showPrioMenu(findViewById(R.id.menu_add_prio));
 			break;
-		case R.id.menu_add_tag:
-			showProjectContextMenu();
-			break;
 		}
 		return true;
 	}
@@ -106,8 +136,6 @@ public class AddTask extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.add_task);
-
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		m_app = (TodoApplication) getApplication();
 		taskBag = m_app.getTaskBag();
@@ -137,6 +165,26 @@ public class AddTask extends SherlockActivity {
 		textInputField = (EditText) findViewById(R.id.taskText);
 		textInputField.setGravity(Gravity.TOP);
 
+		// Setup Navigation drawer
+		m_drawerList = (ListView) findViewById(R.id.left_drawer);
+		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		m_tabletDrawerLayout = (LinearLayout) findViewById(R.id.tablet_drawer_layout);
+
+		// Set the adapter for the list view
+		updateNavigationDrawer();
+		if (m_drawerLayout==null) {
+			// Tablet landscape mode
+			textInputField.setOnKeyListener(new OnKeyListener() {
+
+				@Override
+				public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
+					updateNavigationDrawer();
+					return false;
+				}
+				
+			});
+		}
+		
 		// Set up fortune hint text
 		Random rand = new Random();
 		int fortune_hint_index = Math.abs(rand.nextInt()) % 5;
@@ -201,25 +249,54 @@ public class AddTask extends SherlockActivity {
 		textInputField.requestFocus();
 	}
 
-	private void showProjectContextMenu() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final ArrayList<String> labels = new ArrayList<String>();
-		labels.addAll(labelsInTaskbagAndText());
-		if (labels.size() == 0) {
-			onHelpClick();
-			return;
-		}
-		builder.setItems(labels.toArray(new String[0]), new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface arg0, int which) {
-				replaceTextAtSelection(labels.get(which) + " ");
+	private void updateNavigationDrawer() {
+		m_lists = labelsInTaskbagAndText();
+		if (m_lists.size() == 0) {
+			if (m_drawerLayout != null) {
+				// No contexts or projects, disable navigation drawer
+				m_drawerLayout.setDrawerLockMode(
+						DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+			} else {
+				m_tabletDrawerLayout.setVisibility(View.GONE);
 			}
-		});
+			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+			getSupportActionBar().setHomeButtonEnabled(false);
+		} else {
+			if (m_drawerLayout != null) {
+				m_drawerLayout.setDrawerLockMode(
+						DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
+				m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+				m_drawerLayout, /* DrawerLayout object */
+				R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+				R.string.quickfilter, /* "open drawer" description */
+				R.string.app_label /* "close drawer" description */
+				) {
+					@Override
+					public void onDrawerSlide(View drawerView, float slideOffset) {
+						// Redraw menu to show or hide menu items
+						supportInvalidateOptionsMenu();
+						m_lists.clear();
+						m_lists.addAll(labelsInTaskbagAndText());
+						((ArrayAdapter<?>) m_drawerList.getAdapter()).notifyDataSetChanged();
+						super.onDrawerSlide(drawerView, slideOffset);
+					}
+				};
 
-		// Create the AlertDialog
-		AlertDialog dialog = builder.create();
-		dialog.setTitle(R.string.addcontextproject);
-		dialog.show();
+				// Set the drawer toggle as the DrawerListener
+				m_drawerLayout.setDrawerListener(m_drawerToggle);
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+				getSupportActionBar().setHomeButtonEnabled(true);
+				m_drawerToggle.syncState();
+			} else {
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			}
+			m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
+					R.layout.drawer_list_item, R.id.left_drawer_text, m_lists));
+
+			// Set the list's click listener
+			m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
+		}
 	}
 
 	private void showPrioMenu(View v) {
@@ -376,21 +453,58 @@ public class AddTask extends SherlockActivity {
 		 * added. This way when adding multiple tasks labels from previous lines
 		 * will be available fordropdown
 		 */
-		ArrayList<String> labels = new ArrayList<String>();
+		Set<String> contextsSet = new LinkedHashSet<String>();
+		Set<String> projectsSet = new LinkedHashSet<String>();
 		Task temp = new Task(1, textInputField.getText().toString());
 
 		ArrayList<String> contexts = taskBag.getContexts(false);
 		contexts.addAll(temp.getContexts());
 		Collections.sort(contexts);
 		for (String item : contexts) {
-			labels.add("@" + item);
+			contextsSet.add("@" + item);
 		}
 		ArrayList<String> projects = taskBag.getProjects(false);
 		projects.addAll(temp.getProjects());
 		Collections.sort(projects);
 		for (String item : projects) {
-			labels.add("+" + item);
+			projectsSet.add("+" + item);
 		}
-		return labels;
+		ArrayList<String> result = new ArrayList<String>();
+		result.addAll(contextsSet);
+		result.addAll(projectsSet);
+		return result;
+	}
+
+	private class DrawerItemClickListener implements
+			AdapterView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
+			String itemTitle = tv.getText().toString();
+			Log.v(TAG, "Clicked on drawer " + itemTitle);
+			if (itemTitle.substring(0, 1).equals("@")
+					&& !m_app.m_contexts.remove(itemTitle.substring(1))) {
+				m_app.m_contexts = new ArrayList<String>();
+				m_app.m_contexts.add(itemTitle.substring(1));
+			} else if (itemTitle.substring(0, 1).equals("+")
+					&& !m_app.m_projects.remove(itemTitle.substring(1))) {
+				m_app.m_projects = new ArrayList<String>();
+				m_app.m_projects.add(itemTitle.substring(1));
+			}
+			replaceTextAtSelection(itemTitle);
+			m_drawerList.clearChoices();
+			if (m_drawerLayout != null) {
+				m_drawerLayout.closeDrawer(m_drawerList);
+			}
+		}
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if (m_drawerToggle!=null) {
+			m_drawerToggle.onConfigurationChanged(newConfig);
+		}
 	}
 }

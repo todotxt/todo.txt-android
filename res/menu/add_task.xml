@@ -9,12 +9,6 @@
         android:showAsAction="always"
         android:title="@string/priority_prompt"/>
     <item
-        android:id="@+id/menu_add_tag"
-        android:icon="@drawable/ic_action_filter"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/contextproject_prompt"/>
-    <item
         android:id="@+id/menu_save_task"
         android:icon="@drawable/navigation_accept"
         android:orderInCategory="100"
