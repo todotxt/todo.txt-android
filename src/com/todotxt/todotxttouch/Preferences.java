@@ -57,9 +57,9 @@ public class Preferences extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.preferences);
 
 		m_app = (TodoApplication) getApplication();
-		((CheckBoxPreference) this.getPreferenceManager().findPreference(
-				"todotxtprependdate")).setChecked(m_app.m_prefs.getBoolean(
-				"todotxtprependdate", true));
+		((CheckBoxPreference) findPreference(m_app.m_prefs
+				.prepend_date_pref_key())).setChecked(m_app.m_prefs
+				.isPrependDateEnabled());
 
 		PackageInfo packageInfo;
 		try {
@@ -74,7 +74,7 @@ public class Preferences extends PreferenceActivity {
 		}
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
-		periodicSync = (ListPreference) findPreference(getString(R.string.periodic_sync_pref_key));
+		periodicSync = (ListPreference) findPreference(m_app.m_prefs.periodic_sync_pref_key());
 		setPeriodicSummary(periodicSync.getValue());
 		periodicSync
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {

@@ -2,8 +2,6 @@ package com.todotxt.todotxttouch.test;
 
 import java.io.File;
 
-import android.preference.PreferenceManager;
-
 import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.remote.Client;
 import com.todotxt.todotxttouch.remote.PullTodoResult;
@@ -15,7 +13,7 @@ public class RemoteClientManagerStub extends RemoteClientManager {
 	private RemoteClient remoteClient = new RemoteClientStub();
 	
 	public RemoteClientManagerStub(TodoApplication todoApplication) {
-		super(todoApplication, PreferenceManager.getDefaultSharedPreferences(todoApplication));
+		super(todoApplication, todoApplication.m_prefs);
 	}
 
 	@Override

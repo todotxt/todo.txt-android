@@ -25,6 +25,7 @@ package com.todotxt.todotxttouch.remote;
 import android.content.SharedPreferences;
 
 import com.todotxt.todotxttouch.TodoApplication;
+import com.todotxt.todotxttouch.TodoPreferences;
 
 /**
  * Manager for obtaining, switching, etc. remote clients
@@ -39,14 +40,13 @@ public class RemoteClientManager implements
 	private Client currentClientToken;
 	private RemoteClient currentClient;
 	private TodoApplication todoApplication;
-	private SharedPreferences sharedPreferences;
+	private TodoPreferences sharedPreferences;
 
 	public RemoteClientManager(TodoApplication todoApplication,
-			SharedPreferences sharedPreferences) {
+			TodoPreferences m_prefs) {
 		this.todoApplication = todoApplication;
-		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-		this.sharedPreferences = sharedPreferences;
-		calculateRemoteClient(sharedPreferences);
+		this.sharedPreferences = m_prefs;
+		calculateRemoteClient(m_prefs);
 		currentClient.authenticate();
 	}
 
@@ -71,7 +71,7 @@ public class RemoteClientManager implements
 		// TODO later
 	}
 
-	private void calculateRemoteClient(SharedPreferences sharedPreferences) {
+	private void calculateRemoteClient(TodoPreferences sharedPreferences) {
 		currentClient = getRemoteClient(Client.DROPBOX);
 		currentClientToken = Client.DROPBOX;
 	}

@@ -1,0 +1,242 @@
+/**
+ * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+ *
+ * Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+ *
+ * LICENSE:
+ *
+ * Todo.txt Touch is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * Todo.txt Touch is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with Todo.txt Touch.  If not, see
+ * <http://www.gnu.org/licenses/>.
+ *
+ * @author Todo.txt contributors <todotxt@yahoogroups.com>
+ * @license http://www.gnu.org/licenses/gpl.html
+ * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+ */
+package com.todotxt.todotxttouch;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+
+import com.todotxt.todotxttouch.task.Priority;
+import com.todotxt.todotxttouch.task.Sort;
+import com.todotxt.todotxttouch.util.Util;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
+
+public class TodoPreferences {
+	final static String TAG = TodoPreferences.class.getSimpleName();
+
+	private SharedPreferences m_prefs;
+
+	/*
+	 * Preference keys that aren't used in the resource file should be defined
+	 * as constants
+	 */
+	public static final String PREF_FIRSTRUN = "firstrun";
+	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";
+	public static final String PREF_ACCESSTOKEN_SECRET = "accesstokensecret";
+	public static final String PREF_TODO_REV = "todo_rev";
+	public static final String PREF_DONE_REV = "done_rev";
+	public static final String PREF_NEED_TO_PUSH = "need_to_push";
+	public static final String PREF_SORT = "sort";
+	public static final String PREF_FILTER_PRIOS = "filter_prios";
+	public static final String PREF_FILTER_CONTEXTS = "filter_contexts";
+	public static final String PREF_FILTER_PROJECTS = "filter_projects";
+	public static final String PREF_FILTER_SEARCH = "filter_search";
+	public static final String PREF_FILTER_SUMMARY = "filter_summary";
+
+	/* Localizable defaults that should be defined in strings.xml */
+	private String TODOTXTPATH_defaultPath;
+
+	/*
+	 * Keys that are used in resources should be defined in keys.xml and read
+	 * into variables in the constructor
+	 */
+	private String auto_archive_pref_key;
+	private String TODOTXTPATH_key;
+	private String prepend_date_pref_key;
+	private String periodic_sync_pref_key;
+
+	public TodoPreferences(Context c, SharedPreferences prefs) {
+		m_prefs = prefs;
+
+		auto_archive_pref_key = c.getString(R.string.auto_archive_pref_key);
+		periodic_sync_pref_key = c.getString(R.string.periodic_sync_pref_key);
+		prepend_date_pref_key = c.getString(R.string.prepend_date_pref_key);
+		TODOTXTPATH_key = c.getString(R.string.TODOTXTPATH_key);
+		TODOTXTPATH_defaultPath = c.getString(R.string.TODOTXTPATH_defaultPath);
+		//dump();
+	}
+
+	public String prepend_date_pref_key() {
+		return prepend_date_pref_key;
+	}
+
+	public String periodic_sync_pref_key() {
+		return periodic_sync_pref_key;
+	}
+
+	public String getAccessToken() {
+		return m_prefs.getString(PREF_ACCESSTOKEN_KEY, null);
+	}
+	
+	public String getAccessTokenSecret() {
+		return m_prefs.getString(PREF_ACCESSTOKEN_SECRET, null);
+	}
+	
+	public void storeAccessToken(String accessTokenKey, String accessTokenSecret) {
+		Editor editor = m_prefs.edit();
+		editor.putString(PREF_ACCESSTOKEN_KEY, accessTokenKey);
+		editor.putString(PREF_ACCESSTOKEN_SECRET, accessTokenSecret);
+		editor.commit();
+	}
+
+	public Boolean isAutoArchiveEnabled() {
+		return m_prefs.getBoolean(auto_archive_pref_key, false);
+	}
+
+	public String getFileRevision(String key) {
+		return m_prefs.getString(key, null);
+	}
+
+	public void storeFileRevision(String key, String rev) {
+		Log.d(TAG, "Storing rev. key=" + key + ". val=" + rev);
+		Editor editor = m_prefs.edit();
+		editor.putString(key, rev);
+		editor.commit();
+	}
+
+	public Boolean isFirstRun() {
+		return m_prefs.getBoolean(PREF_FIRSTRUN, true);
+	}
+
+	public void storeFirstRun(boolean value) {
+		Editor editor = m_prefs.edit();
+		editor.putBoolean(PREF_FIRSTRUN, value);
+		editor.commit();
+	}
+	
+	public Boolean isPrependDateEnabled() {
+		return m_prefs.getBoolean(prepend_date_pref_key, true);
+	}
+
+	public boolean isManualModeEnabled() {
+		try {
+			long period = Long.parseLong(m_prefs.getString(
+					periodic_sync_pref_key, "0"));
+			return period < 0;
+		} catch (NumberFormatException ex) {
+			return false;
+		}
+	}
+
+	public boolean needToPush() {
+		return m_prefs.getBoolean(PREF_NEED_TO_PUSH, false);
+	}
+
+	public void storeNeedToPush(boolean needToPush) {
+		Editor editor = m_prefs.edit();
+		editor.putBoolean(PREF_NEED_TO_PUSH, needToPush);
+		editor.commit();
+	}
+
+	public long getSyncPeriod() {
+		try {
+			long period = Long.parseLong(m_prefs.getString(
+					periodic_sync_pref_key, "0"));
+			return period > 0 ? period : 0;
+		} catch (NumberFormatException ex) {
+			return 0L;
+		}
+	}
+
+	public void storeSort(Sort sort) {
+		Editor editor = m_prefs.edit();
+		editor.putInt(PREF_SORT, sort.getId());
+		editor.commit();
+	}
+	
+	public Sort getSort() {
+		return Sort.getById(m_prefs.getInt(PREF_SORT, Sort.PRIORITY_DESC.getId()));
+	}
+	
+	public void storeFilters(Collection<Priority> prios, Collection<?> contexts, Collection<?> projects, String search, Collection<?> summaries) {
+		Editor editor = m_prefs.edit();
+		
+		if (prios != null) {
+			editor.putString(PREF_FILTER_PRIOS, Util.join(Priority.inCode(prios), " "));
+		}
+		
+		if (contexts != null) {
+			editor.putString(PREF_FILTER_CONTEXTS, Util.join(contexts, " "));
+		}
+		
+		if (projects != null) {
+			editor.putString(PREF_FILTER_PROJECTS, Util.join(projects, " "));
+		}
+		
+		if (search != null) {
+			editor.putString(PREF_FILTER_SEARCH, search);
+		}
+		
+		if (search != null) {
+			//split on tab just in case there is a space in the text
+			editor.putString(PREF_FILTER_SUMMARY, Util.join(summaries, "\t"));
+		}
+		
+		editor.commit();
+	}
+
+	public ArrayList<Priority> getFilteredPriorities() {
+		return Priority.toPriority(Util.split(m_prefs.getString(PREF_FILTER_PRIOS, ""), " "));
+	}
+	
+	public ArrayList<String> getFilteredContexts() {
+		return Util.split(m_prefs.getString(PREF_FILTER_CONTEXTS, ""), " ");
+	}
+
+	public ArrayList<String> getFilteredProjects() {
+		return Util.split(m_prefs.getString(PREF_FILTER_PROJECTS, ""), " ");
+	}
+	
+	public String getSearch() {
+		return m_prefs.getString(PREF_FILTER_SEARCH, "");
+	}
+	
+	public ArrayList<String> getFilterSummaries() {
+		//split on tab just in case there is a space in the text
+		return Util.split(m_prefs.getString(PREF_FILTER_SUMMARY, ""), "\t");
+	}
+
+	public String getTodoFilePath() {
+		return m_prefs.getString(TODOTXTPATH_key, TODOTXTPATH_defaultPath);
+	}
+
+	public void clear() {
+		Editor editor = m_prefs.edit();
+		editor.clear();
+		editor.commit();
+	}
+	
+	public void dump() {
+		Map<String, ?> keys = m_prefs.getAll();
+
+		for (Map.Entry<String, ?> entry : keys.entrySet()) {
+			Log.d("map values", entry.getKey() + ": "
+					+ entry.getValue().toString());
+		}
+	}
+
+}

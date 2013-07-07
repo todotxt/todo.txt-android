@@ -32,8 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import android.content.SharedPreferences;
-
+import com.todotxt.todotxttouch.TodoPreferences;
 import com.todotxt.todotxttouch.remote.PullTodoResult;
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.util.TaskIo;
@@ -44,23 +43,19 @@ import com.todotxt.todotxttouch.util.TaskIo;
  * @author Tim Barlotta
  */
 class TaskBagImpl implements TaskBag {
-	private Preferences preferences;
+	private TodoPreferences preferences;
 	private final LocalTaskRepository localRepository;
 	private final RemoteClientManager remoteClientManager;
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	private Date lastReload = null;
 	private Date lastSync = null;
 
-	public TaskBagImpl(Preferences preferences,
+	public TaskBagImpl(TodoPreferences preferences,
 			LocalTaskRepository localRepository,
 			RemoteClientManager remoteClientManager) {
 		this.preferences = preferences;
 		this.localRepository = localRepository;
 		this.remoteClientManager = remoteClientManager;
-	}
-
-	public void updatePreferences(TaskBagImpl.Preferences preferences) {
-		this.preferences = preferences;
 	}
 
 	private void store(ArrayList<Task> tasks) {
@@ -213,7 +208,7 @@ class TaskBagImpl implements TaskBag {
 
 	@Override
 	public void pushToRemote(boolean overridePreference, boolean overwrite) {
-		if (!this.preferences.isWorkOfflineEnabled() || overridePreference) {
+		if (!this.preferences.isManualModeEnabled() || overridePreference) {
 			File doneFile = null;
 			if (localRepository.doneFileModifiedSince(lastSync)) {
 				doneFile = LocalFileTaskRepository.DONE_TXT_FILE;
@@ -232,7 +227,7 @@ class TaskBagImpl implements TaskBag {
 	@Override
 	public void pullFromRemote(boolean overridePreference) {
 		try {
-			if (!this.preferences.isWorkOfflineEnabled() || overridePreference) {
+			if (!this.preferences.isManualModeEnabled() || overridePreference) {
 				PullTodoResult result = remoteClientManager.getRemoteClient()
 						.pullTodo();
 				File todoFile = result.getTodoFile();
@@ -316,22 +311,6 @@ class TaskBagImpl implements TaskBag {
 			}
 		}
 		return partialMatch;
-	}
-
-	public static class Preferences {
-		private final SharedPreferences sharedPreferences;
-
-		public Preferences(SharedPreferences sharedPreferences) {
-			this.sharedPreferences = sharedPreferences;
-		}
-
-		public boolean isPrependDateEnabled() {
-			return sharedPreferences.getBoolean("todotxtprependdate", true);
-		}
-
-		public boolean isWorkOfflineEnabled() {
-			return sharedPreferences.getBoolean("workofflinepref", false);
-		}
 	}
 
 }
