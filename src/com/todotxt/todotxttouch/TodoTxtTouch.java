@@ -131,6 +131,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private boolean mListScrolling = false;
 
+	private LinearLayout m_tabletDrawerLayout;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -194,6 +196,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Setup Navigation drawer
 		m_drawerList = (ListView) findViewById(R.id.left_drawer);
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		m_tabletDrawerLayout = (LinearLayout) findViewById(R.id.tablet_drawer_layout);
 
 		// Set the adapter for the list view
 		updateNavigationDrawer();
@@ -325,14 +328,39 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private void updateNavigationDrawer() {
 		m_lists = contextsAndProjects();
 		if (m_lists.size() == 0) {
-			// No contexts or projects, disable navigation drawer
-			m_drawerLayout.setDrawerLockMode(
-					DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+			if (m_drawerLayout != null) {
+				// No contexts or projects, disable navigation drawer
+				m_drawerLayout.setDrawerLockMode(
+						DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
+			} else {
+				m_tabletDrawerLayout.setVisibility(View.GONE);
+			}
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 			getSupportActionBar().setHomeButtonEnabled(false);
 		} else {
-			m_drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED,
-					Gravity.LEFT);
+			if (m_drawerLayout != null) {
+				m_drawerLayout.setDrawerLockMode(
+						DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
+				m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+				m_drawerLayout, /* DrawerLayout object */
+				R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
+				R.string.quickfilter, /* "open drawer" description */
+				R.string.app_label /* "close drawer" description */
+				) {
+					@Override
+					public void onDrawerSlide(View drawerView, float slideOffset) {
+						// Redraw menu to show or hide menu items
+						supportInvalidateOptionsMenu();
+						super.onDrawerSlide(drawerView, slideOffset);
+					}
+				};
+
+				// Set the drawer toggle as the DrawerListener
+				m_drawerLayout.setDrawerListener(m_drawerToggle);
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+				getSupportActionBar().setHomeButtonEnabled(true);
+				m_drawerToggle.syncState();
+			}
 			m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
 					R.layout.drawer_list_item, R.id.left_drawer_text, m_lists));
@@ -340,26 +368,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 			// Set the list's click listener
 			m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-			m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-			m_drawerLayout, /* DrawerLayout object */
-			R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-			R.string.quickfilter, /* "open drawer" description */
-			R.string.app_label /* "close drawer" description */
-			) {
-				@Override
-				public void onDrawerSlide(View drawerView, float slideOffset) {
-					// Redraw menu to show or hide menu items
-					supportInvalidateOptionsMenu();
-					super.onDrawerSlide(drawerView, slideOffset);
-				}
-			};
-
-			// Set the drawer toggle as the DrawerListener
-			m_drawerLayout.setDrawerListener(m_drawerToggle);
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			getSupportActionBar().setHomeButtonEnabled(true);
-			m_drawerToggle.syncState();
 		}
 	}
 
@@ -384,11 +392,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content
-		boolean drawerOpen = m_drawerLayout.isDrawerVisible(Gravity.LEFT);
-		menu.findItem(R.id.add_new).setVisible(!drawerOpen);
-		menu.findItem(R.id.search).setVisible(!drawerOpen);
-		menu.findItem(R.id.sort).setVisible(!drawerOpen);
-		menu.findItem(R.id.share).setVisible(!drawerOpen);
+		if (m_drawerLayout != null) {
+			boolean drawerOpen = m_drawerLayout.isDrawerVisible(Gravity.LEFT);
+			menu.findItem(R.id.add_new).setVisible(!drawerOpen);
+			menu.findItem(R.id.search).setVisible(!drawerOpen);
+			menu.findItem(R.id.sort).setVisible(!drawerOpen);
+			menu.findItem(R.id.share).setVisible(!drawerOpen);
+		}
 		menu.findItem(R.id.archive).setVisible(
 				!m_app.m_prefs.getBoolean("todotxtautoarchive", false));
 		return super.onPrepareOptionsMenu(menu);
@@ -470,12 +480,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		m_drawerToggle.onConfigurationChanged(newConfig);
+		if (m_drawerToggle!=null) {
+			m_drawerToggle.onConfigurationChanged(newConfig);
+		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
+		if (item.getItemId() == android.R.id.home && m_drawerLayout!=null) {
 
 			if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
 				m_drawerLayout.closeDrawer(m_drawerList);
@@ -1519,7 +1531,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 			setDrawerChoices();
 			m_app.storeFilters();
-			m_drawerLayout.closeDrawer(m_drawerList);
+			if (m_drawerLayout!=null) {
+				m_drawerLayout.closeDrawer(m_drawerList);
+			}
 			setFilteredTasks(false);
 		}
 	}
