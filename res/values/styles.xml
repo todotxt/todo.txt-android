@@ -176,9 +176,4 @@ You should have received a copy of the GNU General Public License along with Tod
 		<item name="android:background">@drawable/horizontal_rule</item>
 	</style>
 	
-	<style name="Widget.Holo.ProgressBar.Horizontal.Center"
-        parent="@style/Widget.Sherlock.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">@drawable/progress_horizontal_holo_center</item>
-        <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo</item>
-    </style>
 </resources>

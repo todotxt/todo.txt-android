@@ -880,6 +880,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	 */
 	@SuppressWarnings("deprecation")
 	private void syncClient(boolean force) {
+		
+		m_pullToRefreshAttacher.setRefreshing(true);
+		
 		if (m_app.m_prefs.isManualModeEnabled()) {
 			Log.v(TAG,
 					"Manual mode, choice forced; prompt user to ask which way to sync");
@@ -980,6 +983,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
+					m_pullToRefreshAttacher.setRefreshComplete();
 					updateSyncUI(false);
 					removeDialog(id);
 				}
