@@ -24,6 +24,7 @@ package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Random;
 
 import android.app.AlertDialog;
@@ -36,8 +37,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -63,9 +70,16 @@ public class AddTask extends SherlockActivity {
 
 	private String share_text;
 
+	private ArrayList<String> mLists;
+
+	private ListView mDrawerList;
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.add_task, menu);
+		if (hasDrawer()) {
+			menu.findItem(R.id.menu_add_tag).setVisible(false);
+		}
 		return true;
 	}
 
@@ -194,11 +208,34 @@ public class AddTask extends SherlockActivity {
 				iniTask.initWithFilters(prios, contexts, projects);
 			}
 		}
-
+	    if (hasDrawer()) {
+	    	mDrawerList = (ListView) findViewById(R.id.left_drawer);
+	    	mDrawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		    mLists = new ArrayList<String>();
+	    	mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+	    	          R.layout.drawer_list_item, R.id.left_drawer_text, mLists));
+	    	updateNavigationDrawer();
+	    	
+	    	// Set the list's click listener
+	    	mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+	        textInputField.setOnKeyListener(new OnKeyListener() {
+	     
+	            @Override
+	            public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
+	                updateNavigationDrawer();
+	                return false;
+	            }	             
+	       });
+	    }
 		textInputField.setSelection(textInputField.getText().toString()
 				.length());
-
 		textInputField.requestFocus();
+	}
+
+	private void updateNavigationDrawer() {
+		mLists.clear();
+		mLists.addAll(labelsInTaskbagAndText());
+	    ((ArrayAdapter<?>) mDrawerList.getAdapter()).notifyDataSetChanged();
 	}
 
 	private void showProjectContextMenu() {
@@ -374,7 +411,7 @@ public class AddTask extends SherlockActivity {
 		/*
 		 * Returns the defined labels in the taskbag and the current task being
 		 * added. This way when adding multiple tasks labels from previous lines
-		 * will be available fordropdown
+		 * will be included as well
 		 */
 		ArrayList<String> labels = new ArrayList<String>();
 		Task temp = new Task(1, textInputField.getText().toString());
@@ -391,6 +428,27 @@ public class AddTask extends SherlockActivity {
 		for (String item : projects) {
 			labels.add("+" + item);
 		}
-		return labels;
+		// Pass through a LinkedHashSet to remove duplicates without
+		// messing up sort order
+		return new ArrayList<String>(new LinkedHashSet<String>(labels));
+	}
+	
+	/**
+	 * Returns true if the left drawer is shown.
+	 */
+	private boolean hasDrawer() {
+		return findViewById(R.id.left_drawer)!=null;		
+	}
+	private class DrawerItemClickListener implements
+	        AdapterView.OnItemClickListener {
+	    @Override
+	    public void onItemClick(AdapterView<?> parent, View view, int position,
+	             long id) {
+	        TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
+	        String itemTitle = tv.getText().toString();
+	        Log.v(TAG, "Clicked on drawer " + itemTitle);
+	        replaceTextAtSelection(itemTitle);
+	        mDrawerList.clearChoices();
+	    }
 	}
 }
