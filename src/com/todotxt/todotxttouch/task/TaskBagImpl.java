@@ -120,6 +120,13 @@ class TaskBagImpl implements TaskBag {
 	}
 
 	@Override
+	public void clear() {
+		this.tasks = new ArrayList<Task>();
+		localRepository.purge();
+		lastReload = null;
+	}
+
+	@Override
 	public int size() {
 		return tasks.size();
 	}
@@ -312,5 +319,6 @@ class TaskBagImpl implements TaskBag {
 		}
 		return partialMatch;
 	}
+
 
 }
