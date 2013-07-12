@@ -65,6 +65,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	public ListRemoteViewsFactory(Context applicationContext, Intent intent) {
 		Log.d(TAG, "ListRemoteViewsFactory instantiated");
 		m_app = (TodoApplication) applicationContext;
+		onDataSetChanged();
 	}
 
 	@Override
