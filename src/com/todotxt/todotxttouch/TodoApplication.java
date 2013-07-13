@@ -135,6 +135,7 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Not connected, don't push now");
 			if (!suppressToast) {
 			    showToast(R.string.toast_notconnected);
+			    updateSyncUI(true);
 			}
 		}
 	}
@@ -161,6 +162,7 @@ public class TodoApplication extends Application {
 			
 			if (!suppressToast) {
 			    showToast(R.string.toast_notconnected);
+			    updateSyncUI(true);
 			}
 		}
 	}
