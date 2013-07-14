@@ -29,6 +29,8 @@ You should have received a copy of the GNU General Public License along with Tod
     android:minWidth="280dp"
     android:previewImage="@drawable/listwidget_preview"
     android:resizeMode="vertical|horizontal"
-    android:updatePeriodMillis="0" >
+    android:updatePeriodMillis="0"
+    android:widgetCategory="keyguard|home_screen"
+    android:initialKeyguardLayout="@layout/listwidget" >
 
 </appwidget-provider>
