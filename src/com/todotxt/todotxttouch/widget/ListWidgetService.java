@@ -22,6 +22,7 @@
  */
 package com.todotxt.todotxttouch.widget;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.todotxt.todotxttouch.Constants;
@@ -59,11 +60,12 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 	TodoApplication m_app;
 	TaskBag taskBag;
-	List<Task> tasks;
+	List<Task> tasks = new ArrayList<Task>();
 
 	public ListRemoteViewsFactory(Context applicationContext, Intent intent) {
 		Log.d(TAG, "ListRemoteViewsFactory instantiated");
 		m_app = (TodoApplication) applicationContext;
+		onDataSetChanged();
 	}
 
 	@Override
