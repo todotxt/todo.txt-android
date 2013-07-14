@@ -38,10 +38,10 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory android:key="dropbox_settings"
-		android:title="@string/DROPBOX_settings_header">
-		<EditTextPreference android:summary="@string/TODOTXTPATH_summary"
-			android:defaultValue="@string/TODOTXTPATH_defaultPath" android:title="@string/TODOTXTPATH_title"
-			android:key="@string/TODOTXTPATH_key" />
+		android:title="@string/dropbox_settings_header">
+		<com.todotxt.todotxttouch.TodoLocationPreference android:summary="@string/todo_path_summary"
+			android:defaultValue="@string/todo_path_default" android:title="@string/todo_path_title"
+			android:key="@string/todo_path_key" />
 		<ListPreference android:key="@string/periodic_sync_pref_key"
 		    android:title="@string/periodic_sync_pref_title" android:entries="@array/periodic_sync_lengths"
 		    android:entryValues="@array/periodic_sync_values" android:defaultValue="0" />

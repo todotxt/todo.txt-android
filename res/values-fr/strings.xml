@@ -38,10 +38,10 @@
   <string name="dropbox_logout_pref_title">Se déconnecter</string>
   <string name="dropbox_logout_pref_summary">Se déconnecter de Dropbox.</string>
   <string name="dropbox_logout_explainer">Etes-vous sûr de vouloir vous déconnecter de Dropbox?</string>
-  <string name="TODOTXTPATH_title">Emplacement du fichier</string>
-  <string name="TODOTXTPATH_summary">Le dossier Dropbox où est placé todo.txt.</string>
-  <string name="TODOTXTPATH_defaultPath">/todo</string>
-  <string name="DROPBOX_settings_header">Dropbox</string>
+  <string name="todo_path_title">Emplacement du fichier</string>
+  <string name="todo_path_summary">Le dossier Dropbox où est placé todo.txt.</string>
+  <string name="todo_path_default">/todo</string>
+  <string name="dropbox_settings_header">Dropbox</string>
   <string name="todotxt_settings_header">todo.txt</string>
   <string name="about_settings_header">A propos</string>
   <string name="prepend_date_pref_title">Dater les nouvelles tâches</string>

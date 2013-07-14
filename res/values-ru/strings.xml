@@ -39,10 +39,10 @@
   <string name="dropbox_logout_pref_title">Выйти</string>
   <string name="dropbox_logout_pref_summary">Выйти из Dropbox.</string>
   <string name="dropbox_logout_explainer">Вы уверены что хотите выйти из Dropbox?</string>
-  <string name="TODOTXTPATH_title">Местонахождение файла</string>
-  <string name="TODOTXTPATH_summary">Папка Dropbox где хранится файл todo.txt.</string>
-  <string name="TODOTXTPATH_defaultPath">/сделать</string>
-  <string name="DROPBOX_settings_header">Dropbox</string>
+  <string name="todo_path_title">Местонахождение файла</string>
+  <string name="todo_path_summary">Папка Dropbox где хранится файл todo.txt.</string>
+  <string name="todo_path_default">/сделать</string>
+  <string name="dropbox_settings_header">Dropbox</string>
   <string name="todotxt_settings_header">сделать.txt</string>
   <string name="about_settings_header">О программе</string>
   <string name="prepend_date_pref_title">Добавление даты новым заданиям</string>

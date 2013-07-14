@@ -39,10 +39,10 @@
   <string name="dropbox_logout_pref_title">Odhlásit</string>
   <string name="dropbox_logout_pref_summary">Odhlásit z Dropboxu.</string>
   <string name="dropbox_logout_explainer">Opravdu se chcete odhlásit z Dropboxu?</string>
-  <string name="TODOTXTPATH_title">Umístění souboru</string>
-  <string name="TODOTXTPATH_summary">Dropbox složka, ve které je soubor todo.txt uložen.</string>
-  <string name="TODOTXTPATH_defaultPath">/todo</string>
-  <string name="DROPBOX_settings_header">Dropbox</string>
+  <string name="todo_path_title">Umístění souboru</string>
+  <string name="todo_path_summary">Dropbox složka, ve které je soubor todo.txt uložen.</string>
+  <string name="todo_path_default">/todo</string>
+  <string name="dropbox_settings_header">Dropbox</string>
   <string name="todotxt_settings_header">todo.txt</string>
   <string name="about_settings_header">O programu</string>
   <string name="prepend_date_pref_title">Datovaní nových úkolů</string>

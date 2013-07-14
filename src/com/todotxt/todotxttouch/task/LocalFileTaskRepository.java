@@ -64,6 +64,7 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	@Override
 	public void purge() {
 		TODO_TXT_FILE.delete();
+		DONE_TXT_FILE.delete();
 	}
 
 	@Override
