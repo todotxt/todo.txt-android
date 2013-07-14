@@ -26,8 +26,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -36,20 +38,23 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 
 public class Preferences extends PreferenceActivity {
 	final static String TAG = Preferences.class.getSimpleName();
 
 	private Preference aboutDialog;
 	private Preference logoutDialog;
+	private TodoLocationPreference mLocationPreference;
 	private ListPreference periodicSync;
 	private static final int ABOUT_DIALOG = 1;
 	private static final int LOGOUT_DIALOG = 2;
-	public static final int RESULT_SYNC_LIST = 2;
 	TodoApplication m_app;
 
 	private String version;
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,9 @@ public class Preferences extends PreferenceActivity {
 				.prepend_date_pref_key())).setChecked(m_app.m_prefs
 				.isPrependDateEnabled());
 
+		mLocationPreference = (TodoLocationPreference)findPreference(m_app.m_prefs.todo_path_key());
+		mLocationPreference.setDisplayWarning(m_app.m_prefs.needToPush());
+		
 		PackageInfo packageInfo;
 		try {
 			packageInfo = getPackageManager().getPackageInfo(getPackageName(),
@@ -118,7 +126,7 @@ public class Preferences extends PreferenceActivity {
 	}
 
 	@Override
-	protected Dialog onCreateDialog(int id) {
+	protected Dialog onCreateDialog(final int id) {
 		if (id == ABOUT_DIALOG) {
 			AlertDialog.Builder aboutAlert = new AlertDialog.Builder(this);
 			aboutAlert.setTitle("Todo.txt v" + version);
@@ -139,11 +147,26 @@ public class Preferences extends PreferenceActivity {
 						public void onClick(DialogInterface arg0, int arg1) {
 						}
 					});
-			return aboutAlert.show();
+			aboutAlert.setOnCancelListener(new OnCancelListener() {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					removeDialog(id);
+				}
+			});
+			return aboutAlert.create();
 		} else if (id == LOGOUT_DIALOG) {
 			AlertDialog.Builder logoutAlert = new AlertDialog.Builder(this);
 			logoutAlert.setTitle(R.string.areyousure);
-			logoutAlert.setMessage(R.string.dropbox_logout_explainer);
+			SpannableStringBuilder ss = new SpannableStringBuilder();
+			if (m_app.m_prefs.needToPush()) {
+				ss.append(getString(R.string.dropbox_logout_warning));
+				ss.setSpan(new ForegroundColorSpan(Color.RED), 0, ss.length(),
+					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				ss.append("\n\n");
+			}
+			ss.append(getString(R.string.dropbox_logout_explainer));
+			logoutAlert.setMessage(ss);
 			logoutAlert.setPositiveButton(R.string.dropbox_logout_pref_title,
 					new DialogInterface.OnClickListener() {
 						@Override
@@ -151,18 +174,24 @@ public class Preferences extends PreferenceActivity {
 							((TodoApplication) getApplication())
 									.getRemoteClientManager().getRemoteClient()
 									.deauthenticate();
-							Preferences.this.setResult(RESULT_SYNC_LIST);
 
 							// produce a logout intent and broadcast it
 							Intent broadcastLogoutIntent = new Intent();
 							broadcastLogoutIntent
-									.setAction("com.todotxt.todotxttouch.ACTION_LOGOUT");
+									.setAction(Constants.INTENT_ACTION_LOGOUT);
 							sendBroadcast(broadcastLogoutIntent);
 							finish();
 						}
 					});
 			logoutAlert.setNegativeButton(R.string.cancel, null);
-			return logoutAlert.show();
+			logoutAlert.setOnCancelListener(new OnCancelListener() {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					removeDialog(id);
+				}
+			});
+			return logoutAlert.create();
 		}
 		return null;
 	}

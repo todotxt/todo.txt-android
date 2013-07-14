@@ -97,7 +97,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private final static int REQUEST_FILTER = 1;
 	private final static int REQUEST_PREFERENCES = 2;
-	private final static int REQUEST_LOGIN = 3;
 
 	private static TodoTxtTouch currentActivityPointer = null;
 
@@ -140,7 +139,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		setContentView(R.layout.main);
 
 		m_app = (TodoApplication) getApplication();
-		//m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
+		m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
 		this.taskBag = m_app.getTaskBag();
 		m_adapter = new TaskAdapter(this, R.layout.list_item,
 				taskBag.getTasks(), getLayoutInflater());
@@ -165,6 +164,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					archiveTasks();
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_ACTION_LOGOUT)) {
+					taskBag.clear();
 					Intent i = new Intent(context, LoginScreen.class);
 					startActivity(i);
 					finish();
@@ -283,7 +283,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// otherwise it will not fire
 		lv.setOnScrollListener(this);
 
-		initializeTasks();
+		initializeTasks(false);
 
 		// Show search results
 		Intent intent = getIntent();
@@ -370,11 +370,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 	}
 
-	private void initializeTasks() {
+	private void initializeTasks(boolean force) {
 		boolean firstrun = m_app.m_prefs.isFirstRun();
 
-		if (firstrun) {
+		if (force || firstrun) {
 			Log.i(TAG, "Initializing app");
+			m_app.m_prefs.clearState();
+			taskBag.clear();
 			syncClient(true);
 			m_app.m_prefs.storeFirstRun(false);
 		} else {
@@ -403,7 +405,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		//m_app.m_prefs.unregisterOnSharedPreferenceChangeListener(this);
+		m_app.m_prefs.unregisterOnSharedPreferenceChangeListener(this);
 		unregisterReceiver(m_broadcastReceiver);
 	}
 
@@ -437,14 +439,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-//		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
-//		// FIXME: Is this code necessary?
-//		// if so, should we be listening for other pref changes like 
-//		// file location and manual sync?
-//		if (TodoPreferences.PREF_ACCESSTOKEN_SECRET.equals(key)) {
-//			Log.i(TAG, "New access token secret. Syncing!");
-//			syncClient(false);
-//		}
+		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
+		if (m_app.m_prefs.todo_path_key().equals(key)) {
+			// file location changed. delete old file, then force a pull
+			initializeTasks(true);
+		} else if (m_app.m_prefs.periodic_sync_pref_key().equals(key) && !m_app.m_prefs.isManualModeEnabled()) {
+			// auto sync enabled. force a sync
+			syncClient(false);
+		}
 	}
 
 	@Override
@@ -918,14 +920,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				setFilteredTasks(false);
 			}
 		} else if (requestCode == REQUEST_PREFERENCES) {
-			// FIXME: we should sync whenever manual mode is disabled
-			// or when the file location is changed (prompt for upload/download).
-			// either here or with a sharedprefchangelistener
-			if (resultCode == Preferences.RESULT_SYNC_LIST) {
-				initializeTasks();
-			}
-		} else if (requestCode == REQUEST_LOGIN) {
-
+			/* Do nothing */
 		}
 	}
 

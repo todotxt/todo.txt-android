@@ -112,4 +112,10 @@ public class TaskBagStub implements TaskBag {
 
 	}
 
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

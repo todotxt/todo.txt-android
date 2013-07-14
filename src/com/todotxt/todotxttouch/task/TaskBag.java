@@ -39,6 +39,8 @@ public interface TaskBag {
 
 	void reload();
 
+	void clear();
+
 	void addAsTask(String input);
 
 	void update(Task task);
