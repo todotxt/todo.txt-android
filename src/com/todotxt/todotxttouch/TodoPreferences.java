@@ -242,7 +242,6 @@ public class TodoPreferences {
 		return m_prefs.getString(todo_path_key, todo_path_default);
 	}
 
-
 	/*
 	 * 
 	 *  Utility methods go here 

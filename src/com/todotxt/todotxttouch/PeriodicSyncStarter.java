@@ -49,7 +49,7 @@ public class PeriodicSyncStarter extends BroadcastReceiver {
 		long syncPeriod = a.m_prefs.getSyncPeriod();
 		if (syncPeriod > 0) {
 			// Wake up and synchronize after after inexact fixed delay
-			alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0,
+			alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, syncPeriod,
 					syncPeriod, pi);
 			// alarms.setRepeating(AlarmManager.ELAPSED_REALTIME, 0, 60 * 1000,
 			// pi); // for testing
