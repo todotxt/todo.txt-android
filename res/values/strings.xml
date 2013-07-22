@@ -83,8 +83,11 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="dropbox_logout_warning">You have local changes to your todo.txt file! If you log out, they will be lost!</string>
     <string name="todo_path_title">File location</string>
     <string name="todo_path_summary">The Dropbox folder where todo.txt is stored.</string>
-    <string name="todo_path_warning">\n\nYou have local changes to your todo.txt file! If you change the file location, they will be lost!</string>
+    <string name="todo_path_warning">You have local changes to your todo.txt file! If you change the file location, they will be lost!</string>
     <string name="todo_path_warning_override">I\'m feeling dangerous!</string>
+    <string name="todo_path_prev_folder">… Up to %s</string>
+    <string name="todo_path_add_new">Add new …</string>
+    <string name="todo_path_empty">Failed to load folder list from Dropbox</string>
     <string name="todo_path_default">/todo</string>
     <string name="dropbox_settings_header">Dropbox</string>
     <string name="todotxt_settings_header">todo.txt</string>
@@ -168,4 +171,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="pull_to_refresh">Pull to refresh</string>
     <string name="syncing">Syncing with Dropbox…</string>
 
+    <!-- path activity -->
+    <string name="discard">Discard</string>
+    <string name="done">Done</string>
+    
 </resources>
