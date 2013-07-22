@@ -25,8 +25,8 @@ package com.todotxt.todotxttouch;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
@@ -67,6 +67,7 @@ public class Preferences extends PreferenceActivity {
 				.isPrependDateEnabled());
 
 		mLocationPreference = (TodoLocationPreference)findPreference(m_app.m_prefs.todo_path_key());
+		mLocationPreference.setApplication(m_app);
 		mLocationPreference.setDisplayWarning(m_app.m_prefs.needToPush());
 		
 		PackageInfo packageInfo;
@@ -101,16 +102,6 @@ public class Preferences extends PreferenceActivity {
 		// only way that works.
 		periodicSync.setSummary(periodicSync.getEntries()[periodicSync
 				.findIndexOfValue((String) newValue)]);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		PeriodicSyncStarter.setupPeriodicSyncer(this);
-	}
-
-	protected void onResume() {
-		super.onResume();
 	}
 
 	@SuppressWarnings("deprecation")

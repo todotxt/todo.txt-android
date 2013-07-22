@@ -1,12 +1,14 @@
 package com.todotxt.todotxttouch.test;
 
 import java.io.File;
+import java.util.List;
 
 import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.remote.Client;
 import com.todotxt.todotxttouch.remote.PullTodoResult;
 import com.todotxt.todotxttouch.remote.RemoteClient;
 import com.todotxt.todotxttouch.remote.RemoteClientManager;
+import com.todotxt.todotxttouch.remote.RemoteFolder;
 
 public class RemoteClientManagerStub extends RemoteClientManager {
 
@@ -81,6 +83,18 @@ public class RemoteClientManagerStub extends RemoteClientManager {
 		public boolean isAvailable() {
 			// TODO Auto-generated method stub
 			return true;
+		}
+
+		@Override
+		public List<RemoteFolder> getSubFolders(String path) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public RemoteFolder getFolder(String path) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 }

@@ -443,9 +443,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		if (m_app.m_prefs.todo_path_key().equals(key)) {
 			// file location changed. delete old file, then force a pull
 			initializeTasks(true);
-		} else if (m_app.m_prefs.periodic_sync_pref_key().equals(key) && !m_app.m_prefs.isManualModeEnabled()) {
-			// auto sync enabled. force a sync
-			syncClient(false);
+		} else if (m_app.m_prefs.periodic_sync_pref_key().equals(key)) {
+			// auto sync enabled. set up alarm and force a sync now
+			PeriodicSyncStarter.setupPeriodicSyncer(this);
+			if (!m_app.m_prefs.isManualModeEnabled()) {
+				syncClient(false);
+			}
 		}
 	}
 
@@ -885,7 +888,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		
 		m_pullToRefreshAttacher.setRefreshing(true);
 		
-		if (m_app.m_prefs.isManualModeEnabled()) {
+		if (!force && m_app.m_prefs.isManualModeEnabled()) {
 			Log.v(TAG,
 					"Manual mode, choice forced; prompt user to ask which way to sync");
 			showDialog(SYNC_CHOICE_DIALOG);
