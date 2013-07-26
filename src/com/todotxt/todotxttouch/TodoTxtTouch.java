@@ -332,7 +332,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				m_drawerLayout.setDrawerLockMode(
 						DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
 			} else {
-				m_tabletDrawerLayout.setVisibility(View.GONE);
+				m_drawerList.setVisibility(View.GONE);
 			}
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 			getSupportActionBar().setHomeButtonEnabled(false);
@@ -359,6 +359,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 				getSupportActionBar().setHomeButtonEnabled(true);
 				m_drawerToggle.syncState();
+			} else {
+				m_drawerList.setVisibility(View.VISIBLE);
 			}
 			m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
