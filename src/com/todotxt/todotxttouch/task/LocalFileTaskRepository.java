@@ -27,9 +27,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.os.Environment;
 import android.util.Log;
 
+import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.TodoException;
 import com.todotxt.todotxttouch.util.TaskIo;
 import com.todotxt.todotxttouch.util.Util;
@@ -43,11 +43,11 @@ class LocalFileTaskRepository implements LocalTaskRepository {
 	private static final String TAG = LocalFileTaskRepository.class
 			.getSimpleName();
 	final static File TODO_TXT_FILE = new File(
-			Environment.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/todo.txt");
+			TodoApplication.getAppContetxt().getFilesDir(),
+			"todo.txt");
 	final static File DONE_TXT_FILE = new File(
-			Environment.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/done.txt");
+			TodoApplication.getAppContetxt().getFilesDir(),
+			"done.txt");
 
 	@Override
 	public void init() {

@@ -45,6 +45,7 @@ public class TodoPreferences {
 	 * as constants
 	 */
 	public static final String PREF_FIRSTRUN = "firstrun";
+	public static final String PREF_VERSION = "versionCode";
 	public static final String PREF_ACCESSTOKEN_KEY = "accesstokenkey";
 	public static final String PREF_ACCESSTOKEN_SECRET = "accesstokensecret";
 	public static final String PREF_TODO_REV = "todo_rev";
@@ -242,6 +243,26 @@ public class TodoPreferences {
 		return m_prefs.getString(todo_path_key, todo_path_default);
 	}
 
+	/**
+	 * Returns the most recent version to have successfully run upgrade tasks.
+	 * Returns 0 if upgrade tasks have never been run.
+	 * @return version code in the same format as in the manifest file.
+	 */
+	public int getVersion() {
+		return m_prefs.getInt(PREF_VERSION, 0);
+	}
+
+	/**
+	 * Store the current application version so that we know
+	 * when we have been upgraded.
+	 * @param versionCode version code in the same format as in the manifest file.
+	 */
+	public void storeVersion(int versionCode) {
+		Editor editor = m_prefs.edit();
+		editor.putInt(PREF_VERSION, versionCode);
+		editor.commit();
+	}
+	
 	/*
 	 * 
 	 *  Utility methods go here 

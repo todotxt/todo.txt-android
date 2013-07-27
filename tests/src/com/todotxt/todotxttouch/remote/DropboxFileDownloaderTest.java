@@ -36,15 +36,15 @@ import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
 
-import junit.framework.TestCase;
-import android.os.Environment;
+import android.test.ApplicationTestCase;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.ProgressListener;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
+import com.todotxt.todotxttouch.TodoApplication;
 
-public class DropboxFileDownloaderTest extends TestCase {
+public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplication> {
 	private static final String remotefile1 = "remotefile1";
 	private static final String remotefile2 = "remotefile2";
 	private static final String localpath1 = "data/com.todotxt.todotxttouch/tmp/test1.txt";
@@ -55,23 +55,30 @@ public class DropboxFileDownloaderTest extends TestCase {
 	private static final String origrev1 = "origrev1";
 	private static final String origrev2 = "origrev2";
 
-	private File localFile1 = new File(
-			Environment.getExternalStorageDirectory(), localpath1);
-	private File localFile2 = new File(
-			Environment.getExternalStorageDirectory(), localpath2);
-
+	private File localFile1;
+	private File localFile2;
 	DropboxFile dbFile1;
 	DropboxFile dbFile2;
 	ArrayList<DropboxFile> dropboxFiles1;
 	ArrayList<DropboxFile> dropboxFiles2;
 
+	public DropboxFileDownloaderTest(Class<TodoApplication> applicationClass) {
+		super(applicationClass);
+	}
+
 	protected void setUp() throws Exception {
+		createApplication();
+		
+		localFile1 = new File(TodoApplication.getAppContetxt().getFilesDir(), localpath1);
+		localFile2 = new File(TodoApplication.getAppContetxt().getFilesDir(), localpath2);
+
 		if (localFile1.exists()) {
 			localFile1.delete();
 		}
 		if (localFile2.exists()) {
 			localFile2.delete();
 		}
+		
 		dbFile1 = new DropboxFile(remotefile1, localFile1, origrev1);
 		dbFile2 = new DropboxFile(remotefile2, localFile2, origrev2);
 		dropboxFiles1 = new ArrayList<DropboxFile>(1);

@@ -24,9 +24,11 @@ package com.todotxt.todotxttouch.util;
 
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -321,6 +323,35 @@ public class Util {
 			Log.e(TAG, "Error renaming " + origFile + " to " + newFile);
 			throw new TodoException("Error renaming " + origFile + " to "
 					+ newFile);
+		}
+	}
+
+	public static void copyFile(File origFile, File newFile, boolean overwrite) {
+		if (!origFile.exists()) {
+			Log.e(TAG, "Error renaming file: " + origFile + " does not exist");
+			throw new TodoException("Error copying file: " + origFile
+					+ " does not exist");
+		}
+
+		createParentDirectory(newFile);
+
+		if (!overwrite && newFile.exists()) {
+			Log.e(TAG, "Error copying file: destination exists: " + newFile);
+			throw new TodoException("Error copying file: destination exists: "
+					+ newFile);
+		}
+
+		try {
+			FileInputStream fis = new FileInputStream(origFile);
+			FileOutputStream fos = new FileOutputStream(newFile);
+			FileChannel in = fis.getChannel();
+			fos.getChannel().transferFrom(in, 0, in.size());
+			fis.close();
+			fos.close();
+		} catch (Exception e) {
+			Log.e(TAG, "Error copying " + origFile + " to " + newFile);
+			throw new TodoException("Error copying " + origFile + " to "
+					+ newFile, e);
 		}
 	}
 
