@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.os.Environment;
 import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
@@ -50,11 +49,11 @@ class DropboxRemoteClient implements RemoteClient {
 	private static final String DONE_TXT_REMOTE_FILE_NAME = "done.txt";
 	private static final AccessType ACCESS_TYPE = AccessType.DROPBOX;
 	private static final File TODO_TXT_TMP_FILE = new File(
-			Environment.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/tmp/todo.txt");
+			TodoApplication.getAppContetxt().getFilesDir(),
+			"tmp/todo.txt");
 	private static final File DONE_TXT_TMP_FILE = new File(
-			Environment.getExternalStorageDirectory(),
-			"data/com.todotxt.todotxttouch/tmp/done.txt");
+			TodoApplication.getAppContetxt().getFilesDir(),
+			"tmp/done.txt");
 
 	private DropboxAPI<AndroidAuthSession> dropboxApi;
 	private TodoApplication todoApplication;
