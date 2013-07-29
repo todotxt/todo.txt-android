@@ -32,6 +32,7 @@ import java.util.List;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.DefaultHeaderTransformer;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -52,7 +53,9 @@ import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableString;
@@ -130,8 +133,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private boolean mListScrolling = false;
 
-	private LinearLayout m_tabletDrawerLayout;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -197,7 +198,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Setup Navigation drawer
 		m_drawerList = (ListView) findViewById(R.id.left_drawer);
 		m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		m_tabletDrawerLayout = (LinearLayout) findViewById(R.id.tablet_drawer_layout);
 
 		// Set the adapter for the list view
 		updateNavigationDrawer();
@@ -517,11 +517,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		return true;
 	}
 
-	private void shareTasks(List<Task> tasks) {
-		String shareText = "";
+	private String selectedTasksAsString(List<Task> tasks) {
+		String text = "";
 		for (Task t : tasks) {
-			shareText += t.inFileFormat() + "\n";
+			text += t.inFileFormat() + "\n";
 		}
+		return text;
+	}
+	
+	private void shareTasks(List<Task> tasks) {
+		String shareText = selectedTasksAsString(tasks);
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
@@ -532,6 +537,26 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				getString(R.string.share_title)));
 	}
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	private void addToCalendar(List<Task> checkedTasks) {
+		Intent intent;
+		String calendarTitle = getString(R.string.calendar_title);
+		String calendarDescription = "";
+		if (checkedTasks.size() == 1) {
+			// Set the task as title
+			calendarTitle = checkedTasks.get(0).getText();
+		} else {
+			// Set the tasks as description
+			calendarDescription = selectedTasksAsString(checkedTasks);
+
+		}
+		intent = new Intent(android.content.Intent.ACTION_EDIT)
+				.setType(Constants.ANDROID_EVENT)
+				.putExtra(Events.TITLE, calendarTitle)
+				.putExtra(Events.DESCRIPTION, calendarDescription);
+		startActivity(intent);
+	}
+	
 	private void prioritizeTasks(final ArrayList<Task> tasks) {
 		final String[] prioArr = Priority
 				.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);
@@ -1169,6 +1194,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						break;
 					case R.id.share:
 						shareTasks(checkedTasks);
+						break;
+					case R.id.calendar:
+						addToCalendar(checkedTasks);
 						break;
 					case R.id.uncomplete:
 						undoCompleteTasks(checkedTasks, true);

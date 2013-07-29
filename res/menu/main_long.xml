@@ -55,6 +55,11 @@ You should have received a copy of the GNU General Public License along with Tod
         android:showAsAction="never"
         android:title="@string/share"/>
     <item
+        android:id="@+id/calendar"
+        android:showAsAction="never"
+        android:title="@string/add_to_calendar"
+        android:enabled="@bool/api_14_or_above"/>
+    <item
         android:id="@+id/url"
         android:visible="false"/>
     <item

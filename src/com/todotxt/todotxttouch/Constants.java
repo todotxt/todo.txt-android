@@ -53,4 +53,8 @@ public class Constants {
 	public final static String INTENT_SET_MANUAL = "com.todotxt.todotxttouch.GO_OFFLINE";
 	public final static String INTENT_UPDATE_UI = "com.todotxt.todotxttouch.UPDATE_UI";
 	public final static String INTENT_WIDGET_UPDATE = "com.todotxt.todotxttouch.APPWIDGET_UPDATE";
+
+	// Android OS specific constants
+	public static final String ANDROID_EVENT = "vnd.android.cursor.item/event";
+
 }
