@@ -11,11 +11,17 @@ Please note that this is currently in a preview state. This basically means that
 
 ---
 
-## Sample
+## Sample Apps
 
-Eventually the sample will be available to download on Google Play. As we're not stable yet you can find the APKs [here](https://drive.google.com/folderview?id=0BxAFUoBj0OjaYTd3SUkzYjIydG8&usp=sharing).
+There are two sample applications, the stock sample which uses the standard library and is therefore has a `minSdkVersion` of 14. There is also a sample which uses the ActionBarSherlock extra so has a `minSdkVersion` of 7.
 
-#### Video
+### Stock Sample
+[![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](http://play.google.com/store/apps/details?id=uk.co.senab.actionbarpulltorefresh.samples.stock)
+
+### ActionBarSherlock Sample
+[![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](http://play.google.com/store/apps/details?id=uk.co.senab.actionbarpulltorefresh.samples.actionbarsherlock)
+
+## Video
 
 [![Sample Video](http://img.youtube.com/vi/YOYtPF-4RPg/0.jpg)](https://www.youtube.com/watch?v=YOYtPF-4RPg)
 
@@ -37,7 +43,7 @@ If the View you want to use is not listed above, you can easily add support in y
 You just need to create an instance of `PullToRefreshAttacher`, giving it the Activity and the View for which will scroll.
 
 ``` java
-private PullToRefreshAttacher mPullToRefreshHelper;
+private PullToRefreshAttacher mPullToRefreshAttacher;
 
 @Override
 public void onCreate(Bundle savedInstanceState) {
@@ -47,10 +53,10 @@ public void onCreate(Bundle savedInstanceState) {
     View scrollableView = findViewById(R.id.blah); 
 
     // Create a PullToRefreshAttacher instance
-    mPullToRefreshHelper = new PullToRefreshAttacher(this);
+    mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
 
-    // Set the Refreshable View and provide the refresh listener
-    mPullToRefreshAttacher.setRefreshableView(scrollableView, this);
+    // Add the Refreshable View and provide the refresh listener
+    mPullToRefreshAttacher.addRefreshableView(scrollableView, this);
 }
 ```
 See the [ListView](https://github.com/chrisbanes/ActionBar-PullToRefresh/blob/master/samples/stock/src/uk/co/senab/actionbarpulltorefresh/samples/stock/ListViewActivity.java) sample for more info.
@@ -79,7 +85,7 @@ So what if you want the view you want to use a view which isn't in the list abov
 
 ``` java
 // Create a PullToRefresh Attacher
-mPullToRefreshAttacher = new PullToRefreshAttacher(this);
+mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
 
 // Create ViewDelegate which can handle your scrollable view.
 // In this case we're creating a ficticious class
@@ -97,6 +103,7 @@ When instatiating a `PullToRefreshAttacher` you can provide an `Options` instanc
  * `headerInAnimation`: The animation resource which is used when the header view is shown.
  * `headerOutAnimation`: The animation resource which is used when the header view is hidden.
  * `refreshScrollDistance`: The vertical distance (percentage of the scrollable view height) that the user needs to scroll for a refresh to start.
+ * `refreshOnUp`: Whether to wait to start the refresh until when the user has lifted their finger.
 
 ### HeaderTransformers
 HeaderTransformers are responsible for updating the header view to match the current state. If you do not provide a HeaderTransformer, there is a default implementation created for you called `DefaultHeaderTransformer`. This default implementation is what provides the default behaviour (growing progress bar, etc).
@@ -104,6 +111,24 @@ HeaderTransformers are responsible for updating the header view to match the cur
 ### Customised Header View layout
 If you feel that the default header view layout does not provide what you require, you can provide your own which is inflated for you. For the majority of cases, you will probably want to provide your own `HeaderTransformer` as well, to update your custom layout.
 
+## Maven
+For the standard library (APIv14+) add the following as a dependency in you `pom.xml`:
+```
+<dependency>
+    <groupId>com.github.chrisbanes.actionbarpulltorefresh</groupId>
+    <artifactId>library</artifactId>
+    <version>0.5</version>
+</dependency>
+```
+
+If you're using ActionBarSherlock (APIv7+) add the following as a dependency in you `pom.xml`:
+```
+<dependency>
+    <groupId>com.github.chrisbanes.actionbarpulltorefresh</groupId>
+    <artifactId>extra-abs</artifactId>
+    <version>0.5</version>
+</dependency>
+```
 ---
 
 ## License
