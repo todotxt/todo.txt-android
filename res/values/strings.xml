@@ -49,6 +49,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="update">Update</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
+    <string name="add_to_calendar">Add reminder</string>
+    <string name="calendar_title">Todo.txt reminder</string>
     <string name="archive">Archive</string>
     <string name="unComplete">Undo complete</string>
     <string name="swipe_action_complete">Completed task.</string>
