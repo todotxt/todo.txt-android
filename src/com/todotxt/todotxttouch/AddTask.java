@@ -49,6 +49,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.todotxt.todotxttouch.remote.RemoteClient;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
@@ -124,6 +125,15 @@ public class AddTask extends SherlockActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		m_app = (TodoApplication) getApplication();
+		
+		// FIXME: save intent so we can come back after login
+		if (!isAuthenticated()) {
+			Intent i = new Intent(this, LoginScreen.class);
+			startActivity(i);
+			finish();
+			return;
+		}
+		
 		taskBag = m_app.getTaskBag();
 
 		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_WITH_REMOTE));
@@ -230,6 +240,12 @@ public class AddTask extends SherlockActivity {
 		textInputField.setSelection(textInputField.getText().toString()
 				.length());
 		textInputField.requestFocus();
+	}
+
+	private boolean isAuthenticated() {
+		RemoteClient remoteClient = m_app.getRemoteClientManager()
+				.getRemoteClient();
+		return remoteClient.isAuthenticated();
 	}
 
 	private void updateNavigationDrawer() {
