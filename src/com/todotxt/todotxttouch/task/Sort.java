@@ -24,6 +24,8 @@ package com.todotxt.todotxttouch.task;
 
 import java.util.Comparator;
 
+import com.todotxt.todotxttouch.util.Strings;
+
 public enum Sort {
 	/**
 	 * Priority descending sort should result in Tasks in the following order
@@ -150,6 +152,64 @@ public enum Sort {
 			int result = t1.getText().compareToIgnoreCase(t2.getText());
 			if (result == 0) {
 				result = Sort.ID_ASC.getComparator().compare(t1, t2);
+			}
+			return result;
+		}
+	}),
+
+	/**
+	 * Date ascending sort should result in Tasks ordered by creation date,
+	 * earliest first. Tasks with no creation date will be sorted by line number
+	 * in ascending order
+	 * <p>
+	 * Note: this comparator imposes orderings that are inconsistent with
+	 * equals.
+	 * </p>
+	 */
+	DATE_ASC(4, new Comparator<Task>() {
+		@Override
+		public int compare(Task t1, Task t2) {
+			if (t1 == null || t2 == null) {
+				throw new NullPointerException(
+						"Null task passed into comparator");
+			}
+
+			int result = 0;
+			if (!Strings.isEmptyOrNull(t1.getPrependedDate())
+					&& !Strings.isEmptyOrNull(t2.getPrependedDate())) {
+				result = t1.getPrependedDate().compareTo(t2.getPrependedDate());
+			}
+			if (result == 0) {
+				result = Sort.ID_ASC.getComparator().compare(t1, t2);
+			}
+			return result;
+		}
+	}),
+
+	/**
+	 * Date descending sort should result in Tasks ordered by creation date,
+	 * most recent first. Tasks with no creation date will be sorted by line
+	 * number in descending order
+	 * <p>
+	 * Note: this comparator imposes orderings that are inconsistent with
+	 * equals.
+	 * </p>
+	 */
+	DATE_DESC(5, new Comparator<Task>() {
+		@Override
+		public int compare(Task t1, Task t2) {
+			if (t1 == null || t2 == null) {
+				throw new NullPointerException(
+						"Null task passed into comparator");
+			}
+
+			int result = 0;
+			if (!Strings.isEmptyOrNull(t1.getPrependedDate())
+					&& !Strings.isEmptyOrNull(t2.getPrependedDate())) {
+				result = t2.getPrependedDate().compareTo(t1.getPrependedDate());
+			}
+			if (result == 0) {
+				result = Sort.ID_DESC.getComparator().compare(t1, t2);
 			}
 			return result;
 		}
