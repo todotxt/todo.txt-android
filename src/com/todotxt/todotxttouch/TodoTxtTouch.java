@@ -166,6 +166,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				} else if (intent.getAction().equalsIgnoreCase(
 						Constants.INTENT_ACTION_LOGOUT)) {
 					taskBag.clear();
+					m_app.broadcastWidgetUpdate();
 					Intent i = new Intent(context, LoginScreen.class);
 					startActivity(i);
 					finish();

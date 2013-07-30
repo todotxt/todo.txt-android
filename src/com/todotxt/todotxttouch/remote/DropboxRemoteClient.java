@@ -130,6 +130,7 @@ class DropboxRemoteClient implements RemoteClient {
 		clearAuthToken();
 		dropboxApi.getSession().unlink();
 		TODO_TXT_TMP_FILE.delete();
+		DONE_TXT_TMP_FILE.delete();
 	}
 
 	@Override

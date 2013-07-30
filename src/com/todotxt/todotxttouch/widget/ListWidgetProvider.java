@@ -41,6 +41,7 @@ import com.todotxt.todotxttouch.AddTask;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.LoginScreen;
 import com.todotxt.todotxttouch.R;
+import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.TodoTxtTouch;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -126,13 +127,19 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		rv.setOnClickPendingIntent(R.id.listwidget_header, pendingIntent);
 
 		// Set click listener for the 'add' button
-		PendingIntent taskStackBuilderPendingIntent = TaskStackBuilder
-				.create(context)
-				.addNextIntent(new Intent(context, TodoTxtTouch.class))
-				.addNextIntent(new Intent(context, AddTask.class))
-				.getPendingIntent(0, 0);
-		rv.setOnClickPendingIntent(R.id.listwidget_additem,
-				taskStackBuilderPendingIntent);
+		if (isAuthenticated(context)) {
+			PendingIntent taskStackBuilderPendingIntent = TaskStackBuilder
+					.create(context)
+					.addNextIntent(new Intent(context, TodoTxtTouch.class))
+					.addNextIntent(new Intent(context, AddTask.class))
+					.getPendingIntent(0, 0);
+			rv.setOnClickPendingIntent(R.id.listwidget_additem,
+					taskStackBuilderPendingIntent);
+		} else {
+			// if not logged in, just go to login screen
+			rv.setOnClickPendingIntent(R.id.listwidget_additem,
+					pendingIntent);
+		}
 
 		// Bind a click listener template for the contents of the list.
 		// Note that we
@@ -167,6 +174,11 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			rv.setViewVisibility(R.id.listwidget_refresh, View.VISIBLE);
 		}
 		return rv;
+	}
+
+	private boolean isAuthenticated(Context context) {
+		TodoApplication app = (TodoApplication)context.getApplicationContext();
+		return app.getRemoteClientManager().getRemoteClient().isAuthenticated();
 	}
 
 }
