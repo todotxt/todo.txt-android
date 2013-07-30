@@ -64,14 +64,15 @@ public class TodoApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		TodoApplication.appContext = getApplicationContext();
-		m_prefs = new TodoPreferences(appContext, PreferenceManager.getDefaultSharedPreferences(this));
-		
+		m_prefs = new TodoPreferences(appContext,
+				PreferenceManager.getDefaultSharedPreferences(this));
+
 		try {
 			new UpgradeHandler(this).run();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, "Failed to run Uprade Tasks", e);
 		}
-		
+
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
 
@@ -101,9 +102,10 @@ public class TodoApplication extends Application {
 		}
 		super.onTerminate();
 	}
-	
+
 	/**
 	 * Are we currently pushing or pulling remote data?
+	 * 
 	 * @return true iff a remote operation currently in progress.
 	 */
 	public boolean syncInProgress() {
@@ -127,7 +129,8 @@ public class TodoApplication extends Application {
 	/**
 	 * Check network status, then push.
 	 */
-	private void pushToRemote(boolean force, boolean overwrite, boolean suppressToast) {
+	private void pushToRemote(boolean force, boolean overwrite,
+			boolean suppressToast) {
 		pushQueue += 1;
 		m_prefs.storeNeedToPush(true);
 		if (!force && m_prefs.isManualModeEnabled()) {
@@ -137,12 +140,12 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Working online; should push if file revisions match");
 			backgroundPushToRemote(overwrite, suppressToast);
 		} else if (m_pulling) {
-			Log.d(TAG, "app is pulling right now. don't start push."); 
+			Log.d(TAG, "app is pulling right now. don't start push.");
 		} else {
 			Log.i(TAG, "Not connected, don't push now");
 			if (!suppressToast) {
-			    showToast(R.string.toast_notconnected);
-			    updateSyncUI(true);
+				showToast(R.string.toast_notconnected);
+				updateSyncUI(true);
 			}
 		}
 	}
@@ -163,13 +166,13 @@ public class TodoApplication extends Application {
 			Log.i(TAG, "Working online; should pull file");
 			backgroundPullFromRemote();
 		} else if (m_pushing) {
-			Log.d(TAG, "app is pushing right now. don't start pull."); 
+			Log.d(TAG, "app is pushing right now. don't start pull.");
 		} else {
 			Log.i(TAG, "Not connected, don't pull now");
-			
+
 			if (!suppressToast) {
-			    showToast(R.string.toast_notconnected);
-			    updateSyncUI(true);
+				showToast(R.string.toast_notconnected);
+				updateSyncUI(true);
 			}
 		}
 	}
@@ -197,9 +200,10 @@ public class TodoApplication extends Application {
 	/**
 	 * Do asynchronous push with gui changes. Do availability check first.
 	 */
-	void backgroundPushToRemote(final boolean overwrite, final boolean suppressToast) {
+	void backgroundPushToRemote(final boolean overwrite,
+			final boolean suppressToast) {
 		if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
-			if(!(m_pushing || m_pulling)) {
+			if (!(m_pushing || m_pulling)) {
 				new AsyncPushTask(overwrite, suppressToast).execute();
 			}
 		} else {
@@ -214,20 +218,20 @@ public class TodoApplication extends Application {
 		static final int ERROR = 2;
 
 		private boolean overwrite;
-        private boolean suppressToast;
-		
+		private boolean suppressToast;
+
 		public AsyncPushTask(boolean overwrite, boolean suppressToast) {
 			this.overwrite = overwrite;
 			this.suppressToast = suppressToast;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			m_pushing = true;
 			pushQueue = 0;
 			updateSyncUI(false);
 		}
-		
+
 		@Override
 		protected Integer doInBackground(Void... params) {
 			try {
@@ -250,7 +254,8 @@ public class TodoApplication extends Application {
 			if (result == SUCCESS) {
 				if (pushQueue > 0) {
 					m_pushing = true;
-					Log.d(TAG, "pushQueue == " + pushQueue + ". Need to push again.");
+					Log.d(TAG, "pushQueue == " + pushQueue
+							+ ". Need to push again.");
 					new AsyncPushTask(false, suppressToast).execute();
 				} else {
 					Log.d(TAG, "taskBag.pushToRemote done");
@@ -316,7 +321,7 @@ public class TodoApplication extends Application {
 	private void updateSyncUI(boolean redrawList) {
 		sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI).putExtra(
 				"redrawList", redrawList));
-		if(redrawList) {
+		if (redrawList) {
 			broadcastWidgetUpdate();
 		}
 	}
@@ -329,7 +334,7 @@ public class TodoApplication extends Application {
 			boolean overwrite = intent.getBooleanExtra(
 					Constants.EXTRA_OVERWRITE, false);
 			boolean suppressToast = intent.getBooleanExtra(
-                    Constants.EXTRA_SUPPRESS_TOAST, false);
+					Constants.EXTRA_SUPPRESS_TOAST, false);
 			if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_START_SYNC_WITH_REMOTE)) {
 				syncWithRemote(force_sync, suppressToast);
@@ -341,9 +346,9 @@ public class TodoApplication extends Application {
 				pullFromRemote(force_sync, suppressToast);
 			} else if (intent.getAction().equalsIgnoreCase(
 					Constants.INTENT_ASYNC_FAILED)) {
-			    if (!suppressToast) {
-			        showToast("Synchronizing Failed");
-			    }
+				if (!suppressToast) {
+					showToast("Synchronizing Failed");
+				}
 				m_pulling = false;
 				m_pushing = false;
 				updateSyncUI(true);
@@ -361,13 +366,14 @@ public class TodoApplication extends Application {
 		m_prefs.storeSort(sort);
 		broadcastWidgetUpdate();
 	}
-	
+
 	public void getStoredSort() {
 		sort = m_prefs.getSort();
 	}
-	
+
 	public void storeFilters() {
-		m_prefs.storeFilters(m_prios, m_contexts, m_projects, m_search, m_filters);
+		m_prefs.storeFilters(m_prios, m_contexts, m_projects, m_search,
+				m_filters);
 		broadcastWidgetUpdate();
 	}
 
@@ -376,7 +382,7 @@ public class TodoApplication extends Application {
 		m_contexts = m_prefs.getFilteredContexts();
 		m_projects = m_prefs.getFilteredProjects();
 		m_search = m_prefs.getSearch();
-		//split on tab just in case there is a space in the text
+		// split on tab just in case there is a space in the text
 		m_filters = m_prefs.getFilterSummaries();
 	}
 

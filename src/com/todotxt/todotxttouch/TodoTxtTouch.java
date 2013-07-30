@@ -488,14 +488,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		if (m_drawerToggle!=null) {
+		if (m_drawerToggle != null) {
 			m_drawerToggle.onConfigurationChanged(newConfig);
 		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home && m_drawerLayout!=null) {
+		if (item.getItemId() == android.R.id.home && m_drawerLayout != null) {
 
 			if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
 				m_drawerLayout.closeDrawer(m_drawerList);
@@ -524,7 +524,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 		return text;
 	}
-	
+
 	private void shareTasks(List<Task> tasks) {
 		String shareText = selectedTasksAsString(tasks);
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -556,7 +556,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				.putExtra(Events.DESCRIPTION, calendarDescription);
 		startActivity(intent);
 	}
-	
+
 	private void prioritizeTasks(final ArrayList<Task> tasks) {
 		final String[] prioArr = Priority
 				.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);
@@ -914,9 +914,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	 */
 	@SuppressWarnings("deprecation")
 	private void syncClient(boolean force) {
-		
+
 		m_pullToRefreshAttacher.setRefreshing(true);
-		
+
 		if (!force && m_app.m_prefs.isManualModeEnabled()) {
 			Log.v(TAG,
 					"Manual mode, choice forced; prompt user to ask which way to sync");
@@ -1555,7 +1555,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 			setDrawerChoices();
 			m_app.storeFilters();
-			if (m_drawerLayout!=null) {
+			if (m_drawerLayout != null) {
 				m_drawerLayout.closeDrawer(m_drawerList);
 			}
 			setFilteredTasks(false);
