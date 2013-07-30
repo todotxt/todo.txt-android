@@ -1111,12 +1111,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	/** Handle clear filter click **/
 	public void onClearClick(View v) {
+		clearFilter();
+
 		// End current activity if it's search results
 		Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			finish();
 		} else { // otherwise just clear the filter in the current activity
-			clearFilter();
 			setFilteredTasks(false);
 		}
 	}
@@ -1597,6 +1598,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			m_app.m_filters.remove(getString(R.string.filter_tab_projects));
 		}
 
-		((ArrayAdapter<?>) m_drawerList.getAdapter()).notifyDataSetChanged();
+		ArrayAdapter<?> adapter = (ArrayAdapter<?>) m_drawerList.getAdapter();
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
+		}
 	}
 }
