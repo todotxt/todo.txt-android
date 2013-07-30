@@ -65,6 +65,13 @@ public class TodoApplication extends Application {
 		super.onCreate();
 		TodoApplication.appContext = getApplicationContext();
 		m_prefs = new TodoPreferences(appContext, PreferenceManager.getDefaultSharedPreferences(this));
+		
+		try {
+			new UpgradeHandler(this).run();
+		} catch(Exception e) {
+			Log.e(TAG, "Failed to run Uprade Tasks", e);
+		}
+		
 		remoteClientManager = new RemoteClientManager(this, m_prefs);
 		this.taskBag = TaskBagFactory.getTaskBag(this, m_prefs);
 
