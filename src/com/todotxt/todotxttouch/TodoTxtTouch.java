@@ -559,7 +559,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private void prioritizeTasks(final ArrayList<Task> tasks) {
 		final String[] prioArr = Priority
-				.rangeInCode(Priority.NONE, Priority.E).toArray(new String[0]);
+				.rangeInCode(Priority.NONE, Priority.Z).toArray(new String[0]);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.select_priority));
 		builder.setSingleChoiceItems(prioArr, 0, new OnClickListener() {
