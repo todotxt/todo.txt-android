@@ -33,6 +33,7 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
@@ -295,6 +296,14 @@ class DropboxRemoteClient implements RemoteClient {
 					results.add(new DropboxRemoteFolder(e));
 				}
 			}
+		}catch (DropboxServerException dse) {
+			if (dse.error != DropboxServerException._404_NOT_FOUND) {
+				Log.e(TAG, "Error getting folders for path: " + path);
+				Log.e(TAG, "Dropbox returned error code: " + dse.error);
+				throw new RemoteException("Failed to get folder listing from Dropbox", dse);
+			}
+			// A 404 is OK. We will create the directory if necessary when we push
+			Log.i(TAG, "Remote path not found: " + path);
 		} catch (DropboxException e) {
 			Log.e(TAG, "Error getting folders for path: " + path);
 			throw new RemoteException(

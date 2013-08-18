@@ -44,7 +44,11 @@ public class Path {
 				path = path.substring(0, path.length() - 1);
 			}
 			int ind = path.lastIndexOf('/');
-			return path.substring(0, ind + 1);
+			if (ind == 0) {
+				// strip the last slash, unless the entire path is '/'
+				ind = 1;
+			}
+			return path.substring(0, ind);
 		}
 	}
 }
