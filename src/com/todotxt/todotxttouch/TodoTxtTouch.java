@@ -108,6 +108,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	ProgressDialog m_ProgressDialog = null;
 	String m_DialogText = "";
 	Boolean m_DialogActive = false;
+	private int mScrollPosition = -1;
+	private int mScrollTop = -1;
 	Menu options_menu;
 	private Boolean wasOffline = false;
 
@@ -322,8 +324,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		// Do nothing
-
+		if (visibleItemCount > 0) {
+			calculateScrollPosition();
+		}
 	}
 
 	private void updateNavigationDrawer() {
@@ -420,6 +423,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	@Override
+	protected void onPause() {
+		super.onPause();
+		calculateScrollPosition();
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		m_app.getStoredSort();
@@ -458,7 +467,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// outState.putInt("sort", sort.getId());
+		outState.putInt("ScrollPosition", mScrollPosition);
+		outState.putInt("ScrollTop", mScrollTop);
+
 		outState.putBoolean("DialogActive", m_DialogActive);
 		outState.putString("DialogText", m_DialogText);
 
@@ -469,7 +480,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	protected void onRestoreInstanceState(Bundle state) {
 		super.onRestoreInstanceState(state);
-		// sort = Sort.getById(state.getInt("sort"));
+		mScrollPosition = state.getInt("ScrollPosition", -1);
+		mScrollTop = state.getInt("ScrollTop", -1);
+		
 		m_DialogActive = state.getBoolean("DialogActive");
 		m_DialogText = state.getString("DialogText");
 		if (m_DialogActive) {
@@ -515,6 +528,15 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		}
 		return true;
+	}
+
+	private void calculateScrollPosition() {
+		ListView lv = getListView();
+		mScrollPosition = lv.getFirstVisiblePosition();
+		mScrollTop = lv.getFirstVisiblePosition();
+		View v = lv.getChildAt(0);
+		mScrollTop = (v == null) ? 0 : v.getTop();
+		Log.v(TAG, "ListView index " + mScrollPosition + " top " + mScrollTop);
 	}
 
 	private String selectedTasksAsString(List<Task> tasks) {
@@ -1302,11 +1324,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			}
 		}
 
-		ListView lv = getListView();
-		int index = lv.getFirstVisiblePosition();
-		View v = lv.getChildAt(0);
-		int top = (v == null) ? 0 : v.getTop();
-		Log.v(TAG, "ListView index " + index + " top " + top);
+		if (mScrollPosition < 0) {
+			calculateScrollPosition();
+		}
 
 		m_adapter.clear();
 		for (Task task : taskBag.getTasks(FilterFactory.generateAndFilter(
@@ -1315,8 +1335,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			m_adapter.add(task);
 		}
 
-		lv.setSelectionFromTop(index, top);
-
+		ListView lv = getListView();
+		lv.setSelectionFromTop(mScrollPosition, mScrollTop);
+		
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
 		final LinearLayout actionbar = (LinearLayout) findViewById(R.id.actionbar);
 		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
