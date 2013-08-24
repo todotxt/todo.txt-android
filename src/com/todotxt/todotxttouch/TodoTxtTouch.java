@@ -1587,6 +1587,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			}
 		} else {
 			m_app.m_filters.remove(getString(R.string.filter_tab_contexts));
+			m_app.m_contexts = new ArrayList<String>();
 		}
 
 		if (haveProjects) {
@@ -1596,6 +1597,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			}
 		} else {
 			m_app.m_filters.remove(getString(R.string.filter_tab_projects));
+			m_app.m_projects = new ArrayList<String>();
 		}
 
 		ArrayAdapter<?> adapter = (ArrayAdapter<?>) m_drawerList.getAdapter();
