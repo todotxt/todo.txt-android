@@ -23,8 +23,8 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.todotxt.todotxttouch"
-    android:versionCode="54"
-    android:versionName="2.2-beta1" >
+    android:versionCode="55"
+    android:versionName="2.2-beta2" >
 
     <uses-sdk
         android:minSdkVersion="8"
