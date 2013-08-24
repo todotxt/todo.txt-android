@@ -101,6 +101,7 @@ public class TodoLocationPreference extends DialogPreference {
 			if (mDisplayMode == DisplayMode.ADD_NEW) {
 				value = new File(value, mEditText.getText().toString())
 						.toString();
+				addNew(value);
 			}
 			if (callChangeListener(value)) {
 				persistString(value);
@@ -184,8 +185,8 @@ public class TodoLocationPreference extends DialogPreference {
 					mEditText.requestFocus();
 				} else {
 					// drill down to this directory
-					int index = mCurrentSelection.getParent() == null ? position
-							: position - 1;
+					int index = mCurrentSelection.getData().hasParent() ? position - 1
+							: position;
 					selectFolder(mCurrentSelection.getChild(index));
 				}
 			}
@@ -233,6 +234,16 @@ public class TodoLocationPreference extends DialogPreference {
 				.getFolder(mCurrentSelection.getData().getParentPath());
 		mRootFolder = new Tree<RemoteFolder>(parent);
 		selectFolder(mRootFolder);
+	}
+
+	private void addNew(String path) {
+		Tree<RemoteFolder> tree = findFolderInTree(mCurrentSelection, path);
+		if (tree == null) {
+			RemoteFolder folder = mApp.getRemoteClientManager()
+					.getRemoteClient().getFolder(path);
+			tree = mCurrentSelection.addChild(folder);
+		}
+		setCurrentSelection(tree);
 	}
 
 	private void setCurrentSelection(Tree<RemoteFolder> folder) {
@@ -294,16 +305,25 @@ public class TodoLocationPreference extends DialogPreference {
 					return;
 				}
 
+				// if we are loading the parent of our current folder
+				// add the current folder as a child so we can keep it's children
+				boolean shouldAddCurrent = mCurrentSelection.getData().getParentPath().equals(folder.getData().getPath());
 				for (RemoteFolder child : result) {
-					if (mCurrentSelection.getData().equals(child)) {
-						// if we just loaded the parent of our current folder
-						// add it as a child so we can keep it's children
+					if (shouldAddCurrent && mCurrentSelection.getData().equals(child)) {
 						folder.addChild(mCurrentSelection);
+						shouldAddCurrent = false;
 					} else {
 						folder.addChild(child);
 					}
 				}
 
+				if (shouldAddCurrent) {
+					// if the user created the current folder,
+					// it won't really exist yet, but let's not 
+					// wipe it out.
+					folder.addChild(mCurrentSelection);
+				}
+				
 				folder.setLoaded();
 				setCurrentSelection(folder);
 			}
