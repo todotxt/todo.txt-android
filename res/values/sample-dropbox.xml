@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -22,11 +21,14 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <resources>
-<!--
+
+    <!--
 First, copy this file to dropbox.xml. Then uncomment out the following lines and fill in the appropriate values.
 The dropbox_consumer_key value must start with 'db-'
     <string name="dropbox_consumer_key">Enter your Dropbox app key here</string>
     <string name="dropbox_consumer_secret">Enter your Dropbox app secret here</string>
--->    
+    -->
+
 </resources>

@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import android.preference.PreferenceManager;
@@ -33,358 +34,354 @@ import java.util.Date;
 import com.todotxt.todotxttouch.TodoPreferences;
 
 public class TaskBagImplTest extends AndroidTestCase {
+    class TestLocalTaskRepository implements LocalTaskRepository {
+        @Override
+        public boolean todoFileModifiedSince(Date date) {
+            return false;
+        }
+
+        @Override
+        public void store(ArrayList<Task> tasks) {
+        }
+
+        @Override
+        public void purge() {
+        }
+
+        @Override
+        public ArrayList<Task> load() {
+            return null;
+        }
+
+        @Override
+        public void init() {
+        }
 
-	class TestLocalTaskRepository implements LocalTaskRepository {
-
-		@Override
-		public boolean todoFileModifiedSince(Date date) {
-			return false;
-		}
-
-		@Override
-		public void store(ArrayList<Task> tasks) {
-		}
-
-		@Override
-		public void purge() {
-		}
-
-		@Override
-		public ArrayList<Task> load() {
-			return null;
-		}
+        @Override
+        public boolean doneFileModifiedSince(Date date) {
+            return false;
+        }
 
-		@Override
-		public void init() {
-		}
+        @Override
+        public void archive(ArrayList<Task> tasks) {
+        }
 
-		@Override
-		public boolean doneFileModifiedSince(Date date) {
-			return false;
-		}
+        @Override
+        public void storeDoneTasks(File file) {
+        }
 
-		@Override
-		public void archive(ArrayList<Task> tasks) {
-		}
+        @Override
+        public ArrayList<Task> loadDoneTasks() {
+            return null;
+        }
 
-		@Override
-		public void storeDoneTasks(File file) {
-		}
+        @Override
+        public void storeDoneTasks(ArrayList<Task> tasks) {
+            return;
+        }
+    };
 
-		@Override
-		public ArrayList<Task> loadDoneTasks() {
-			return null;
-		}
+    private String input1 = "A Simple test with no curve balls";
+    private String input2 = "Another test with no curve balls";
+    private Task task1;
+    private Task task2;
 
-		@Override
-		public void storeDoneTasks(ArrayList<Task> tasks) {
-			return;
-		}
-	};
+    ArrayList<Task> list1;
+    ArrayList<Task> list2;
 
-	private String input1 = "A Simple test with no curve balls";
-	private String input2 = "Another test with no curve balls";
-	private Task task1;
-	private Task task2;
-	ArrayList<Task> list1;
-	ArrayList<Task> list2;
-	TodoPreferences prefs;
+    TodoPreferences prefs;
 
-	protected void setUp() throws Exception {
-		task1 = new Task(1, input1);
-		task2 = new Task(2, input2);
-		list1 = new ArrayList<Task>(2);
-		list2 = new ArrayList<Task>(2);
-		prefs = new TodoPreferences(getContext(),
-				PreferenceManager.getDefaultSharedPreferences(getContext()));
-	}
+    protected void setUp() throws Exception {
+        task1 = new Task(1, input1);
+        task2 = new Task(2, input2);
+        list1 = new ArrayList<Task>(2);
+        list2 = new ArrayList<Task>(2);
+        prefs = new TodoPreferences(getContext(),
+                PreferenceManager.getDefaultSharedPreferences(getContext()));
+    }
 
-	public void testReload() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+    public void testReload() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-		list1.add(task1);
-		list1.add(task2);
+        list1.add(task1);
+        list1.add(task2);
 
-		TaskBagImpl taskBag = new TaskBagImpl(null, repo, null);
+        TaskBagImpl taskBag = new TaskBagImpl(null, repo, null);
 
-		assertEquals(0, taskBag.size());
+        assertEquals(0, taskBag.size());
 
-		taskBag.reload();
+        taskBag.reload();
 
-		assertEquals(2, taskBag.size());
+        assertEquals(2, taskBag.size());
 
-		assertEquals(taskBag.getTasks().get(0), task1);
-		assertEquals(taskBag.getTasks().get(1), task2);
+        assertEquals(taskBag.getTasks().get(0), task1);
+        assertEquals(taskBag.getTasks().get(1), task2);
+    }
 
-	}
+    public void testReloadModified() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            boolean first = true;
 
-	public void testReloadModified() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			boolean first = true;
+            public boolean todoFileModifiedSince(Date date) {
+                return !first;
+            }
 
-			public boolean todoFileModifiedSince(Date date) {
-				return !first;
-			}
+            public ArrayList<Task> load() {
+                if (first) {
+                    first = false;
+                    return list1;
+                } else {
+                    return list2;
+                }
+            }
+        };
 
-			public ArrayList<Task> load() {
-				if (first) {
-					first = false;
-					return list1;
-				} else {
-					return list2;
-				}
-			}
-		};
+        list1.add(task1);
+        list2.add(task2);
 
-		list1.add(task1);
-		list2.add(task2);
+        TaskBagImpl taskBag = new TaskBagImpl(null, repo, null);
 
-		TaskBagImpl taskBag = new TaskBagImpl(null, repo, null);
+        assertEquals(0, taskBag.size());
 
-		assertEquals(0, taskBag.size());
+        taskBag.reload();
 
-		taskBag.reload();
+        assertEquals(1, taskBag.size());
 
-		assertEquals(1, taskBag.size());
+        taskBag.reload();
 
-		taskBag.reload();
+        assertEquals(1, taskBag.size());
 
-		assertEquals(1, taskBag.size());
+        assertEquals(taskBag.getTasks().get(0), task2);
+    }
 
-		assertEquals(taskBag.getTasks().get(0), task2);
+    public void testReloadNotModified() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-	}
+        list1.add(task1);
+        list1.add(task2);
 
-	public void testReloadNotModified() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+        TaskBagImpl taskBag = new TaskBagImpl(null, repo, null);
 
-		list1.add(task1);
-		list1.add(task2);
+        assertEquals(0, taskBag.size());
 
-		TaskBagImpl taskBag = new TaskBagImpl(null, repo, null);
+        taskBag.reload();
 
-		assertEquals(0, taskBag.size());
+        assertEquals(2, taskBag.size());
 
-		taskBag.reload();
+        assertEquals(taskBag.getTasks().get(0), task1);
+        assertEquals(taskBag.getTasks().get(1), task2);
 
-		assertEquals(2, taskBag.size());
+        taskBag.reload();
 
-		assertEquals(taskBag.getTasks().get(0), task1);
-		assertEquals(taskBag.getTasks().get(1), task2);
+        try {
+            Field listField = TaskBagImpl.class.getDeclaredField("tasks");
+            listField.setAccessible(true);
+            assertEquals(list1, listField.get(taskBag));
+        } catch (Exception e) {
+            fail(e.toString());
+        }
+    }
 
-		taskBag.reload();
+    public void testAddAsTaskToNewList() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-		try {
-			Field listField = TaskBagImpl.class.getDeclaredField("tasks");
-			listField.setAccessible(true);
-			assertEquals(list1, listField.get(taskBag));
-		} catch (Exception e) {
-			fail(e.toString());
-		}
-	}
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-	public void testAddAsTaskToNewList() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+        assertEquals(0, taskBag.size());
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        taskBag.addAsTask(input1);
 
-		assertEquals(0, taskBag.size());
+        assertEquals(1, taskBag.size());
 
-		taskBag.addAsTask(input1);
+        assertEquals(taskBag.getTasks().get(0).getText(), input1);
+    }
 
-		assertEquals(1, taskBag.size());
+    public void testAddAsTaskToExistingList() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-		assertEquals(taskBag.getTasks().get(0).getText(), input1);
+        list1.add(task1);
 
-	}
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-	public void testAddAsTaskToExistingList() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+        assertEquals(0, taskBag.size());
 
-		list1.add(task1);
+        taskBag.addAsTask(input2);
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        assertEquals(2, taskBag.size());
 
-		assertEquals(0, taskBag.size());
+        assertEquals(taskBag.getTasks().get(0).getText(), input1);
+        assertEquals(taskBag.getTasks().get(1).getText(), input2);
+    }
 
-		taskBag.addAsTask(input2);
+    public void testUpdate() {
+        String newText = "new text";
 
-		assertEquals(2, taskBag.size());
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-		assertEquals(taskBag.getTasks().get(0).getText(), input1);
-		assertEquals(taskBag.getTasks().get(1).getText(), input2);
+        list1.add(task1);
+        list1.add(task2);
 
-	}
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-	public void testUpdate() {
-		String newText = "new text";
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+        assertEquals(0, taskBag.size());
 
-		list1.add(task1);
-		list1.add(task2);
+        task2.update(newText);
+        taskBag.update(task2);
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        assertEquals(2, taskBag.size());
 
-		assertEquals(0, taskBag.size());
+        assertEquals(taskBag.getTasks().get(0).getText(), input1);
+        assertEquals(taskBag.getTasks().get(1).getText(), newText);
+    }
 
-		task2.update(newText);
-		taskBag.update(task2);
+    public void testUpdateFailsOnNonExistentTask() {
+        String newText = "new text";
 
-		assertEquals(2, taskBag.size());
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-		assertEquals(taskBag.getTasks().get(0).getText(), input1);
-		assertEquals(taskBag.getTasks().get(1).getText(), newText);
+        list1.add(task1);
 
-	}
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-	public void testUpdateFailsOnNonExistentTask() {
-		String newText = "new text";
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+        assertEquals(0, taskBag.size());
 
-		list1.add(task1);
+        task2.update(newText);
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        boolean thrown = false;
 
-		assertEquals(0, taskBag.size());
+        try {
+            taskBag.update(task2);
+        } catch (TaskPersistException e) {
+            thrown = true;
+        }
 
-		task2.update(newText);
+        assertTrue("TaskPersistException should be thrown", thrown);
+        assertEquals(1, taskBag.size());
 
-		boolean thrown = false;
-		try {
-			taskBag.update(task2);
-		} catch (TaskPersistException e) {
-			thrown = true;
-		}
-		assertTrue("TaskPersistException should be thrown", thrown);
-		assertEquals(1, taskBag.size());
+        assertEquals(taskBag.getTasks().get(0).getText(), input1);
+    }
 
-		assertEquals(taskBag.getTasks().get(0).getText(), input1);
+    public void testRemove() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-	}
+        list1.add(task1);
+        list1.add(task2);
 
-	public void testRemove() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-		list1.add(task1);
-		list1.add(task2);
+        assertEquals(0, taskBag.size());
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        taskBag.delete(task2);
 
-		assertEquals(0, taskBag.size());
+        assertEquals(1, taskBag.size());
 
-		taskBag.delete(task2);
+        assertEquals(taskBag.getTasks().get(0).getText(), input1);
+    }
 
-		assertEquals(1, taskBag.size());
+    public void testRemoveFailsOnNonExistentTask() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
+        };
 
-		assertEquals(taskBag.getTasks().get(0).getText(), input1);
+        list1.add(task1);
 
-	}
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-	public void testRemoveFailsOnNonExistentTask() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
-		};
+        assertEquals(0, taskBag.size());
 
-		list1.add(task1);
+        boolean thrown = false;
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        try {
+            taskBag.delete(task2);
+        } catch (TaskPersistException e) {
+            thrown = true;
+        }
 
-		assertEquals(0, taskBag.size());
+        assertTrue("TaskPersistException should be thrown", thrown);
 
-		boolean thrown = false;
-		try {
-			taskBag.delete(task2);
-		} catch (TaskPersistException e) {
-			thrown = true;
-		}
-		assertTrue("TaskPersistException should be thrown", thrown);
+        assertEquals(1, taskBag.size());
 
-		assertEquals(1, taskBag.size());
+        assertEquals(taskBag.getTasks().get(0).getText(), input1);
+    }
 
-		assertEquals(taskBag.getTasks().get(0).getText(), input1);
+    public void testUnarchive() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
 
-	}
+            public ArrayList<Task> loadDoneTasks() {
+                return list2;
+            }
+        };
 
-	public void testUnarchive() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
+        list2.add(task1);
 
-			public ArrayList<Task> loadDoneTasks() {
-				return list2;
-			}
-		};
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-		list2.add(task1);
+        assertEquals(0, taskBag.size());
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        taskBag.unarchive(task1);
 
-		assertEquals(0, taskBag.size());
+        assertEquals(1, taskBag.size());
+        assertEquals(0, list2.size());
 
-		taskBag.unarchive(task1);
+        assertEquals(taskBag.getTasks().get(0).getText(), input1);
+    }
 
-		assertEquals(1, taskBag.size());
-		assertEquals(0, list2.size());
+    public void testUnarchiveOnNonExistentTask() {
+        LocalTaskRepository repo = new TestLocalTaskRepository() {
+            public ArrayList<Task> load() {
+                return list1;
+            }
 
-		assertEquals(taskBag.getTasks().get(0).getText(), input1);
+            public ArrayList<Task> loadDoneTasks() {
+                return list2;
+            }
+        };
 
-	}
+        list2.add(task1);
 
-	public void testUnarchiveOnNonExistentTask() {
-		LocalTaskRepository repo = new TestLocalTaskRepository() {
-			public ArrayList<Task> load() {
-				return list1;
-			}
+        TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
 
-			public ArrayList<Task> loadDoneTasks() {
-				return list2;
-			}
-		};
+        assertEquals(0, taskBag.size());
 
-		list2.add(task1);
+        taskBag.unarchive(task2);
 
-		TaskBagImpl taskBag = new TaskBagImpl(prefs, repo, null);
+        assertEquals(1, taskBag.size());
+        assertEquals(1, list2.size());
 
-		assertEquals(0, taskBag.size());
-
-		taskBag.unarchive(task2);
-
-		assertEquals(1, taskBag.size());
-		assertEquals(1, list2.size());
-
-		assertEquals(taskBag.getTasks().get(0).getText(), input2);
-		assertEquals(list2.get(0).getText(), input1);
-
-	}
+        assertEquals(taskBag.getTasks().get(0).getText(), input2);
+        assertEquals(list2.get(0).getText(), input1);
+    }
 }

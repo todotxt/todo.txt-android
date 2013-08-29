@@ -21,12 +21,13 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listwidget_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="4dip"
-    android:paddingBottom="4dip" >
+    android:paddingBottom="4dip"
+    android:paddingTop="4dip" >
 
     <TextView
         android:id="@+id/listwidget_taskprio"
@@ -44,9 +45,9 @@ You should have received a copy of the GNU General Public License along with Tod
         android:layout_toRightOf="@id/listwidget_taskprio"
         android:ellipsize="end"
         android:maxLines="2"
+        android:paddingBottom="4dip"
         android:paddingLeft="4dip"
         android:paddingRight="4dip"
-        android:paddingBottom="4dip"
         android:textColor="#232323"
         android:textSize="16sp" />
 

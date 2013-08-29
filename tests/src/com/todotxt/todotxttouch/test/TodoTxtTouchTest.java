@@ -20,26 +20,25 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.test;
 
 import com.todotxt.todotxttouch.TodoTxtTouch;
 import android.test.ActivityInstrumentationTestCase2;
 
-public class TodoTxtTouchTest extends
-		ActivityInstrumentationTestCase2<TodoTxtTouch> {
+public class TodoTxtTouchTest extends ActivityInstrumentationTestCase2<TodoTxtTouch> {
+    @SuppressWarnings("unused")
+    // TODO: Remove
+    private TodoTxtTouch m_activity;
 
-	@SuppressWarnings("unused")
-	// TODO: Remove
-	private TodoTxtTouch m_activity;
+    @SuppressWarnings("deprecation")
+    public TodoTxtTouchTest() {
+        super("com.todotxt.todotxttouch", TodoTxtTouch.class);
+    }
 
-	@SuppressWarnings("deprecation")
-	public TodoTxtTouchTest() {
-		super("com.todotxt.todotxttouch", TodoTxtTouch.class);
-	}
-
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		m_activity = this.getActivity();
-	}
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        m_activity = this.getActivity();
+    }
 }

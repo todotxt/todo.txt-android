@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -24,156 +23,157 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
-	<style name="Theme.TodoTxt" parent="Theme.Sherlock.Light.DarkActionBar">
-    	<item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>
-    	<item name="actionBarStyle">@style/MyActionBar</item>
-	</style>
-	
 
-	<style name="MyActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-    	<item name="android:background">#006400</item>
-    	<item name="background">#006400</item>
-	</style>
+    <style name="Theme.TodoTxt" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
 
-	<style name="TitleBar">
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">@dimen/title_height</item>
-		<item name="android:orientation">horizontal</item>
-	</style>
+    <style name="MyActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#006400</item>
+        <item name="background">#006400</item>
+    </style>
 
-	<style name="TitleBarAction">
-		<item name="android:layout_width">@dimen/title_height</item>
-		<item name="android:layout_height">fill_parent</item>
-	</style>
+    <style name="TitleBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/title_height</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
 
-	<style name="TitleBarProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:layout_marginLeft">20dip</item>
-		<item name="android:layout_marginRight">19dip</item>
-		<item name="android:layout_marginTop">20dip</item>
-		<item name="android:indeterminate">true</item>
-	</style>
+    <style name="TitleBarAction">
+        <item name="android:layout_width">@dimen/title_height</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
 
-	<style name="TitleBarSeparator">
-		<item name="android:layout_width">1px</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_marginTop">10dip</item>
-		<item name="android:layout_marginBottom">0dip</item>
-	</style>
-	<style name="TitleBarLabel">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_marginRight">10dip</item>
-		<item name="android:gravity">bottom</item>
-	</style>
+    <style name="TitleBarProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">19dip</item>
+        <item name="android:layout_marginTop">20dip</item>
+        <item name="android:indeterminate">true</item>
+    </style>
 
-	<style name="TitleBarLogo">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:clickable">true</item>
-	</style>
+    <style name="TitleBarSeparator">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginBottom">0dip</item>
+    </style>
 
-	<style name="WidgetTitleBarLogo">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">wrap_content</item>
-		<item name="android:clickable">true</item>
-	</style>
+    <style name="TitleBarLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_marginRight">10dip</item>
+        <item name="android:gravity">bottom</item>
+    </style>
 
-	<style name="TitleBarSpring">
-		<item name="android:layout_width">0dp</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_weight">1</item>
-	</style>
+    <style name="TitleBarLogo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:clickable">true</item>
+    </style>
 
-	<style name="SubTitleBar">
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">@dimen/subtitle_height</item>
-		<item name="android:orientation">horizontal</item>
-		<item name="android:background">@drawable/subtitle_background</item>
-		<item name="android:visibility">gone</item>
-	</style>
+    <style name="WidgetTitleBarLogo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clickable">true</item>
+    </style>
 
-	<style name="ActionBar">
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:layout_height">@dimen/actionbar_height</item>
-		<item name="android:orientation">horizontal</item>
-		<item name="android:background">@drawable/actionbar_background</item>
-		<item name="android:visibility">gone</item>
-	</style>
+    <style name="TitleBarSpring">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
 
-	<style name="ActionBarButtonSet">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:orientation">horizontal</item>
-		<item name="android:background">@drawable/actionbar_button_set</item>
-		<item name="android:layout_margin">3dip</item>
-	</style>
+    <style name="SubTitleBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/subtitle_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/subtitle_background</item>
+        <item name="android:visibility">gone</item>
+    </style>
 
-	<style name="ActionBarSeparator">
-		<item name="android:layout_width">1px</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_marginTop">3dip</item>
-		<item name="android:layout_marginBottom">3dip</item>
-		<item name="android:background">@drawable/actionbar_separator</item>
-	</style>
+    <style name="ActionBar">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">@dimen/actionbar_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/actionbar_background</item>
+        <item name="android:visibility">gone</item>
+    </style>
 
-	<style name="ActionBarSeparatorWhite">
-		<item name="android:layout_width">1px</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:layout_marginTop">3dip</item>
-		<item name="android:layout_marginBottom">3dip</item>
-		<item name="android:background">@drawable/actionbar_separator_white</item>
-	</style>
+    <style name="ActionBarButtonSet">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/actionbar_button_set</item>
+        <item name="android:layout_margin">3dip</item>
+    </style>
 
-	<style name="ActionBarButton">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:background">@drawable/actionbar_button</item>
-		<item name="android:paddingTop">2dip</item>
-		<item name="android:paddingBottom">2dip</item>
-		<item name="android:paddingLeft">7dip</item>
-		<item name="android:paddingRight">7dip</item>
-		<item name="android:layout_margin">3dip</item>
-	</style>
+    <style name="ActionBarSeparator">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_marginTop">3dip</item>
+        <item name="android:layout_marginBottom">3dip</item>
+        <item name="android:background">@drawable/actionbar_separator</item>
+    </style>
 
-	<style name="ActionBarLeftButton">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:background">@drawable/actionbar_left_button</item>
-		<item name="android:paddingTop">2dip</item>
-		<item name="android:paddingBottom">2dip</item>
-		<item name="android:paddingLeft">7dip</item>
-		<item name="android:paddingRight">7dip</item>
-		<item name="android:drawablePadding">4dip</item>
-	</style>
+    <style name="ActionBarSeparatorWhite">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_marginTop">3dip</item>
+        <item name="android:layout_marginBottom">3dip</item>
+        <item name="android:background">@drawable/actionbar_separator_white</item>
+    </style>
 
-	<style name="ActionBarCenterButton">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:background">@drawable/actionbar_center_button</item>
-		<item name="android:paddingTop">2dip</item>
-		<item name="android:paddingBottom">2dip</item>
-		<item name="android:paddingLeft">7dip</item>
-		<item name="android:paddingRight">7dip</item>
-		<item name="android:drawablePadding">4dip</item>
-	</style>
+    <style name="ActionBarButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/actionbar_button</item>
+        <item name="android:paddingTop">2dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">7dip</item>
+        <item name="android:paddingRight">7dip</item>
+        <item name="android:layout_margin">3dip</item>
+    </style>
 
-	<style name="ActionBarRightButton">
-		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">fill_parent</item>
-		<item name="android:background">@drawable/actionbar_right_button</item>
-		<item name="android:paddingTop">2dip</item>
-		<item name="android:paddingBottom">2dip</item>
-		<item name="android:paddingLeft">7dip</item>
-		<item name="android:paddingRight">7dip</item>
-		<item name="android:drawablePadding">4dip</item>
-	</style>
+    <style name="ActionBarLeftButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/actionbar_left_button</item>
+        <item name="android:paddingTop">2dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">7dip</item>
+        <item name="android:paddingRight">7dip</item>
+        <item name="android:drawablePadding">4dip</item>
+    </style>
 
-	<style name="HorizontalRule">
-		<item name="android:layout_height">1px</item>
-		<item name="android:layout_width">fill_parent</item>
-		<item name="android:background">@drawable/horizontal_rule</item>
-	</style>
-	
+    <style name="ActionBarCenterButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/actionbar_center_button</item>
+        <item name="android:paddingTop">2dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">7dip</item>
+        <item name="android:paddingRight">7dip</item>
+        <item name="android:drawablePadding">4dip</item>
+    </style>
+
+    <style name="ActionBarRightButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/actionbar_right_button</item>
+        <item name="android:paddingTop">2dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">7dip</item>
+        <item name="android:paddingRight">7dip</item>
+        <item name="android:drawablePadding">4dip</item>
+    </style>
+
+    <style name="HorizontalRule">
+        <item name="android:layout_height">1px</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:background">@drawable/horizontal_rule</item>
+    </style>
+
 </resources>

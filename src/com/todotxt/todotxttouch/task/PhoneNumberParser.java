@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
@@ -34,38 +35,41 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 
 public class PhoneNumberParser {
-	// private static final Pattern NUMBER_PATTERN = android.util.Patterns.
-	private static final PhoneNumberParser INSTANCE = new PhoneNumberParser();
+    // private static final Pattern NUMBER_PATTERN = android.util.Patterns.
+    private static final PhoneNumberParser INSTANCE = new PhoneNumberParser();
 
-	private PhoneNumberParser() {
-	}
+    private PhoneNumberParser() {
+    }
 
-	public static PhoneNumberParser getInstance() {
-		return INSTANCE;
-	}
+    public static PhoneNumberParser getInstance() {
+        return INSTANCE;
+    }
 
-	public List<String> parse(String inputText) {
-		if (inputText == null) {
-			return Collections.emptyList();
-		} 
-		
-		// Only run the phone number parser if Android version is not Honeycomb
-		// API level 11 - 13
-		int sdk = Build.VERSION.SDK_INT;
-		if (sdk >= 11 && sdk <= 13) {
-			return Collections.emptyList();
-		}
+    public List<String> parse(String inputText) {
+        if (inputText == null) {
+            return Collections.emptyList();
+        }
 
-		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-		Iterable<PhoneNumberMatch> numbersMatch = phoneUtil.findNumbers(
-				inputText, Locale.getDefault().getCountry());
-		ArrayList<String> numbers = new ArrayList<String>();
-		for (PhoneNumberMatch number : numbersMatch) {
-			numbers.add(phoneUtil.format(number.number(),
-					PhoneNumberFormat.NATIONAL));
+        // Only run the phone number parser if Android version is not Honeycomb
+        // API level 11 - 13
+        int sdk = Build.VERSION.SDK_INT;
 
-		}
+        if (sdk >= 11 && sdk <= 13) {
+            return Collections.emptyList();
+        }
 
-		return numbers;
-	}
+        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+
+        Iterable<PhoneNumberMatch> numbersMatch = phoneUtil.findNumbers(
+                inputText, Locale.getDefault().getCountry());
+
+        ArrayList<String> numbers = new ArrayList<String>();
+
+        for (PhoneNumberMatch number : numbersMatch) {
+            numbers.add(phoneUtil.format(number.number(),
+                    PhoneNumberFormat.NATIONAL));
+        }
+
+        return numbers;
+    }
 }

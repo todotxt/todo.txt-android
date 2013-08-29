@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import junit.framework.TestCase;
@@ -32,89 +33,86 @@ import java.util.Arrays;
  * @author Tim Barlotta
  */
 public class ByProjectFilterTest extends TestCase {
-	public void testConstructor_nullProjects() {
-		ByProjectFilter filter = new ByProjectFilter(null);
-		assertNotNull(filter.getProjects());
-		assertEquals(0, filter.getProjects().size());
-	}
+    public void testConstructor_nullProjects() {
+        ByProjectFilter filter = new ByProjectFilter(null);
 
-	public void testConstructor_valid() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertNotNull(filter.getProjects());
-		assertEquals(3, filter.getProjects().size());
-		assertEquals("abc", filter.getProjects().get(0));
-		assertEquals("123", filter.getProjects().get(1));
-		assertEquals("hello", filter.getProjects().get(2));
-	}
+        assertNotNull(filter.getProjects());
+        assertEquals(0, filter.getProjects().size());
+    }
 
-	public void testFilter_noFilterProjects_noTaskProjects() {
-		ByProjectFilter filter = new ByProjectFilter(null);
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world")));
-	}
+    public void testConstructor_valid() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc", "123", "hello"));
 
-	public void testFilter_oneFilterProject_noTaskProjects() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world")));
-	}
+        assertNotNull(filter.getProjects());
+        assertEquals(3, filter.getProjects().size());
+        assertEquals("abc", filter.getProjects().get(0));
+        assertEquals("123", filter.getProjects().get(1));
+        assertEquals("hello", filter.getProjects().get(2));
+    }
 
-	public void testFilter_noFilterProject_oneTaskProjects() {
-		ByProjectFilter filter = new ByProjectFilter(null);
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world +abc")));
-	}
+    public void testFilter_noFilterProjects_noTaskProjects() {
+        ByProjectFilter filter = new ByProjectFilter(null);
 
-	public void testFilter_oneFilterProject_sameTaskProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world +abc")));
-	}
+        assertTrue("apply was not true", filter.apply(new Task(1, "hello world")));
+    }
 
-	public void testFilter_oneFilterProject_differentTaskProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world +123")));
-	}
+    public void testFilter_oneFilterProject_noTaskProjects() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc"));
 
-	public void testFilter_multipleFilterProject_oneSameTaskProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world +123")));
-	}
+        assertFalse("apply was not false", filter.apply(new Task(1, "hello world")));
+    }
 
-	public void testFilter_multipleFilterProject_multipleTaskProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world +123 +goodbye")));
-	}
+    public void testFilter_noFilterProject_oneTaskProjects() {
+        ByProjectFilter filter = new ByProjectFilter(null);
 
-	public void testFilter_multipleFilterProject_multipleSameTaskProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world +123 +hello")));
-	}
+        assertTrue("apply was not true", filter.apply(new Task(1, "hello world +abc")));
+    }
 
-	public void testFilter_multipleFilterProject_multipleDifferentTaskProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world +xyz +goodbye")));
-	}
+    public void testFilter_oneFilterProject_sameTaskProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc"));
 
-	public void testFilter_filterNoProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("-"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world")));
-	}
+        assertTrue("apply was not true", filter.apply(new Task(1, "hello world +abc")));
+    }
 
-	public void testFilter_filterNoProject_oneTaskProject() {
-		ByProjectFilter filter = new ByProjectFilter(Arrays.asList("-"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world +Test")));
-	}
+    public void testFilter_oneFilterProject_differentTaskProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc"));
+
+        assertFalse("apply was not false", filter.apply(new Task(1, "hello world +123")));
+    }
+
+    public void testFilter_multipleFilterProject_oneSameTaskProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc", "123", "hello"));
+
+        assertTrue("apply was not true", filter.apply(new Task(1, "hello world +123")));
+    }
+
+    public void testFilter_multipleFilterProject_multipleTaskProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc", "123", "hello"));
+
+        assertTrue("apply was not true", filter.apply(new Task(1, "hello world +123 +goodbye")));
+    }
+
+    public void testFilter_multipleFilterProject_multipleSameTaskProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc", "123", "hello"));
+
+        assertTrue("apply was not true", filter.apply(new Task(1, "hello world +123 +hello")));
+    }
+
+    public void testFilter_multipleFilterProject_multipleDifferentTaskProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("abc", "123", "hello"));
+
+        assertFalse("apply was not false", filter.apply(new Task(1, "hello world +xyz +goodbye")));
+    }
+
+    public void testFilter_filterNoProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("-"));
+
+        assertTrue("apply was not true", filter.apply(new Task(1, "hello world")));
+    }
+
+    public void testFilter_filterNoProject_oneTaskProject() {
+        ByProjectFilter filter = new ByProjectFilter(Arrays.asList("-"));
+
+        assertFalse("apply was not false", filter.apply(new Task(1, "hello world +Test")));
+    }
 }

@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 /**
@@ -29,11 +30,11 @@ package com.todotxt.todotxttouch.task;
  */
 @SuppressWarnings("serial")
 public class TaskPersistException extends RuntimeException {
-	public TaskPersistException(String message) {
-		super(message);
-	}
+    public TaskPersistException(String message) {
+        super(message);
+    }
 
-	public TaskPersistException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public TaskPersistException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

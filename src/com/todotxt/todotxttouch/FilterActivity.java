@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
@@ -42,157 +43,183 @@ import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class FilterActivity extends TabActivity {
+    private final static String TAG = FilterActivity.class.getSimpleName();
+    private static ArrayList<String> appliedFilters = new ArrayList<String>();
 
-	private final static String TAG = FilterActivity.class.getSimpleName();
-	private static ArrayList<String> appliedFilters = new ArrayList<String>();
-	private TabHost mTabHost;
+    private TabHost mTabHost;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		mTabHost = getTabHost();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		Drawable actionBarBg = getResources().getDrawable(
-				R.drawable.title_background);
-		mTabHost.getTabWidget().setBackgroundDrawable(actionBarBg);
+        mTabHost = getTabHost();
 
-		LayoutInflater.from(this).inflate(R.layout.filter,
-				mTabHost.getTabContentView(), true);
+        Drawable actionBarBg = getResources().getDrawable(R.drawable.title_background);
+        mTabHost.getTabWidget().setBackgroundDrawable(actionBarBg);
 
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_priorities))
-				// .setIndicator(getString(R.string.filter_tab_priorities))
-				.setIndicator(buildIndicator(R.string.filter_tab_priorities))
-				.setContent(R.id.priorities));
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_projects))
-				.setIndicator(buildIndicator(R.string.filter_tab_projects))
-				.setContent(R.id.projects));
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_contexts))
-				.setIndicator(buildIndicator(R.string.filter_tab_contexts))
-				.setContent(R.id.contexts));
-		mTabHost.addTab(mTabHost
-				.newTabSpec(getString(R.string.filter_tab_search))
-				.setIndicator(buildIndicator(R.string.filter_tab_search))
-				.setContent(R.id.search));
+        LayoutInflater.from(this).inflate(R.layout.filter, mTabHost.getTabContentView(), true);
 
-		Intent data = getIntent();
-		ArrayList<String> priosArr = data
-				.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
-		ArrayList<String> projectsArr = data
-				.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
-		ArrayList<String> contextsArr = data
-				.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
+        mTabHost.addTab(mTabHost
+                .newTabSpec(getString(R.string.filter_tab_priorities))
+                // .setIndicator(getString(R.string.filter_tab_priorities))
+                .setIndicator(buildIndicator(R.string.filter_tab_priorities))
+                .setContent(R.id.priorities));
 
-		ArrayList<String> priosArrSelected = data
-				.getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED);
-		ArrayList<String> projectsArrSelected = data
-				.getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED);
-		ArrayList<String> contextsArrSelected = data
-				.getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED);
+        mTabHost.addTab(mTabHost
+                .newTabSpec(getString(R.string.filter_tab_projects))
+                .setIndicator(buildIndicator(R.string.filter_tab_projects))
+                .setContent(R.id.projects));
 
-		String searchTerm = data.getStringExtra(Constants.EXTRA_SEARCH);
+        mTabHost.addTab(mTabHost
+                .newTabSpec(getString(R.string.filter_tab_contexts))
+                .setIndicator(buildIndicator(R.string.filter_tab_contexts))
+                .setContent(R.id.contexts));
 
-		final ListView priorities = (ListView) findViewById(R.id.prioritieslv);
-		priorities.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		priorities.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.simple_list_item_multiple_choice, priosArr));
-		setSelected(priorities, priosArrSelected);
+        mTabHost.addTab(mTabHost
+                .newTabSpec(getString(R.string.filter_tab_search))
+                .setIndicator(buildIndicator(R.string.filter_tab_search))
+                .setContent(R.id.search));
 
-		final ListView projects = (ListView) findViewById(R.id.projectslv);
-		projects.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		projects.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.simple_list_item_multiple_choice, projectsArr));
-		setSelected(projects, projectsArrSelected);
+        Intent data = getIntent();
 
-		final ListView contexts = (ListView) findViewById(R.id.contextslv);
-		contexts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		contexts.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.simple_list_item_multiple_choice, contextsArr));
-		setSelected(contexts, contextsArrSelected);
+        ArrayList<String> priosArr = data.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
+        ArrayList<String> projectsArr = data.getStringArrayListExtra(Constants.EXTRA_PROJECTS);
+        ArrayList<String> contextsArr = data.getStringArrayListExtra(Constants.EXTRA_CONTEXTS);
 
-		final EditText search = (EditText) findViewById(R.id.searchet);
-		search.setText(searchTerm);
+        ArrayList<String> priosArrSelected = data
+                .getStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED);
 
-		Button ok = (Button) findViewById(R.id.ok);
-		ok.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v(TAG, "onClick OK");
-				Intent data = new Intent();
-				Log.v(TAG, "Clearing all filter types.");
-				appliedFilters = new ArrayList<String>();
-				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-						getItems(priorities, getString(R.string.filter_tab_priorities)));
-				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-						getItems(projects, getString(R.string.filter_tab_projects)));
-				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-						getItems(contexts, getString(R.string.filter_tab_contexts)));
-				data.putExtra(Constants.EXTRA_SEARCH, search.getText()
-						.toString());
-				data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,
-						appliedFilters);
-				setResult(Activity.RESULT_OK, data);
-				finish();
-			}
-		});
+        ArrayList<String> projectsArrSelected = data
+                .getStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED);
 
-		Button cancel = (Button) findViewById(R.id.cancel);
-		cancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v(TAG, "onClick Cancel");
-				setResult(Activity.RESULT_CANCELED);
-				finish();
-			}
-		});
+        ArrayList<String> contextsArrSelected = data
+                .getStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED);
 
-		Button clear = (Button) findViewById(R.id.clear);
-		clear.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v(TAG, "onClick Clear");
-				appliedFilters = new ArrayList<String>();
-				setSelected(priorities, null);
-				setSelected(projects, null);
-				setSelected(contexts, null);
-				search.setText("");
-			}
-		});
-	}
+        String searchTerm = data.getStringExtra(Constants.EXTRA_SEARCH);
 
-	private View buildIndicator(int textRes) {
-		final TextView indicator = (TextView) this.getLayoutInflater().inflate(
-				R.layout.tab_indicator, mTabHost.getTabWidget(), false);
-		indicator.setText(textRes);
-		return indicator;
-	}
+        final ListView priorities = (ListView) findViewById(R.id.prioritieslv);
+        priorities.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        priorities.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.simple_list_item_multiple_choice, priosArr));
 
-	private static ArrayList<String> getItems(ListView adapter, String type) {
-		ArrayList<String> arr = new ArrayList<String>();
-		int size = adapter.getCount();
-		for (int i = 0; i < size; i++) {
-			if (adapter.isItemChecked(i)) {
-				arr.add((String) adapter.getAdapter().getItem(i));
-				Log.v(TAG, " Adding "
-						+ (String) adapter.getAdapter().getItem(i)
-						+ " to applied filters.");
-				if (!appliedFilters.contains(type)) {
-					appliedFilters.add(type);
-					Log.v(TAG, " Adding " + type + " to applied filter types.");
-				}
-			}
-		}
-		return arr;
-	}
+        setSelected(priorities, priosArrSelected);
 
-	private static void setSelected(ListView lv, ArrayList<String> selected) {
-		int count = lv.getCount();
-		for (int i = 0; i < count; i++) {
-			String str = (String) lv.getItemAtPosition(i);
-			lv.setItemChecked(i, selected != null && selected.contains(str));
-		}
-	}
+        final ListView projects = (ListView) findViewById(R.id.projectslv);
+        projects.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        projects.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.simple_list_item_multiple_choice, projectsArr));
+
+        setSelected(projects, projectsArrSelected);
+
+        final ListView contexts = (ListView) findViewById(R.id.contextslv);
+        contexts.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        contexts.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.simple_list_item_multiple_choice, contextsArr));
+
+        setSelected(contexts, contextsArrSelected);
+
+        final EditText search = (EditText) findViewById(R.id.searchet);
+        search.setText(searchTerm);
+
+        Button ok = (Button) findViewById(R.id.ok);
+
+        ok.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "onClick OK");
+
+                Intent data = new Intent();
+
+                Log.v(TAG, "Clearing all filter types.");
+
+                appliedFilters = new ArrayList<String>();
+                data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
+                        getItems(priorities, getString(R.string.filter_tab_priorities)));
+                data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
+                        getItems(projects, getString(R.string.filter_tab_projects)));
+                data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
+                        getItems(contexts, getString(R.string.filter_tab_contexts)));
+                data.putExtra(Constants.EXTRA_SEARCH, search.getText()
+                        .toString());
+                data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,
+                        appliedFilters);
+
+                setResult(Activity.RESULT_OK, data);
+
+                finish();
+            }
+        });
+
+        Button cancel = (Button) findViewById(R.id.cancel);
+        cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "onClick Cancel");
+
+                setResult(Activity.RESULT_CANCELED);
+
+                finish();
+            }
+        });
+
+        Button clear = (Button) findViewById(R.id.clear);
+        clear.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "onClick Clear");
+
+                appliedFilters = new ArrayList<String>();
+
+                setSelected(priorities, null);
+                setSelected(projects, null);
+                setSelected(contexts, null);
+
+                search.setText("");
+            }
+        });
+    }
+
+    private View buildIndicator(int textRes) {
+        final TextView indicator = (TextView) this.getLayoutInflater().inflate(
+                R.layout.tab_indicator, mTabHost.getTabWidget(), false);
+
+        indicator.setText(textRes);
+
+        return indicator;
+    }
+
+    @SuppressWarnings("unused")
+    private static ArrayList<String> getItems(ListView adapter, String type) {
+        ArrayList<String> arr = new ArrayList<String>();
+
+        int size = adapter.getCount();
+
+        for (int i = 0; i < size; i++) {
+            if (adapter.isItemChecked(i)) {
+                arr.add((String) adapter.getAdapter().getItem(i));
+
+                Log.v(TAG, " Adding "
+                        + (String) adapter.getAdapter().getItem(i)
+                        + " to applied filters.");
+
+                if (!appliedFilters.contains(type)) {
+                    appliedFilters.add(type);
+
+                    Log.v(TAG, " Adding " + type + " to applied filter types.");
+                }
+            }
+        }
+
+        return arr;
+    }
+
+    private static void setSelected(ListView lv, ArrayList<String> selected) {
+        int count = lv.getCount();
+
+        for (int i = 0; i < count; i++) {
+            String str = (String) lv.getItemAtPosition(i);
+            lv.setItemChecked(i, selected != null && selected.contains(str));
+        }
+    }
 
 }

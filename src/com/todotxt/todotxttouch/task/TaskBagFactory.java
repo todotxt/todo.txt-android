@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import com.todotxt.todotxttouch.TodoApplication;
@@ -31,12 +32,12 @@ import com.todotxt.todotxttouch.TodoPreferences;
  * @author Tim Barlotta
  */
 public class TaskBagFactory {
-	public static TaskBag getTaskBag(TodoApplication application,
-			TodoPreferences sharedPreferences) {
+    public static TaskBag getTaskBag(TodoApplication application,
+            TodoPreferences sharedPreferences) {
 
-		LocalFileTaskRepository localFileTaskRepository = new LocalFileTaskRepository();
+        LocalFileTaskRepository localFileTaskRepository = new LocalFileTaskRepository();
 
-		return new TaskBagImpl(sharedPreferences, localFileTaskRepository,
-				application.getRemoteClientManager());
-	}
+        return new TaskBagImpl(sharedPreferences, localFileTaskRepository,
+                application.getRemoteClientManager());
+    }
 }

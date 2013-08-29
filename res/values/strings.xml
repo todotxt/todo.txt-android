@@ -105,23 +105,29 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="sync_dialog_download">Download to device</string>
     <string name="sync_upload_message">Uploading todo.txt…</string>
     <string name="sync_download_message">Downloading todo.txt…</string>
+
     <!-- sync conflict dialog -->
     <string name="sync_conflict_dialog_title">File Conflict</string>
     <string name="sync_conflict_dialog_msg">Oops! There is a newer version of your todo.txt file in Dropbox. \nDo you want to upload your local changes, or download the Dropbox version?</string>
+
     <!-- login -->
     <string name="welcome_message">Welcome to Todo.txt</string>
     <string name="login_screen_button">Connect to Dropbox</string>
+
     <!-- delete -->
     <string name="delete_task_title">Delete task</string>
     <string name="delete_task_message">This cannot be undone. Are you sure?</string>
     <string name="delete_task_confirm">Delete</string>
+
     <!-- search -->
     <string name="search_hint">Search todo.txt</string>
+
     <!-- filter tabs -->
     <string name="filter_tab_priorities">Priority</string>
     <string name="filter_tab_projects">Project</string>
     <string name="filter_tab_contexts">Context</string>
     <string name="filter_tab_search">Keyword</string>
+
     <!-- title bar changes -->
     <string name="title_search_results">Search term: </string>
     <string name="title_filter_applied">Filtered by: </string>
@@ -138,6 +144,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <!-- launcher shortcut -->
     <string name="shortcut_addtask_name">Add Task</string>
+
     <!-- share -->
     <string name="share_addtask_name">Add to Todo.txt</string>
     <string name="share_subject">Todo.txt task</string>
@@ -176,5 +183,5 @@ You should have received a copy of the GNU General Public License along with Tod
     <!-- path activity -->
     <string name="discard">Discard</string>
     <string name="done">Done</string>
-    
+
 </resources>

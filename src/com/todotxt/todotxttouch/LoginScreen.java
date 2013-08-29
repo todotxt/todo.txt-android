@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch;
 
 import android.app.Activity;
@@ -37,93 +38,100 @@ import com.todotxt.todotxttouch.remote.RemoteClient;
 import com.todotxt.todotxttouch.util.Util;
 
 public class LoginScreen extends Activity {
+    final static String TAG = LoginScreen.class.getSimpleName();
 
-	final static String TAG = LoginScreen.class.getSimpleName();
+    private TodoApplication m_app;
+    private Button m_LoginButton;
+    private BroadcastReceiver m_broadcastReceiver;
 
-	private TodoApplication m_app;
-	private Button m_LoginButton;
-	private BroadcastReceiver m_broadcastReceiver;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		Log.i(TAG, "LoginScreen onCreate");
-		
-		setContentView(R.layout.login);
+        Log.i(TAG, "LoginScreen onCreate");
 
-		m_app = (TodoApplication) getApplication();
+        setContentView(R.layout.login);
 
-		// supposed to help with the banding on the green background
-		findViewById(R.id.loginbackground).getBackground().setDither(true);
+        m_app = (TodoApplication) getApplication();
 
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGIN");
-		m_broadcastReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				switchToTodolist();
-			}
-		};
-		registerReceiver(m_broadcastReceiver, intentFilter);
+        // supposed to help with the banding on the green background
+        findViewById(R.id.loginbackground).getBackground().setDither(true);
 
-		m_LoginButton = (Button) findViewById(R.id.login);
-		m_LoginButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				startLogin();
-			}
-		});
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.todotxt.todotxttouch.ACTION_LOGIN");
 
-		RemoteClient remoteClient = m_app.getRemoteClientManager()
-				.getRemoteClient();
-		if (remoteClient.isAuthenticated()) {
-			switchToTodolist();
-		}
-	}
+        m_broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switchToTodolist();
+            }
+        };
 
-	private void switchToTodolist() {
-		Intent intent = new Intent(this, TodoTxtTouch.class);
-		startActivity(intent);
-		finish();
-	}
+        registerReceiver(m_broadcastReceiver, intentFilter);
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		Log.i(TAG, "LoginScreen onResume");
-		finishLogin();
-	}
+        m_LoginButton = (Button) findViewById(R.id.login);
+        m_LoginButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                startLogin();
+            }
+        });
 
-	private void finishLogin() {
-		RemoteClient remoteClient = m_app.getRemoteClientManager()
-				.getRemoteClient();
-		if (remoteClient.finishLogin() && remoteClient.isAuthenticated()) {
-			Log.i(TAG, "LoginScreen: login complete: about to start the app.");
-			Intent broadcastLoginIntent = new Intent(
-					"com.todotxt.todotxttouch.ACTION_LOGIN");
-			sendBroadcast(broadcastLoginIntent);
-		} else {
-			Log.i(TAG, "LoginScreen: not logged in. Showing login screen.");
-		}
-	}
+        RemoteClient remoteClient = m_app.getRemoteClientManager()
+                .getRemoteClient();
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		unregisterReceiver(m_broadcastReceiver);
-	}
+        if (remoteClient.isAuthenticated()) {
+            switchToTodolist();
+        }
+    }
 
-	void startLogin() {
-		final RemoteClient client = m_app.getRemoteClientManager()
-				.getRemoteClient();
+    private void switchToTodolist() {
+        Intent intent = new Intent(this, TodoTxtTouch.class);
+        startActivity(intent);
 
-		if (!client.isAvailable()) {
-			Log.d(TAG, "Remote service " + client.getClass().getSimpleName()
-					+ " is not available; aborting login");
-			Util.showToastLong(m_app, R.string.toast_login_notconnected);
-		} else {
-			client.startLogin();
-		}
-	}
+        finish();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.i(TAG, "LoginScreen onResume");
+
+        finishLogin();
+    }
+
+    private void finishLogin() {
+        RemoteClient remoteClient = m_app.getRemoteClientManager()
+                .getRemoteClient();
+
+        if (remoteClient.finishLogin() && remoteClient.isAuthenticated()) {
+            Log.i(TAG, "LoginScreen: login complete: about to start the app.");
+
+            Intent broadcastLoginIntent = new Intent("com.todotxt.todotxttouch.ACTION_LOGIN");
+
+            sendBroadcast(broadcastLoginIntent);
+        } else {
+            Log.i(TAG, "LoginScreen: not logged in. Showing login screen.");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        unregisterReceiver(m_broadcastReceiver);
+    }
+
+    void startLogin() {
+        final RemoteClient client = m_app.getRemoteClientManager().getRemoteClient();
+
+        if (!client.isAvailable()) {
+            Log.d(TAG, "Remote service " + client.getClass().getSimpleName()
+                    + " is not available; aborting login");
+
+            Util.showToastLong(m_app, R.string.toast_login_notconnected);
+        } else {
+            client.startLogin();
+        }
+    }
 }

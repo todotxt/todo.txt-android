@@ -20,97 +20,101 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class TextSplitter {
-	private final static Pattern COMPLETED_PATTERN = Pattern
-			.compile("^([X,x] )(.*)");
+    private final static Pattern COMPLETED_PATTERN = Pattern
+            .compile("^([X,x] )(.*)");
 
-	private final static Pattern COMPLETED_PREPENDED_DATES_PATTERN = Pattern
-			.compile("^(\\d{4}-\\d{2}-\\d{2}) (\\d{4}-\\d{2}-\\d{2}) (.*)");
+    private final static Pattern COMPLETED_PREPENDED_DATES_PATTERN = Pattern
+            .compile("^(\\d{4}-\\d{2}-\\d{2}) (\\d{4}-\\d{2}-\\d{2}) (.*)");
 
-	private final static Pattern SINGLE_DATE_PATTERN = Pattern
-			.compile("^(\\d{4}-\\d{2}-\\d{2}) (.*)");
+    private final static Pattern SINGLE_DATE_PATTERN = Pattern
+            .compile("^(\\d{4}-\\d{2}-\\d{2}) (.*)");
 
-	private final static TextSplitter INSTANCE = new TextSplitter();
+    private final static TextSplitter INSTANCE = new TextSplitter();
 
-	private TextSplitter() {
-	}
+    private TextSplitter() {
+    }
 
-	public static TextSplitter getInstance() {
-		return INSTANCE;
-	}
+    public static TextSplitter getInstance() {
+        return INSTANCE;
+    }
 
-	static class SplitResult {
-		public final Priority priority;
-		public final String text;
-		public final String prependedDate;
-		public final boolean completed;
-		public final String completedDate;
+    static class SplitResult {
+        public final Priority priority;
+        public final String text;
+        public final String prependedDate;
+        public final boolean completed;
+        public final String completedDate;
 
-		private SplitResult(Priority priority, String text,
-				String prependedDate, boolean completed, String completedDate) {
-			this.priority = priority;
-			this.text = text;
-			this.prependedDate = prependedDate;
-			this.completed = completed;
-			this.completedDate = completedDate;
-		}
-	}
+        private SplitResult(Priority priority, String text,
+                String prependedDate, boolean completed, String completedDate) {
+            this.priority = priority;
+            this.text = text;
+            this.prependedDate = prependedDate;
+            this.completed = completed;
+            this.completedDate = completedDate;
+        }
+    }
 
-	public SplitResult split(String inputText) {
-		if (inputText == null) {
-			return new SplitResult(Priority.NONE, "", "", false, "");
-		}
+    public SplitResult split(String inputText) {
+        if (inputText == null) {
+            return new SplitResult(Priority.NONE, "", "", false, "");
+        }
 
-		Matcher completedMatcher = COMPLETED_PATTERN.matcher(inputText);
-		boolean completed;
-		String text;
-		if (completedMatcher.find()) {
-			completed = true;
-			text = completedMatcher.group(2);
-		} else {
-			completed = false;
-			text = inputText;
-		}
+        Matcher completedMatcher = COMPLETED_PATTERN.matcher(inputText);
 
-		Priority priority = Priority.NONE;
-		if (!completed) {
-			PriorityTextSplitter.PrioritySplitResult prioritySplitResult = PriorityTextSplitter
-					.getInstance().split(text);
-			priority = prioritySplitResult.priority;
-			text = prioritySplitResult.text;
-		}
+        boolean completed;
+        String text;
 
-		String completedDate = "";
-		String prependedDate = "";
-		if (completed) {
-			Matcher completedAndPrependedDatesMatcher = COMPLETED_PREPENDED_DATES_PATTERN
-					.matcher(text);
-			if (completedAndPrependedDatesMatcher.find()) {
-				completedDate = completedAndPrependedDatesMatcher.group(1);
-				prependedDate = completedAndPrependedDatesMatcher.group(2);
-				text = completedAndPrependedDatesMatcher.group(3);
-			} else {
-				Matcher completionDateMatcher = SINGLE_DATE_PATTERN
-						.matcher(text);
-				if (completionDateMatcher.find()) {
-					completedDate = completionDateMatcher.group(1);
-					text = completionDateMatcher.group(2);
-				}
-			}
-		} else {
-			Matcher prependedDateMatcher = SINGLE_DATE_PATTERN.matcher(text);
-			if (prependedDateMatcher.find()) {
-				text = prependedDateMatcher.group(2);
-				prependedDate = prependedDateMatcher.group(1);
-			}
-		}
+        if (completedMatcher.find()) {
+            completed = true;
+            text = completedMatcher.group(2);
+        } else {
+            completed = false;
+            text = inputText;
+        }
 
-		return new SplitResult(priority, text, prependedDate, completed,
-				completedDate);
-	}
+        Priority priority = Priority.NONE;
+
+        if (!completed) {
+            PriorityTextSplitter.PrioritySplitResult prioritySplitResult = PriorityTextSplitter
+                    .getInstance().split(text);
+            priority = prioritySplitResult.priority;
+            text = prioritySplitResult.text;
+        }
+
+        String completedDate = "";
+        String prependedDate = "";
+
+        if (completed) {
+            Matcher completedAndPrependedDatesMatcher = COMPLETED_PREPENDED_DATES_PATTERN
+                    .matcher(text);
+            if (completedAndPrependedDatesMatcher.find()) {
+                completedDate = completedAndPrependedDatesMatcher.group(1);
+                prependedDate = completedAndPrependedDatesMatcher.group(2);
+                text = completedAndPrependedDatesMatcher.group(3);
+            } else {
+                Matcher completionDateMatcher = SINGLE_DATE_PATTERN
+                        .matcher(text);
+                if (completionDateMatcher.find()) {
+                    completedDate = completionDateMatcher.group(1);
+                    text = completionDateMatcher.group(2);
+                }
+            }
+        } else {
+            Matcher prependedDateMatcher = SINGLE_DATE_PATTERN.matcher(text);
+            if (prependedDateMatcher.find()) {
+                text = prependedDateMatcher.group(2);
+                prependedDate = prependedDateMatcher.group(1);
+            }
+        }
+
+        return new SplitResult(priority, text, prependedDate, completed, completedDate);
+    }
 }

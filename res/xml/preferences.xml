@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 	This file is part of Todo.txt Touch, an Android app for managing your todo.txt 
 	file (http://todotxt.com).
@@ -28,28 +27,48 @@
 	@license http://www.gnu.org/licenses/gpl.html
 	@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:key="todotxt_settings"
-		android:title="@string/todotxt_settings_header">
-		<CheckBoxPreference android:key="@string/auto_archive_pref_key"
-			android:title="@string/auto_archive_pref_title" android:summary="@string/auto_archive_pref_summary" />
-	    <CheckBoxPreference android:key="@string/prepend_date_pref_key"
-			android:title="@string/prepend_date_pref_title" android:summary="@string/prepend_date_pref_summary" />
-	</PreferenceCategory>
 
-	<PreferenceCategory android:key="dropbox_settings"
-		android:title="@string/dropbox_settings_header">
-		<com.todotxt.todotxttouch.TodoLocationPreference android:summary="@string/todo_path_summary"
-			android:defaultValue="@string/todo_path_default" android:title="@string/todo_path_title"
-			android:key="@string/todo_path_key" />
-		<ListPreference android:key="@string/periodic_sync_pref_key"
-		    android:title="@string/periodic_sync_pref_title" android:entries="@array/periodic_sync_lengths"
-		    android:entryValues="@array/periodic_sync_values" android:defaultValue="0" />
-		<Preference android:key="logout_dropbox" android:title="@string/dropbox_logout_pref_title"
-			android:summary="@string/dropbox_logout_pref_summary" />
-	</PreferenceCategory>
-	<PreferenceCategory android:key="about_settings_header"
-		android:title="@string/about_settings_header">
-		<Preference android:title="@string/app_label" android:key="app_version" />
-	</PreferenceCategory>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="todotxt_settings"
+        android:title="@string/todotxt_settings_header" >
+        <CheckBoxPreference
+            android:key="@string/auto_archive_pref_key"
+            android:summary="@string/auto_archive_pref_summary"
+            android:title="@string/auto_archive_pref_title" />
+        <CheckBoxPreference
+            android:key="@string/prepend_date_pref_key"
+            android:summary="@string/prepend_date_pref_summary"
+            android:title="@string/prepend_date_pref_title" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="dropbox_settings"
+        android:title="@string/dropbox_settings_header" >
+        <com.todotxt.todotxttouch.TodoLocationPreference
+            android:defaultValue="@string/todo_path_default"
+            android:key="@string/todo_path_key"
+            android:summary="@string/todo_path_summary"
+            android:title="@string/todo_path_title" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/periodic_sync_lengths"
+            android:entryValues="@array/periodic_sync_values"
+            android:key="@string/periodic_sync_pref_key"
+            android:title="@string/periodic_sync_pref_title" />
+
+        <Preference
+            android:key="logout_dropbox"
+            android:summary="@string/dropbox_logout_pref_summary"
+            android:title="@string/dropbox_logout_pref_title" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="about_settings_header"
+        android:title="@string/about_settings_header" >
+        <Preference
+            android:key="app_version"
+            android:title="@string/app_label" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

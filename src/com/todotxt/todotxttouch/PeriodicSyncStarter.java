@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch;
 
 import android.app.AlarmManager;
@@ -29,31 +30,33 @@ import android.content.Context;
 import android.content.Intent;
 
 public class PeriodicSyncStarter extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            setupPeriodicSyncer(context);
+        }
+    }
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-			setupPeriodicSyncer(context);
-		}
-	}
+    public static void setupPeriodicSyncer(Context context) {
+        TodoApplication a = (TodoApplication) context.getApplicationContext();
 
-	public static void setupPeriodicSyncer(Context context) {
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-		TodoApplication a = (TodoApplication) context.getApplicationContext();
-		AlarmManager alarms = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
-		Intent i = new Intent(context, SyncerService.class);
-		PendingIntent pi = PendingIntent.getService(context, 0, i,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		alarms.cancel(pi); // Cancel any previously started
-		long syncPeriod = a.m_prefs.getSyncPeriod();
-		if (syncPeriod > 0) {
-			// Wake up and synchronize after after inexact fixed delay
-			alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, syncPeriod,
-					syncPeriod, pi);
-			// alarms.setRepeating(AlarmManager.ELAPSED_REALTIME, 0, 60 * 1000,
-			// pi); // for testing
-		}
-	}
+        Intent i = new Intent(context, SyncerService.class);
 
+        PendingIntent pi = PendingIntent.getService(context, 0, i,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarms.cancel(pi); // Cancel any previously started
+
+        long syncPeriod = a.m_prefs.getSyncPeriod();
+
+        if (syncPeriod > 0) {
+            // Wake up and synchronize after after inexact fixed delay
+            alarms.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, syncPeriod,
+                    syncPeriod, pi);
+            // alarms.setRepeating(AlarmManager.ELAPSED_REALTIME, 0, 60 * 1000,
+            // pi); // for testing
+        }
+    }
 }

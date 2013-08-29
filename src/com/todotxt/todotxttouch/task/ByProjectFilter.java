@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
@@ -31,35 +32,38 @@ import java.util.List;
  * @author Tim Barlotta
  */
 class ByProjectFilter implements Filter<Task> {
-	private ArrayList<String> projects = new ArrayList<String>();
+    private ArrayList<String> projects = new ArrayList<String>();
 
-	public ByProjectFilter(List<String> projects) {
-		if (projects != null) {
-			this.projects.addAll(projects);
-		}
-	}
+    public ByProjectFilter(List<String> projects) {
+        if (projects != null) {
+            this.projects.addAll(projects);
+        }
+    }
 
-	@Override
-	public boolean apply(Task input) {
-		if (projects.size() == 0) {
-			return true;
-		}
-		for (String p : input.getProjects()) {
-			if (projects.contains(p)) {
-				return true;
-			}
-		}
-		/*
-		 * Match tasks without project if filter contains "-"
-		 */
-		if (input.getProjects().size()==0 && projects.contains("-")) {
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean apply(Task input) {
+        if (projects.size() == 0) {
+            return true;
+        }
 
-	/* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
-	ArrayList<String> getProjects() {
-		return projects;
-	}
+        for (String p : input.getProjects()) {
+            if (projects.contains(p)) {
+                return true;
+            }
+        }
+
+        /*
+         * Match tasks without project if filter contains "-"
+         */
+        if (input.getProjects().size() == 0 && projects.contains("-")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
+    ArrayList<String> getProjects() {
+        return projects;
+    }
 }
