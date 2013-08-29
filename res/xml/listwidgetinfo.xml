@@ -21,7 +21,9 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/listwidget"
     android:initialLayout="@layout/listwidget"
     android:minHeight="120dp"
     android:minResizeHeight="0dp"
@@ -30,7 +32,6 @@ You should have received a copy of the GNU General Public License along with Tod
     android:previewImage="@drawable/listwidget_preview"
     android:resizeMode="vertical|horizontal"
     android:updatePeriodMillis="0"
-    android:widgetCategory="keyguard|home_screen"
-    android:initialKeyguardLayout="@layout/listwidget" >
+    android:widgetCategory="keyguard|home_screen" >
 
 </appwidget-provider>

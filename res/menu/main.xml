@@ -37,8 +37,8 @@ You should have received a copy of the GNU General Public License along with Tod
     <item
         android:id="@+id/sort"
         android:icon="@drawable/collections_sort_by_size"
-        android:title="@string/sort"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/sort"/>
     <!--
     <item
         android:id="@+id/filter"

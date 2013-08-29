@@ -20,39 +20,37 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.util;
 
 import junit.framework.TestCase;
 
 public class CursorPositionCalculatorTest extends TestCase {
-	public void testCalculate_nullPrior() {
-		assertEquals(7, CursorPositionCalculator.calculate(0, null, "123test"));
-	}
+    public void testCalculate_nullPrior() {
+        assertEquals(7, CursorPositionCalculator.calculate(0, null, "123test"));
+    }
 
-	public void testCalculate_nullNew() {
-		assertEquals(0, CursorPositionCalculator.calculate(0, "test", null));
-	}
+    public void testCalculate_nullNew() {
+        assertEquals(0, CursorPositionCalculator.calculate(0, "test", null));
+    }
 
-	public void testCalculate_simpleBegin() {
-		assertEquals(3,
-				CursorPositionCalculator.calculate(0, "test", "123test"));
-	}
+    public void testCalculate_simpleBegin() {
+        assertEquals(3, CursorPositionCalculator.calculate(0, "test", "123test"));
+    }
 
-	public void testCalculate_simpleEnd() {
-		assertEquals(7,
-				CursorPositionCalculator.calculate(4, "test", "test123"));
-	}
+    public void testCalculate_simpleEnd() {
+        assertEquals(7, CursorPositionCalculator.calculate(4, "test", "test123"));
+    }
 
-	public void testCalculate_emptyPrior() {
-		assertEquals(7, CursorPositionCalculator.calculate(0, "", "123test"));
-	}
+    public void testCalculate_emptyPrior() {
+        assertEquals(7, CursorPositionCalculator.calculate(0, "", "123test"));
+    }
 
-	public void testCalculate_emptyNew() {
-		assertEquals(0, CursorPositionCalculator.calculate(0, "test", ""));
-	}
+    public void testCalculate_emptyNew() {
+        assertEquals(0, CursorPositionCalculator.calculate(0, "test", ""));
+    }
 
-	public void testCalculate_nonsense1() {
-		assertEquals(7,
-				CursorPositionCalculator.calculate(99, "test", "test123"));
-	}
+    public void testCalculate_nonsense1() {
+        assertEquals(7, CursorPositionCalculator.calculate(99, "test", "test123"));
+    }
 }

@@ -1,3 +1,4 @@
+
 package com.todotxt.todotxttouch.test;
 
 import java.lang.reflect.Field;
@@ -13,340 +14,353 @@ import com.todotxt.todotxttouch.remote.RemoteClientManager;
 import com.todotxt.todotxttouch.task.TaskBag;
 
 public class TodoApplicationTest extends ApplicationTestCase<TodoApplication> {
-	LooperThread looper;
+    LooperThread looper;
 
-	class LooperThread extends Thread {
-		public Handler mHandler;
+    class LooperThread extends Thread {
+        public Handler mHandler;
 
-		public void run() {
-			Looper.prepare();
-			mHandler = new Handler();
-			Looper.loop();
-		}
-	}
+        public void run() {
+            Looper.prepare();
+            mHandler = new Handler();
+            Looper.loop();
+        }
+    }
 
-	public TodoApplicationTest() {
-		super(TodoApplication.class);
-		looper = new LooperThread();
-		looper.start();
-	}
+    public TodoApplicationTest() {
+        super(TodoApplication.class);
+        looper = new LooperThread();
+        looper.start();
+    }
 
-	@Override
-	protected void finalize() throws Throwable {
-		looper.join(100);
-		Handler h = looper.mHandler;
-		Looper l = h.getLooper();
-		l.quit();
-		looper.join();
-		super.finalize();
-	}
+    @Override
+    protected void finalize() throws Throwable {
+        looper.join(100);
+        Handler h = looper.mHandler;
+        Looper l = h.getLooper();
+        l.quit();
+        looper.join();
 
-	protected void setUp() throws Exception {
-		super.setUp();
-		createApplication();
-		TodoApplication app = getApplication();
+        super.finalize();
+    }
 
-		RemoteClientManager mgr = new RemoteClientManagerStub(app);
-		try {
-			Field mgrField = TodoApplication.class
-					.getDeclaredField("remoteClientManager");
-			mgrField.setAccessible(true);
-			mgrField.set(app, mgr);
-		} catch (Exception e) {
-			fail(e.toString());
-		}
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+        createApplication();
+        TodoApplication app = getApplication();
 
-	private void setTaskBag(TodoApplication app, TaskBag bag) {
-		try {
-			Field bagField = TodoApplication.class.getDeclaredField("taskBag");
-			bagField.setAccessible(true);
-			bagField.set(app, bag);
-		} catch (Exception e) {
-			fail(e.toString());
-		}
-	}
+        RemoteClientManager mgr = new RemoteClientManagerStub(app);
 
-	private void startPush(final TodoApplication app) {
-		looper.mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Class<?> parameterTypes[] = new Class[3];
-					parameterTypes[0] = boolean.class;
-					parameterTypes[1] = boolean.class;
-					parameterTypes[2] = boolean.class;
-					// pushToRemote(force_sync, overwrite, suppressToast)
-					Method method = TodoApplication.class.getDeclaredMethod(
-							"pushToRemote", parameterTypes);
-					method.setAccessible(true);
-					method.invoke(app, false, false, false);
-				} catch (Exception e) {
-					Log.e("TEST", "Failed to run pushToRemote", e);
-					fail(e.toString());
-				}
-			}
-		});
-	}
+        try {
+            Field mgrField = TodoApplication.class.getDeclaredField("remoteClientManager");
+            mgrField.setAccessible(true);
+            mgrField.set(app, mgr);
+        } catch (Exception e) {
+            fail(e.toString());
+        }
+    }
 
-	private void startPull(final TodoApplication app) {
-		looper.mHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Class<?> parameterTypes[] = new Class[2];
-					parameterTypes[0] = boolean.class;
-					parameterTypes[1] = boolean.class;
-					Method method = TodoApplication.class.getDeclaredMethod(
-							"pullFromRemote", parameterTypes);
-					method.setAccessible(true);
-					method.invoke(app, false, false);
-				} catch (Exception e) {
-					Log.e("TEST", "Failed to run pullFromRemote", e);
-					fail(e.toString());
-				}
-			}
-		});
-	}
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
-	public class Waiter {
-		private static final long sleepInterval = 60;
-		private static final long maxWait = 15000;
+    private void setTaskBag(TodoApplication app, TaskBag bag) {
+        try {
+            Field bagField = TodoApplication.class.getDeclaredField("taskBag");
+            bagField.setAccessible(true);
+            bagField.set(app, bag);
+        } catch (Exception e) {
+            fail(e.toString());
+        }
+    }
 
-		public boolean doWait() {
-			long elapsed = 0;
-			boolean res = false;
-			while (!(res = test()) && elapsed < maxWait) {
-				try {
-					Thread.sleep(sleepInterval);
-				} catch (InterruptedException e) {
-				}
-				elapsed += sleepInterval;
-			}
-			if (elapsed >= maxWait) {
-				Log.e("WAITER", "WAITER ELAPSED!!!");
-			}
-			return res;
-		}
+    private void startPush(final TodoApplication app) {
+        looper.mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Class<?> parameterTypes[] = new Class[3];
 
-		public boolean test() {
-			return false;
-		}
-	}
+                    parameterTypes[0] = boolean.class;
+                    parameterTypes[1] = boolean.class;
+                    parameterTypes[2] = boolean.class;
 
-	public void testPushToRemote() {
-		TodoApplication app = getApplication();
-		final TaskBagStub bag = new TaskBagStub();
-		setTaskBag(app, bag);
+                    // pushToRemote(force_sync, overwrite, suppressToast)
+                    Method method = TodoApplication.class.getDeclaredMethod("pushToRemote",
+                            parameterTypes);
+                    method.setAccessible(true);
+                    method.invoke(app, false, false, false);
+                } catch (Exception e) {
+                    Log.e("TEST", "Failed to run pushToRemote", e);
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
+                    fail(e.toString());
+                }
+            }
+        });
+    }
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pullFromRemoteCalled == 1;
-			};
-		}.doWait();
+    private void startPull(final TodoApplication app) {
+        looper.mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Class<?> parameterTypes[] = new Class[2];
 
-		assertEquals("Should have called pushToRemote once", 1,
-				bag.pushToRemoteCalled);
-		// Remember that pull is called automatically after a successful push
-		assertEquals("Should have called pullToRemote once", 1,
-				bag.pullFromRemoteCalled);
-	}
+                    parameterTypes[0] = boolean.class;
+                    parameterTypes[1] = boolean.class;
 
-	public void testPushToRemoteMultiple() {
-		TodoApplication app = getApplication();
-		final TaskBagStub bag = new TaskBagStub();
-		setTaskBag(app, bag);
+                    Method method = TodoApplication.class.getDeclaredMethod("pullFromRemote",
+                            parameterTypes);
+                    method.setAccessible(true);
+                    method.invoke(app, false, false);
+                } catch (Exception e) {
+                    Log.e("TEST", "Failed to run pullFromRemote", e);
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
-		startPush(app);
+                    fail(e.toString());
+                }
+            }
+        });
+    }
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pullFromRemoteCalled == 1;
-			};
-		}.doWait();
+    public class Waiter {
+        private static final long sleepInterval = 60;
+        private static final long maxWait = 15000;
 
-		assertEquals("Should have called pushToRemote twice", 2,
-				bag.pushToRemoteCalled);
-		// Remember that pull is called automatically after a successful push
-		assertEquals("Should have called pullToRemote twice", 1,
-				bag.pullFromRemoteCalled);
-	}
+        public boolean doWait() {
+            long elapsed = 0;
+            boolean res = false;
 
-	public void testPushToRemoteMultipleDelayed() {
-		TodoApplication app = getApplication();
-		final TaskBagStub bag = new TaskBagStub() {
-			@Override
-			public void pushToRemote(boolean overridePreference,
-					boolean overwrite) {
-				super.pushToRemote(overridePreference, overwrite);
-				if (pushToRemoteCalled <= 1) {
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-		};
-		setTaskBag(app, bag);
+            while (!(res = test()) && elapsed < maxWait) {
+                try {
+                    Thread.sleep(sleepInterval);
+                } catch (InterruptedException e) {
+                }
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
+                elapsed += sleepInterval;
+            }
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pushToRemoteCalled == 1;
-			};
-		}.doWait();
+            if (elapsed >= maxWait) {
+                Log.e("WAITER", "WAITER ELAPSED!!!");
+            }
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
-		startPush(app);
-		startPush(app);
-		startPush(app);
-		startPush(app);
+            return res;
+        }
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pullFromRemoteCalled == 1;
-			};
-		}.doWait();
+        public boolean test() {
+            return false;
+        }
+    }
 
-		assertEquals("Should have called pushToRemote twice", 2,
-				bag.pushToRemoteCalled);
-		// Remember that pull is called automatically after a successful push
-		assertEquals("Should have called pullToRemote once", 1,
-				bag.pullFromRemoteCalled);
-	}
+    public void testPushToRemote() {
+        TodoApplication app = getApplication();
 
-	public void testPushToRemoteMultipleDelayedWithPull() {
-		TodoApplication app = getApplication();
-		final TaskBagStub bag = new TaskBagStub() {
-			@Override
-			public void pushToRemote(boolean overridePreference,
-					boolean overwrite) {
-				super.pushToRemote(overridePreference, overwrite);
-				if (pushToRemoteCalled <= 1) {
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-		};
-		setTaskBag(app, bag);
+        final TaskBagStub bag = new TaskBagStub();
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
+        setTaskBag(app, bag);
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pushToRemoteCalled == 1;
-			};
-		}.doWait();
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
-		startPush(app);
+        new Waiter() {
+            public boolean test() {
+                return bag.pullFromRemoteCalled == 1;
+            };
+        }.doWait();
 
-		// This pull should not be called
-		// app.sendBroadcast(new
-		// Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
-		startPull(app);
+        assertEquals("Should have called pushToRemote once", 1, bag.pushToRemoteCalled);
+        // Remember that pull is called automatically after a successful push
+        assertEquals("Should have called pullToRemote once", 1, bag.pullFromRemoteCalled);
+    }
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
-		startPush(app);
-		startPush(app);
+    public void testPushToRemoteMultiple() {
+        TodoApplication app = getApplication();
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pullFromRemoteCalled == 1;
-			};
-		}.doWait();
+        final TaskBagStub bag = new TaskBagStub();
 
-		assertEquals("Should have called pushToRemote twice", 2,
-				bag.pushToRemoteCalled);
-		// Remember that pull is called automatically after a successful push
-		assertEquals("Should have called pullToRemote once", 1,
-				bag.pullFromRemoteCalled);
-	}
+        setTaskBag(app, bag);
 
-	public void testPushToRemoteMultipleDelayedThenPull() {
-		TodoApplication app = getApplication();
-		final TaskBagStub bag = new TaskBagStub() {
-			@Override
-			public void pushToRemote(boolean overridePreference,
-					boolean overwrite) {
-				super.pushToRemote(overridePreference, overwrite);
-				if (pushToRemoteCalled <= 1) {
-					try {
-						Thread.sleep(200);
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-		};
-		setTaskBag(app, bag);
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
+        startPush(app);
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
+        new Waiter() {
+            public boolean test() {
+                return bag.pullFromRemoteCalled == 1;
+            };
+        }.doWait();
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pushToRemoteCalled == 1;
-			};
-		}.doWait();
+        assertEquals("Should have called pushToRemote twice", 2, bag.pushToRemoteCalled);
+        // Remember that pull is called automatically after a successful push
+        assertEquals("Should have called pullToRemote twice", 1, bag.pullFromRemoteCalled);
+    }
 
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		// app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
-		startPush(app);
-		startPush(app);
-		startPush(app);
-		startPush(app);
-		startPush(app);
+    public void testPushToRemoteMultipleDelayed() {
+        TodoApplication app = getApplication();
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pullFromRemoteCalled == 1;
-			};
-		}.doWait();
+        final TaskBagStub bag = new TaskBagStub() {
+            @Override
+            public void pushToRemote(boolean overridePreference,
+                    boolean overwrite) {
+                super.pushToRemote(overridePreference, overwrite);
 
-		// This pull should be called
-		// app.sendBroadcast(new
-		// Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
-		startPull(app);
+                if (pushToRemoteCalled <= 1) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        };
 
-		new Waiter() {
-			public boolean test() {
-				return bag.pullFromRemoteCalled == 2;
-			};
-		}.doWait();
+        setTaskBag(app, bag);
 
-		assertEquals("Should have called pushToRemote twice", 2,
-				bag.pushToRemoteCalled);
-		// Remember that pull is called automatically after a successful push
-		assertEquals("Should have called pullToRemote twice", 2,
-				bag.pullFromRemoteCalled);
-	}
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
 
+        new Waiter() {
+            public boolean test() {
+                return bag.pushToRemoteCalled == 1;
+            };
+        }.doWait();
+
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
+        startPush(app);
+        startPush(app);
+        startPush(app);
+        startPush(app);
+
+        new Waiter() {
+            public boolean test() {
+                return bag.pullFromRemoteCalled == 1;
+            };
+        }.doWait();
+
+        assertEquals("Should have called pushToRemote twice", 2, bag.pushToRemoteCalled);
+        // Remember that pull is called automatically after a successful push
+        assertEquals("Should have called pullToRemote once", 1, bag.pullFromRemoteCalled);
+    }
+
+    public void testPushToRemoteMultipleDelayedWithPull() {
+        TodoApplication app = getApplication();
+
+        final TaskBagStub bag = new TaskBagStub() {
+            @Override
+            public void pushToRemote(boolean overridePreference,
+                    boolean overwrite) {
+                super.pushToRemote(overridePreference, overwrite);
+                if (pushToRemoteCalled <= 1) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        };
+
+        setTaskBag(app, bag);
+
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
+
+        new Waiter() {
+            public boolean test() {
+                return bag.pushToRemoteCalled == 1;
+            };
+        }.doWait();
+
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
+        startPush(app);
+
+        // This pull should not be called
+        // app.sendBroadcast(new
+        // Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
+        startPull(app);
+
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
+        startPush(app);
+        startPush(app);
+
+        new Waiter() {
+            public boolean test() {
+                return bag.pullFromRemoteCalled == 1;
+            };
+        }.doWait();
+
+        assertEquals("Should have called pushToRemote twice", 2, bag.pushToRemoteCalled);
+        // Remember that pull is called automatically after a successful push
+        assertEquals("Should have called pullToRemote once", 1, bag.pullFromRemoteCalled);
+    }
+
+    public void testPushToRemoteMultipleDelayedThenPull() {
+        TodoApplication app = getApplication();
+
+        final TaskBagStub bag = new TaskBagStub() {
+            @Override
+            public void pushToRemote(boolean overridePreference,
+                    boolean overwrite) {
+                super.pushToRemote(overridePreference, overwrite);
+
+                if (pushToRemoteCalled <= 1) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        };
+
+        setTaskBag(app, bag);
+
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
+
+        new Waiter() {
+            public boolean test() {
+                return bag.pushToRemoteCalled == 1;
+            };
+        }.doWait();
+
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        // app.sendBroadcast(new Intent(Constants.INTENT_START_SYNC_TO_REMOTE));
+        startPush(app);
+        startPush(app);
+        startPush(app);
+        startPush(app);
+        startPush(app);
+
+        new Waiter() {
+            public boolean test() {
+                return bag.pullFromRemoteCalled == 1;
+            };
+        }.doWait();
+
+        // This pull should be called
+        // app.sendBroadcast(new
+        // Intent(Constants.INTENT_START_SYNC_FROM_REMOTE));
+        startPull(app);
+
+        new Waiter() {
+            public boolean test() {
+                return bag.pullFromRemoteCalled == 2;
+            };
+        }.doWait();
+
+        assertEquals("Should have called pushToRemote twice", 2, bag.pushToRemoteCalled);
+        // Remember that pull is called automatically after a successful push
+        assertEquals("Should have called pullToRemote twice", 2, bag.pullFromRemoteCalled);
+    }
 }

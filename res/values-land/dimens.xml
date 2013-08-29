@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -24,5 +23,7 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <resources>
-   <dimen name="path_dialog_height">144dp</dimen>
+
+    <dimen name="path_dialog_height">144dp</dimen>
+
 </resources>

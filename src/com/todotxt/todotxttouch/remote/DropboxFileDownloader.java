@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 import java.io.File;
@@ -36,128 +37,135 @@ import com.dropbox.client2.exception.DropboxServerException;
 import com.todotxt.todotxttouch.util.Util;
 
 public class DropboxFileDownloader {
+    final static String TAG = DropboxFileDownloader.class.getSimpleName();
 
-	final static String TAG = DropboxFileDownloader.class.getSimpleName();
+    private DropboxAPI<?> dropboxApi;
+    private DropboxFileStatus status;
+    private Collection<DropboxFile> files;
 
-	private DropboxAPI<?> dropboxApi;
-	private DropboxFileStatus status;
-	private Collection<DropboxFile> files;
+    /**
+     * @param files
+     */
+    public DropboxFileDownloader(DropboxAPI<?> dropboxApi, Collection<DropboxFile> files) {
+        this.dropboxApi = dropboxApi;
+        this.files = files;
 
-	/**
-	 * @param files
-	 */
-	public DropboxFileDownloader(DropboxAPI<?> dropboxApi,
-			Collection<DropboxFile> files) {
-		this.dropboxApi = dropboxApi;
-		this.files = files;
-		status = DropboxFileStatus.INITIALIZED;
-	}
+        status = DropboxFileStatus.INITIALIZED;
+    }
 
-	/**
-	 * @return the status
-	 */
-	public DropboxFileStatus getStatus() {
-		return status;
-	}
+    /**
+     * @return the status
+     */
+    public DropboxFileStatus getStatus() {
+        return status;
+    }
 
-	/**
-	 * @return the files
-	 */
-	public Collection<DropboxFile> getFiles() {
-		return files;
-	}
+    /**
+     * @return the files
+     */
+    public Collection<DropboxFile> getFiles() {
+        return files;
+    }
 
-	public void pullFiles() {
-		status = DropboxFileStatus.STARTED;
-		Log.d(TAG, "pullFiles started");
+    public void pullFiles() {
+        status = DropboxFileStatus.STARTED;
 
-		// load each metadata
-		for (DropboxFile file : files) {
-			loadMetadata(file);
-		}
+        Log.d(TAG, "pullFiles started");
 
-		// load each file with a newer rev
-		for (DropboxFile file : files) {
-			if (file.getStatus() == DropboxFileStatus.FOUND) {
-				loadFile(file);
-			}
-		}
+        // load each metadata
+        for (DropboxFile file : files) {
+            loadMetadata(file);
+        }
 
-		status = DropboxFileStatus.SUCCESS;
-	}
+        // load each file with a newer rev
+        for (DropboxFile file : files) {
+            if (file.getStatus() == DropboxFileStatus.FOUND) {
+                loadFile(file);
+            }
+        }
 
-	private void loadMetadata(DropboxFile file) {
-		Log.d(TAG, "Loading metadata for " + file.getRemoteFile());
+        status = DropboxFileStatus.SUCCESS;
+    }
 
-		DropboxAPI.Entry metadata = null;
-		try {
-			metadata = dropboxApi.metadata(file.getRemoteFile(), 0, null,
-					false, null);
-		} catch (DropboxServerException se) {
-			if (se.error == DropboxServerException._404_NOT_FOUND) {
-				Log.d(TAG, "metadata NOT found! Returning NOT_FOUND status.");
-				file.setStatus(DropboxFileStatus.NOT_FOUND);
-				return;
-			}
-			throw new RemoteException("Server Exception: " + se.error + " "
-					+ se.reason, se);
-		} catch (DropboxException e) {
-			throw new RemoteException("Dropbox Exception: " + e.getMessage(), e);
-		}
+    private void loadMetadata(DropboxFile file) {
+        Log.d(TAG, "Loading metadata for " + file.getRemoteFile());
 
-		Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + metadata.rev);
-		Log.d(TAG, "local rev = " + file.getOriginalRev());
+        DropboxAPI.Entry metadata = null;
 
-		file.setLoadedMetadata(metadata);
+        try {
+            metadata = dropboxApi.metadata(file.getRemoteFile(), 0, null, false, null);
+        } catch (DropboxServerException se) {
+            if (se.error == DropboxServerException._404_NOT_FOUND) {
+                Log.d(TAG, "metadata NOT found! Returning NOT_FOUND status.");
 
-		if (metadata.rev.equals(file.getOriginalRev())) {
-			// don't bother downloading if the rev is the same
-			Log.d(TAG, "revs match. returning NOT_CHANGED status.");
-			file.setStatus(DropboxFileStatus.NOT_CHANGED);
-		} else if (metadata.isDeleted) {
-			Log.d(TAG,
-					"File marked as deleted on Dropbox! Returning NOT_FOUND status.");
-			file.setStatus(DropboxFileStatus.NOT_FOUND);
-		} else {
-			Log.d(TAG, "revs don't match. returning FOUND status.");
-			file.setStatus(DropboxFileStatus.FOUND);
-		}
-	}
+                file.setStatus(DropboxFileStatus.NOT_FOUND);
 
-	private void loadFile(DropboxFile file) {
-		Log.d(TAG,
-				"Downloading " + file.getRemoteFile() + " at rev = "
-						+ file.getLoadedMetadata().rev);
-		File localFile = file.getLocalFile();
-		try {
-			if (!localFile.exists()) {
-				Util.createParentDirectory(localFile);
-				localFile.createNewFile();
-			}
-		} catch (IOException e) {
-			throw new RemoteException("Failed to ensure that file exists", e);
-		}
+                return;
+            }
 
-		FileOutputStream outputStream = null;
-		try {
-			outputStream = new FileOutputStream(localFile);
-		} catch (FileNotFoundException e1) {
-			throw new RemoteException("Failed to find file", e1);
-		}
+            throw new RemoteException("Server Exception: " + se.error + " " + se.reason, se);
+        } catch (DropboxException e) {
+            throw new RemoteException("Dropbox Exception: " + e.getMessage(), e);
+        }
 
-		try {
-			dropboxApi.getFile(file.getRemoteFile(),
-					file.getLoadedMetadata().rev, outputStream, null);
-			outputStream.flush();
-			outputStream.close();
-		} catch (DropboxException e) {
-			throw new RemoteException("Cannot get file from Dropbox", e);
-		} catch (IOException e) {
-			throw new RemoteException("Failed to find file", e);
-		}
+        Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + metadata.rev);
+        Log.d(TAG, "local rev = " + file.getOriginalRev());
 
-		Log.d(TAG, "Download successful. Returning status SUCCESS");
-		file.setStatus(DropboxFileStatus.SUCCESS);
-	}
+        file.setLoadedMetadata(metadata);
 
+        if (metadata.rev.equals(file.getOriginalRev())) {
+            // don't bother downloading if the rev is the same
+            Log.d(TAG, "revs match. returning NOT_CHANGED status.");
+
+            file.setStatus(DropboxFileStatus.NOT_CHANGED);
+        } else if (metadata.isDeleted) {
+            Log.d(TAG, "File marked as deleted on Dropbox! Returning NOT_FOUND status.");
+
+            file.setStatus(DropboxFileStatus.NOT_FOUND);
+        } else {
+            Log.d(TAG, "revs don't match. returning FOUND status.");
+
+            file.setStatus(DropboxFileStatus.FOUND);
+        }
+    }
+
+    private void loadFile(DropboxFile file) {
+        Log.d(TAG,
+                "Downloading " + file.getRemoteFile() + " at rev = "
+                        + file.getLoadedMetadata().rev);
+
+        File localFile = file.getLocalFile();
+
+        try {
+            if (!localFile.exists()) {
+                Util.createParentDirectory(localFile);
+                localFile.createNewFile();
+            }
+        } catch (IOException e) {
+            throw new RemoteException("Failed to ensure that file exists", e);
+        }
+
+        FileOutputStream outputStream = null;
+
+        try {
+            outputStream = new FileOutputStream(localFile);
+        } catch (FileNotFoundException e1) {
+            throw new RemoteException("Failed to find file", e1);
+        }
+
+        try {
+            dropboxApi.getFile(file.getRemoteFile(),
+                    file.getLoadedMetadata().rev, outputStream, null);
+            outputStream.flush();
+            outputStream.close();
+        } catch (DropboxException e) {
+            throw new RemoteException("Cannot get file from Dropbox", e);
+        } catch (IOException e) {
+            throw new RemoteException("Failed to find file", e);
+        }
+
+        Log.d(TAG, "Download successful. Returning status SUCCESS");
+
+        file.setStatus(DropboxFileStatus.SUCCESS);
+    }
 }

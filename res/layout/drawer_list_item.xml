@@ -12,19 +12,20 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-  -->
+-->
 <com.todotxt.todotxttouch.RelativeLayoutCheckable xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-<TextView 
-    android:id="@+id/left_drawer_text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:gravity="center_vertical"
-    android:paddingLeft="16dip"
-    android:paddingRight="16dip"
-    android:minHeight="48dp"
-    style="@style/TodoTxtTouchLight"
-            />
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/left_drawer_text"
+        style="@style/TodoTxtTouchLight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingLeft="16dip"
+        android:paddingRight="16dip"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </com.todotxt.todotxttouch.RelativeLayoutCheckable>

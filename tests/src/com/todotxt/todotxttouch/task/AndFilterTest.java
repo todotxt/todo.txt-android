@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import junit.framework.TestCase;
@@ -32,36 +33,36 @@ import java.util.Arrays;
  * @author Tim Barlotta
  */
 public class AndFilterTest extends TestCase {
-	public void testNoFilters() {
-		AndFilter andFilter = new AndFilter();
-		assertTrue("apply was not true",
-				andFilter.apply(new Task(1, "(A) abc 123")));
-	}
+    public void testNoFilters() {
+        AndFilter andFilter = new AndFilter();
 
-	public void testMultipleFilters_matchesBoth() {
-		AndFilter andFilter = new AndFilter();
-		andFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
-		andFilter.addFilter(new ByTextFilter("abc", false));
+        assertTrue("apply was not true", andFilter.apply(new Task(1, "(A) abc 123")));
+    }
 
-		assertTrue("apply was not true",
-				andFilter.apply(new Task(1, "(A) abc 123")));
-	}
+    public void testMultipleFilters_matchesBoth() {
+        AndFilter andFilter = new AndFilter();
 
-	public void testMultipleFilters_matchesOnlyOne() {
-		AndFilter andFilter = new AndFilter();
-		andFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
-		andFilter.addFilter(new ByTextFilter("abc", false));
+        andFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
+        andFilter.addFilter(new ByTextFilter("abc", false));
 
-		assertFalse("apply was not false",
-				andFilter.apply(new Task(1, "(A) hello world")));
-	}
+        assertTrue("apply was not true", andFilter.apply(new Task(1, "(A) abc 123")));
+    }
 
-	public void testMultipleFilters_matchesNone() {
-		AndFilter andFilter = new AndFilter();
-		andFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
-		andFilter.addFilter(new ByTextFilter("abc", false));
+    public void testMultipleFilters_matchesOnlyOne() {
+        AndFilter andFilter = new AndFilter();
 
-		assertFalse("apply was not false",
-				andFilter.apply(new Task(1, "(B) hello world")));
-	}
+        andFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
+        andFilter.addFilter(new ByTextFilter("abc", false));
+
+        assertFalse("apply was not false", andFilter.apply(new Task(1, "(A) hello world")));
+    }
+
+    public void testMultipleFilters_matchesNone() {
+        AndFilter andFilter = new AndFilter();
+
+        andFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
+        andFilter.addFilter(new ByTextFilter("abc", false));
+
+        assertFalse("apply was not false", andFilter.apply(new Task(1, "(B) hello world")));
+    }
 }

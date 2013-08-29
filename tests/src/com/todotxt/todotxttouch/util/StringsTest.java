@@ -20,106 +20,100 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.util;
 
 import junit.framework.TestCase;
 
 public class StringsTest extends TestCase {
-	public void testIsEmptyOrNull_null() {
-		assertTrue(Strings.isEmptyOrNull(null));
-	}
+    public void testIsEmptyOrNull_null() {
+        assertTrue(Strings.isEmptyOrNull(null));
+    }
 
-	public void testIsEmptyOrNull_emptyString() {
-		assertTrue(Strings.isEmptyOrNull(""));
-	}
+    public void testIsEmptyOrNull_emptyString() {
+        assertTrue(Strings.isEmptyOrNull(""));
+    }
 
-	public void testIsEmptyOrNull_nonEmpty() {
-		assertFalse(Strings.isEmptyOrNull("qwerty"));
-	}
+    public void testIsEmptyOrNull_nonEmpty() {
+        assertFalse(Strings.isEmptyOrNull("qwerty"));
+    }
 
-	public void testIsEmptyOrNull_singleSpace() {
-		assertFalse(Strings.isEmptyOrNull(" "));
-	}
+    public void testIsEmptyOrNull_singleSpace() {
+        assertFalse(Strings.isEmptyOrNull(" "));
+    }
 
-	public void testInsertPadded_null() {
-		assertEquals("thistest", Strings.insertPadded("thistest", 4, null));
-	}
+    public void testInsertPadded_null() {
+        assertEquals("thistest", Strings.insertPadded("thistest", 4, null));
+    }
 
-	public void testInsertPadded_blank() {
-		assertEquals("thistest", Strings.insertPadded("thistest", 4, ""));
-	}
+    public void testInsertPadded_blank() {
+        assertEquals("thistest", Strings.insertPadded("thistest", 4, ""));
+    }
 
-	public void testInsertPadded_invalidInsertionPoint_toosmall() {
-		try {
-			assertEquals("thistest", Strings.insertPadded("thistest", -1, "is"));
-			fail("Exception not thrown");
-		} catch (IndexOutOfBoundsException e) {
-			// success
-		}
-	}
+    public void testInsertPadded_invalidInsertionPoint_toosmall() {
+        try {
+            assertEquals("thistest", Strings.insertPadded("thistest", -1, "is"));
 
-	public void testInsertPadded_invalidInsertionPoint_toolarge() {
-		try {
-			assertEquals("thistest", Strings.insertPadded("thistest", 99, "is"));
-			fail("Exception not thrown");
-		} catch (IndexOutOfBoundsException e) {
-			// success
-		}
-	}
+            fail("Exception not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // success
+        }
+    }
 
-	public void testInsertPadded_simple() {
-		assertEquals("this is test", Strings.insertPadded("thistest", 4, "is"));
-	}
+    public void testInsertPadded_invalidInsertionPoint_toolarge() {
+        try {
+            assertEquals("thistest", Strings.insertPadded("thistest", 99, "is"));
 
-	public void testInsertPadded_simpleBegin() {
-		assertEquals("is thistest", Strings.insertPadded("thistest", 0, "is"));
-	}
+            fail("Exception not thrown");
+        } catch (IndexOutOfBoundsException e) {
+            // success
+        }
+    }
 
-	public void testInsertPadded_simpleEnd() {
-		assertEquals("thistest is ", Strings.insertPadded("thistest", 8, "is"));
-	}
+    public void testInsertPadded_simple() {
+        assertEquals("this is test", Strings.insertPadded("thistest", 4, "is"));
+    }
 
-	public void testInsertPadded_prepadded() {
-		assertEquals("this is test", Strings.insertPadded("this test", 4, "is"));
-	}
+    public void testInsertPadded_simpleBegin() {
+        assertEquals("is thistest", Strings.insertPadded("thistest", 0, "is"));
+    }
 
-	public void testInsertPadded_prepaddedBegin() {
-		assertEquals("is this test",
-				Strings.insertPadded(" this test", 0, "is"));
-	}
+    public void testInsertPadded_simpleEnd() {
+        assertEquals("thistest is ", Strings.insertPadded("thistest", 8, "is"));
+    }
 
-	public void testInsertPadded_prepaddedEnd1() {
-		assertEquals("this test is ",
-				Strings.insertPadded("this test ", 9, "is"));
-	}
+    public void testInsertPadded_prepadded() {
+        assertEquals("this is test", Strings.insertPadded("this test", 4, "is"));
+    }
 
-	public void testInsertPadded_prepaddedEnd2() {
-		assertEquals("this test is ",
-				Strings.insertPadded("this test ", 10, "is"));
-	}
-	
-	public void testInsertPaddedIfNeeded_intoEmpty() {
-		assertEquals("thing one ",
-				Strings.insertPaddedIfNeeded("", 0, "thing one"));
-	}
-	
-	public void testInsertPaddedIfNeeded_alreadyThere() {
-		assertEquals("@errands hi ",
-				Strings.insertPaddedIfNeeded("@errands hi", 11, "@errands"));
-		assertEquals("hi @errands ",
-				Strings.insertPaddedIfNeeded("hi @errands", 11, "@errands"));
-		assertEquals("+project hi ",
-				Strings.insertPaddedIfNeeded("+project hi", 11, "+project"));
-		assertEquals("hi +project ",
-				Strings.insertPaddedIfNeeded("hi +project", 11, "+project"));
-	}
-	
-	public void testInsertPaddedIfNeeded_supersetThere() {
-		assertEquals("@errands2 hi @errands ",
-				Strings.insertPaddedIfNeeded("@errands2 hi", 12, "@errands"));
-		assertEquals("+project2 hi +project ",
-				Strings.insertPaddedIfNeeded("+project2 hi", 12, "+project"));
-		assertEquals("john@email @email ",
-				Strings.insertPaddedIfNeeded("john@email", 10, "@email"));
-	}
+    public void testInsertPadded_prepaddedBegin() {
+        assertEquals("is this test", Strings.insertPadded(" this test", 0, "is"));
+    }
+
+    public void testInsertPadded_prepaddedEnd1() {
+        assertEquals("this test is ", Strings.insertPadded("this test ", 9, "is"));
+    }
+
+    public void testInsertPadded_prepaddedEnd2() {
+        assertEquals("this test is ", Strings.insertPadded("this test ", 10, "is"));
+    }
+
+    public void testInsertPaddedIfNeeded_intoEmpty() {
+        assertEquals("thing one ", Strings.insertPaddedIfNeeded("", 0, "thing one"));
+    }
+
+    public void testInsertPaddedIfNeeded_alreadyThere() {
+        assertEquals("@errands hi ", Strings.insertPaddedIfNeeded("@errands hi", 11, "@errands"));
+        assertEquals("hi @errands ", Strings.insertPaddedIfNeeded("hi @errands", 11, "@errands"));
+        assertEquals("+project hi ", Strings.insertPaddedIfNeeded("+project hi", 11, "+project"));
+        assertEquals("hi +project ", Strings.insertPaddedIfNeeded("hi +project", 11, "+project"));
+    }
+
+    public void testInsertPaddedIfNeeded_supersetThere() {
+        assertEquals("@errands2 hi @errands ",
+                Strings.insertPaddedIfNeeded("@errands2 hi", 12, "@errands"));
+        assertEquals("+project2 hi +project ",
+                Strings.insertPaddedIfNeeded("+project2 hi", 12, "+project"));
+        assertEquals("john@email @email ", Strings.insertPaddedIfNeeded("john@email", 10, "@email"));
+    }
 }

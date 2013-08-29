@@ -22,14 +22,13 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-
 <!-- suppress ALL -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tablet_drawer_layout"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_height="match_parent" >
-	
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
     <ListView
         android:id="@+id/left_drawer"
         style="@style/TodoTxtTouchLight"
@@ -38,6 +37,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:layout_gravity="start"
         android:background="#f3f3f3"
         android:choiceMode="singleChoice" />
+
     <LinearLayout
         android:id="@+id/home_root"
         android:layout_width="fill_parent"
@@ -53,4 +53,5 @@ You should have received a copy of the GNU General Public License along with Tod
             android:gravity="top"
             android:inputType="textCapSentences|textMultiLine" />
     </LinearLayout>
+
 </LinearLayout>

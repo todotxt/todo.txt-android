@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
@@ -29,21 +30,22 @@ import java.util.ArrayList;
  * Returns true when there are no subfilters.
  */
 class AndFilter implements Filter<Task> {
-	private ArrayList<Filter<Task>> filters = new ArrayList<Filter<Task>>();
+    private ArrayList<Filter<Task>> filters = new ArrayList<Filter<Task>>();
 
-	public void addFilter(Filter<Task> filter) {
-		if (filter != null) {
-			filters.add(filter);
-		}
-	}
+    public void addFilter(Filter<Task> filter) {
+        if (filter != null) {
+            filters.add(filter);
+        }
+    }
 
-	@Override
-	public boolean apply(Task input) {
-		for (Filter<Task> f : filters) {
-			if (!f.apply(input)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    @Override
+    public boolean apply(Task input) {
+        for (Filter<Task> f : filters) {
+            if (!f.apply(input)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

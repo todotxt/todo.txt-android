@@ -20,88 +20,109 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import junit.framework.TestCase;
 
 public class PriorityTextSplitterTest extends TestCase {
-	public void testSplit_empty() {
-		String input = "";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("", result.text);
-	}
+    public void testSplit_empty() {
+        String input = "";
 
-	public void testSplit_null() {
-		String input = null;
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("", result.text);
-	}
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
 
-	public void testSplit_withPriority() {
-		String input = "(A) test";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.A, result.priority);
-		assertEquals("test", result.text);
-	}
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("", result.text);
+    }
 
-	public void testSplit_withPrependedDate() {
-		String input = "2011-01-02 test";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("2011-01-02 test", result.text);
-	}
+    public void testSplit_null() {
+        String input = null;
 
-	public void testSplit_withPriorityAndPrependedDate() {
-		String input = "(A) 2011-01-02 test";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.A, result.priority);
-		assertEquals("2011-01-02 test", result.text);
-	}
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
 
-	public void testSplit_dateInterspersedInText() {
-		String input = "Call Mom 2011-03-02";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("Call Mom 2011-03-02", result.text);
-	}
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("", result.text);
+    }
 
-	public void testSplit_missingSpace() {
-		String input = "(A)2011-01-02 test";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("(A)2011-01-02 test", result.text);
-	}
+    public void testSplit_withPriority() {
+        String input = "(A) test";
 
-	public void testSplit_outOfOrder() {
-		String input = "2011-01-02 (A) test";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("2011-01-02 (A) test", result.text);
-	}
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
 
-	public void testSplit_completed() {
-		String input = "x 2011-01-02 test 123";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("x 2011-01-02 test 123", result.text);
-	}
+        assertEquals(Priority.A, result.priority);
+        assertEquals("test", result.text);
+    }
 
-	public void testSplit_completedWithPrependedDate() {
-		String input = "x 2011-01-02 2011-01-01 test 123";
-		PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
-		PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
-		assertEquals(Priority.NONE, result.priority);
-		assertEquals("x 2011-01-02 2011-01-01 test 123", result.text);
-	}
+    public void testSplit_withPrependedDate() {
+        String input = "2011-01-02 test";
+
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
+
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("2011-01-02 test", result.text);
+    }
+
+    public void testSplit_withPriorityAndPrependedDate() {
+        String input = "(A) 2011-01-02 test";
+
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
+
+        assertEquals(Priority.A, result.priority);
+        assertEquals("2011-01-02 test", result.text);
+    }
+
+    public void testSplit_dateInterspersedInText() {
+        String input = "Call Mom 2011-03-02";
+
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
+
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("Call Mom 2011-03-02", result.text);
+    }
+
+    public void testSplit_missingSpace() {
+        String input = "(A)2011-01-02 test";
+
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
+
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("(A)2011-01-02 test", result.text);
+    }
+
+    public void testSplit_outOfOrder() {
+        String input = "2011-01-02 (A) test";
+
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
+
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("2011-01-02 (A) test", result.text);
+    }
+
+    public void testSplit_completed() {
+        String input = "x 2011-01-02 test 123";
+
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
+
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("x 2011-01-02 test 123", result.text);
+    }
+
+    public void testSplit_completedWithPrependedDate() {
+        String input = "x 2011-01-02 2011-01-01 test 123";
+
+        PriorityTextSplitter splitter = PriorityTextSplitter.getInstance();
+        PriorityTextSplitter.PrioritySplitResult result = splitter.split(input);
+
+        assertEquals(Priority.NONE, result.priority);
+        assertEquals("x 2011-01-02 2011-01-01 test 123", result.text);
+    }
 }
