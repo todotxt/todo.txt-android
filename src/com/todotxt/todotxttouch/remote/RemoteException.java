@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 /**
@@ -29,11 +30,11 @@ package com.todotxt.todotxttouch.remote;
  */
 @SuppressWarnings("serial")
 public class RemoteException extends RuntimeException {
-	public RemoteException(String message) {
-		super(message);
-	}
+    public RemoteException(String message) {
+        super(message);
+    }
 
-	public RemoteException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public RemoteException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

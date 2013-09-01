@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 /**
@@ -28,41 +29,42 @@ package com.todotxt.todotxttouch.task;
  * @author Tim Barlotta
  */
 class ByTextFilter implements Filter<Task> {
-	private String text;
-	private boolean caseSensitive;
-	private String[] parts;
+    private String text;
+    private boolean caseSensitive;
+    private String[] parts;
 
-	public ByTextFilter(String text, boolean caseSensitive) {
-		if (text == null) {
-			text = "";
-		}
-		this.text = caseSensitive ? text : text.toUpperCase();
-		this.caseSensitive = caseSensitive;
+    public ByTextFilter(String text, boolean caseSensitive) {
+        if (text == null) {
+            text = "";
+        }
 
-		this.parts = this.text.split("\\s");
-	}
+        this.text = caseSensitive ? text : text.toUpperCase();
+        this.caseSensitive = caseSensitive;
 
-	@Override
-	public boolean apply(Task input) {
-		String taskText = caseSensitive ? input.getText() : input.getText()
-				.toUpperCase();
+        this.parts = this.text.split("\\s");
+    }
 
-		for (int i = 0; i < parts.length; ++i) {
-			String part = this.parts[i];
+    @Override
+    public boolean apply(Task input) {
+        String taskText = caseSensitive ? input.getText() : input.getText()
+                .toUpperCase();
 
-			if ((part.length() > 0) && !taskText.contains(part))
-				return (false);
-		}
+        for (int i = 0; i < parts.length; ++i) {
+            String part = this.parts[i];
 
-		return true;
-	}
+            if ((part.length() > 0) && !taskText.contains(part))
+                return (false);
+        }
 
-	/* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
-	String getText() {
-		return text;
-	}
+        return true;
+    }
 
-	boolean isCaseSensitive() {
-		return caseSensitive;
-	}
+    /* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
+    String getText() {
+        return text;
+    }
+
+    boolean isCaseSensitive() {
+        return caseSensitive;
+    }
 }

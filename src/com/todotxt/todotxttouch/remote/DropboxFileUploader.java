@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 import java.io.File;
@@ -37,162 +38,174 @@ import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.todotxt.todotxttouch.util.Util;
 
 public class DropboxFileUploader {
+    final static String TAG = DropboxFileUploader.class.getSimpleName();
 
-	final static String TAG = DropboxFileUploader.class.getSimpleName();
-	
-	private DropboxAPI<?> dropboxApi;
-	private DropboxFileStatus status;
-	private Collection<DropboxFile> files;
-	private boolean overwrite;
+    private DropboxAPI<?> dropboxApi;
+    private DropboxFileStatus status;
+    private Collection<DropboxFile> files;
+    private boolean overwrite;
 
-	/**
-	 * @param files
-	 */
-	public DropboxFileUploader(DropboxAPI<?> dropboxApi,
-			Collection<DropboxFile> files, boolean overwrite) {
-		this.dropboxApi = dropboxApi;
-		this.files = files;
-		this.overwrite = overwrite;
-		status = DropboxFileStatus.INITIALIZED;
-	}
+    /**
+     * @param files
+     */
+    public DropboxFileUploader(DropboxAPI<?> dropboxApi,
+            Collection<DropboxFile> files, boolean overwrite) {
+        this.dropboxApi = dropboxApi;
+        this.files = files;
+        this.overwrite = overwrite;
+        status = DropboxFileStatus.INITIALIZED;
+    }
 
-	/**
-	 * @return the status
-	 */
-	public DropboxFileStatus getStatus() {
-		return status;
-	}
+    /**
+     * @return the status
+     */
+    public DropboxFileStatus getStatus() {
+        return status;
+    }
 
-	/**
-	 * @return the files
-	 */
-	public Collection<DropboxFile> getFiles() {
-		return files;
-	}
+    /**
+     * @return the files
+     */
+    public Collection<DropboxFile> getFiles() {
+        return files;
+    }
 
-	public void pushFiles() {
-		status = DropboxFileStatus.STARTED;
-		Log.d(TAG, "pushFiles started");
-		
-		// load each metadata
-		for (DropboxFile file : files) {
-			loadMetadata(file);
-		}
+    public void pushFiles() {
+        status = DropboxFileStatus.STARTED;
 
-		// upload each file that has changed
-		for (DropboxFile file : files) {
-			if (file.getStatus() == DropboxFileStatus.FOUND
-					|| file.getStatus() == DropboxFileStatus.NOT_FOUND) {
-				uploadFile(file);
-			}
-		}
+        Log.d(TAG, "pushFiles started");
 
-		status = DropboxFileStatus.SUCCESS;
-	}
+        // load each metadata
+        for (DropboxFile file : files) {
+            loadMetadata(file);
+        }
 
-	private void loadMetadata(DropboxFile file) {
-		Log.d(TAG, "Loading metadata for " + file.getRemoteFile());
-		
-		DropboxAPI.Entry metadata = null;
-		try {
-			metadata = dropboxApi.metadata(file.getRemoteFile(), 1, null,
-					false, null);
-		} catch (DropboxServerException se) {
-			if (se.error == DropboxServerException._404_NOT_FOUND) {
-				Log.d(TAG, "metadata NOT found! Returning NOT_FOUND status.");
-				file.setStatus(DropboxFileStatus.NOT_FOUND);
-				return;
-			}
-			throw new RemoteException("Server Exception: " + se.error + " " + se.reason, se);
-		} catch (DropboxException e) {
-			throw new RemoteException("Dropbox Exception: " + e.getMessage(), e);
-		}
+        // upload each file that has changed
+        for (DropboxFile file : files) {
+            if (file.getStatus() == DropboxFileStatus.FOUND
+                    || file.getStatus() == DropboxFileStatus.NOT_FOUND) {
+                uploadFile(file);
+            }
+        }
 
-		Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + metadata.rev);
-		Log.d(TAG, "local rev = " + file.getOriginalRev());
-		
-		if (metadata.isDeleted) {
-			Log.d(TAG, "File marked as deleted on Dropbox! Returning NOT_FOUND status.");
-			file.setStatus(DropboxFileStatus.NOT_FOUND);
-		} else {
+        status = DropboxFileStatus.SUCCESS;
+    }
 
-			file.setLoadedMetadata(metadata);
+    private void loadMetadata(DropboxFile file) {
+        Log.d(TAG, "Loading metadata for " + file.getRemoteFile());
 
-			if (!overwrite && !metadata.rev.equals(file.getOriginalRev())) {
-				Log.d(TAG, "revs don't match! Returning CONFLICT status.");
-				file.setStatus(DropboxFileStatus.CONFLICT);
-				throw new RemoteConflictException("Local file "
-						+ file.getRemoteFile()
-						+ " conflicts with remote version.");
-			} else {
-				Log.d(TAG, "revs match (or we're forcing the upload). returning FOUND status.");
-				file.setStatus(DropboxFileStatus.FOUND);
-			}
-		}
-	}
+        DropboxAPI.Entry metadata = null;
 
-	private void uploadFile(DropboxFile file) {
-		Log.d(TAG, "Uploading " + file.getRemoteFile());
+        try {
+            metadata = dropboxApi.metadata(file.getRemoteFile(), 1, null,
+                    false, null);
+        } catch (DropboxServerException se) {
+            if (se.error == DropboxServerException._404_NOT_FOUND) {
+                Log.d(TAG, "metadata NOT found! Returning NOT_FOUND status.");
 
-		File localFile = file.getLocalFile();
-		try {
-			if (!localFile.exists()) {
-				Util.createParentDirectory(localFile);
-				localFile.createNewFile();
-			}
-		} catch (IOException e) {
-			throw new RemoteException("Failed to ensure that file exists", e);
-		}
+                file.setStatus(DropboxFileStatus.NOT_FOUND);
 
-		String rev = null;
-		if (file.getLoadedMetadata() != null) {
-			rev = file.getLoadedMetadata().rev;
-		}
+                return;
+            }
+            throw new RemoteException("Server Exception: " + se.error + " " + se.reason, se);
+        } catch (DropboxException e) {
+            throw new RemoteException("Dropbox Exception: " + e.getMessage(), e);
+        }
 
-		Log.d(TAG, "Sending parent_rev = " + rev);
-		
-		FileInputStream inputStream;
-		try {
-			inputStream = new FileInputStream(localFile);
-		} catch (FileNotFoundException e1) {
-			throw new RemoteException("File " + localFile.getAbsolutePath()
-					+ " not found", e1);
-		}
+        Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + metadata.rev);
+        Log.d(TAG, "local rev = " + file.getOriginalRev());
 
-		DropboxAPI.Entry metadata = null;
+        if (metadata.isDeleted) {
+            Log.d(TAG, "File marked as deleted on Dropbox! Returning NOT_FOUND status.");
 
-		try {
-			metadata = dropboxApi.putFile(file.getRemoteFile(), inputStream,
-					localFile.length(), rev, null);
-			inputStream.close();
+            file.setStatus(DropboxFileStatus.NOT_FOUND);
+        } else {
+            file.setLoadedMetadata(metadata);
 
-		} catch (DropboxUnlinkedException e) {
-			throw new RemoteException("User has unlinked.", e);
-		} catch (DropboxException e) {
-			e.printStackTrace();
-			throw new RemoteException("Something went wrong while uploading: " + e.getMessage(),
-					e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RemoteException("Problem with IO", e);
-		}
+            if (!overwrite && !metadata.rev.equals(file.getOriginalRev())) {
+                Log.d(TAG, "revs don't match! Returning CONFLICT status.");
 
-		Log.d(TAG, "Upload succeeded. new rev = " + metadata.rev + ". path = " + metadata.path);
-		
-		file.setLoadedMetadata(metadata);
-		if (!metadata.path.equalsIgnoreCase(file.getRemoteFile())) {
-			// If the uploaded remote path does not match our expected
-			// remotePath,
-			// then a conflict occurred and we should announce the conflict to
-			// the user.
-			Log.d(TAG, "upload created new file! Returning CONFLICT status.");
-			file.setStatus(DropboxFileStatus.CONFLICT);
-			throw new RemoteConflictException("Local file "
-					+ file.getRemoteFile() + " conflicts with remote version.");
-		} else {
-			Log.d(TAG, "Returning SUCCESS status");
-			file.setStatus(DropboxFileStatus.SUCCESS);
-		}
-	}
+                file.setStatus(DropboxFileStatus.CONFLICT);
 
+                throw new RemoteConflictException("Local file "
+                        + file.getRemoteFile()
+                        + " conflicts with remote version.");
+            } else {
+                Log.d(TAG, "revs match (or we're forcing the upload). returning FOUND status.");
+
+                file.setStatus(DropboxFileStatus.FOUND);
+            }
+        }
+    }
+
+    private void uploadFile(DropboxFile file) {
+        Log.d(TAG, "Uploading " + file.getRemoteFile());
+
+        File localFile = file.getLocalFile();
+
+        try {
+            if (!localFile.exists()) {
+                Util.createParentDirectory(localFile);
+                localFile.createNewFile();
+            }
+        } catch (IOException e) {
+            throw new RemoteException("Failed to ensure that file exists", e);
+        }
+
+        String rev = null;
+
+        if (file.getLoadedMetadata() != null) {
+            rev = file.getLoadedMetadata().rev;
+        }
+
+        Log.d(TAG, "Sending parent_rev = " + rev);
+
+        FileInputStream inputStream;
+
+        try {
+            inputStream = new FileInputStream(localFile);
+        } catch (FileNotFoundException e1) {
+            throw new RemoteException("File " + localFile.getAbsolutePath()
+                    + " not found", e1);
+        }
+
+        DropboxAPI.Entry metadata = null;
+
+        try {
+            metadata = dropboxApi.putFile(file.getRemoteFile(), inputStream, localFile.length(),
+                    rev, null);
+            inputStream.close();
+        } catch (DropboxUnlinkedException e) {
+            throw new RemoteException("User has unlinked.", e);
+        } catch (DropboxException e) {
+            e.printStackTrace();
+
+            throw new RemoteException("Something went wrong while uploading: " + e.getMessage(), e);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            throw new RemoteException("Problem with IO", e);
+        }
+
+        Log.d(TAG, "Upload succeeded. new rev = " + metadata.rev + ". path = " + metadata.path);
+
+        file.setLoadedMetadata(metadata);
+
+        if (!metadata.path.equalsIgnoreCase(file.getRemoteFile())) {
+            // If the uploaded remote path does not match our expected
+            // remotePath,
+            // then a conflict occurred and we should announce the conflict to
+            // the user.
+            Log.d(TAG, "upload created new file! Returning CONFLICT status.");
+
+            file.setStatus(DropboxFileStatus.CONFLICT);
+
+            throw new RemoteConflictException("Local file "
+                    + file.getRemoteFile() + " conflicts with remote version.");
+        } else {
+            Log.d(TAG, "Returning SUCCESS status");
+
+            file.setStatus(DropboxFileStatus.SUCCESS);
+        }
+    }
 }

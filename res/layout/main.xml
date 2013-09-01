@@ -22,96 +22,100 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
-<android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <!-- The main content view -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/home_root"
-                  android:orientation="vertical"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent">
 
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- The main content view -->
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/home_root"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
         <LinearLayout
-                style="@style/ActionBar"
-                android:id="@+id/actionbar"
-                android:visibility="gone">
+            android:id="@+id/actionbar"
+            style="@style/ActionBar"
+            android:visibility="gone" >
 
             <ImageView
-                    android:id="@+id/actionbar_icon"
-                    android:contentDescription="@string/app_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginRight="5dip"
-                    android:src="@drawable/ic_actionbar_filter"/>
+                android:id="@+id/actionbar_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:contentDescription="@string/app_label"
+                android:src="@drawable/ic_actionbar_filter" />
 
             <TextView
-                    android:id="@+id/filter_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@color/actionbar_label"/>
+                android:id="@+id/filter_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/actionbar_label" />
 
-            <View style="@style/TitleBarSpring"/>
+            <View style="@style/TitleBarSpring" />
 
             <LinearLayout
-                    style="@style/ActionBarButtonSet"
-                    android:scrollbars="horizontal">
+                style="@style/ActionBarButtonSet"
+                android:scrollbars="horizontal" >
 
                 <ImageView
-                        style="@style/ActionBarSeparator"
-                        android:contentDescription="@string/separator"/>
+                    style="@style/ActionBarSeparator"
+                    android:contentDescription="@string/separator" />
 
                 <ImageView
-                        style="@style/ActionBarSeparatorWhite"
-                        android:contentDescription="@string/separator"/>
+                    style="@style/ActionBarSeparatorWhite"
+                    android:contentDescription="@string/separator" />
 
                 <Button
-                        style="@style/ActionBarRightButton"
-                        android:text="@string/clear"
-                        android:onClick="onClearClick"/>
+                    style="@style/ActionBarRightButton"
+                    android:onClick="onClearClick"
+                    android:text="@string/clear" />
             </LinearLayout>
         </LinearLayout>
 
         <ImageView
-                style="@style/HorizontalRule"
-                android:contentDescription="@string/separator"/>
+            style="@style/HorizontalRule"
+            android:contentDescription="@string/separator" />
 
         <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="0dip"
-                android:background="@color/white"
-                android:layout_weight="1">
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:orientation="vertical" >
 
             <ListView
-                    android:id="@id/android:list"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:fastScrollEnabled="true"
-                    style="@style/TodoTxtTouchLight"/>
+                android:id="@id/android:list"
+                style="@style/TodoTxtTouchLight"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:fastScrollEnabled="true" />
 
             <TextView
-                    android:id="@id/android:empty"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:text="@string/main_no_items"
-                    style="@style/TodoTxtTouchLight"
-                    android:gravity="center_vertical|center_horizontal"/>
+                android:id="@id/android:empty"
+                style="@style/TodoTxtTouchLight"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/main_no_items" />
         </LinearLayout>
     </LinearLayout>
     <!-- The navigation drawer -->
+
     <ListView
-            android:id="@+id/left_drawer"
-            android:layout_width="240dip"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:choiceMode="singleChoice"
-            style="@style/TodoTxtTouchLight"
-            android:background="#f3f3f3"/>
+        android:id="@+id/left_drawer"
+        style="@style/TodoTxtTouchLight"
+        android:layout_width="240dip"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#f3f3f3"
+        android:choiceMode="singleChoice" />
+
 </android.support.v4.widget.DrawerLayout>

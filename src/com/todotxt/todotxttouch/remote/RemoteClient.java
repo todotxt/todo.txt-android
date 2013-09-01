@@ -20,84 +20,85 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 import java.io.File;
 import java.util.List;
 
 public interface RemoteClient {
+    Client getClient();
 
-	Client getClient();
+    /**
+     * Attempts to authenticate with remote api
+     * 
+     * @return true if successful
+     */
+    boolean authenticate();
 
-	/**
-	 * Attempts to authenticate with remote api
-	 * 
-	 * @return true if successful
-	 */
-	boolean authenticate();
+    /**
+     * Starts the login with remote api
+     * 
+     * @return true if successful
+     */
+    boolean startLogin();
 
-	/**
-	 * Starts the login with remote api
-	 * 
-	 * @return true if successful
-	 */
-	boolean startLogin();
+    /**
+     * Implement this for two-step oAuth type login to finish the process. Call
+     * this from the onResume() of your activity
+     * 
+     * @return true if successful
+     */
+    boolean finishLogin();
 
-	/**
-	 * Implement this for two-step oAuth type login to finish the process. Call
-	 * this from the onResume() of your activity
-	 * 
-	 * @return true if successful
-	 */
-	boolean finishLogin();
+    /**
+     * Attempts to deauthenticate with remote api
+     */
+    void deauthenticate();
 
-	/**
-	 * Attempts to deauthenticate with remote api
-	 */
-	void deauthenticate();
+    /**
+     * Check to see if we are authenticated with remote api
+     * 
+     * @return true if authenticated
+     */
+    boolean isAuthenticated();
 
-	/**
-	 * Check to see if we are authenticated with remote api
-	 * 
-	 * @return true if authenticated
-	 */
-	boolean isAuthenticated();
+    /**
+     * Check to see if we have enough information to authenticate with remote
+     * api
+     * 
+     * @deprecated This is information internal to the remote service. Will be
+     *             removed. Use {@link RemoteClient#isAuthenticated()} instead.
+     * @return true if we have authToken, false if we need login information
+     */
+    boolean isLoggedIn();
 
-	/**
-	 * Check to see if we have enough information to authenticate with remote
-	 * api
-	 * 
-	 * @deprecated This is information internal to the remote service. Will be
-	 *             removed. Use {@link RemoteClient#isAuthenticated()} instead.
-	 * @return true if we have authToken, false if we need login information
-	 */
-	boolean isLoggedIn();
+    /**
+     * Pull the remote Todo.txt file
+     * 
+     * @return
+     */
+    PullTodoResult pullTodo();
 
-	/**
-	 * Pull the remote Todo.txt file
-	 * 
-	 * @return
-	 */
-	PullTodoResult pullTodo();
+    /**
+     * Push mobile
+     * 
+     * @param todoFile
+     * @param doneFile
+     * @param overwrite if true, upload the files even if there is a remote
+     *            conflict.
+     */
+    void pushTodo(File todoFile, File doneFile, boolean overwrite);
 
-	/**
-	 * Push mobile
-	 * 
-	 * @param todoFile
-	 * @param doneFile
-	 * @param overwrite if true, upload the files even if there
-	 * 	is a remote conflict.
-	 */
-	void pushTodo(File todoFile, File doneFile, boolean overwrite);
+    /**
+     * A method to check if the remote service is available (network, sd-card,
+     * etc)
+     * 
+     * @return true if available, false if not
+     */
+    boolean isAvailable();
 
-	/**
-	 * A method to check if the remote service is available (network, sd-card,
-	 * etc)
-	 * 
-	 * @return true if available, false if not
-	 */
-	boolean isAvailable();
+    List<RemoteFolder> getSubFolders(String path);
 
-	List<RemoteFolder> getSubFolders(String path);
-	RemoteFolder getFolder(String path);
+    RemoteFolder getFolder(String path);
 }

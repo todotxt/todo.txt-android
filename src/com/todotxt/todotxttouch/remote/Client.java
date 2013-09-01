@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 /**
@@ -28,5 +29,5 @@ package com.todotxt.todotxttouch.remote;
  * @author Tim Barlotta
  */
 public enum Client {
-	DROPBOX;
+    DROPBOX;
 }

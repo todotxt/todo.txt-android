@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import junit.framework.TestCase;
@@ -28,52 +29,52 @@ import java.util.Collections;
 import java.util.List;
 
 public class ProjectParserTest extends TestCase {
-	public void test_empty() {
-		String input = "";
-		List<String> strings = ProjectParser.getInstance().parse(input);
-		assertEquals(Collections.<String> emptyList(), strings);
-	}
+    public void test_empty() {
+        String input = "";
+        List<String> strings = ProjectParser.getInstance().parse(input);
+        assertEquals(Collections.<String> emptyList(), strings);
+    }
 
-	public void test_null() {
-		String input = null;
-		List<String> strings = ProjectParser.getInstance().parse(input);
-		assertEquals(Collections.<String> emptyList(), strings);
-	}
+    public void test_null() {
+        String input = null;
+        List<String> strings = ProjectParser.getInstance().parse(input);
+        assertEquals(Collections.<String> emptyList(), strings);
+    }
 
-	public void test_withoutContext() {
-		String input = "a simple string";
-		List<String> strings = ProjectParser.getInstance().parse(input);
-		assertEquals(Collections.<String> emptyList(), strings);
-	}
+    public void test_withoutContext() {
+        String input = "a simple string";
+        List<String> strings = ProjectParser.getInstance().parse(input);
+        assertEquals(Collections.<String> emptyList(), strings);
+    }
 
-	public void test_withContext() {
-		String input = "a simple +string";
-		List<String> strings = ProjectParser.getInstance().parse(input);
-		assertEquals(1, strings.size());
-		assertTrue(strings.contains("string"));
-	}
+    public void test_withContext() {
+        String input = "a simple +string";
+        List<String> strings = ProjectParser.getInstance().parse(input);
+        assertEquals(1, strings.size());
+        assertTrue(strings.contains("string"));
+    }
 
-	public void test_withMultipleContexts() {
-		String input = "a simple +string +test";
-		List<String> strings = ProjectParser.getInstance().parse(input);
-		assertEquals(2, strings.size());
-		assertTrue(strings.contains("string"));
-		assertTrue(strings.contains("test"));
-	}
+    public void test_withMultipleContexts() {
+        String input = "a simple +string +test";
+        List<String> strings = ProjectParser.getInstance().parse(input);
+        assertEquals(2, strings.size());
+        assertTrue(strings.contains("string"));
+        assertTrue(strings.contains("test"));
+    }
 
-	public void test_withInterspersedContexts() {
-		String input = "+more complex +case with a +string +test";
-		List<String> strings = ProjectParser.getInstance().parse(input);
-		assertEquals(4, strings.size());
-		assertTrue(strings.contains("more"));
-		assertTrue(strings.contains("case"));
-		assertTrue(strings.contains("string"));
-		assertTrue(strings.contains("test"));
-	}
-	
-	public void test_withoutSpace() {
-		String input = "Check out this web site http://example.com/this+is+an+example";
-		List<String> strings = ProjectParser.getInstance().parse(input);
-		assertEquals(0, strings.size());
-	}
+    public void test_withInterspersedContexts() {
+        String input = "+more complex +case with a +string +test";
+        List<String> strings = ProjectParser.getInstance().parse(input);
+        assertEquals(4, strings.size());
+        assertTrue(strings.contains("more"));
+        assertTrue(strings.contains("case"));
+        assertTrue(strings.contains("string"));
+        assertTrue(strings.contains("test"));
+    }
+
+    public void test_withoutSpace() {
+        String input = "Check out this web site http://example.com/this+is+an+example";
+        List<String> strings = ProjectParser.getInstance().parse(input);
+        assertEquals(0, strings.size());
+    }
 }

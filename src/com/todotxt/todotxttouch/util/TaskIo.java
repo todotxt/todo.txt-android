@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.util;
 
 import java.io.BufferedReader;
@@ -42,88 +43,98 @@ import com.todotxt.todotxttouch.task.Task;
  * @author Tim Barlotta
  */
 public class TaskIo {
-	private final static String TAG = TaskIo.class.getSimpleName();
+    private final static String TAG = TaskIo.class.getSimpleName();
 
-	private static boolean sWindowsLineBreaks = false;
-	
-	private static String readLine(BufferedReader r) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		boolean eol = false;
-		int c;
-		
-		while(!eol && (c = r.read()) >= 0) {
-			sb.append((char)c);
-			eol = (c == '\r' || c == '\n');
-			
-			// check for \r\n
-			if (c == '\r') {
-				r.mark(1);
-				c = r.read();
-				if (c != '\n') {
-					r.reset();
-				} else {
-					sWindowsLineBreaks = true;
-					sb.append((char)c);
-				}
-			}
-		}
-		return sb.length() == 0 ? null : sb.toString();
-	}
-	
-	public static ArrayList<Task> loadTasksFromFile(File file)
-			throws IOException {
-		ArrayList<Task> items = new ArrayList<Task>();
-		BufferedReader in = null;
-		if (!file.exists()) {
-			Log.w(TAG, file.getAbsolutePath() + " does not exist!");
-		} else {
-			InputStream is = new FileInputStream(file);
-			try {
-				in = new BufferedReader(new InputStreamReader(is));
-				String line;
-				long counter = 0L;
-				sWindowsLineBreaks = false;
-				while ((line = readLine(in)) != null) {
-					line = line.trim();
-					if (line.length() > 0) {
-						items.add(new Task(counter, line));
-					}
-					counter++;
-				}
-			} finally {
-				Util.closeStream(in);
-				Util.closeStream(is);
-			}
-		}
-		return items;
-	}
+    private static boolean sWindowsLineBreaks = false;
 
-	public static void writeToFile(List<Task> tasks, File file) {
-		writeToFile(tasks, file, false);
-	}
+    private static String readLine(BufferedReader r) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        boolean eol = false;
+        int c;
 
-	public static void writeToFile(List<Task> tasks, File file,
-			boolean append) {
-		try {
-			if (!Util.isDeviceWritable()) {
-				throw new IOException("Device is not writable!");
-			}
-			Util.createParentDirectory(file);
-			FileWriter fw = new FileWriter(file, append);
-			for (int i = 0; i < tasks.size(); ++i) {
-				String fileFormat = tasks.get(i).inFileFormat();
-				fw.write(fileFormat);
-				if (sWindowsLineBreaks) {
-					// Log.v(TAG, "Using Windows line breaks");
-					fw.write("\r\n");
-				} else {
-					// Log.v(TAG, "NOT using Windows line breaks");
-					fw.write("\n");
-				}
-			}
-			fw.close();
-		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
-		}
-	}
+        while (!eol && (c = r.read()) >= 0) {
+            sb.append((char) c);
+            eol = (c == '\r' || c == '\n');
+
+            // check for \r\n
+            if (c == '\r') {
+                r.mark(1);
+                c = r.read();
+
+                if (c != '\n') {
+                    r.reset();
+                } else {
+                    sWindowsLineBreaks = true;
+                    sb.append((char) c);
+                }
+            }
+        }
+
+        return sb.length() == 0 ? null : sb.toString();
+    }
+
+    public static ArrayList<Task> loadTasksFromFile(File file) throws IOException {
+        ArrayList<Task> items = new ArrayList<Task>();
+        BufferedReader in = null;
+
+        if (!file.exists()) {
+            Log.w(TAG, file.getAbsolutePath() + " does not exist!");
+        } else {
+            InputStream is = new FileInputStream(file);
+
+            try {
+                in = new BufferedReader(new InputStreamReader(is));
+                String line;
+                long counter = 0L;
+                sWindowsLineBreaks = false;
+
+                while ((line = readLine(in)) != null) {
+                    line = line.trim();
+
+                    if (line.length() > 0) {
+                        items.add(new Task(counter, line));
+                    }
+
+                    counter++;
+                }
+            } finally {
+                Util.closeStream(in);
+                Util.closeStream(is);
+            }
+        }
+
+        return items;
+    }
+
+    public static void writeToFile(List<Task> tasks, File file) {
+        writeToFile(tasks, file, false);
+    }
+
+    public static void writeToFile(List<Task> tasks, File file, boolean append) {
+        try {
+            if (!Util.isDeviceWritable()) {
+                throw new IOException("Device is not writable!");
+            }
+
+            Util.createParentDirectory(file);
+            FileWriter fw = new FileWriter(file, append);
+
+            for (int i = 0; i < tasks.size(); ++i) {
+                String fileFormat = tasks.get(i).inFileFormat();
+                fw.write(fileFormat);
+
+                if (sWindowsLineBreaks) {
+                    // Log.v(TAG, "Using Windows line breaks");
+                    fw.write("\r\n");
+                } else {
+                    // Log.v(TAG, "NOT using Windows line breaks");
+                    fw.write("\n");
+                }
+            }
+
+            fw.close();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
 }

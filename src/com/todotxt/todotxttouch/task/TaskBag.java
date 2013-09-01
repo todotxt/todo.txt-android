@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
@@ -32,57 +33,56 @@ import java.util.List;
  * @author Tim Barlotta
  */
 public interface TaskBag {
+    void archive();
 
-	void archive();
+    void unarchive(Task task);
 
-	void unarchive(Task task);
+    void reload();
 
-	void reload();
+    void clear();
 
-	void clear();
+    void addAsTask(String input);
 
-	void addAsTask(String input);
+    void update(Task task);
 
-	void update(Task task);
+    void delete(Task task);
 
-	void delete(Task task);
+    List<Task> getTasks();
 
-	List<Task> getTasks();
+    List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator);
 
-	List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator);
+    int size();
 
-	int size();
+    ArrayList<String> getProjects(boolean includeNone);
 
-	ArrayList<String> getProjects(boolean includeNone);
+    ArrayList<String> getContexts(boolean includeNone);
 
-	ArrayList<String> getContexts(boolean includeNone);
+    ArrayList<Priority> getPriorities();
 
-	ArrayList<Priority> getPriorities();
+    /* REMOTE APIs */
+    // FUTURE make this syncWithRemote()
+    /**
+     * Push tasks in localRepository into remoteRepository if you're not working
+     * offline
+     */
+    void pushToRemote(boolean overwrite);
 
-	/* REMOTE APIs */
-	// FUTURE make this syncWithRemote()
-	/**
-	 * Push tasks in localRepository into remoteRepository if you're not working
-	 * offline
-	 */
-	void pushToRemote(boolean overwrite);
+    /**
+     * Force-push tasks in localRepository into remoteRepository disregarding
+     * Work Offline status
+     */
+    void pushToRemote(boolean overridePreference, boolean overwrite);
 
-	/**
-	 * Force-push tasks in localRepository into remoteRepository disregarding
-	 * Work Offline status
-	 */
-	void pushToRemote(boolean overridePreference, boolean overwrite);
+    /**
+     * Pulls tasks from remoteRepository, stores in localRepository
+     */
+    void pullFromRemote();
 
-	/**
-	 * Pulls tasks from remoteRepository, stores in localRepository
-	 */
-	void pullFromRemote();
+    /**
+     * Force-pull tasks from remoteRepository into localRepository disregarding
+     * Work Offline status
+     */
+    void pullFromRemote(boolean overridePreference);
 
-	/**
-	 * Force-pull tasks from remoteRepository into localRepository disregarding
-	 * Work Offline status
-	 */
-	void pullFromRemote(boolean overridePreference);
-
-	/* END REMOTE APIs */
+    /* END REMOTE APIs */
 }

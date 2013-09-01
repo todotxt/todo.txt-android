@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.net.MalformedURLException;
@@ -33,33 +34,36 @@ import java.util.regex.Pattern;
 import com.todotxt.todotxttouch.TodoException;
 
 public class LinkParser {
-	private static final Pattern LINK_PATTERN = Pattern
-			.compile("(http|https)://[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?");
-	private static final LinkParser INSTANCE = new LinkParser();
+    private static final Pattern LINK_PATTERN = Pattern
+            .compile("(http|https)://[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?");
+    private static final LinkParser INSTANCE = new LinkParser();
 
-	private LinkParser() {
-	}
+    private LinkParser() {
+    }
 
-	public static LinkParser getInstance() {
-		return INSTANCE;
-	}
+    public static LinkParser getInstance() {
+        return INSTANCE;
+    }
 
-	public List<URL> parse(String inputText) {
-		if (inputText == null) {
-			return Collections.emptyList();
-		}
+    public List<URL> parse(String inputText) {
+        if (inputText == null) {
+            return Collections.emptyList();
+        }
 
-		Matcher m = LINK_PATTERN.matcher(inputText);
-		List<URL> links = new ArrayList<URL>();
-		while (m.find()) {
-			URL link;
-			try {
-				link = new URL(m.group());
-				links.add(link);
-			} catch (MalformedURLException e) {
-				throw new TodoException("Malformed URL matched the regex", e);
-			}
-		}
-		return links;
-	}
+        Matcher m = LINK_PATTERN.matcher(inputText);
+        List<URL> links = new ArrayList<URL>();
+
+        while (m.find()) {
+            URL link;
+
+            try {
+                link = new URL(m.group());
+                links.add(link);
+            } catch (MalformedURLException e) {
+                throw new TodoException("Malformed URL matched the regex", e);
+            }
+        }
+
+        return links;
+    }
 }
