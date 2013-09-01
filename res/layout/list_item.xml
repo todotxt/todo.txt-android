@@ -22,32 +22,47 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <com.todotxt.todotxttouch.RelativeLayoutCheckable xmlns:android="http://schemas.android.com/apk/res/android"
-	android:background="@color/grey">
-	<RelativeLayout
-		android:id="@+id/swipe_view"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content" 
-		android:paddingTop="4dip"
-		android:paddingBottom="4dip"
-		android:minHeight="48dp"
-		android:gravity="center_vertical"
-		android:background="@color/white">
-		
-		<TextView android:id="@+id/taskprio" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:paddingLeft="8dip"
-			android:paddingRight="8dip"
-			android:textSize="16sp" android:textStyle="bold" />
-	
-		<TextView android:id="@+id/tasktext" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:paddingBottom="4dip"
-			android:paddingRight="8dip" 
-			android:textSize="16sp" android:layout_toRightOf="@id/taskprio" />
-	
-		<TextView android:id="@+id/taskage" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:textSize="12sp"
-			android:layout_below="@id/tasktext" android:layout_toRightOf="@id/taskprio"
-			android:textColor="@color/grey" android:visibility="gone" />
-	</RelativeLayout>
+    android:background="@color/grey" >
+
+    <RelativeLayout
+        android:id="@+id/swipe_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingBottom="4dip"
+        android:paddingTop="4dip" >
+
+        <TextView
+            android:id="@+id/taskprio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tasktext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/taskprio"
+            android:paddingBottom="4dip"
+            android:paddingRight="8dip"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/taskage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tasktext"
+            android:layout_toRightOf="@id/taskprio"
+            android:textColor="@color/grey"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
 </com.todotxt.todotxttouch.RelativeLayoutCheckable>

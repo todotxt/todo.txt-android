@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 import android.content.SharedPreferences;
@@ -33,46 +34,44 @@ import com.todotxt.todotxttouch.TodoPreferences;
  * @author Tim Barlotta
  */
 public class RemoteClientManager implements
-		SharedPreferences.OnSharedPreferenceChangeListener {
-	// private final static String TAG =
-	// RemoteClientManager.class.getSimpleName();
-	@SuppressWarnings("unused")
-	private Client currentClientToken;
-	private RemoteClient currentClient;
-	private TodoApplication todoApplication;
-	private TodoPreferences sharedPreferences;
+        SharedPreferences.OnSharedPreferenceChangeListener {
+    // private final static String TAG =
+    // RemoteClientManager.class.getSimpleName();
+    @SuppressWarnings("unused")
+    private Client currentClientToken;
+    private RemoteClient currentClient;
+    private TodoApplication todoApplication;
+    private TodoPreferences sharedPreferences;
 
-	public RemoteClientManager(TodoApplication todoApplication,
-			TodoPreferences m_prefs) {
-		this.todoApplication = todoApplication;
-		this.sharedPreferences = m_prefs;
-		calculateRemoteClient(m_prefs);
-		currentClient.authenticate();
-	}
+    public RemoteClientManager(TodoApplication todoApplication, TodoPreferences m_prefs) {
+        this.todoApplication = todoApplication;
+        this.sharedPreferences = m_prefs;
+        calculateRemoteClient(m_prefs);
+        currentClient.authenticate();
+    }
 
-	public RemoteClient getRemoteClient() {
-		return currentClient;
-	}
+    public RemoteClient getRemoteClient() {
+        return currentClient;
+    }
 
-	/**
-	 * Returns the client associated with the passed in token does not switch
-	 * the client
-	 * 
-	 * @param clientToken
-	 * @return
-	 */
-	private RemoteClient getRemoteClient(Client clientToken) {
-		return new DropboxRemoteClient(todoApplication, sharedPreferences);
-	}
+    /**
+     * Returns the client associated with the passed in token does not switch
+     * the client
+     * 
+     * @param clientToken
+     * @return
+     */
+    private RemoteClient getRemoteClient(Client clientToken) {
+        return new DropboxRemoteClient(todoApplication, sharedPreferences);
+    }
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
-		// TODO later
-	}
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // TODO later
+    }
 
-	private void calculateRemoteClient(TodoPreferences sharedPreferences) {
-		currentClient = getRemoteClient(Client.DROPBOX);
-		currentClientToken = Client.DROPBOX;
-	}
+    private void calculateRemoteClient(TodoPreferences sharedPreferences) {
+        currentClient = getRemoteClient(Client.DROPBOX);
+        currentClientToken = Client.DROPBOX;
+    }
 }

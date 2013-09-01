@@ -20,35 +20,42 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.util;
 
 public class Path {
-	public static String fileName(String path) {
-		if (!Strings.isBlank(path)) {
-			// adapted from DropboxAPI.java v1.5.4
-			if (path.endsWith("/")) {
-				path = path.substring(0, path.length() - 1);
-			}
-			int ind = path.lastIndexOf('/');
-			return path.substring(ind + 1, path.length());
-		}
-		return "";
-	}
+    public static String fileName(String path) {
+        if (!Strings.isBlank(path)) {
+            // adapted from DropboxAPI.java v1.5.4
+            if (path.endsWith("/")) {
+                path = path.substring(0, path.length() - 1);
+            }
 
-	public static String parentPath(String path) {
-		// adapted from DropboxAPI.java v1.5.4
-		if (Strings.isBlank(path) || path.equals("/")) {
-			return "";
-		} else {
-			if (path.endsWith("/")) {
-				path = path.substring(0, path.length() - 1);
-			}
-			int ind = path.lastIndexOf('/');
-			if (ind == 0) {
-				// strip the last slash, unless the entire path is '/'
-				ind = 1;
-			}
-			return path.substring(0, ind);
-		}
-	}
+            int ind = path.lastIndexOf('/');
+
+            return path.substring(ind + 1, path.length());
+        }
+
+        return "";
+    }
+
+    public static String parentPath(String path) {
+        // adapted from DropboxAPI.java v1.5.4
+        if (Strings.isBlank(path) || path.equals("/")) {
+            return "";
+        } else {
+            if (path.endsWith("/")) {
+                path = path.substring(0, path.length() - 1);
+            }
+
+            int ind = path.lastIndexOf('/');
+
+            if (ind == 0) {
+                // strip the last slash, unless the entire path is '/'
+                ind = 1;
+            }
+
+            return path.substring(0, ind);
+        }
+    }
 }

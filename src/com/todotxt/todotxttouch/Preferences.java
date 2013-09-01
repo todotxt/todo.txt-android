@@ -54,7 +54,7 @@ public class Preferences extends PreferenceActivity {
 	TodoApplication m_app;
 
 	private String version;
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,31 +63,33 @@ public class Preferences extends PreferenceActivity {
 
 		m_app = (TodoApplication) getApplication();
 		((CheckBoxPreference) findPreference(m_app.m_prefs
-				.prepend_date_pref_key())).setChecked(m_app.m_prefs
+				.getPrependDatePrefKey())).setChecked(m_app.m_prefs
 				.isPrependDateEnabled());
 
-		mLocationPreference = (TodoLocationPreference)findPreference(m_app.m_prefs.todo_path_key());
+		mLocationPreference = (TodoLocationPreference) findPreference(m_app.m_prefs
+				.getTodoPathKey());
 		mLocationPreference.setApplication(m_app);
 		mLocationPreference.setDisplayWarning(m_app.m_prefs.needToPush());
-		
+
 		PackageInfo packageInfo;
+
 		try {
 			packageInfo = getPackageManager().getPackageInfo(getPackageName(),
 					0);
 			Preference versionPref = (Preference) findPreference("app_version");
 			versionPref.setSummary("v" + packageInfo.versionName);
 			version = packageInfo.versionName;
-
 		} catch (NameNotFoundException e) {
 			// e.printStackTrace();
 		}
+
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
-		periodicSync = (ListPreference) findPreference(m_app.m_prefs.periodic_sync_pref_key());
+		periodicSync = (ListPreference) findPreference(m_app.m_prefs
+				.getPeriodicSyncPrefKey());
 		setPeriodicSummary(periodicSync.getValue());
 		periodicSync
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-
 					@Override
 					public boolean onPreferenceChange(Preference preference,
 							Object newValue) {
@@ -113,6 +115,7 @@ public class Preferences extends PreferenceActivity {
 		} else if (preference == logoutDialog) {
 			showDialog(LOGOUT_DIALOG);
 		}
+
 		return true;
 	}
 
@@ -124,6 +127,7 @@ public class Preferences extends PreferenceActivity {
 			aboutAlert
 					.setMessage("by Gina Trapani &\nthe Todo.txt community\n\nhttp://todotxt.com");
 			aboutAlert.setIcon(R.drawable.todotxt_touch_icon);
+
 			aboutAlert.setPositiveButton("Follow us",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
@@ -133,11 +137,13 @@ public class Preferences extends PreferenceActivity {
 							startActivity(i);
 						}
 					});
+
 			aboutAlert.setNegativeButton("Close",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 						}
 					});
+
 			aboutAlert.setOnCancelListener(new OnCancelListener() {
 				@SuppressWarnings("deprecation")
 				@Override
@@ -145,19 +151,23 @@ public class Preferences extends PreferenceActivity {
 					removeDialog(id);
 				}
 			});
+
 			return aboutAlert.create();
 		} else if (id == LOGOUT_DIALOG) {
 			AlertDialog.Builder logoutAlert = new AlertDialog.Builder(this);
 			logoutAlert.setTitle(R.string.areyousure);
 			SpannableStringBuilder ss = new SpannableStringBuilder();
+
 			if (m_app.m_prefs.needToPush()) {
 				ss.append(getString(R.string.dropbox_logout_warning));
 				ss.setSpan(new ForegroundColorSpan(Color.RED), 0, ss.length(),
-					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				ss.append("\n\n");
 			}
+
 			ss.append(getString(R.string.dropbox_logout_explainer));
 			logoutAlert.setMessage(ss);
+
 			logoutAlert.setPositiveButton(R.string.dropbox_logout_pref_title,
 					new DialogInterface.OnClickListener() {
 						@Override
@@ -174,7 +184,9 @@ public class Preferences extends PreferenceActivity {
 							finish();
 						}
 					});
+
 			logoutAlert.setNegativeButton(R.string.cancel, null);
+
 			logoutAlert.setOnCancelListener(new OnCancelListener() {
 				@SuppressWarnings("deprecation")
 				@Override
@@ -182,9 +194,10 @@ public class Preferences extends PreferenceActivity {
 					removeDialog(id);
 				}
 			});
+
 			return logoutAlert.create();
 		}
+
 		return null;
 	}
-
 }

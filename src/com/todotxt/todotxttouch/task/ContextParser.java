@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
@@ -29,28 +30,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class ContextParser {
-	private final static Pattern CONTEXT_PATTERN = Pattern
-			.compile("(?:^|\\s)@(\\S*\\w)");
-	private static final ContextParser INSTANCE = new ContextParser();
+    private final static Pattern CONTEXT_PATTERN = Pattern.compile("(?:^|\\s)@(\\S*\\w)");
+    private static final ContextParser INSTANCE = new ContextParser();
 
-	private ContextParser() {
-	}
+    private ContextParser() {
+    }
 
-	public static ContextParser getInstance() {
-		return INSTANCE;
-	}
+    public static ContextParser getInstance() {
+        return INSTANCE;
+    }
 
-	public List<String> parse(String inputText) {
-		if (inputText == null) {
-			return Collections.emptyList();
-		}
+    public List<String> parse(String inputText) {
+        if (inputText == null) {
+            return Collections.emptyList();
+        }
 
-		Matcher m = CONTEXT_PATTERN.matcher(inputText);
-		List<String> contexts = new ArrayList<String>();
-		while (m.find()) {
-			String context = m.group(1);
-			contexts.add(context);
-		}
-		return contexts;
-	}
+        Matcher m = CONTEXT_PATTERN.matcher(inputText);
+        List<String> contexts = new ArrayList<String>();
+
+        while (m.find()) {
+            String context = m.group(1);
+            contexts.add(context);
+        }
+
+        return contexts;
+    }
 }

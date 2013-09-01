@@ -20,24 +20,25 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 import java.io.File;
 
 public class PullTodoResult {
-	private File todoFile;
-	private File doneFile;
-	
-	public PullTodoResult(File todoFile, File doneFile) {
-		this.todoFile = todoFile;
-		this.doneFile = doneFile;
-	}
-	
-	public File getTodoFile() {
-		return todoFile;
-	}
-	
-	public File getDoneFile() {
-		return doneFile;
-	}
+    private File todoFile;
+    private File doneFile;
+
+    public PullTodoResult(File todoFile, File doneFile) {
+        this.todoFile = todoFile;
+        this.doneFile = doneFile;
+    }
+
+    public File getTodoFile() {
+        return todoFile;
+    }
+
+    public File getDoneFile() {
+        return doneFile;
+    }
 }

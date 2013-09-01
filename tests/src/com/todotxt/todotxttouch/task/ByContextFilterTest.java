@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import junit.framework.TestCase;
@@ -32,89 +33,89 @@ import java.util.Arrays;
  * @author Tim Barlotta
  */
 public class ByContextFilterTest extends TestCase {
-	public void testConstructor_nullContexts() {
-		ByContextFilter filter = new ByContextFilter(null);
-		assertNotNull(filter.getContexts());
-		assertEquals(0, filter.getContexts().size());
-	}
+    public void testConstructor_nullContexts() {
+        ByContextFilter filter = new ByContextFilter(null);
+        assertNotNull(filter.getContexts());
+        assertEquals(0, filter.getContexts().size());
+    }
 
-	public void testConstructor_valid() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertNotNull(filter.getContexts());
-		assertEquals(3, filter.getContexts().size());
-		assertEquals("abc", filter.getContexts().get(0));
-		assertEquals("123", filter.getContexts().get(1));
-		assertEquals("hello", filter.getContexts().get(2));
-	}
+    public void testConstructor_valid() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
+                "123", "hello"));
+        assertNotNull(filter.getContexts());
+        assertEquals(3, filter.getContexts().size());
+        assertEquals("abc", filter.getContexts().get(0));
+        assertEquals("123", filter.getContexts().get(1));
+        assertEquals("hello", filter.getContexts().get(2));
+    }
 
-	public void testFilter_noFilterContexts_noTaskContexts() {
-		ByContextFilter filter = new ByContextFilter(null);
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world")));
-	}
+    public void testFilter_noFilterContexts_noTaskContexts() {
+        ByContextFilter filter = new ByContextFilter(null);
+        assertTrue("apply was not true",
+                filter.apply(new Task(1, "hello world")));
+    }
 
-	public void testFilter_oneFilterContext_noTaskContexts() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world")));
-	}
+    public void testFilter_oneFilterContext_noTaskContexts() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc"));
+        assertFalse("apply was not false",
+                filter.apply(new Task(1, "hello world")));
+    }
 
-	public void testFilter_noFilterContext_oneTaskContexts() {
-		ByContextFilter filter = new ByContextFilter(null);
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world @abc")));
-	}
+    public void testFilter_noFilterContext_oneTaskContexts() {
+        ByContextFilter filter = new ByContextFilter(null);
+        assertTrue("apply was not true",
+                filter.apply(new Task(1, "hello world @abc")));
+    }
 
-	public void testFilter_oneFilterContext_sameTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world @abc")));
-	}
+    public void testFilter_oneFilterContext_sameTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc"));
+        assertTrue("apply was not true",
+                filter.apply(new Task(1, "hello world @abc")));
+    }
 
-	public void testFilter_oneFilterContext_differentTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world @123")));
-	}
+    public void testFilter_oneFilterContext_differentTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc"));
+        assertFalse("apply was not false",
+                filter.apply(new Task(1, "hello world @123")));
+    }
 
-	public void testFilter_multipleFilterContext_oneSameTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world @123")));
-	}
+    public void testFilter_multipleFilterContext_oneSameTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
+                "123", "hello"));
+        assertTrue("apply was not true",
+                filter.apply(new Task(1, "hello world @123")));
+    }
 
-	public void testFilter_multipleFilterContext_multipleTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world @123 @goodbye")));
-	}
+    public void testFilter_multipleFilterContext_multipleTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
+                "123", "hello"));
+        assertTrue("apply was not true",
+                filter.apply(new Task(1, "hello world @123 @goodbye")));
+    }
 
-	public void testFilter_multipleFilterContext_multipleSameTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world @123 @hello")));
-	}
+    public void testFilter_multipleFilterContext_multipleSameTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
+                "123", "hello"));
+        assertTrue("apply was not true",
+                filter.apply(new Task(1, "hello world @123 @hello")));
+    }
 
-	public void testFilter_multipleFilterContext_multipleDifferentTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
-				"123", "hello"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world @xyz @goodbye")));
-	}
+    public void testFilter_multipleFilterContext_multipleDifferentTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("abc",
+                "123", "hello"));
+        assertFalse("apply was not false",
+                filter.apply(new Task(1, "hello world @xyz @goodbye")));
+    }
 
-	public void testFilter_noContextFilter_noTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("-"));
-		assertTrue("apply was not true",
-				filter.apply(new Task(1, "hello world")));
-	}
+    public void testFilter_noContextFilter_noTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("-"));
+        assertTrue("apply was not true",
+                filter.apply(new Task(1, "hello world")));
+    }
 
-	public void testFilter_noContextFilter_oneTaskContext() {
-		ByContextFilter filter = new ByContextFilter(Arrays.asList("-"));
-		assertFalse("apply was not false",
-				filter.apply(new Task(1, "hello world @xyz")));
-	}
+    public void testFilter_noContextFilter_oneTaskContext() {
+        ByContextFilter filter = new ByContextFilter(Arrays.asList("-"));
+        assertFalse("apply was not false",
+                filter.apply(new Task(1, "hello world @xyz")));
+    }
 }

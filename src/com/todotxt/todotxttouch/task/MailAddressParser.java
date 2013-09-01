@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
@@ -29,29 +30,31 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MailAddressParser {
-	private static final Pattern MAIL_ADDRESS_PATTERN = Pattern
-			.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
-					+ "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\."
-					+ "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
-	private static final MailAddressParser INSTANCE = new MailAddressParser();
+    private static final Pattern MAIL_ADDRESS_PATTERN = Pattern
+            .compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" + "\\@"
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" + "(" + "\\."
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" + ")+");
+    private static final MailAddressParser INSTANCE = new MailAddressParser();
 
-	private MailAddressParser() {
-	}
+    private MailAddressParser() {
+    }
 
-	public static MailAddressParser getInstance() {
-		return INSTANCE;
-	}
+    public static MailAddressParser getInstance() {
+        return INSTANCE;
+    }
 
-	public List<String> parse(String inputText) {
-		if (inputText == null) {
-			return Collections.emptyList();
-		}
+    public List<String> parse(String inputText) {
+        if (inputText == null) {
+            return Collections.emptyList();
+        }
 
-		Matcher m = MAIL_ADDRESS_PATTERN.matcher(inputText);
-		List<String> addresses = new ArrayList<String>();
-		while (m.find()) {
-			addresses.add(m.group().trim());
-		}
-		return addresses;
-	}
+        Matcher m = MAIL_ADDRESS_PATTERN.matcher(inputText);
+        List<String> addresses = new ArrayList<String>();
+
+        while (m.find()) {
+            addresses.add(m.group().trim());
+        }
+
+        return addresses;
+    }
 }

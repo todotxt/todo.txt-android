@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.widget;
 
 import java.util.ArrayList;
@@ -49,122 +50,125 @@ import android.widget.RemoteViewsService;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ListWidgetService extends RemoteViewsService {
-	@Override
-	public RemoteViewsFactory onGetViewFactory(Intent intent) {
-		return new ListRemoteViewsFactory(this.getApplicationContext(), intent);
-	}
+    @Override
+    public RemoteViewsFactory onGetViewFactory(Intent intent) {
+        return new ListRemoteViewsFactory(this.getApplicationContext(), intent);
+    }
 }
 
 class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-	private static final String TAG = ListRemoteViewsFactory.class.getName();
+    private static final String TAG = ListRemoteViewsFactory.class.getName();
 
-	TodoApplication m_app;
-	TaskBag taskBag;
-	List<Task> tasks = new ArrayList<Task>();
+    TodoApplication m_app;
+    TaskBag taskBag;
+    List<Task> tasks = new ArrayList<Task>();
 
-	public ListRemoteViewsFactory(Context applicationContext, Intent intent) {
-		Log.d(TAG, "ListRemoteViewsFactory instantiated");
-		m_app = (TodoApplication) applicationContext;
-		onDataSetChanged();
-	}
+    public ListRemoteViewsFactory(Context applicationContext, Intent intent) {
+        Log.d(TAG, "ListRemoteViewsFactory instantiated");
 
-	@Override
-	public void onDataSetChanged() {
-		taskBag = m_app.getTaskBag();
-		tasks = taskBag.getTasks(FilterFactory.generateAndFilter(m_app.m_prios,
-				m_app.m_contexts, m_app.m_projects, m_app.m_search, false),
-				m_app.sort.getComparator());
-	}
+        m_app = (TodoApplication) applicationContext;
+        onDataSetChanged();
+    }
 
-	@Override
-	public int getCount() {
-		return tasks.size();
-	}
+    @Override
+    public void onDataSetChanged() {
+        taskBag = m_app.getTaskBag();
+        tasks = taskBag.getTasks(FilterFactory.generateAndFilter(m_app.m_prios,
+                m_app.m_contexts, m_app.m_projects, m_app.m_search, false),
+                m_app.sort.getComparator());
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return tasks.get(position).getId();
-	}
+    @Override
+    public int getCount() {
+        return tasks.size();
+    }
 
-	@Override
-	public RemoteViews getLoadingView() {
-		return null;
-	}
+    @Override
+    public long getItemId(int position) {
+        return tasks.get(position).getId();
+    }
 
-	@Override
-	public RemoteViews getViewAt(int position) {
-		Task task = tasks.get(position);
-		RemoteViews rv = new RemoteViews(m_app.getPackageName(),
-				R.layout.listwidget_item);
+    @Override
+    public RemoteViews getLoadingView() {
+        return null;
+    }
 
-		SpannableString ss = new SpannableString(task.inScreenFormat());
-		Util.setGray(ss, task.getProjects());
-		Util.setGray(ss, task.getContexts());
-		if (task.isCompleted()) {
-			ss.setSpan(new StrikethroughSpan(), 0, ss.length(),
-					Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		}
-		rv.setTextViewText(R.id.listwidget_tasktext, ss);
+    @Override
+    public RemoteViews getViewAt(int position) {
+        Task task = tasks.get(position);
+        RemoteViews rv = new RemoteViews(m_app.getPackageName(), R.layout.listwidget_item);
 
-		rv.setTextViewText(R.id.listwidget_taskprio, task.getPriority()
-				.inListFormat());
-		int color = R.color.black;
-		switch (task.getPriority()) {
-		case A:
-			color = R.color.green;
-			break;
-		case B:
-			color = R.color.blue;
-			break;
-		case C:
-			color = R.color.orange;
-			break;
-		case D:
-			color = R.color.gold;
-			break;
-		default:
-			color = R.color.black;
-		}
-		Resources resources = m_app.getResources();
-		rv.setTextColor(R.id.listwidget_taskprio, resources.getColor(color));
+        SpannableString ss = new SpannableString(task.inScreenFormat());
+        Util.setGray(ss, task.getProjects());
+        Util.setGray(ss, task.getContexts());
 
-		if (m_app.m_prefs.isPrependDateEnabled()
-				&& !task.isCompleted()
-				&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
-			rv.setTextViewText(R.id.listwidget_taskage, task.getRelativeAge());
-			rv.setViewVisibility(R.id.listwidget_taskage, View.VISIBLE);
-		} else {
-			rv.setViewVisibility(R.id.listwidget_taskage, View.GONE);
-		}
+        if (task.isCompleted()) {
+            ss.setSpan(new StrikethroughSpan(), 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
 
-		// Set the click intent so that we can handle it
-		final Intent fillInIntent = new Intent();
-		fillInIntent.putExtra(Constants.EXTRA_TASK, getItemId(position));
-		rv.setOnClickFillInIntent(R.id.listwidget_item, fillInIntent);
+        rv.setTextViewText(R.id.listwidget_tasktext, ss);
 
-		return rv;
-	}
+        rv.setTextViewText(R.id.listwidget_taskprio, task.getPriority().inListFormat());
+        int color = R.color.black;
 
-	@Override
-	public int getViewTypeCount() {
-		return 1;
-	}
+        switch (task.getPriority()) {
+            case A:
+                color = R.color.green;
 
-	@Override
-	public boolean hasStableIds() {
-		return false;
-	}
+                break;
+            case B:
+                color = R.color.blue;
 
-	@Override
-	public void onCreate() {
-		// TODO Auto-generated method stub
+                break;
+            case C:
+                color = R.color.orange;
 
-	}
+                break;
+            case D:
+                color = R.color.gold;
 
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
+                break;
+            default:
+                color = R.color.black;
+        }
 
-	}
+        Resources resources = m_app.getResources();
+        rv.setTextColor(R.id.listwidget_taskprio, resources.getColor(color));
 
+        if (m_app.m_prefs.isPrependDateEnabled()
+                && !task.isCompleted()
+                && !Strings.isEmptyOrNull(task.getRelativeAge())) {
+            rv.setTextViewText(R.id.listwidget_taskage, task.getRelativeAge());
+            rv.setViewVisibility(R.id.listwidget_taskage, View.VISIBLE);
+        } else {
+            rv.setViewVisibility(R.id.listwidget_taskage, View.GONE);
+        }
+
+        // Set the click intent so that we can handle it
+        final Intent fillInIntent = new Intent();
+        fillInIntent.putExtra(Constants.EXTRA_TASK, getItemId(position));
+        rv.setOnClickFillInIntent(R.id.listwidget_item, fillInIntent);
+
+        return rv;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 1;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public void onCreate() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onDestroy() {
+        // TODO Auto-generated method stub
+    }
 }

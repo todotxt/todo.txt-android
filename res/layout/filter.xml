@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -21,94 +22,102 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" 
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-
-<RelativeLayout
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-	<LinearLayout android:id="@+id/buttons"
-		android:orientation="horizontal"
-		android:layout_alignParentBottom="true"
-		android:layout_width="fill_parent" 
-		android:layout_height="wrap_content"
-        android:background="@drawable/actionbar_dark_background"
-        android:padding="3dip">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
-		<Button android:id="@+id/ok"
-				android:text="@string/ok"
-				android:layout_weight="1"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-
-        <Button android:id="@+id/clear"
-            android:text="@string/clear"
-            android:layout_weight="1"
+        <LinearLayout
+            android:id="@+id/buttons"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/actionbar_dark_background"
+            android:orientation="horizontal"
+            android:padding="3dip" >
 
-		<Button android:id="@+id/cancel"
-				android:text="@string/cancel"
-				android:layout_weight="1"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/ok"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ok" />
 
-	</LinearLayout>
+            <Button
+                android:id="@+id/clear"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/clear" />
 
-	<LinearLayout android:id="@+id/priorities"
-		android:layout_above="@id/buttons"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-        android:background="@color/white">
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel" />
+        </LinearLayout>
 
-		<ListView android:id="@+id/prioritieslv" 
-		    android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-            android:cacheColorHint="#00000000" />
-
-	</LinearLayout>
-
-	<LinearLayout android:id="@+id/projects"
-		android:layout_above="@id/buttons"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-        android:background="@color/white">
-
-		<ListView android:id="@+id/projectslv" 
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent" 
-			android:cacheColorHint="#00000000" />
-
-	</LinearLayout>
-
-	<LinearLayout android:id="@+id/contexts"
-		android:layout_above="@id/buttons"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-        android:background="@color/white">
-
-		<ListView android:id="@+id/contextslv" 
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-            android:cacheColorHint="#00000000" />
-
-	</LinearLayout>
-
-	<LinearLayout android:id="@+id/search"
-        android:layout_above="@id/buttons"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-        android:background="@color/white">
-
-		<EditText android:id="@+id/searchet" 
+        <LinearLayout
+            android:id="@+id/priorities"
             android:layout_width="fill_parent"
-            android:hint="@string/search"
-			android:layout_height="wrap_content" />
+            android:layout_height="fill_parent"
+            android:layout_above="@id/buttons"
+            android:background="@color/white" >
 
-	</LinearLayout>
+            <ListView
+                android:id="@+id/prioritieslv"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:cacheColorHint="#00000000" />
+        </LinearLayout>
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/projects"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/buttons"
+            android:background="@color/white" >
+
+            <ListView
+                android:id="@+id/projectslv"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:cacheColorHint="#00000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contexts"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/buttons"
+            android:background="@color/white" >
+
+            <ListView
+                android:id="@+id/contextslv"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:cacheColorHint="#00000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/buttons"
+            android:background="@color/white" >
+
+            <EditText
+                android:id="@+id/searchet"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search" />
+        </LinearLayout>
+    </RelativeLayout>
+
 </LinearLayout>

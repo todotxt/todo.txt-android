@@ -20,13 +20,13 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 import java.io.File;
 import java.util.List;
 
 public interface RemoteClient {
-
 	Client getClient();
 
 	/**
@@ -85,8 +85,8 @@ public interface RemoteClient {
 	 * 
 	 * @param todoFile
 	 * @param doneFile
-	 * @param overwrite if true, upload the files even if there
-	 * 	is a remote conflict.
+	 * @param overwrite
+	 *            if true, upload the files even if there is a remote conflict.
 	 */
 	void pushTodo(File todoFile, File doneFile, boolean overwrite);
 
@@ -99,5 +99,6 @@ public interface RemoteClient {
 	boolean isAvailable();
 
 	List<RemoteFolder> getSubFolders(String path);
+
 	RemoteFolder getFolder(String path);
 }

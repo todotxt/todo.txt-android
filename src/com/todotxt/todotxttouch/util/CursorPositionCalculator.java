@@ -20,37 +20,33 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.util;
 
 public final class CursorPositionCalculator {
+    /**
+     * Calculates the cursor position when a string changes based on the cursor
+     * position prior to the change
+     * 
+     * @param priorCursorPosition the position of the cursor prior to the change
+     * @param priorValue the prior value of the string
+     * @param newValue the new value of the string
+     * @return the calculated position. If priorValue is null than the
+     *         calculated position will be the position just after the string.
+     *         If the newValue is null than the position will be 0.
+     */
+    public static final int calculate(int priorCursorPosition, String priorValue, String newValue) {
+        if (newValue == null) {
+            return 0;
+        }
 
-	/**
-	 * Calculates the cursor position when a string changes based on the cursor
-	 * position prior to the change
-	 * 
-	 * @param priorCursorPosition
-	 *            the position of the cursor prior to the change
-	 * @param priorValue
-	 *            the prior value of the string
-	 * @param newValue
-	 *            the new value of the string
-	 * @return the calculated position. If priorValue is null than the
-	 *         calculated position will be the position just after the string.
-	 *         If the newValue is null than the position will be 0.
-	 */
-	public static final int calculate(int priorCursorPosition,
-			String priorValue, String newValue) {
-		if (newValue == null) {
-			return 0;
-		}
+        if (priorValue == null) {
+            return newValue.length();
+        }
 
-		if (priorValue == null) {
-			return newValue.length();
-		}
+        int pos = priorCursorPosition + (newValue.length() - priorValue.length());
+        pos = pos < 0 ? 0 : pos;
 
-		int pos = priorCursorPosition
-				+ (newValue.length() - priorValue.length());
-		pos = pos < 0 ? 0 : pos;
-		return pos > newValue.length() ? newValue.length() : pos;
-	}
+        return pos > newValue.length() ? newValue.length() : pos;
+    }
 }

@@ -24,62 +24,63 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="app_label">Todo.txt</string>
-	<string name="added_task">追加されました</string>
-	<string name="add_task_failed">追加に失敗しました</string>
-	<string name="updated_task">更新されました</string>
-	<string name="update_task_failed">更新に失敗しました</string>
-	<string name="sort">並び替え</string>
-	<string name="filter">フィルター</string>
-	<string name="main_no_items">タスクがありません。</string>
-	<string name="set_preferences">設定</string>
-	<string name="preferences">設定</string>
-	<string name="sync">同期</string>
-	<string name="search">検索</string>
-	<string name="refresh">更新</string>
-	<string name="add">追加</string>
-	<string name="addtask">追加</string>
-	<string name="done">完了にする</string>
-	<string name="priority">優先度を変更</string>
-	<string name="update">編集</string>
-	<string name="delete">削除</string>
-	<string name="share">共有</string>
-	<string name="unComplete">完了の取り消し</string>
-	<string name="ok">OK</string>
-	<string name="cancel">キャンセル</string>
-	<string name="clear">クリア</string>
-	<string name="areyousure">本当によろしいですか？</string>
-	<!-- preferences -->
-	<string name="dropbox_logout_pref_title">ログアウト</string>
-	<string name="dropbox_logout_pref_summary">Dropbox からログアウトします。</string>
-	<string name="dropbox_logout_explainer">本当に Dropbox からログアウトしてよろしいですか?</string>
-	<string name="todo_path_title">ファイルの場所</string>
-	<string name="todo_path_summary">todo.txt ファイルを置く Dropbox 上のフォルダを指定します。</string>
-	<string name="todo_path_default">/todo</string>
-	<string name="dropbox_settings_header">Dropbox</string>
-	<string name="todotxt_settings_header">todo.txt</string>
-	<string name="about_settings_header">About</string>
 
-	<string name="prepend_date_pref_title">日付を追加</string>
-	<string name="prepend_date_pref_summary">タスクを追加するときに自動で今日の日付をセットします。</string>
-	<!-- login -->
-	<string name="login_screen_button">Dropbox にログイン</string>
-	<!-- delete -->
-	<string name="delete_task_title">削除</string>
-	<string name="delete_task_message">削除すると元には戻せません。本当によろしいですか？</string>
-	<string name="delete_task_confirm">削除</string>
-	<!-- search -->
-	<string name="search_hint">Search todo.txt</string>
-	<!-- filter tabs -->
-	<string name="filter_tab_priorities">優先度</string>
-	<string name="filter_tab_projects">プロジェクト</string>
-	<string name="filter_tab_contexts">コンテキスト</string>
-	<string name="filter_tab_search">キーワード</string>
-	<!-- title bar changes -->
-	<string name="title_search_results">検索結果: </string>
-	<string name="title_filter_applied">フィルター結果: </string>
-	<!-- launcher shortcut -->
-	<string name="shortcut_addtask_name">追加</string>
-	<!--  share -->
-	<string name="share_addtask_name">Add to Todo.txt</string>
+    <string name="app_label">Todo.txt</string>
+    <string name="added_task">追加されました</string>
+    <string name="add_task_failed">追加に失敗しました</string>
+    <string name="updated_task">更新されました</string>
+    <string name="update_task_failed">更新に失敗しました</string>
+    <string name="sort">並び替え</string>
+    <string name="filter">フィルター</string>
+    <string name="main_no_items">タスクがありません。</string>
+    <string name="set_preferences">設定</string>
+    <string name="preferences">設定</string>
+    <string name="sync">同期</string>
+    <string name="search">検索</string>
+    <string name="refresh">更新</string>
+    <string name="add">追加</string>
+    <string name="addtask">追加</string>
+    <string name="done">完了にする</string>
+    <string name="priority">優先度を変更</string>
+    <string name="update">編集</string>
+    <string name="delete">削除</string>
+    <string name="share">共有</string>
+    <string name="unComplete">完了の取り消し</string>
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="clear">クリア</string>
+    <string name="areyousure">本当によろしいですか？</string>
+    <!-- preferences -->
+    <string name="dropbox_logout_pref_title">ログアウト</string>
+    <string name="dropbox_logout_pref_summary">Dropbox からログアウトします。</string>
+    <string name="dropbox_logout_explainer">本当に Dropbox からログアウトしてよろしいですか?</string>
+    <string name="todo_path_title">ファイルの場所</string>
+    <string name="todo_path_summary">todo.txt ファイルを置く Dropbox 上のフォルダを指定します。</string>
+    <string name="todo_path_default">/todo</string>
+    <string name="dropbox_settings_header">Dropbox</string>
+    <string name="todotxt_settings_header">todo.txt</string>
+    <string name="about_settings_header">About</string>
+    <string name="prepend_date_pref_title">日付を追加</string>
+    <string name="prepend_date_pref_summary">タスクを追加するときに自動で今日の日付をセットします。</string>
+    <!-- login -->
+    <string name="login_screen_button">Dropbox にログイン</string>
+    <!-- delete -->
+    <string name="delete_task_title">削除</string>
+    <string name="delete_task_message">削除すると元には戻せません。本当によろしいですか？</string>
+    <string name="delete_task_confirm">削除</string>
+    <!-- search -->
+    <string name="search_hint">Search todo.txt</string>
+    <!-- filter tabs -->
+    <string name="filter_tab_priorities">優先度</string>
+    <string name="filter_tab_projects">プロジェクト</string>
+    <string name="filter_tab_contexts">コンテキスト</string>
+    <string name="filter_tab_search">キーワード</string>
+    <!-- title bar changes -->
+    <string name="title_search_results">検索結果: </string>
+    <string name="title_filter_applied">フィルター結果: </string>
+    <!-- launcher shortcut -->
+    <string name="shortcut_addtask_name">追加</string>
+    <!-- share -->
+    <string name="share_addtask_name">Add to Todo.txt</string>
+
 </resources>

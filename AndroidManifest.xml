@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -21,6 +22,7 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.todotxt.todotxttouch"
     android:versionCode="56"
@@ -158,7 +160,7 @@ You should have received a copy of the GNU General Public License along with Tod
             <!-- This specifies the widget provider info -->
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/listwidgetinfo" />
+                android:resource="@xml/list_widget_info" />
         </receiver>
 
         <!-- The service serving the RemoteViews to the collection widget -->
