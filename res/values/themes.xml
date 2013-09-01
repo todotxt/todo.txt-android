@@ -22,14 +22,15 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <resources>
-	<style name="TodoTxtTouchLight" parent="@android:style/Theme.Holo.Light">
 
-	</style>
-	<style name="TodoTxtTouchDark" parent="@android:style/Theme.Holo">
+    <style name="TodoTxtTouchLight" parent="@android:style/Theme.Holo.Light"></style>
 
-	</style>
-	<style name="TodoTheme.Widget" parent="TodoTxtTouchDark">
-		<item name="android:background">@android:color/transparent</item>
-	</style>
+    <style name="TodoTxtTouchDark" parent="@android:style/Theme.Holo"></style>
+
+    <style name="TodoTheme.Widget" parent="TodoTxtTouchDark">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch;
 
 import java.util.ArrayList;
@@ -78,43 +79,37 @@ public class TodoPreferences {
 		prepend_date_pref_key = c.getString(R.string.prepend_date_pref_key);
 		todo_path_key = c.getString(R.string.todo_path_key);
 		todo_path_default = c.getString(R.string.todo_path_default);
-		//dump();
+		// dump();
 	}
 
-
 	/*
-	 * 
-	 *  Accessor methods for preference keys go here 
-	 *
+	 * Accessor methods for preference keys go here
 	 */
-	
-	public String prepend_date_pref_key() {
+
+	public String getPrependDatePrefKey() {
 		return prepend_date_pref_key;
 	}
 
-	public String periodic_sync_pref_key() {
+	public String getPeriodicSyncPrefKey() {
 		return periodic_sync_pref_key;
 	}
 
-	public String todo_path_key() {
+	public String getTodoPathKey() {
 		return todo_path_key;
 	}
 
-
 	/*
-	 * 
-	 *  Accessor methods for preference values go here 
-	 *
+	 * Accessor methods for preference values go here
 	 */
-	
+
 	public String getAccessToken() {
 		return m_prefs.getString(PREF_ACCESSTOKEN_KEY, null);
 	}
-	
+
 	public String getAccessTokenSecret() {
 		return m_prefs.getString(PREF_ACCESSTOKEN_SECRET, null);
 	}
-	
+
 	public void storeAccessToken(String accessTokenKey, String accessTokenSecret) {
 		Editor editor = m_prefs.edit();
 		editor.putString(PREF_ACCESSTOKEN_KEY, accessTokenKey);
@@ -132,6 +127,7 @@ public class TodoPreferences {
 
 	public void storeFileRevision(String key, String rev) {
 		Log.d(TAG, "Storing rev. key=" + key + ". val=" + rev);
+
 		Editor editor = m_prefs.edit();
 		editor.putString(key, rev);
 		editor.commit();
@@ -146,7 +142,7 @@ public class TodoPreferences {
 		editor.putBoolean(PREF_FIRSTRUN, value);
 		editor.commit();
 	}
-	
+
 	public Boolean isPrependDateEnabled() {
 		return m_prefs.getBoolean(prepend_date_pref_key, true);
 	}
@@ -155,6 +151,7 @@ public class TodoPreferences {
 		try {
 			long period = Long.parseLong(m_prefs.getString(
 					periodic_sync_pref_key, "0"));
+
 			return period < 0;
 		} catch (NumberFormatException ex) {
 			return false;
@@ -175,6 +172,7 @@ public class TodoPreferences {
 		try {
 			long period = Long.parseLong(m_prefs.getString(
 					periodic_sync_pref_key, "0"));
+
 			return period > 0 ? period : 0;
 		} catch (NumberFormatException ex) {
 			return 0L;
@@ -186,42 +184,47 @@ public class TodoPreferences {
 		editor.putInt(PREF_SORT, sort.getId());
 		editor.commit();
 	}
-	
+
 	public Sort getSort() {
-		return Sort.getById(m_prefs.getInt(PREF_SORT, Sort.PRIORITY_DESC.getId()));
+		return Sort.getById(m_prefs.getInt(PREF_SORT,
+				Sort.PRIORITY_DESC.getId()));
 	}
-	
-	public void storeFilters(Collection<Priority> prios, Collection<?> contexts, Collection<?> projects, String search, Collection<?> summaries) {
+
+	public void storeFilters(Collection<Priority> prios,
+			Collection<?> contexts, Collection<?> projects, String search,
+			Collection<?> summaries) {
 		Editor editor = m_prefs.edit();
-		
+
 		if (prios != null) {
-			editor.putString(PREF_FILTER_PRIOS, Util.join(Priority.inCode(prios), " "));
+			editor.putString(PREF_FILTER_PRIOS,
+					Util.join(Priority.inCode(prios), " "));
 		}
-		
+
 		if (contexts != null) {
 			editor.putString(PREF_FILTER_CONTEXTS, Util.join(contexts, " "));
 		}
-		
+
 		if (projects != null) {
 			editor.putString(PREF_FILTER_PROJECTS, Util.join(projects, " "));
 		}
-		
+
 		if (search != null) {
 			editor.putString(PREF_FILTER_SEARCH, search);
 		}
-		
+
 		if (search != null) {
-			//split on tab just in case there is a space in the text
+			// split on tab just in case there is a space in the text
 			editor.putString(PREF_FILTER_SUMMARY, Util.join(summaries, "\t"));
 		}
-		
+
 		editor.commit();
 	}
 
 	public ArrayList<Priority> getFilteredPriorities() {
-		return Priority.toPriority(Util.split(m_prefs.getString(PREF_FILTER_PRIOS, ""), " "));
+		return Priority.toPriority(Util.split(
+				m_prefs.getString(PREF_FILTER_PRIOS, ""), " "));
 	}
-	
+
 	public ArrayList<String> getFilteredContexts() {
 		return Util.split(m_prefs.getString(PREF_FILTER_CONTEXTS, ""), " ");
 	}
@@ -229,13 +232,13 @@ public class TodoPreferences {
 	public ArrayList<String> getFilteredProjects() {
 		return Util.split(m_prefs.getString(PREF_FILTER_PROJECTS, ""), " ");
 	}
-	
+
 	public String getSearch() {
 		return m_prefs.getString(PREF_FILTER_SEARCH, "");
 	}
-	
+
 	public ArrayList<String> getFilterSummaries() {
-		//split on tab just in case there is a space in the text
+		// split on tab just in case there is a space in the text
 		return Util.split(m_prefs.getString(PREF_FILTER_SUMMARY, ""), "\t");
 	}
 
@@ -246,6 +249,7 @@ public class TodoPreferences {
 	/**
 	 * Returns the most recent version to have successfully run upgrade tasks.
 	 * Returns 0 if upgrade tasks have never been run.
+	 * 
 	 * @return version code in the same format as in the manifest file.
 	 */
 	public int getVersion() {
@@ -253,20 +257,20 @@ public class TodoPreferences {
 	}
 
 	/**
-	 * Store the current application version so that we know
-	 * when we have been upgraded.
-	 * @param versionCode version code in the same format as in the manifest file.
+	 * Store the current application version so that we know when we have been
+	 * upgraded.
+	 * 
+	 * @param versionCode
+	 *            version code in the same format as in the manifest file.
 	 */
 	public void storeVersion(int versionCode) {
 		Editor editor = m_prefs.edit();
 		editor.putInt(PREF_VERSION, versionCode);
 		editor.commit();
 	}
-	
+
 	/*
-	 * 
-	 *  Utility methods go here 
-	 *
+	 * Utility methods go here
 	 */
 
 	public void clearState() {
@@ -283,12 +287,14 @@ public class TodoPreferences {
 		editor.clear();
 		editor.commit();
 	}
-	
-	public void registerOnSharedPreferenceChangeListener (SharedPreferences.OnSharedPreferenceChangeListener listener) {
+
+	public void registerOnSharedPreferenceChangeListener(
+			SharedPreferences.OnSharedPreferenceChangeListener listener) {
 		m_prefs.registerOnSharedPreferenceChangeListener(listener);
 	}
 
-	public void unregisterOnSharedPreferenceChangeListener (SharedPreferences.OnSharedPreferenceChangeListener listener) {
+	public void unregisterOnSharedPreferenceChangeListener(
+			SharedPreferences.OnSharedPreferenceChangeListener listener) {
 		m_prefs.unregisterOnSharedPreferenceChangeListener(listener);
 	}
 
@@ -300,5 +306,4 @@ public class TodoPreferences {
 					+ entry.getValue().toString());
 		}
 	}
-
 }

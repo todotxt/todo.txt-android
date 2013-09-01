@@ -1,3 +1,4 @@
+
 package com.todotxt.todotxttouch.test;
 
 import com.todotxt.todotxttouch.task.Filter;
@@ -11,111 +12,111 @@ import java.util.List;
 
 public class TaskBagStub implements TaskBag {
 
-	@Override
-	public void archive() {
-		// TODO Auto-generated method stub
+    @Override
+    public void archive() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void reload() {
-		// TODO Auto-generated method stub
+    @Override
+    public void reload() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void addAsTask(String input) {
-		// TODO Auto-generated method stub
+    @Override
+    public void addAsTask(String input) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void update(Task task) {
-		// TODO Auto-generated method stub
+    @Override
+    public void update(Task task) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void delete(Task task) {
-		// TODO Auto-generated method stub
+    @Override
+    public void delete(Task task) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public List<Task> getTasks() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Task> getTasks() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Task> getTasks(Filter<Task> filter, Comparator<Task> comparator) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int size() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	@Override
-	public ArrayList<String> getProjects(boolean includeNone) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ArrayList<String> getProjects(boolean includeNone) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public ArrayList<String> getContexts(boolean includeNone) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ArrayList<String> getContexts(boolean includeNone) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public ArrayList<Priority> getPriorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ArrayList<Priority> getPriorities() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public void pushToRemote(boolean overwrite) {
-		// TODO Auto-generated method stub
-		pushToRemote(false, overwrite);
-	}
+    @Override
+    public void pushToRemote(boolean overwrite) {
+        // TODO Auto-generated method stub
+        pushToRemote(false, overwrite);
+    }
 
-	@Override
-	public void pushToRemote(boolean overridePreference, boolean overwrite) {
-		// TODO Auto-generated method stub
-		++pushToRemoteCalled;
+    @Override
+    public void pushToRemote(boolean overridePreference, boolean overwrite) {
+        // TODO Auto-generated method stub
+        ++pushToRemoteCalled;
 
-	}
+    }
 
-	public int pushToRemoteCalled = 0;
+    public int pushToRemoteCalled = 0;
 
-	@Override
-	public void pullFromRemote() {
-		// TODO Auto-generated method stub
-		pullFromRemote(false);
-	}
+    @Override
+    public void pullFromRemote() {
+        // TODO Auto-generated method stub
+        pullFromRemote(false);
+    }
 
-	@Override
-	public void pullFromRemote(boolean overridePreference) {
-		// TODO Auto-generated method stub
-		++pullFromRemoteCalled;
-	}
+    @Override
+    public void pullFromRemote(boolean overridePreference) {
+        // TODO Auto-generated method stub
+        ++pullFromRemoteCalled;
+    }
 
-	public int pullFromRemoteCalled = 0;
+    public int pullFromRemoteCalled = 0;
 
-	@Override
-	public void unarchive(Task task) {
-		// TODO Auto-generated method stub
+    @Override
+    public void unarchive(Task task) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void clear() {
+        // TODO Auto-generated method stub
+
+    }
 
 }

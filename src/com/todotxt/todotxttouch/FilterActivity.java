@@ -42,7 +42,6 @@ import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
 public class FilterActivity extends TabActivity {
-
 	private final static String TAG = FilterActivity.class.getSimpleName();
 	private static ArrayList<String> appliedFilters = new ArrayList<String>();
 	private TabHost mTabHost;
@@ -50,6 +49,7 @@ public class FilterActivity extends TabActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		mTabHost = getTabHost();
 
 		Drawable actionBarBg = getResources().getDrawable(
@@ -64,20 +64,24 @@ public class FilterActivity extends TabActivity {
 				// .setIndicator(getString(R.string.filter_tab_priorities))
 				.setIndicator(buildIndicator(R.string.filter_tab_priorities))
 				.setContent(R.id.priorities));
+
 		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_projects))
 				.setIndicator(buildIndicator(R.string.filter_tab_projects))
 				.setContent(R.id.projects));
+
 		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_contexts))
 				.setIndicator(buildIndicator(R.string.filter_tab_contexts))
 				.setContent(R.id.contexts));
+
 		mTabHost.addTab(mTabHost
 				.newTabSpec(getString(R.string.filter_tab_search))
 				.setIndicator(buildIndicator(R.string.filter_tab_search))
 				.setContent(R.id.search));
 
 		Intent data = getIntent();
+
 		ArrayList<String> priosArr = data
 				.getStringArrayListExtra(Constants.EXTRA_PRIORITIES);
 		ArrayList<String> projectsArr = data
@@ -120,15 +124,24 @@ public class FilterActivity extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				Log.v(TAG, "onClick OK");
+
 				Intent data = new Intent();
+
 				Log.v(TAG, "Clearing all filter types.");
+
 				appliedFilters = new ArrayList<String>();
-				data.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-						getItems(priorities, getString(R.string.filter_tab_priorities)));
-				data.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-						getItems(projects, getString(R.string.filter_tab_projects)));
-				data.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-						getItems(contexts, getString(R.string.filter_tab_contexts)));
+				data.putStringArrayListExtra(
+						Constants.EXTRA_PRIORITIES,
+						getItems(priorities,
+								getString(R.string.filter_tab_priorities)));
+				data.putStringArrayListExtra(
+						Constants.EXTRA_PROJECTS,
+						getItems(projects,
+								getString(R.string.filter_tab_projects)));
+				data.putStringArrayListExtra(
+						Constants.EXTRA_CONTEXTS,
+						getItems(contexts,
+								getString(R.string.filter_tab_contexts)));
 				data.putExtra(Constants.EXTRA_SEARCH, search.getText()
 						.toString());
 				data.putStringArrayListExtra(Constants.EXTRA_APPLIED_FILTERS,
@@ -143,6 +156,7 @@ public class FilterActivity extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				Log.v(TAG, "onClick Cancel");
+
 				setResult(Activity.RESULT_CANCELED);
 				finish();
 			}
@@ -153,6 +167,7 @@ public class FilterActivity extends TabActivity {
 			@Override
 			public void onClick(View v) {
 				Log.v(TAG, "onClick Clear");
+
 				appliedFilters = new ArrayList<String>();
 				setSelected(priorities, null);
 				setSelected(projects, null);
@@ -166,12 +181,14 @@ public class FilterActivity extends TabActivity {
 		final TextView indicator = (TextView) this.getLayoutInflater().inflate(
 				R.layout.tab_indicator, mTabHost.getTabWidget(), false);
 		indicator.setText(textRes);
+
 		return indicator;
 	}
 
 	private static ArrayList<String> getItems(ListView adapter, String type) {
 		ArrayList<String> arr = new ArrayList<String>();
 		int size = adapter.getCount();
+
 		for (int i = 0; i < size; i++) {
 			if (adapter.isItemChecked(i)) {
 				arr.add((String) adapter.getAdapter().getItem(i));
@@ -184,15 +201,16 @@ public class FilterActivity extends TabActivity {
 				}
 			}
 		}
+
 		return arr;
 	}
 
 	private static void setSelected(ListView lv, ArrayList<String> selected) {
 		int count = lv.getCount();
+
 		for (int i = 0; i < count; i++) {
 			String str = (String) lv.getItemAtPosition(i);
 			lv.setItemChecked(i, selected != null && selected.contains(str));
 		}
 	}
-
 }

@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import junit.framework.TestCase;
@@ -32,37 +33,37 @@ import java.util.Arrays;
  * @author Tim Barlotta
  */
 public class OrFilterTest extends TestCase {
-	public void testNoFilters() {
-		OrFilter orFilter = new OrFilter();
-		assertTrue("apply was not true",
-				orFilter.apply(new Task(1, "(A) abc 123")));
-	}
+    public void testNoFilters() {
+        OrFilter orFilter = new OrFilter();
+        assertTrue("apply was not true",
+                orFilter.apply(new Task(1, "(A) abc 123")));
+    }
 
-	public void testMultipleFilters_matchesBoth() {
-		OrFilter orFilter = new OrFilter();
-		orFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
-		orFilter.addFilter(new ByTextFilter("abc", false));
+    public void testMultipleFilters_matchesBoth() {
+        OrFilter orFilter = new OrFilter();
+        orFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
+        orFilter.addFilter(new ByTextFilter("abc", false));
 
-		assertTrue("apply was not true",
-				orFilter.apply(new Task(1, "(A) abc 123")));
-	}
+        assertTrue("apply was not true",
+                orFilter.apply(new Task(1, "(A) abc 123")));
+    }
 
-	public void testMultipleFilters_matchesOnlyOne() {
-		OrFilter orFilter = new OrFilter();
-		orFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
-		orFilter.addFilter(new ByTextFilter("abc", false));
+    public void testMultipleFilters_matchesOnlyOne() {
+        OrFilter orFilter = new OrFilter();
+        orFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
+        orFilter.addFilter(new ByTextFilter("abc", false));
 
-		assertTrue("apply was not true",
-				orFilter.apply(new Task(1, "(A) hello world")));
-	}
+        assertTrue("apply was not true",
+                orFilter.apply(new Task(1, "(A) hello world")));
+    }
 
-	public void testMultipleFilters_matchesNone() {
-		OrFilter orFilter = new OrFilter();
-		orFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
-		orFilter.addFilter(new ByTextFilter("abc", false));
+    public void testMultipleFilters_matchesNone() {
+        OrFilter orFilter = new OrFilter();
+        orFilter.addFilter(new ByPriorityFilter(Arrays.asList(Priority.A)));
+        orFilter.addFilter(new ByTextFilter("abc", false));
 
-		assertFalse("apply was not false",
-				orFilter.apply(new Task(1, "(B) hello world")));
-	}
+        assertFalse("apply was not false",
+                orFilter.apply(new Task(1, "(B) hello world")));
+    }
 
 }

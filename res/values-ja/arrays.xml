@@ -24,11 +24,11 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 <resources>
 
-	<string-array name="sort">
-		<item>優先度</item>
-		<item>ID 昇順</item>
-		<item>ID 降順</item>
-		<item>アルファベット順</item>
-	</string-array>
+    <string-array name="sort">
+        <item>優先度</item>
+        <item>ID 昇順</item>
+        <item>ID 降順</item>
+        <item>アルファベット順</item>
+    </string-array>
 
 </resources>

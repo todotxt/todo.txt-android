@@ -22,35 +22,35 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:orientation="vertical"
- 	android:gravity="center_vertical|center_horizontal"
- 	android:background="@color/black_trans"
-  >
 
-  <TextView
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:gravity="center_vertical"
-	android:text="@string/add_task_help"
-	android:textColor="@color/white"
-	android:textSize="9pt"
-	android:padding="15pt" />
-	
-	<Button
-		android:id="@+id/close"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@drawable/help_close_button"
-		android:text="@string/close"
-		android:textColor="@color/white"
-		android:textSize="8pt"
-		android:paddingTop="5dip"
-		android:paddingBottom="5dip"
-		android:paddingLeft="30dip"
-		android:paddingRight="30dip"
-		android:onClick="onCloseClick"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black_trans"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="15pt"
+        android:text="@string/add_task_help"
+        android:textColor="@color/white"
+        android:textSize="9pt" />
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/help_close_button"
+        android:onClick="onCloseClick"
+        android:paddingBottom="5dip"
+        android:paddingLeft="30dip"
+        android:paddingRight="30dip"
+        android:paddingTop="5dip"
+        android:text="@string/close"
+        android:textColor="@color/white"
+        android:textSize="8pt" />
+
 </LinearLayout>

@@ -23,7 +23,13 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:title="@string/unComplete" android:id="@+id/unComplete" />
-	<item android:title="@string/delete" android:id="@+id/delete" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/unComplete"
+        android:title="@string/unComplete"/>
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete"/>
+
 </menu>

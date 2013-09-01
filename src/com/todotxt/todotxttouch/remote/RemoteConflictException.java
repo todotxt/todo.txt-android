@@ -20,19 +20,19 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.remote;
 
 /**
  * Indicates a conflict occurred when working with a remote task store
- * 
  */
 @SuppressWarnings("serial")
 public class RemoteConflictException extends RemoteException {
-	public RemoteConflictException(String message) {
-		super(message);
-	}
+    public RemoteConflictException(String message) {
+        super(message);
+    }
 
-	public RemoteConflictException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public RemoteConflictException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
