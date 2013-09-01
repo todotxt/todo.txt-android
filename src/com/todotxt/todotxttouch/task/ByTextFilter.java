@@ -29,42 +29,42 @@ package com.todotxt.todotxttouch.task;
  * @author Tim Barlotta
  */
 class ByTextFilter implements Filter<Task> {
-    private String text;
-    private boolean caseSensitive;
-    private String[] parts;
+	private String text;
+	private boolean caseSensitive;
+	private String[] parts;
 
-    public ByTextFilter(String text, boolean caseSensitive) {
-        if (text == null) {
-            text = "";
-        }
+	public ByTextFilter(String text, boolean caseSensitive) {
+		if (text == null) {
+			text = "";
+		}
 
-        this.text = caseSensitive ? text : text.toUpperCase();
-        this.caseSensitive = caseSensitive;
+		this.text = caseSensitive ? text : text.toUpperCase();
+		this.caseSensitive = caseSensitive;
 
-        this.parts = this.text.split("\\s");
-    }
+		this.parts = this.text.split("\\s");
+	}
 
-    @Override
-    public boolean apply(Task input) {
-        String taskText = caseSensitive ? input.getText() : input.getText()
-                .toUpperCase();
+	@Override
+	public boolean apply(Task input) {
+		String taskText = caseSensitive ? input.getText() : input.getText()
+				.toUpperCase();
 
-        for (int i = 0; i < parts.length; ++i) {
-            String part = this.parts[i];
+		for (int i = 0; i < parts.length; ++i) {
+			String part = this.parts[i];
 
-            if ((part.length() > 0) && !taskText.contains(part))
-                return (false);
-        }
+			if ((part.length() > 0) && !taskText.contains(part))
+				return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    /* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
-    String getText() {
-        return text;
-    }
+	/* FOR TESTING ONLY, DO NOT USE IN APPLICATION */
+	String getText() {
+		return text;
+	}
 
-    boolean isCaseSensitive() {
-        return caseSensitive;
-    }
+	boolean isCaseSensitive() {
+		return caseSensitive;
+	}
 }

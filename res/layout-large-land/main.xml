@@ -33,7 +33,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
     <ListView
         android:id="@+id/left_drawer"
-        style="@style/TodoTxtTouchLight"
         android:layout_width="240dip"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -103,14 +102,12 @@ You should have received a copy of the GNU General Public License along with Tod
 
             <ListView
                 android:id="@id/android:list"
-                style="@style/TodoTxtTouchLight"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:fastScrollEnabled="true" />
 
             <TextView
                 android:id="@id/android:empty"
-                style="@style/TodoTxtTouchLight"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical|center_horizontal"

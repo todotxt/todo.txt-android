@@ -124,7 +124,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
         <ListView
             android:id="@+id/widget_list"
-            style="@style/TodoTxtTouchLight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="#f3f3f3"
@@ -132,7 +131,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
         <TextView
             android:id="@+id/empty_view"
-            style="@style/TodoTxtTouchLight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"

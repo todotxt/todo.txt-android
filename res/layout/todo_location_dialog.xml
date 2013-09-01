@@ -55,7 +55,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
         <ListView
             android:id="@id/android:list"
-            style="@style/TodoTxtTouchLight"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/path_dialog_height"
             android:fastScrollEnabled="true" />
@@ -67,7 +66,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
             <TextView
                 android:id="@+id/empty_text"
-                style="@style/TodoTxtTouchLight"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical|center_horizontal"

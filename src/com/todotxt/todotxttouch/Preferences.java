@@ -63,11 +63,11 @@ public class Preferences extends PreferenceActivity {
 
 		m_app = (TodoApplication) getApplication();
 		((CheckBoxPreference) findPreference(m_app.m_prefs
-				.prepend_date_pref_key())).setChecked(m_app.m_prefs
+				.getPrependDatePrefKey())).setChecked(m_app.m_prefs
 				.isPrependDateEnabled());
 
 		mLocationPreference = (TodoLocationPreference) findPreference(m_app.m_prefs
-				.todo_path_key());
+				.getTodoPathKey());
 		mLocationPreference.setApplication(m_app);
 		mLocationPreference.setDisplayWarning(m_app.m_prefs.needToPush());
 
@@ -86,7 +86,7 @@ public class Preferences extends PreferenceActivity {
 		aboutDialog = findPreference("app_version");
 		logoutDialog = findPreference("logout_dropbox");
 		periodicSync = (ListPreference) findPreference(m_app.m_prefs
-				.periodic_sync_pref_key());
+				.getPeriodicSyncPrefKey());
 		setPeriodicSummary(periodicSync.getValue());
 		periodicSync
 				.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {

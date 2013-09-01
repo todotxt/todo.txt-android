@@ -29,7 +29,7 @@ You should have received a copy of the GNU General Public License along with Tod
     android:versionName="2.2-beta2" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -160,7 +160,7 @@ You should have received a copy of the GNU General Public License along with Tod
             <!-- This specifies the widget provider info -->
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/listwidgetinfo" />
+                android:resource="@xml/list_widget_info" />
         </receiver>
 
         <!-- The service serving the RemoteViews to the collection widget -->

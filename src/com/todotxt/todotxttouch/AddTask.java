@@ -56,7 +56,6 @@ import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Util;
 
 public class AddTask extends SherlockActivity {
-
 	private final static String TAG = AddTask.class.getSimpleName();
 
 	private ProgressDialog m_ProgressDialog = null;
