@@ -176,9 +176,18 @@ You should have received a copy of the GNU General Public License along with Tod
 	</style>
 
 	<style name="HorizontalRule">
-		<item name="android:layout_height">1px</item>
+		<item name="android:layout_height">1dp</item>
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:background">@drawable/horizontal_rule</item>
 	</style>
+	
+	
+	<style name="VerticalRule">
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_width">1dp</item>
+		<item name="android:background">#FFCCCCCC</item>
+	</style>
+	
+	<style name="BorderlessButton" parent="Widget.Sherlock.ActionButton" />
 	
 </resources>
