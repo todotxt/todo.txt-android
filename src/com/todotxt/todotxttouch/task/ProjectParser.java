@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.ArrayList;
@@ -29,27 +30,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class ProjectParser {
-	private final static Pattern CONTEXT_PATTERN = Pattern
-			.compile("(?:^|\\s)\\+(\\S*\\w)");;
-	private static final ProjectParser INSTANCE = new ProjectParser();
+    private final static Pattern CONTEXT_PATTERN = Pattern.compile("(?:^|\\s)\\+(\\S*\\w)");;
+    private static final ProjectParser INSTANCE = new ProjectParser();
 
-	private ProjectParser() {
-	}
+    private ProjectParser() {
+    }
 
-	public static ProjectParser getInstance() {
-		return INSTANCE;
-	}
+    public static ProjectParser getInstance() {
+        return INSTANCE;
+    }
 
-	public List<String> parse(String inputText) {
-		if (inputText == null) {
-			return Collections.emptyList();
-		}
-		Matcher m = CONTEXT_PATTERN.matcher(inputText);
-		List<String> projects = new ArrayList<String>();
-		while (m.find()) {
-			String project = m.group(1).trim();
-			projects.add(project);
-		}
-		return projects;
-	}
+    public List<String> parse(String inputText) {
+        if (inputText == null) {
+            return Collections.emptyList();
+        }
+
+        Matcher m = CONTEXT_PATTERN.matcher(inputText);
+        List<String> projects = new ArrayList<String>();
+
+        while (m.find()) {
+            String project = m.group(1).trim();
+            projects.add(project);
+        }
+
+        return projects;
+    }
 }

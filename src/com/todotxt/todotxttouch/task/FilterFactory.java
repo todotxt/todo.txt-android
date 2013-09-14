@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 import java.util.List;
@@ -32,28 +33,27 @@ import com.todotxt.todotxttouch.util.Strings;
  * @author Tim Barlotta
  */
 public class FilterFactory {
+    public static Filter<Task> generateAndFilter(List<Priority> priorities,
+            List<String> contexts, List<String> projects, String text,
+            boolean caseSensitive) {
+        AndFilter filter = new AndFilter();
 
-	public static Filter<Task> generateAndFilter(List<Priority> priorities,
-			List<String> contexts, List<String> projects, String text,
-			boolean caseSensitive) {
-		AndFilter filter = new AndFilter();
+        if (priorities.size() > 0) {
+            filter.addFilter(new ByPriorityFilter(priorities));
+        }
 
-		if (priorities.size() > 0) {
-			filter.addFilter(new ByPriorityFilter(priorities));
-		}
+        if (contexts.size() > 0) {
+            filter.addFilter(new ByContextFilter(contexts));
+        }
 
-		if (contexts.size() > 0) {
-			filter.addFilter(new ByContextFilter(contexts));
-		}
+        if (projects.size() > 0) {
+            filter.addFilter(new ByProjectFilter(projects));
+        }
 
-		if (projects.size() > 0) {
-			filter.addFilter(new ByProjectFilter(projects));
-		}
+        if (!Strings.isEmptyOrNull(text)) {
+            filter.addFilter(new ByTextFilter(text, caseSensitive));
+        }
 
-		if (!Strings.isEmptyOrNull(text)) {
-			filter.addFilter(new ByTextFilter(text, caseSensitive));
-		}
-		return filter;
-	}
-
+        return filter;
+    }
 }

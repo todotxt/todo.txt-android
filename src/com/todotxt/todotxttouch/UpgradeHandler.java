@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch;
 
 import java.io.File;
@@ -33,97 +34,101 @@ import android.os.Environment;
 import android.util.Log;
 
 public class UpgradeHandler {
-	private static final String TAG = UpgradeHandler.class.getSimpleName();
-	
-	private TodoApplication mApp;
-	private int mCurVersion;
-	private int mPrevVersion;
-	List<UpgradeTask> mHandlers = new ArrayList<UpgradeTask>();
+    private static final String TAG = UpgradeHandler.class.getSimpleName();
 
-	public UpgradeHandler(TodoApplication application) {
-		mApp = application;
-	}
+    private TodoApplication mApp;
+    private int mCurVersion;
+    private int mPrevVersion;
+    List<UpgradeTask> mHandlers = new ArrayList<UpgradeTask>();
 
-	public void run() throws NameNotFoundException {
-		mCurVersion = mApp.getPackageManager().getPackageInfo(
-				mApp.getPackageName(), 0).versionCode;
-		mPrevVersion = mApp.m_prefs.getVersion();
-		
-		if (mPrevVersion >= mCurVersion) {
-			Log.d(TAG, "No need to upgrade. Stored version is " + mPrevVersion + ". Cur version is "
-					+ mCurVersion);
-			return;
-		}
-		
-		Log.i(TAG, "Running upgrade tasks from " + mPrevVersion + " to "
-				+ mCurVersion);
+    public UpgradeHandler(TodoApplication application) {
+        mApp = application;
+    }
 
-		initHandlers();
-		for (UpgradeTask handler : mHandlers) {
-			int version = handler.getVersion();
-			if (version > mPrevVersion && version <= mCurVersion) {
-				Log.i(TAG, "Running upgrade task: " + handler.getDescription());
-				handler.getRunnable().run();
-			}
-		}
+    public void run() throws NameNotFoundException {
+        mCurVersion = mApp.getPackageManager().getPackageInfo(mApp.getPackageName(), 0).versionCode;
+        mPrevVersion = mApp.m_prefs.getVersion();
 
-		mApp.m_prefs.storeVersion(mCurVersion);
-		Log.i(TAG, "Successfully upgraded to version " + mCurVersion);
-	}
+        if (mPrevVersion >= mCurVersion) {
+            Log.d(TAG, "No need to upgrade. Stored version is " + mPrevVersion
+                    + ". Cur version is "
+                    + mCurVersion);
 
-	final class UpgradeTask {
-		private String mDescription;
-		private int mVersion;
-		private Runnable mRunnable;
+            return;
+        }
 
-		public UpgradeTask(String description, int version, Runnable runnable) {
-			mDescription = description;
-			mVersion = version;
-			mRunnable = runnable;
-		}
+        Log.i(TAG, "Running upgrade tasks from " + mPrevVersion + " to " + mCurVersion);
 
-		public String getDescription() {
-			return mDescription;
-		}
+        initHandlers();
 
-		public int getVersion() {
-			return mVersion;
-		}
+        for (UpgradeTask handler : mHandlers) {
+            int version = handler.getVersion();
 
-		public Runnable getRunnable() {
-			return mRunnable;
-		}
-	}
+            if (version > mPrevVersion && version <= mCurVersion) {
+                Log.i(TAG, "Running upgrade task: " + handler.getDescription());
+                handler.getRunnable().run();
+            }
+        }
 
-	void initHandlers() {
-		UpgradeTask up53 = new UpgradeTask(
-				"Migrate data from external to internal storage", 53,
-				new Runnable() {
-					@Override
-					public void run() {
-						File srcTodo = new File(Environment
-								.getExternalStorageDirectory(),
-								"data/com.todotxt.todotxttouch/todo.txt");
-						File srcDone = new File(Environment
-								.getExternalStorageDirectory(),
-								"data/com.todotxt.todotxttouch/done.txt");
-						File destTodo = new File(TodoApplication
-								.getAppContetxt().getFilesDir(), "todo.txt");
-						File destDone = new File(TodoApplication
-								.getAppContetxt().getFilesDir(), "done.txt");
+        mApp.m_prefs.storeVersion(mCurVersion);
 
-						if (srcTodo.exists() && !destTodo.exists()) {
-							Log.d(TAG, "Copying " + srcTodo + " to " + destTodo);
-							Util.copyFile(srcTodo, destTodo, false);
-						}
+        Log.i(TAG, "Successfully upgraded to version " + mCurVersion);
+    }
 
-						if (srcDone.exists() && !destDone.exists()) {
-							Log.d(TAG, "Copying " + srcDone + " to " + destDone);
-							Util.copyFile(srcDone, destDone, false);
-						}
-					}
-				});
-		mHandlers.add(up53);
+    final class UpgradeTask {
+        private String mDescription;
+        private int mVersion;
+        private Runnable mRunnable;
 
-	}
+        public UpgradeTask(String description, int version, Runnable runnable) {
+            mDescription = description;
+            mVersion = version;
+            mRunnable = runnable;
+        }
+
+        public String getDescription() {
+            return mDescription;
+        }
+
+        public int getVersion() {
+            return mVersion;
+        }
+
+        public Runnable getRunnable() {
+            return mRunnable;
+        }
+    }
+
+    void initHandlers() {
+        UpgradeTask up53 = new UpgradeTask(
+                "Migrate data from external to internal storage", 53,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        File srcTodo = new File(Environment
+                                .getExternalStorageDirectory(),
+                                "data/com.todotxt.todotxttouch/todo.txt");
+                        File srcDone = new File(Environment
+                                .getExternalStorageDirectory(),
+                                "data/com.todotxt.todotxttouch/done.txt");
+                        File destTodo = new File(TodoApplication
+                                .getAppContetxt().getFilesDir(), "todo.txt");
+                        File destDone = new File(TodoApplication
+                                .getAppContetxt().getFilesDir(), "done.txt");
+
+                        if (srcTodo.exists() && !destTodo.exists()) {
+                            Log.d(TAG, "Copying " + srcTodo + " to " + destTodo);
+
+                            Util.copyFile(srcTodo, destTodo, false);
+                        }
+
+                        if (srcDone.exists() && !destDone.exists()) {
+                            Log.d(TAG, "Copying " + srcDone + " to " + destDone);
+
+                            Util.copyFile(srcDone, destDone, false);
+                        }
+                    }
+                });
+        mHandlers.add(up53);
+    }
 }

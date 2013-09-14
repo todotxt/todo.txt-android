@@ -23,7 +23,6 @@
 package com.todotxt.todotxttouch;
 
 public class Constants {
-
 	public static final String DROPBOX_MODUS = "dropbox";
 
 	public final static long INVALID_ID = -1;
@@ -56,5 +55,4 @@ public class Constants {
 
 	// Android OS specific constants
 	public static final String ANDROID_EVENT = "vnd.android.cursor.item/event";
-
 }

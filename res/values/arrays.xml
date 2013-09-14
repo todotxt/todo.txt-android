@@ -22,33 +22,32 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
+
 <resources>
 
-	<string-array name="sort">
-		<item>Priority</item>
-		<item>Line ascending</item>
-		<item>Line descending</item>
-		<item>Text (A-Z)</item>
-		<item>Date ascending</item>
-		<item>Date descending</item>
-	</string-array>
-	
-	<string-array name="periodic_sync_lengths">
-	    <item>Never (work offline)</item>
-		<item>When using app</item>
-		<item>Every 15 minutes</item>
-		<item>Every hour</item>
-		<item>Twice a day</item>
-		<item>Once a day</item>
-	</string-array>
-	
-	<string-array name="periodic_sync_values"> <!-- values from AlarmManager.INTERVAL_* -->
-		<item>-1</item>
-		<item>0</item>
-		<item>900000</item>
-		<item>3600000</item>
-		<item>43200000</item>
-		<item>86400000</item>
-	</string-array>
+    <string-array name="sort">
+        <item>Priority</item>
+        <item>Line ascending</item>
+        <item>Line descending</item>
+        <item>Text (A-Z)</item>
+        <item>Date ascending</item>
+        <item>Date descending</item>
+    </string-array>
+    <string-array name="periodic_sync_lengths">
+        <item>Never (work offline)</item>
+        <item>When using app</item>
+        <item>Every 15 minutes</item>
+        <item>Every hour</item>
+        <item>Twice a day</item>
+        <item>Once a day</item>
+    </string-array>
+    <string-array name="periodic_sync_values"> <!-- values from AlarmManager.INTERVAL_* -->
+        <item>-1</item>
+        <item>0</item>
+        <item>900000</item>
+        <item>3600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+    </string-array>
 
 </resources>

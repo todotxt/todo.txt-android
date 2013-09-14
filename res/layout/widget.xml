@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
 This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -166,11 +167,11 @@ You should have received a copy of the GNU General Public License along with Tod
             <ImageView
                 android:id="@+id/widget_launchbutton"
                 style="@style/WidgetTitleBarLogo"
+                android:contentDescription="@string/app_label"
                 android:maxHeight="40dp"
                 android:maxWidth="40dp"
                 android:padding="5dip"
-                android:src="@drawable/widget_icon_launcher_40"
-                android:contentDescription="@string/app_label" />
+                android:src="@drawable/widget_icon_launcher_40" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -185,9 +186,9 @@ You should have received a copy of the GNU General Public License along with Tod
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dip"
+                    android:contentDescription="@string/addtask"
                     android:padding="5dip"
-                    android:src="@drawable/widget_add" 
-                    android:contentDescription="@string/addtask"/>
+                    android:src="@drawable/widget_add" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -20,18 +20,17 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch;
 
 public class TodoException extends RuntimeException {
+    private static final long serialVersionUID = 2160630991596963352L;
 
-	private static final long serialVersionUID = 2160630991596963352L;
+    public TodoException(String msg) {
+        super(msg);
+    }
 
-	public TodoException(String msg) {
-		super(msg);
-	}
-
-	public TodoException(String msg, Throwable t) {
-		super(msg, t);
-	}
-
+    public TodoException(String msg, Throwable t) {
+        super(msg, t);
+    }
 }

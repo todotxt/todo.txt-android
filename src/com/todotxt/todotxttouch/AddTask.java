@@ -56,7 +56,6 @@ import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Util;
 
 public class AddTask extends SherlockActivity {
-
 	private final static String TAG = AddTask.class.getSimpleName();
 
 	private ProgressDialog m_ProgressDialog = null;
@@ -78,9 +77,11 @@ public class AddTask extends SherlockActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.add_task, menu);
+
 		if (hasDrawer()) {
 			menu.findItem(R.id.menu_add_tag).setVisible(false);
 		}
+
 		return true;
 	}
 
@@ -97,22 +98,28 @@ public class AddTask extends SherlockActivity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
+
 			break;
 		case R.id.menu_save_task:
 			final String input = textInputField.getText().toString();
+
 			if (input.trim().equalsIgnoreCase("")) {
 				Util.showToastLong(this, R.string.add_empty_task);
 			} else {
 				addEditAsync(input);
 			}
+
 			break;
 		case R.id.menu_add_prio:
 			showPrioMenu(findViewById(R.id.menu_add_prio));
+
 			break;
 		case R.id.menu_add_tag:
 			showProjectContextMenu();
+
 			break;
 		}
+
 		return true;
 	}
 
@@ -125,38 +132,46 @@ public class AddTask extends SherlockActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		m_app = (TodoApplication) getApplication();
-		
+
 		// FIXME: save intent so we can come back after login
 		if (!isAuthenticated()) {
 			Intent i = new Intent(this, LoginScreen.class);
 			startActivity(i);
 			finish();
+
 			return;
 		}
-		
+
 		taskBag = m_app.getTaskBag();
 
 		sendBroadcast(new Intent(Constants.INTENT_START_SYNC_WITH_REMOTE));
 
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
+
 		// create shortcut and exit
 		if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
 			Log.d(TAG, "Setting up shortcut icon");
+
 			setupShortcut();
 			finish();
+
 			return;
 		} else if (Intent.ACTION_SEND.equals(action)) {
 			Log.d(TAG, "Share");
+
 			share_text = (String) intent
 					.getCharSequenceExtra(Intent.EXTRA_TEXT);
+
 			Log.d(TAG, share_text);
 		} else if ("com.google.android.gm.action.AUTO_SEND".equals(action)) {
 			// Called as note to self from google search/now
 			noteToSelf(intent);
 			finish();
+
 			return;
 		}
+
 		// text
 		textInputField = (EditText) findViewById(R.id.taskText);
 		textInputField.setGravity(Gravity.TOP);
@@ -165,21 +180,27 @@ public class AddTask extends SherlockActivity {
 		Random rand = new Random();
 		int fortune_hint_index = Math.abs(rand.nextInt()) % 5;
 		int fortune_hint_text;
+
 		switch (fortune_hint_index) {
 		case 0:
 			fortune_hint_text = R.string.tasktexthint0;
+
 			break;
 		case 1:
 			fortune_hint_text = R.string.tasktexthint1;
+
 			break;
 		case 2:
 			fortune_hint_text = R.string.tasktexthint2;
+
 			break;
 		case 3:
 			fortune_hint_text = R.string.tasktexthint3;
+
 			break;
 		case 4:
 			fortune_hint_text = R.string.tasktexthint4;
+
 			break;
 		default:
 			fortune_hint_text = R.string.tasktexthint2;
@@ -195,6 +216,7 @@ public class AddTask extends SherlockActivity {
 
 		Task task = (Task) getIntent().getSerializableExtra(
 				Constants.EXTRA_TASK);
+
 		if (task != null) {
 			m_backup = task;
 			iniTask = m_backup;
@@ -218,25 +240,27 @@ public class AddTask extends SherlockActivity {
 				iniTask.initWithFilters(prios, contexts, projects);
 			}
 		}
-	    if (hasDrawer()) {
-	    	mDrawerList = (ListView) findViewById(R.id.left_drawer);
-	    	mDrawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-		    mLists = new ArrayList<String>();
-	    	mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-	    	          R.layout.drawer_list_item, R.id.left_drawer_text, mLists));
-	    	updateNavigationDrawer();
-	    	
-	    	// Set the list's click listener
-	    	mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-	        textInputField.setOnKeyListener(new OnKeyListener() {
-	     
-	            @Override
-	            public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
-	                updateNavigationDrawer();
-	                return false;
-	            }	             
-	       });
-	    }
+
+		if (hasDrawer()) {
+			mDrawerList = (ListView) findViewById(R.id.left_drawer);
+			mDrawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			mLists = new ArrayList<String>();
+			mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+					R.layout.drawer_list_item, R.id.left_drawer_text, mLists));
+			updateNavigationDrawer();
+
+			// Set the list's click listener
+			mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+			textInputField.setOnKeyListener(new OnKeyListener() {
+				@Override
+				public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
+					updateNavigationDrawer();
+
+					return false;
+				}
+			});
+		}
+
 		textInputField.setSelection(textInputField.getText().toString()
 				.length());
 		textInputField.requestFocus();
@@ -245,23 +269,26 @@ public class AddTask extends SherlockActivity {
 	private boolean isAuthenticated() {
 		RemoteClient remoteClient = m_app.getRemoteClientManager()
 				.getRemoteClient();
+
 		return remoteClient.isAuthenticated();
 	}
 
 	private void updateNavigationDrawer() {
 		mLists.clear();
 		mLists.addAll(labelsInTaskbagAndText());
-	    ((ArrayAdapter<?>) mDrawerList.getAdapter()).notifyDataSetChanged();
+		((ArrayAdapter<?>) mDrawerList.getAdapter()).notifyDataSetChanged();
 	}
 
 	private void showProjectContextMenu() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final ArrayList<String> labels = new ArrayList<String>();
 		labels.addAll(labelsInTaskbagAndText());
+
 		if (labels.size() == 0) {
 			onHelpClick();
 			return;
 		}
+
 		builder.setItems(labels.toArray(new String[0]), new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface arg0, int which) {
@@ -305,6 +332,7 @@ public class AddTask extends SherlockActivity {
 		int length = textInputField.getText().length();
 		int sizeDelta;
 		ArrayList<String> lines = new ArrayList<String>();
+
 		for (String line : textInputField.getText().toString()
 				.split("\\r\\n|\\r|\\n")) {
 			lines.add(line);
@@ -314,10 +342,13 @@ public class AddTask extends SherlockActivity {
 		CharSequence enteredText = textInputField.getText().toString();
 		CharSequence textToCursor = enteredText.subSequence(0, start);
 		ArrayList<String> linesBeforeCursor = new ArrayList<String>();
+
 		for (String line : textToCursor.toString().split("\\r\\n|\\r|\\n")) {
 			linesBeforeCursor.add(line);
 		}
+
 		int currentLine = 0;
+
 		if (linesBeforeCursor.size() > 0) {
 			currentLine = linesBeforeCursor.size() - 1;
 		}
@@ -335,12 +366,14 @@ public class AddTask extends SherlockActivity {
 	private void replaceTextAtSelection(CharSequence title) {
 		int start = textInputField.getSelectionStart();
 		int end = textInputField.getSelectionEnd();
+
 		if (start == end && start != 0) {
 			// no selection prefix with space if needed
 			if (!(textInputField.getText().charAt(start - 1) == ' ')) {
 				title = " " + title;
 			}
 		}
+
 		textInputField.getText().replace(Math.min(start, end),
 				Math.max(start, end), title, 0, title.length());
 	}
@@ -357,6 +390,7 @@ public class AddTask extends SherlockActivity {
 				try {
 					Task task = (Task) params[0];
 					String input = (String) params[1];
+
 					if (task != null) {
 						input = input.replaceAll("\\r\\n|\\r|\\n", " ");
 						task.update(input);
@@ -369,9 +403,11 @@ public class AddTask extends SherlockActivity {
 
 					// make widgets update
 					m_app.broadcastWidgetUpdate();
+
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, "input: " + input + " - " + e.getMessage());
+
 					return false;
 				}
 			}
@@ -389,6 +425,7 @@ public class AddTask extends SherlockActivity {
 							: getString(R.string.add_task_failed);
 					Util.showToastLong(AddTask.this, res);
 				}
+
 				m_ProgressDialog.dismiss();
 			}
 		}.execute(m_backup, input);
@@ -412,6 +449,7 @@ public class AddTask extends SherlockActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+
 		if (m_ProgressDialog != null) {
 			m_ProgressDialog.dismiss();
 		}
@@ -435,36 +473,43 @@ public class AddTask extends SherlockActivity {
 		ArrayList<String> contexts = taskBag.getContexts(false);
 		contexts.addAll(temp.getContexts());
 		Collections.sort(contexts);
+
 		for (String item : contexts) {
 			labels.add("@" + item);
 		}
+
 		ArrayList<String> projects = taskBag.getProjects(false);
 		projects.addAll(temp.getProjects());
 		Collections.sort(projects);
+
 		for (String item : projects) {
 			labels.add("+" + item);
 		}
+
 		// Pass through a LinkedHashSet to remove duplicates without
 		// messing up sort order
 		return new ArrayList<String>(new LinkedHashSet<String>(labels));
 	}
-	
+
 	/**
 	 * Returns true if the left drawer is shown.
 	 */
 	private boolean hasDrawer() {
-		return findViewById(R.id.left_drawer)!=null;		
+		return findViewById(R.id.left_drawer) != null;
 	}
+
 	private class DrawerItemClickListener implements
-	        AdapterView.OnItemClickListener {
-	    @Override
-	    public void onItemClick(AdapterView<?> parent, View view, int position,
-	             long id) {
-	        TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
-	        String itemTitle = tv.getText().toString();
-	        Log.v(TAG, "Clicked on drawer " + itemTitle);
-	        replaceTextAtSelection(itemTitle);
-	        mDrawerList.clearChoices();
-	    }
+			AdapterView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
+			String itemTitle = tv.getText().toString();
+
+			Log.v(TAG, "Clicked on drawer " + itemTitle);
+
+			replaceTextAtSelection(itemTitle);
+			mDrawerList.clearChoices();
+		}
 	}
 }

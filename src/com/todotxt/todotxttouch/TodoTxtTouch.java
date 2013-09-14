@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch;
 
 import java.io.Serializable;
@@ -183,11 +184,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						ConnectivityManager.CONNECTIVITY_ACTION)) {
 					handleConnectivityChange(context);
 				}
+
 				// Taskbag might have changed, update drawer adapter
 				// to reflect new/removed contexts and projects
 				updateNavigationDrawer();
 			}
 		};
+
 		registerReceiver(m_broadcastReceiver, intentFilter);
 
 		setListAdapter(this.m_adapter);
@@ -231,6 +234,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 						// Reinsert item to list
 						ArrayList<Task> tasks = new ArrayList<Task>();
 						tasks.add(task);
+
 						if (wasComplete) {
 							completeTasks(tasks, false);
 						} else {
@@ -242,7 +246,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					public String getTitle() {
 						return popupTitle;
 					}
-
 				};
 			}
 		};
@@ -269,6 +272,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				// to prevent interference with the DrawerLayout
 				ViewConfiguration vc = ViewConfiguration.get(view.getContext());
 				int deadZoneX = vc.getScaledTouchSlop();
+
 				if (motionEvent.getX() < deadZoneX) {
 					return false;
 				}
@@ -280,9 +284,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				if (!mListScrolling && m_swipeList.onTouch(view, motionEvent)) {
 					return false;
 				}
+
 				return false;
 			}
 		});
+
 		// We must set the scrollListener after the onTouchListener,
 		// otherwise it will not fire
 		lv.setOnScrollListener(this);
@@ -291,34 +297,37 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		// Show search results
 		Intent intent = getIntent();
+
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			m_app.m_search = intent.getStringExtra(SearchManager.QUERY);
 			Log.v(TAG, "Searched for " + m_app.m_search);
 			m_app.storeFilters();
 			setFilteredTasks(false);
 		}
-
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// Store the scrolling state of the listview
 		Log.v(TAG, "Scrolling state: " + scrollState);
+
 		switch (scrollState) {
 		case OnScrollListener.SCROLL_STATE_IDLE:
 			mListScrolling = false;
+
 			break;
 		case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
 			// List is scrolling under the direct touch of the user
 			mListScrolling = true;
+
 			break;
 		case OnScrollListener.SCROLL_STATE_FLING:
 			// The user did a 'fling' on the list and it's still
 			// scrolling
 			mListScrolling = true;
+
 			break;
 		}
-
 	}
 
 	@Override
@@ -331,6 +340,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	private void updateNavigationDrawer() {
 		m_lists = contextsAndProjects();
+
 		if (m_lists.size() == 0) {
 			if (m_drawerLayout != null) {
 				// No contexts or projects, disable navigation drawer
@@ -339,13 +349,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			} else {
 				m_drawerList.setVisibility(View.GONE);
 			}
+
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 			getSupportActionBar().setHomeButtonEnabled(false);
 		} else {
 			if (m_drawerLayout != null) {
 				m_drawerLayout.setDrawerLockMode(
 						DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
-				m_drawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+				m_drawerToggle = new ActionBarDrawerToggle(this, /*
+																 * host Activity
+																 */
 				m_drawerLayout, /* DrawerLayout object */
 				R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
 				R.string.quickfilter, /* "open drawer" description */
@@ -367,6 +380,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			} else {
 				m_drawerList.setVisibility(View.VISIBLE);
 			}
+
 			m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			m_drawerList.setAdapter(new ArrayAdapter<String>(this,
 					R.layout.drawer_list_item, R.id.left_drawer_text, m_lists));
@@ -382,6 +396,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		if (force || firstrun) {
 			Log.i(TAG, "Initializing app");
+
 			m_app.m_prefs.clearState();
 			taskBag.clear();
 			syncClient(true);
@@ -390,6 +405,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			if (!m_app.m_prefs.isManualModeEnabled()) {
 				syncClient(false);
 			}
+
 			taskBag.reload();
 		}
 	}
@@ -404,8 +420,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			menu.findItem(R.id.sort).setVisible(!drawerOpen);
 			menu.findItem(R.id.share).setVisible(!drawerOpen);
 		}
+
 		menu.findItem(R.id.archive).setVisible(
 				!m_app.m_prefs.isAutoArchiveEnabled());
+
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -438,6 +456,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Select the specified item if one was passed in to this activity
 		// e.g. from the widget
 		Intent intent = this.getIntent();
+
 		if (intent.hasExtra(Constants.EXTRA_TASK)) {
 			int position = getPositionFromId(intent.getLongExtra(
 					Constants.EXTRA_TASK, 0));
@@ -453,12 +472,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		Log.v(TAG, "onSharedPreferenceChanged key=" + key);
-		if (m_app.m_prefs.todo_path_key().equals(key)) {
+
+		if (m_app.m_prefs.getTodoPathKey().equals(key)) {
 			// file location changed. delete old file, then force a pull
 			initializeTasks(true);
-		} else if (m_app.m_prefs.periodic_sync_pref_key().equals(key)) {
+		} else if (m_app.m_prefs.getPeriodicSyncPrefKey().equals(key)) {
 			// auto sync enabled. set up alarm and force a sync now
 			PeriodicSyncStarter.setupPeriodicSyncer(this);
+
 			if (!m_app.m_prefs.isManualModeEnabled()) {
 				syncClient(false);
 			}
@@ -482,9 +503,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		super.onRestoreInstanceState(state);
 		mScrollPosition = state.getInt("ScrollPosition", -1);
 		mScrollTop = state.getInt("ScrollTop", -1);
-		
+
 		m_DialogActive = state.getBoolean("DialogActive");
 		m_DialogText = state.getString("DialogText");
+
 		if (m_DialogActive) {
 			showProgressDialog(m_DialogText);
 		}
@@ -495,12 +517,14 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		this.options_menu = menu;
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+
 		if (m_drawerToggle != null) {
 			m_drawerToggle.onConfigurationChanged(newConfig);
 		}
@@ -516,6 +540,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				m_drawerLayout.openDrawer(m_drawerList);
 			}
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -525,8 +550,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			return super.dispatchTouchEvent(ev);
 		} catch (java.lang.ArrayIndexOutOfBoundsException e) {
 			Log.e(TAG, "Caught exception in dispatchTouchEvent", e);
-
 		}
+
 		return true;
 	}
 
@@ -536,14 +561,17 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		mScrollTop = lv.getFirstVisiblePosition();
 		View v = lv.getChildAt(0);
 		mScrollTop = (v == null) ? 0 : v.getTop();
+
 		Log.v(TAG, "ListView index " + mScrollPosition + " top " + mScrollTop);
 	}
 
 	private String selectedTasksAsString(List<Task> tasks) {
 		String text = "";
+
 		for (Task t : tasks) {
 			text += t.inFileFormat() + "\n";
 		}
+
 		return text;
 	}
 
@@ -564,6 +592,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		Intent intent;
 		String calendarTitle = getString(R.string.calendar_title);
 		String calendarDescription = "";
+
 		if (checkedTasks.size() == 1) {
 			// Set the task as title
 			calendarTitle = checkedTasks.get(0).getText();
@@ -572,6 +601,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			calendarDescription = selectedTasksAsString(checkedTasks);
 
 		}
+
 		intent = new Intent(android.content.Intent.ACTION_EDIT)
 				.setType(Constants.ANDROID_EVENT)
 				.putExtra(Events.TITLE, calendarTitle)
@@ -600,15 +630,19 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							ArrayList<Task> tasks = (ArrayList<Task>) params[0];
 							String[] prioArr = (String[]) params[1];
 							int which = (Integer) params[2];
+
 							for (Task task : tasks) {
 								task.setPriority(Priority
 										.toPriority(prioArr[which]));
 								taskBag.update(task);
 							}
+
 							m_app.broadcastWidgetUpdate();
+
 							return true;
 						} catch (Exception e) {
 							Log.e(TAG, e.getMessage(), e);
+
 							return false;
 						}
 					}
@@ -616,6 +650,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
+
 						if (result) {
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_TO_REMOTE));
@@ -627,6 +662,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}.execute(tasks, prioArr, which);
 			}
 		});
+
 		builder.show();
 	}
 
@@ -650,6 +686,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							for (Task task : tasks) {
 								task.markIncomplete();
 								task.setPriority(task.getOriginalPriority());
+
 								try {
 									taskBag.update(task);
 								} catch (TaskPersistException tpe) {
@@ -663,9 +700,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 									}
 								}
 							}
+
 							return true;
 						} catch (Exception e) {
 							Log.e(TAG, e.getMessage(), e);
+
 							return false;
 						}
 					}
@@ -673,6 +712,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
+
 						if (result) {
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_TO_REMOTE));
@@ -684,6 +724,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}.execute(tasks);
 			}
 		};
+
 		if (showConfirm) {
 			Util.showConfirmationDialog(this, R.string.areyousure, listener,
 					R.string.unComplete);
@@ -707,23 +748,29 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				try {
 					@SuppressWarnings("unchecked")
 					ArrayList<Task> tasks = (ArrayList<Task>) params[0];
+
 					for (Task task : tasks) {
 						task.markComplete(new Date());
 						taskBag.update(task);
 					}
+
 					if (m_app.m_prefs.isAutoArchiveEnabled()) {
 						taskBag.archive();
 					}
+
 					m_app.broadcastWidgetUpdate();
+
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, e.getMessage(), e);
+
 					return false;
 				}
 			}
 
 			protected void onPostExecute(Boolean result) {
 				TodoTxtTouch.currentActivityPointer.dismissProgressDialog(true);
+
 				if (result) {
 					sendBroadcast(new Intent(
 							Constants.INTENT_START_SYNC_TO_REMOTE));
@@ -745,9 +792,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
 				new AsyncTask<Object, Void, Boolean>() {
-
 					protected void onPreExecute() {
 						m_ProgressDialog = showProgressDialog(getString(R.string.progress_delete));
 					}
@@ -759,10 +804,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							for (Task task : (ArrayList<Task>) params[0]) {
 								taskBag.delete(task);
 							}
+
 							m_app.broadcastWidgetUpdate();
+
 							return true;
 						} catch (Exception e) {
 							Log.e(TAG, e.getMessage(), e);
+
 							return false;
 						}
 					}
@@ -770,6 +818,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					protected void onPostExecute(Boolean result) {
 						TodoTxtTouch.currentActivityPointer
 								.dismissProgressDialog(true);
+
 						if (result) {
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_TO_REMOTE));
@@ -781,12 +830,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}.execute(tasks);
 			}
 		};
+
 		Util.showDeleteConfirmationDialog(this, listener);
 	}
 
 	private void archiveTasks() {
 		new AsyncTask<Void, Void, Boolean>() {
-
 			protected void onPreExecute() {
 				m_ProgressDialog = showProgressDialog(getString(R.string.progress_archive));
 			}
@@ -795,15 +844,18 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			protected Boolean doInBackground(Void... params) {
 				try {
 					taskBag.archive();
+
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, e.getMessage(), e);
+
 					return false;
 				}
 			}
 
 			protected void onPostExecute(Boolean result) {
 				TodoTxtTouch.currentActivityPointer.dismissProgressDialog(true);
+
 				if (result) {
 					Util.showToastLong(TodoTxtTouch.this,
 							getString(R.string.confirm_archive));
@@ -821,36 +873,47 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
+
 		m_swipeList.discardUndo();
+
 		switch (item.getItemId()) {
 		case R.id.add_new:
 			startAddTaskActivity();
+
 			break;
 		case R.id.search:
 			onSearchRequested();
+
 			break;
 		case R.id.preferences:
 			startPreferencesActivity();
+
 			break;
 		// case R.id.filter:
 		// startFilterActivity();
 		// break;
 		case R.id.sync:
 			Log.v(TAG, "onMenuItemSelected: sync");
+
 			syncClient(false);
+
 			break;
 		case R.id.sort:
 			startSortDialog();
+
 			break;
 		case R.id.share:
 			shareTasks(m_adapter.getItems());
+
 			break;
 		case R.id.archive:
 			showDialog(ARCHIVE_DIALOG);
+
 			break;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}
+
 		return true;
 	}
 
@@ -863,15 +926,18 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		final ArrayList<String> filterItems = new ArrayList<String>();
 		ArrayList<String> contexts = taskBag.getContexts(false);
 		Collections.sort(contexts);
+
 		for (String item : contexts) {
 			filterItems.add("@" + item);
 		}
 
 		ArrayList<String> projects = taskBag.getProjects(false);
 		Collections.sort(projects);
+
 		for (String item : projects) {
 			filterItems.add("+" + item);
 		}
+
 		return filterItems;
 	}
 
@@ -883,6 +949,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						Log.v(TAG, "onClick " + which);
+
 						m_app.sort = Sort.getById(which);
 						m_app.storeSort();
 						dialog.dismiss();
@@ -905,9 +972,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			// Using the wasOffline flag to limit the frequency of syncs.
 			if (!m_app.m_prefs.isManualModeEnabled() && wasOffline) {
 				Log.d(TAG, "Got connectivity notification. Syncing now...");
+
 				sendBroadcast(new Intent(
 						Constants.INTENT_START_SYNC_WITH_REMOTE));
 			}
+
 			wasOffline = false;
 		} else {
 			wasOffline = true;
@@ -925,7 +994,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	/**
 	 * Sync with remote client.
-	 * 
 	 * <ul>
 	 * <li>Will Pull in auto mode.
 	 * <li>Will ask "push or pull" in manual mode.
@@ -936,20 +1004,23 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	 */
 	@SuppressWarnings("deprecation")
 	private void syncClient(boolean force) {
-
 		m_pullToRefreshAttacher.setRefreshing(true);
 
 		if (!force && m_app.m_prefs.isManualModeEnabled()) {
 			Log.v(TAG,
 					"Manual mode, choice forced; prompt user to ask which way to sync");
+
 			showDialog(SYNC_CHOICE_DIALOG);
 		} else {
 			Log.i(TAG, "auto sync mode; should automatically sync; force = "
 					+ force);
+
 			Intent i = new Intent(Constants.INTENT_START_SYNC_WITH_REMOTE);
+
 			if (force) {
 				i.putExtra(Constants.EXTRA_FORCE_SYNC, true);
 			}
+
 			sendBroadcast(i);
 		}
 	}
@@ -957,7 +1028,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+
 		Log.v(TAG, "onActivityResult: resultCode=" + resultCode + " i=" + data);
+
 		if (requestCode == REQUEST_FILTER) {
 			if (resultCode == Activity.RESULT_OK) {
 				m_app.m_prios = Priority.toPriority(data
@@ -983,6 +1056,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			m_ProgressDialog.dismiss();
 			m_DialogActive = false;
 		}
+
 		if (reload) {
 			setFilteredTasks(reload);
 		}
@@ -994,6 +1068,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 		m_DialogText = message;
 		m_DialogActive = true;
+
 		return (m_ProgressDialog = ProgressDialog.show(TodoTxtTouch.this,
 				message, getString(R.string.wait_progress), true));
 	}
@@ -1004,9 +1079,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		if (id == SYNC_CHOICE_DIALOG) {
 			Log.v(TAG, "Time to show the sync choice dialog");
+
 			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
 			upDownChoice.setTitle(R.string.sync_dialog_title);
 			upDownChoice.setMessage(R.string.sync_dialog_msg);
+
 			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
@@ -1017,6 +1094,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							showToast(getString(R.string.sync_upload_message));
 						}
 					});
+
 			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
@@ -1027,8 +1105,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							showToast(getString(R.string.sync_download_message));
 						}
 					});
-			upDownChoice.setOnCancelListener(new OnCancelListener() {
 
+			upDownChoice.setOnCancelListener(new OnCancelListener() {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
@@ -1037,16 +1115,20 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					removeDialog(id);
 				}
 			});
+
 			return upDownChoice.create();
 		} else if (id == SYNC_CONFLICT_DIALOG) {
 			Log.v(TAG, "Time to show the sync conflict dialog");
+
 			AlertDialog.Builder upDownChoice = new AlertDialog.Builder(this);
 			upDownChoice.setTitle(R.string.sync_conflict_dialog_title);
 			upDownChoice.setMessage(R.string.sync_conflict_dialog_msg);
+
 			upDownChoice.setPositiveButton(R.string.sync_dialog_upload,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							Log.v(TAG, "User selected PUSH");
+
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_TO_REMOTE)
 									.putExtra(Constants.EXTRA_OVERWRITE, true)
@@ -1055,10 +1137,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							showToast(getString(R.string.sync_upload_message));
 						}
 					});
+
 			upDownChoice.setNegativeButton(R.string.sync_dialog_download,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							Log.v(TAG, "User selected PULL");
+
 							sendBroadcast(new Intent(
 									Constants.INTENT_START_SYNC_FROM_REMOTE)
 									.putExtra(Constants.EXTRA_FORCE_SYNC, true));
@@ -1066,8 +1150,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							showToast(getString(R.string.sync_download_message));
 						}
 					});
-			upDownChoice.setOnCancelListener(new OnCancelListener() {
 
+			upDownChoice.setOnCancelListener(new OnCancelListener() {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
@@ -1075,11 +1159,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					removeDialog(id);
 				}
 			});
+
 			return upDownChoice.create();
 		} else if (id == ARCHIVE_DIALOG) {
 			AlertDialog.Builder archiveAlert = new AlertDialog.Builder(this);
 			archiveAlert.setTitle(R.string.archive_now_title);
 			archiveAlert.setMessage(R.string.archive_now_explainer);
+
 			archiveAlert.setPositiveButton(R.string.archive_now_title,
 					new DialogInterface.OnClickListener() {
 						@Override
@@ -1093,6 +1179,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							sendBroadcast(broadcastArchiveIntent);
 						}
 					});
+
 			archiveAlert.setNegativeButton(R.string.cancel,
 					new DialogInterface.OnClickListener() {
 						@SuppressWarnings("deprecation")
@@ -1100,14 +1187,15 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							removeDialog(id);
 						}
 					});
-			archiveAlert.setOnCancelListener(new OnCancelListener() {
 
+			archiveAlert.setOnCancelListener(new OnCancelListener() {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
 					removeDialog(id);
 				}
 			});
+
 			return archiveAlert.create();
 		} else {
 			return null;
@@ -1128,6 +1216,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	/** Handle "refresh/download" action. */
 	public void onSyncClick(View v) {
 		Log.v(TAG, "titlebar: sync");
+
 		syncClient(false);
 	}
 
@@ -1137,6 +1226,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		// End current activity if it's search results
 		Intent intent = getIntent();
+
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			finish();
 		} else { // otherwise just clear the filter in the current activity
@@ -1147,10 +1237,12 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private int getPositionFromId(long id) {
 		for (int position = 0; position < m_adapter.getCount(); position++) {
 			Task task = m_adapter.getItem(position);
+
 			if (task.getId() == id) {
 				return position;
 			}
 		}
+
 		return 0;
 	}
 
@@ -1158,11 +1250,13 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		ArrayList<Task> result = new ArrayList<Task>();
 		SparseBooleanArray checkedItems = getListView()
 				.getCheckedItemPositions();
+
 		for (int i = 0; i < checkedItems.size(); i++) {
 			if (checkedItems.valueAt(i)) {
 				result.add(m_adapter.getItem(checkedItems.keyAt(i)));
 			}
 		}
+
 		return result;
 	}
 
@@ -1173,19 +1267,22 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	void showContextActionBarIfNeeded() {
 		ArrayList<Task> checkedTasks = getCheckedTasks();
 		int checkedCount = checkedTasks.size();
+
 		if (inActionMode() && checkedCount == 0) {
 			mMode.finish();
+
 			return;
 		} else if (checkedCount == 0) {
 			return;
 		}
+
 		if (mMode == null) {
 			m_swipeList.setEnabled(false);
 			mMode = startActionMode(new Callback() {
-
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 					getSupportMenuInflater().inflate(R.menu.main_long, menu);
+
 					return true;
 				}
 
@@ -1200,6 +1297,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					ArrayList<Task> checkedTasks = getCheckedTasks();
 					int menuid = item.getItemId();
 					Intent intent;
+
 					switch (menuid) {
 					case R.id.update:
 						if (checkedTasks.size() == 1) {
@@ -1208,50 +1306,65 @@ public class TodoTxtTouch extends SherlockListActivity implements
 							Log.w(TAG,
 									"More than one task was selected while handling update menu");
 						}
+
 						break;
 					case R.id.done:
 						completeTasks(checkedTasks, true);
+
 						break;
 					case R.id.priority:
 						prioritizeTasks(checkedTasks);
+
 						break;
 					case R.id.share:
 						shareTasks(checkedTasks);
+
 						break;
 					case R.id.calendar:
 						addToCalendar(checkedTasks);
+
 						break;
 					case R.id.uncomplete:
 						undoCompleteTasks(checkedTasks, true);
+
 						break;
 					case R.id.delete:
 						deleteTasks(checkedTasks);
+
 						break;
 					case R.id.url:
 						Log.v(TAG, "url: " + item.getTitle().toString());
+
 						intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item
 								.getTitle().toString()));
 						startActivity(intent);
+
 						break;
 					case R.id.mail:
 						Log.v(TAG, "mail: " + item.getTitle().toString());
+
 						intent = new Intent(Intent.ACTION_SEND, Uri.parse(item
 								.getTitle().toString()));
 						intent.putExtra(android.content.Intent.EXTRA_EMAIL,
 								new String[] { item.getTitle().toString() });
 						intent.setType("text/plain");
 						startActivity(intent);
+
 						break;
 					case R.id.phone_number:
 						Log.v(TAG, "phone_number");
+
 						intent = new Intent(Intent.ACTION_DIAL,
 								Uri.parse("tel:" + item.getTitle().toString()));
 						startActivity(intent);
+
 						break;
 					default:
 						Log.w(TAG, "unrecognized menuItem: " + menuid);
 					}
+
 					mMode.finish();
+
 					return true;
 				}
 
@@ -1262,7 +1375,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					m_swipeList.setEnabled(true);
 					mMode = null;
 				}
-
 			});
 		}
 		mMode.setTitle(checkedCount + " " + getString(R.string.selected));
@@ -1275,6 +1387,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		if (checkedCount == 1) {
 			updateAction.setVisible(true);
 			Task task = checkedTasks.get(0);
+
 			if (task.isCompleted()) {
 				completeAction.setVisible(false);
 			} else {
@@ -1285,9 +1398,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				menu.add(Menu.CATEGORY_SECONDARY, R.id.url, Menu.NONE,
 						url.toString());
 			}
+
 			for (String s1 : task.getMailAddresses()) {
 				menu.add(Menu.CATEGORY_SECONDARY, R.id.mail, Menu.NONE, s1);
 			}
+
 			for (String s : task.getPhoneNumbers()) {
 				menu.add(Menu.CATEGORY_SECONDARY, R.id.phone_number, Menu.NONE,
 						s);
@@ -1298,7 +1413,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			uncompleteAction.setVisible(true);
 			menu.removeGroup(Menu.CATEGORY_SECONDARY);
 		}
-
 	}
 
 	void clearFilter() {
@@ -1306,6 +1420,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		if (inActionMode()) {
 			mMode.finish();
 		}
+
 		m_app.m_prios = new ArrayList<Priority>(); // Collections.emptyList();
 		m_app.m_contexts = new ArrayList<String>(); // Collections.emptyList();
 		m_app.m_projects = new ArrayList<String>(); // Collections.emptyList();
@@ -1337,7 +1452,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 		ListView lv = getListView();
 		lv.setSelectionFromTop(mScrollPosition, mScrollTop);
-		
+
 		final TextView filterText = (TextView) findViewById(R.id.filter_text);
 		final LinearLayout actionbar = (LinearLayout) findViewById(R.id.actionbar);
 		final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
@@ -1347,20 +1462,21 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				String filterTitle = getString(R.string.title_filter_applied)
 						+ " ";
 				int count = m_app.m_filters.size();
+
 				for (int i = 0; i < count; i++) {
 					filterTitle += m_app.m_filters.get(i) + " ";
 				}
+
 				if (!Strings.isEmptyOrNull(m_app.m_search)) {
 					filterTitle += getString(R.string.filter_tab_search);
 				}
+
 				actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
 
 				actionbar.setVisibility(View.VISIBLE);
 				filterText.setText(filterTitle);
-
 			} else if (!Strings.isEmptyOrNull(m_app.m_search)) {
 				if (filterText != null) {
-
 					actionbar_icon
 							.setImageResource(R.drawable.ic_actionbar_search);
 					filterText.setText(getString(R.string.title_search_results)
@@ -1385,7 +1501,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	}
 
 	private void updateSyncUI(boolean redrawList) {
-
 		if (redrawList) {
 			m_pullToRefreshAttacher.setRefreshComplete();
 			// hide action bar
@@ -1448,6 +1563,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final ViewHolder holder;
+
 			if (convertView == null) {
 				convertView = m_inflater.inflate(R.layout.list_item, null);
 				holder = new ViewHolder();
@@ -1464,6 +1580,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			}
 
 			Task task = m_adapter.getItem(position);// taskBag.getTasks().get(position);
+
 			if (task != null) {
 				holder.taskprio.setText(task.getPriority().inListFormat());
 				SpannableString ss = new SpannableString(task.inScreenFormat());
@@ -1477,19 +1594,24 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				switch (task.getPriority()) {
 				case A:
 					holder.taskprio.setTextColor(res.getColor(R.color.green));
+
 					break;
 				case B:
 					holder.taskprio.setTextColor(res.getColor(R.color.blue));
+
 					break;
 				case C:
 					holder.taskprio.setTextColor(res.getColor(R.color.orange));
+
 					break;
 				case D:
 					holder.taskprio.setTextColor(res.getColor(R.color.gold));
+
 					break;
 				default:
 					holder.taskprio.setTextColor(res.getColor(R.color.black));
 				}
+
 				if (task.isCompleted()) {
 					// Log.v(TAG, "Striking through " + task.getText());
 					holder.tasktext.setPaintFlags(holder.tasktext
@@ -1500,6 +1622,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				}
 
 				holder.taskage.setVisibility(View.GONE);
+
 				if (m_app.m_prefs.isPrependDateEnabled()) {
 					if (!task.isCompleted()
 							&& !Strings.isEmptyOrNull(task.getRelativeAge())) {
@@ -1508,15 +1631,18 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					}
 				}
 			}
+
 			return convertView;
 		}
 
 		public List<Task> getItems() {
 			// Make a copy to prevent accidental modification of the adapter.
 			ArrayList<Task> tasks = new ArrayList<Task>();
+
 			for (int position = 0; position < this.getCount(); position++) {
 				tasks.add(this.getItem(position));
 			}
+
 			return tasks;
 		}
 
@@ -1564,7 +1690,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				long id) {
 			TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
 			String itemTitle = tv.getText().toString();
+
 			Log.v(TAG, "Clicked on drawer " + itemTitle);
+
 			if (itemTitle.substring(0, 1).equals("@")
 					&& !m_app.m_contexts.remove(itemTitle.substring(1))) {
 				m_app.m_contexts = new ArrayList<String>();
@@ -1577,9 +1705,11 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 			setDrawerChoices();
 			m_app.storeFilters();
+
 			if (m_drawerLayout != null) {
 				m_drawerLayout.closeDrawer(m_drawerList);
 			}
+
 			setFilteredTasks(false);
 		}
 	}
@@ -1592,6 +1722,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		for (int i = 0; i < m_lists.size(); i++) {
 			char sigil = m_lists.get(i).charAt(0);
 			String item = m_lists.get(i).substring(1);
+
 			if (sigil == '@' && m_app.m_contexts.contains(item)) {
 				m_drawerList.setItemChecked(i, true);
 				haveContexts = true;
@@ -1622,6 +1753,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 
 		ArrayAdapter<?> adapter = (ArrayAdapter<?>) m_drawerList.getAdapter();
+
 		if (adapter != null) {
 			adapter.notifyDataSetChanged();
 		}

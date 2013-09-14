@@ -20,6 +20,7 @@
  * @license http://www.gnu.org/licenses/gpl.html
  * @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
  */
+
 package com.todotxt.todotxttouch.task;
 
 /**
@@ -36,6 +37,7 @@ class ByTextFilter implements Filter<Task> {
 		if (text == null) {
 			text = "";
 		}
+
 		this.text = caseSensitive ? text : text.toUpperCase();
 		this.caseSensitive = caseSensitive;
 
@@ -51,7 +53,7 @@ class ByTextFilter implements Filter<Task> {
 			String part = this.parts[i];
 
 			if ((part.length() > 0) && !taskText.contains(part))
-				return (false);
+				return false;
 		}
 
 		return true;
