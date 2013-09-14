@@ -1,5 +1,5 @@
 /**
- * This file is part of Todo.txt Touch, an Android app for managing your todo.txt file (http://todotxt.com).
+ * This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
  * 
  * Thanks to: http://kurtischiappone.com/programming/java/relative-date
  */

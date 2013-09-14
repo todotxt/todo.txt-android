@@ -53,7 +53,7 @@ def update_source(filename, shortfn, copyright):
   utfstr = chr(0xef)+chr(0xbb)+chr(0xbf)
   fdata = file(filename,"r+").read()
   # arghh
-  has_cp = (fdata.find("LICENSE") > 0) and (fdata.find("This file is part of Todo.txt Touch") > 0)
+  has_cp = (fdata.find("LICENSE") > 0) and (fdata.find("This file is part of Todo.txt") > 0)
   # print "has_cp: %s" % has_cp
   if not has_cp:
     made_mods = True
@@ -61,7 +61,7 @@ def update_source(filename, shortfn, copyright):
       print >> sys.stderr, "updating "+filename
     isUTF = False
     nl = get_copyright_namelist(filename, False)
-    filename_str = filename.replace(TODOTXTOUCH_HOME, "Todo.txt Touch")
+    filename_str = filename.replace(TODOTXTOUCH_HOME, "Todo.txt")
     copyright_str = "" + filename_str + "\n\nCopyright (c) 2009-2013 " + nl +"\n"
 
     javaHeader = ""
