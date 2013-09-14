@@ -27,8 +27,13 @@ You should have received a copy of the GNU General Public License along with Tod
 	<style name="Theme.TodoTxt" parent="Theme.Sherlock.Light.DarkActionBar">
     	<item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>
     	<item name="actionBarStyle">@style/MyActionBar</item>
+    	<item name="android:actionOverflowButtonStyle" tools:ignore="NewApi">@style/OverFlow</item>
+    	<item name="actionOverflowButtonStyle">@style/OverFlow</item>
 	</style>
-	
+
+	<style name="OverFlow" parent="Widget.Sherlock.ActionButton.Overflow">
+	    <item name="android:src">@drawable/ic_action_overflow</item>
+	</style>
 
 	<style name="MyActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
     	<item name="android:background">#006400</item>
@@ -171,9 +176,18 @@ You should have received a copy of the GNU General Public License along with Tod
 	</style>
 
 	<style name="HorizontalRule">
-		<item name="android:layout_height">1px</item>
+		<item name="android:layout_height">1dp</item>
 		<item name="android:layout_width">fill_parent</item>
 		<item name="android:background">@drawable/horizontal_rule</item>
 	</style>
+	
+	
+	<style name="VerticalRule">
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:layout_width">1dp</item>
+		<item name="android:background">#FFCCCCCC</item>
+	</style>
+	
+	<style name="BorderlessButton" parent="Widget.Sherlock.ActionButton" />
 	
 </resources>
