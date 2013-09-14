@@ -889,9 +889,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			startPreferencesActivity();
 
 			break;
-		// case R.id.filter:
-		// startFilterActivity();
-		// break;
 		case R.id.sync:
 			Log.v(TAG, "onMenuItemSelected: sync");
 
@@ -1660,27 +1657,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	public void showToast(int resid) {
 		Util.showToastLong(this, resid);
-	}
-
-	public void startFilterActivity() {
-		Intent i = new Intent(this, FilterActivity.class);
-
-		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES,
-				Priority.inCode(taskBag.getPriorities()));
-		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS,
-				taskBag.getProjects(true));
-		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS,
-				taskBag.getContexts(true));
-
-		i.putStringArrayListExtra(Constants.EXTRA_PRIORITIES_SELECTED,
-				Priority.inCode(m_app.m_prios));
-		i.putStringArrayListExtra(Constants.EXTRA_PROJECTS_SELECTED,
-				m_app.m_projects);
-		i.putStringArrayListExtra(Constants.EXTRA_CONTEXTS_SELECTED,
-				m_app.m_contexts);
-		i.putExtra(Constants.EXTRA_SEARCH, m_app.m_search);
-
-		startActivityIfNeeded(i, REQUEST_FILTER);
 	}
 
 	private class DrawerItemClickListener implements
