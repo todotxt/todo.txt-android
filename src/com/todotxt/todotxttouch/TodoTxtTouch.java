@@ -33,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher.DefaultHeaderTransformer;
+import uk.co.senab.actionbarpulltorefresh.library.DefaultHeaderTransformer;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
