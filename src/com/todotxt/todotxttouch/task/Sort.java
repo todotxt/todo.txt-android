@@ -27,8 +27,6 @@ package com.todotxt.todotxttouch.task;
 
 import java.util.Comparator;
 
-import com.todotxt.todotxttouch.util.Strings;
-
 public enum Sort {
     /**
      * Priority descending sort should result in Tasks in the following order
@@ -39,51 +37,21 @@ public enum Sort {
      * If tasks are of the same priority level, they are sorted by task id
      * ascending
      * </p>
-     * <p>
-     * Note: this comparator imposes orderings that are inconsistent with
-     * equals.
-     * </p>
      */
     PRIORITY_DESC(0, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
-            if (t1 == null || t2 == null) {
+            if ((t1 == null) || (t2 == null)) {
                 throw new NullPointerException("Null task passed into comparator");
             }
 
-            if (t1.isCompleted() && t2.isCompleted()) {
-                return Sort.ID_ASC.getComparator().compare(t1, t2);
+            int result = t1.getSortPriority().compareTo(t2.getSortPriority());
+
+            if (result != 0) {
+                return result;
             }
 
-            if (t1.isCompleted() || t2.isCompleted()) {
-                if (t1.isCompleted()) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            }
-
-            if (t1.getPriority() == Priority.NONE
-                    && t2.getPriority() == Priority.NONE) {
-                return Sort.ID_ASC.getComparator().compare(t1, t2);
-            }
-
-            if (t1.getPriority() == Priority.NONE
-                    || t2.getPriority() == Priority.NONE) {
-                if (t1.getPriority() == Priority.NONE) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            }
-
-            int result = t1.getPriority().compareTo(t2.getPriority());
-
-            if (result == 0) {
-                result = Sort.ID_ASC.getComparator().compare(t1, t2);
-            }
-
-            return result;
+            return Sort.ID_ASC.getComparator().compare(t1, t2);
         }
     }),
 
@@ -92,138 +60,118 @@ public enum Sort {
      * <p>
      * 1, 2, 3, 4, ..., n
      * </p>
-     * <p>
-     * Note: this comparator imposes orderings that are inconsistent with
-     * equals.
-     * </p>
      */
     ID_ASC(1, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
-            if (t1 == null || t2 == null) {
-                throw new NullPointerException(
-                        "Null task passed into comparator");
+            if ((t1 == null) || (t2 == null)) {
+                throw new NullPointerException("Null task passed into comparator");
             }
 
-            return Long.valueOf(t1.getId()).compareTo(t2.getId());
+            return ((Long) t1.getId()).compareTo((Long) t2.getId());
         }
     }),
 
     /**
-     * Id ascending sort should result in Tasks in the following order
+     * Id descending sort should result in Tasks in the following order
      * <p>
      * n, ..., 4, 3, 2, 1
-     * </p>
-     * <p>
-     * Note: this comparator imposes orderings that are inconsistent with
-     * equals.
      * </p>
      */
     ID_DESC(2, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
-            if (t1 == null || t2 == null) {
-                throw new NullPointerException(
-                        "Null task passed into comparator");
+            if ((t1 == null) || (t2 == null)) {
+                throw new NullPointerException("Null task passed into comparator");
             }
 
-            return Long.valueOf(t2.getId()).compareTo(t1.getId());
+            return ((Long) t2.getId()).compareTo((Long) t1.getId());
         }
     }),
 
     /**
      * Text ascending sort should result in Tasks sorting in the following order
      * <p>
-     * a, b, c, d, e, ..., z
+     * (incomplete) a, b, c, d, e, ..., z, (completed) a, b, c, d, e, ..., z
      * </p>
      * <p>
-     * If tasks are of the same priority level, they are sorted by task id
-     * ascending
-     * </p>
-     * <p>
-     * Note: this comparator imposes orderings that are inconsistent with
-     * equals.
+     * If tasks are of the same text (and completion) value, they are sorted by
+     * task id ascending
      * </p>
      */
     TEXT_ASC(3, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
-            if (t1 == null || t2 == null) {
-                throw new NullPointerException(
-                        "Null task passed into comparator");
+            if ((t1 == null) || (t2 == null)) {
+                throw new NullPointerException("Null task passed into comparator");
             }
 
-            int result = t1.getText().compareToIgnoreCase(t2.getText());
+            int result = ((Boolean) t1.isCompleted()).compareTo((Boolean) t2.isCompleted());
 
-            if (result == 0) {
-                result = Sort.ID_ASC.getComparator().compare(t1, t2);
+            if (result != 0) {
+                return result;
             }
 
-            return result;
+            result = t1.getText().compareToIgnoreCase(t2.getText());
+
+            if (result != 0) {
+                return result;
+            }
+
+            return result = Sort.ID_ASC.getComparator().compare(t1, t2);
         }
     }),
 
     /**
      * Date ascending sort should result in Tasks ordered by creation date,
      * earliest first. Tasks with no creation date will be sorted by line number
-     * in ascending order
+     * in ascending order after those with a date. Followed finally by completed
+     * tasks.
      * <p>
-     * Note: this comparator imposes orderings that are inconsistent with
-     * equals.
+     * If tasks are of the same date sort level, they are sorted by task id
+     * ascending
      * </p>
      */
     DATE_ASC(4, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
-            if (t1 == null || t2 == null) {
-                throw new NullPointerException(
-                        "Null task passed into comparator");
+            if ((t1 == null) || (t2 == null)) {
+                throw new NullPointerException("Null task passed into comparator");
             }
 
-            int result = 0;
+            int result = t1.getAscSortDate().compareTo(t2.getAscSortDate());
 
-            if (!Strings.isEmptyOrNull(t1.getPrependedDate())
-                    && !Strings.isEmptyOrNull(t2.getPrependedDate())) {
-                result = t1.getPrependedDate().compareTo(t2.getPrependedDate());
+            if (result != 0) {
+                return result;
             }
 
-            if (result == 0) {
-                result = Sort.ID_ASC.getComparator().compare(t1, t2);
-            }
-
-            return result;
+            return result = Sort.ID_ASC.getComparator().compare(t1, t2);
         }
     }),
 
     /**
      * Date descending sort should result in Tasks ordered by creation date,
      * most recent first. Tasks with no creation date will be sorted by line
-     * number in descending order
+     * number in descending order before all tasks with dates.
      * <p>
-     * Note: this comparator imposes orderings that are inconsistent with
-     * equals.
+     * If tasks are of the same date level, they are sorted by task id
+     * descending
      * </p>
      */
     DATE_DESC(5, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
-            if (t1 == null || t2 == null) {
-                throw new NullPointerException(
-                        "Null task passed into comparator");
+            if ((t1 == null) || (t2 == null)) {
+                throw new NullPointerException("Null task passed into comparator");
             }
 
-            int result = 0;
+            int result = t2.getDescSortDate().compareTo(t1.getDescSortDate());
 
-            if (!Strings.isEmptyOrNull(t1.getPrependedDate())
-                    && !Strings.isEmptyOrNull(t2.getPrependedDate())) {
-                result = t2.getPrependedDate().compareTo(t1.getPrependedDate());
+            if (result != 0) {
+                return result;
             }
 
-            if (result == 0) {
-                result = Sort.ID_DESC.getComparator().compare(t1, t2);
-            }
-
-            return result;
+            return result = Sort.ID_DESC.getComparator().compare(t1, t2);
         }
     });
 
@@ -259,5 +207,4 @@ public enum Sort {
 
         return Sort.PRIORITY_DESC;
     }
-
 }
