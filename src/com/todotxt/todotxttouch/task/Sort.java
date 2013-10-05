@@ -118,7 +118,7 @@ public enum Sort {
                 return result;
             }
 
-            return result = Sort.ID_ASC.getComparator().compare(t1, t2);
+            return Sort.ID_ASC.getComparator().compare(t1, t2);
         }
     }),
 
@@ -145,7 +145,7 @@ public enum Sort {
                 return result;
             }
 
-            return result = Sort.ID_ASC.getComparator().compare(t1, t2);
+            return Sort.ID_ASC.getComparator().compare(t1, t2);
         }
     }),
 
@@ -171,7 +171,7 @@ public enum Sort {
                 return result;
             }
 
-            return result = Sort.ID_DESC.getComparator().compare(t1, t2);
+            return Sort.ID_DESC.getComparator().compare(t1, t2);
         }
     });
 
