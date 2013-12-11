@@ -67,6 +67,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="tasktexthint2">Take the road less traveled @Woods\nMake all the difference +Life</string>
     <string name="tasktexthint3">Schedule chain mail fitting @castle\nSharpen sword +SelfPreservation</string>
     <string name="tasktexthint4">Complete weekly review +GTD\nAchieve mind like water +GTD</string>
+    <string name="tasktexthint5">Don't ignore your dreams +life\nDon't work too much @work\nSay what you think +life\nCultivate friendships @anywhere\nBe happy +life</string>
     <string name="add_task_help">Enter a project into your task using the format +YourProject or a context using @YourContext.\n\n<b>Projects</b> start with a + sign and contain no spaces, like +WebsiteRedesign or
 		+Novel.\n\n<b>Contexts</b> (where or with what you will complete a task) start with an @ sign, like @phone or
 		@GroceryStore.</string>
