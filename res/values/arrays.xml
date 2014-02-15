@@ -26,20 +26,20 @@ You should have received a copy of the GNU General Public License along with Tod
 <resources>
 
     <string-array name="sort">
-        <item>Priority</item>
-        <item>Line ascending</item>
-        <item>Line descending</item>
-        <item>Text (A-Z)</item>
-        <item>Date ascending</item>
-        <item>Date descending</item>
+        <item>@string/sort_priority_desc</item>
+        <item>@string/sort_id_asc</item>
+        <item>@string/sort_id_desc</item>
+        <item>@string/sort_text_asc</item>
+        <item>@string/sort_date_asc</item>
+        <item>@string/sort_date_desc</item>
     </string-array>
     <string-array name="periodic_sync_lengths">
-        <item>Never (work offline)</item>
-        <item>When using app</item>
-        <item>Every 15 minutes</item>
-        <item>Every hour</item>
-        <item>Twice a day</item>
-        <item>Once a day</item>
+        <item>@string/periodic_sync_manual</item>
+        <item>@string/periodic_sync_automatic</item>
+        <item>@string/periodic_sync_every_15_minutes</item>
+        <item>@string/periodic_sync_every_hour</item>
+        <item>@string/periodic_sync_every_12_hours</item>
+        <item>@string/periodic_sync_every_24_hours</item>
     </string-array>
     <string-array name="periodic_sync_values"> <!-- values from AlarmManager.INTERVAL_* -->
         <item>-1</item>
