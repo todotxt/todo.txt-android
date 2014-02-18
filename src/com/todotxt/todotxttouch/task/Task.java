@@ -173,8 +173,7 @@ public class Task implements Serializable {
     public void markComplete(Date date) {
         if (!this.completed) {
             this.priority = Priority.NONE;
-            this.completionDate = new SimpleDateFormat(Task.DATE_FORMAT)
-                    .format(date);
+            this.completionDate = new SimpleDateFormat(Task.DATE_FORMAT).format(date);
             this.deleted = false;
             this.completed = true;
         }
@@ -239,80 +238,105 @@ public class Task implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
 
-        if (obj == null)
+        if (obj == null) {
             return false;
+        }
 
-        if (getClass() != obj.getClass())
+        if (getClass() != obj.getClass()) {
             return false;
+        }
 
         Task other = (Task) obj;
 
-        if (completed != other.completed)
+        if (completed != other.completed) {
             return false;
+        }
 
         if (completionDate == null) {
-            if (other.completionDate != null)
+            if (other.completionDate != null) {
                 return false;
-        } else if (!completionDate.equals(other.completionDate))
+            }
+        } else if (!completionDate.equals(other.completionDate)) {
             return false;
+        }
 
         if (contexts == null) {
-            if (other.contexts != null)
+            if (other.contexts != null) {
                 return false;
-        } else if (!contexts.equals(other.contexts))
+            }
+        } else if (!contexts.equals(other.contexts)) {
             return false;
+        }
 
-        if (deleted != other.deleted)
+        if (deleted != other.deleted) {
             return false;
+        }
 
-        if (id != other.id)
+        if (id != other.id) {
             return false;
+        }
 
         if (links == null) {
-            if (other.links != null)
+            if (other.links != null) {
                 return false;
-        } else if (!links.equals(other.links))
+            }
+        } else if (!links.equals(other.links)) {
             return false;
+        }
 
         if (mailAddresses == null) {
-            if (other.mailAddresses != null)
+            if (other.mailAddresses != null) {
                 return false;
-        } else if (!mailAddresses.equals(other.mailAddresses))
+            }
+        } else if (!mailAddresses.equals(other.mailAddresses)) {
             if (phoneNumbers == null) {
-                if (other.phoneNumbers != null)
+                if (other.phoneNumbers != null) {
                     return false;
-            } else if (!phoneNumbers.equals(other.phoneNumbers))
+                }
+            } else if (!phoneNumbers.equals(other.phoneNumbers)) {
                 return false;
+            }
+        }
 
         if (prependedDate == null) {
-            if (other.prependedDate != null)
+            if (other.prependedDate != null) {
                 return false;
-        } else if (!prependedDate.equals(other.prependedDate))
+            }
+        } else if (!prependedDate.equals(other.prependedDate)) {
             return false;
+        }
 
-        if (priority != other.priority)
+        if (priority != other.priority) {
             return false;
+        }
 
         if (projects == null) {
-            if (other.projects != null)
+            if (other.projects != null) {
                 return false;
-        } else if (!projects.equals(other.projects))
+            }
+        } else if (!projects.equals(other.projects)) {
             return false;
+        }
 
         if (relativeAge == null) {
-            if (other.relativeAge != null)
+            if (other.relativeAge != null) {
                 return false;
-        } else if (!relativeAge.equals(other.relativeAge))
+            }
+        } else if (!relativeAge.equals(other.relativeAge)) {
             return false;
+        }
 
         if (text == null) {
-            if (other.text != null)
+            if (other.text != null) {
                 return false;
-        } else if (!text.equals(other.text))
+            }
+        } else if (!text.equals(other.text)) {
             return false;
+        }
 
         return true;
     }
@@ -320,7 +344,9 @@ public class Task implements Serializable {
     @Override
     public int hashCode() {
         final int prime = 31;
+
         int result = 1;
+
         result = prime * result + (completed ? 1231 : 1237);
         result = prime * result
                 + ((completionDate == null) ? 0 : completionDate.hashCode());
@@ -343,6 +369,43 @@ public class Task implements Serializable {
         result = prime * result + ((text == null) ? 0 : text.hashCode());
 
         return result;
+    }
+
+    /**
+     * Returns the fully extended priority order: A - Z, None, Completed
+     * 
+     * @return fullyExtendedPriority
+     */
+    public Integer getSortPriority() {
+        if (completed) {
+            return Priority.values().length;
+        }
+
+        return (priority.ordinal() > 0 ? priority.ordinal() - 1 : Priority.values().length - 1);
+    }
+
+    public String getAscSortDate() {
+        if (completed) {
+            return "9999-99-99";
+        }
+
+        if (Strings.isEmptyOrNull(prependedDate)) {
+            return "9999-99-98";
+        }
+
+        return prependedDate;
+    }
+
+    public String getDescSortDate() {
+        if (completed) {
+            return "0000-00-00";
+        }
+
+        if (Strings.isEmptyOrNull(prependedDate)) {
+            return "9999-99-99";
+        }
+
+        return prependedDate;
     }
 
     public void initWithFilters(ArrayList<Priority> prios, ArrayList<String> ctxts,
