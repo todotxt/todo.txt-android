@@ -6,7 +6,7 @@
     <string name="add_empty_task">Agregar tarea</string>
     <string name="add_task_context_btn">Contexto</string>
     <string name="add_task_failed">No se pudo agregar la tarea</string>
-    <string name="add_task_help">Ingrese un proyecto en su tarea usando el formato +YourProject o un contexto usando @YourContext. \n\n</string>
+    <string name="add_task_help">Ingrese un proyecto en su tarea usando el formato +TuProyecto o un contexto usando @TuContexto. \n\n</string>
     <string name="add_task_help_btn">Ayuda</string>
     <string name="add_task_priority_btn">Prioridad</string>
     <string name="add_task_project_btn">Proyecto</string>
@@ -123,4 +123,7 @@
     <string name="tasktexthint0">Bosquejar capítulo 1 +Novela @máquinadeescribir\nLlamar al agente literario @teléfono</string>
     <string name="tasktexthint1">Aprender a progamar +autoaprendisaje\nConstruir la mejor aplicación @computadora</string>
     <string name="tasktexthint2">Tomar la ruta menos transitada @bosque\nHacer la diferencia  +vida</string>
+    <string name="dropbox_settings_header">Dropbox</string>
+    <string name="filter_tab_search">Palabra clave</string>
+    <string name="tasktexthint4">Completar revisión semanal +GTD\nLograr mente como el agua +GTD</string>
 </resources>
