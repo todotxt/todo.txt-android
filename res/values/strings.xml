@@ -45,7 +45,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="quickfilter">Quick filter</string>
     <string name="nocontextsprojectsfilter">There are no contexts or projects in your todo.txt to filter on.</string>
     <string name="updatetask">Update task</string>
-    <string name="done">Complete</string>
+    <string name="complete">Complete</string>
     <string name="priority">Prioritize</string>
     <string name="update">Update</string>
     <string name="delete">Delete</string>
