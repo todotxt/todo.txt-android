@@ -180,7 +180,7 @@ public class AddTask extends SherlockActivity {
 
 		// Set up fortune hint text
 		Random rand = new Random();
-		int fortune_hint_index = Math.abs(rand.nextInt()) % 6;
+		int fortune_hint_index = Math.abs(rand.nextInt()) % 5;
 		int fortune_hint_text;
 
 		switch (fortune_hint_index) {
@@ -202,10 +202,6 @@ public class AddTask extends SherlockActivity {
 			break;
 		case 4:
 			fortune_hint_text = R.string.tasktexthint4;
-
-			break;
-		case 5:
-			fortune_hint_text = R.string.tasktexthint5;
 
 			break;
 		default:
