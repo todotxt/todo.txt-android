@@ -35,6 +35,10 @@ Todo.txt for Android's source code is available at https://github.com/ginatrapan
     <string name="updated_task">Task aktualisiert.</string>
     <string name="update_task_failed">Konnte Task nicht aktualisieren.</string>
     <string name="sort">Sortieren</string>
+    <string name="sort_priority_desc">Gewichtung</string>
+    <string name="sort_id_asc">ID aufsteigend</string>
+    <string name="sort_id_desc">ID absteigend</string>
+    <string name="sort_text_asc">Text (A-Z)</string>
     <string name="filter">Filtern</string>
     <string name="main_no_items">Keine anzuzeigenden Tasks.</string>
     <string name="set_preferences">Einstellungen</string>

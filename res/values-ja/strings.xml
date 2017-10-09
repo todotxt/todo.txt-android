@@ -31,6 +31,10 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="updated_task">更新されました</string>
     <string name="update_task_failed">更新に失敗しました</string>
     <string name="sort">並び替え</string>
+    <string name="sort_priority_desc">優先度</string>
+    <string name="sort_id_asc">ID 昇順</string>
+    <string name="sort_id_desc">ID 降順</string>
+    <string name="sort_text_asc">アルファベット順</string>
     <string name="filter">フィルター</string>
     <string name="main_no_items">タスクがありません。</string>
     <string name="set_preferences">設定</string>
