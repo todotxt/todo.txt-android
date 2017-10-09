@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_label">Todo.txt</string>
+    <string name="added_task">Uppgift tillagd</string>
+    <string name="add_task_failed">Kunde inte lägga till uppgift</string>
+    <string name="add_empty_task">Lägg till uppgift</string>
+    <string name="updated_task">Uppdaterade uppgift</string>
+    <string name="update_task_failed">Kunde inte uppdatera uppgift</string>
+    <string name="sort">Sortera</string>
+    <string name="sort_dialog_header">Sorta uppgifter</string>
+    <string name="filter">Filter</string>
+    <string name="main_no_items">Inga uppgifter att uppvisa.</string>
+    <string name="set_preferences">Inställningar</string>
+    <string name="preferences">Inställningar</string>
+    <string name="sync">Synkronisera</string>
+    <string name="search">Söka</string>
+    <string name="refresh">Uppdatera</string>
+    <string name="add">Lägg till</string>
+    <string name="addtask">Lägg till uppgifter</string>
+    <string name="quickfilter">Snabbfilter</string>
+    <string name="nocontextsprojectsfilter">Det finns inga sammanhang eller projekt i din todo.txt att filtrera på.</string>
+    <string name="updatetask">Uppdatera uppgift</string>
+    <string name="done">Klart</string>
+    <string name="priority">Prioritera</string>
+    <string name="update">Uppdatera</string>
+    <string name="delete">Ta bort</string>
+    <string name="share">Dela</string>
+    <string name="add_to_calendar">Schemalägg</string>
+    <string name="calendar_title">Todo.txt påminnelse</string>
+    <string name="archive">Arkivera</string>
+    <string name="unComplete">Ångra klarmarkering</string>
+    <string name="swipe_action_complete">Klarmarkera uppgift.</string>
+    <string name="swipe_action_unComplete">Markerade uppgiften ogjord.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Ångra</string>
+    <string name="close">Stäng</string>
+    <string name="clear">Rensa</string>
+    <string name="selected">markerad</string>
+    <string name="areyousure">Är du säker?</string>
+    <string name="tasktexthint0">Utkast kapitel 1 +Roman @skrivmaskin\nRing förläggare @telefon</string>
+    <string name="tasktexthint1">Lär dig koda +EgenUtbildning\nBygg en killer-app @dator</string>
+    <string name="tasktexthint2">Ta den sällan använda vägen @Skogen\nUtgör skillnaden! +Livet</string>
+    <string name="tasktexthint3">Boka tid för att prova ringbrynja @Slott\nSlipa svärdet +SjälvBevarelse</string>
+    <string name="tasktexthint4">Veckosammanfattning +GTD\nUppnå ett medvetande som vatten +GTD</string>
+    <string name="add_task_help">Lägg till ett projekt i din uppgift genom att använda formatet +DittProjekt eller ett kontext genom @DittKontext.\n\n<b>Projekt</b> börja med ett +-tecken och inga mellanslag, som t.ex. +OmdesignWebbsida eller
+		+Roman.\n\n<b>Kontext</b> (Var eller med vad du ska utföra en uppgift) börja med ett @-tecken, som i t.ex. @telefon eller @Affären.</string>
+    <string name="addcontextproject">Lägg till @kontext eller +projekt</string>
+    <string name="assignpriority">Prioritera denna uppgift</string>
+    <string name="filterbycontextproject">Filtrera på @kontext eller +projekt</string>
+    <string name="taskadded">La till uppgift till todo.txt</string>
+
+    <!-- settings -->
+    <string name="auto_archive_pref_title">Arkivera automatiskt</string>
+    <string name="auto_archive_pref_summary">Arkivera automatiskt utförda uppgifter i done.txt.</string>
+    <string name="archive_now_title">Arkivera uppgifter</string>
+    <string name="archive_now_explainer">Flytta utförda uppgifter till done.txt? Detta kan inte ångras.</string>
+    <string name="dropbox_logout_pref_title">Logga ut</string>
+    <string name="dropbox_logout_pref_summary">Koppla bort Dropbox.</string>
+    <string name="dropbox_logout_explainer">Är du säker att du vill logga ut från Dropbox?</string>
+    <string name="dropbox_logout_warning">Du har lokala ändringar i din todo.txt-fil! Om du loggar ut kommer de att gå förlorade!</string>
+    <string name="todo_path_title">Sökväg</string>
+    <string name="todo_path_summary">Dropbox-foldern där todo.txt sparas.</string>
+    <string name="todo_path_warning">Du har lokala ändringar i din todo.txt-fil! Om du ändrar sökvägen till filen, kommer ändringarna att gå förlorade!</string>
+    <string name="todo_path_warning_override">Jag är äventyrlig!</string>
+    <string name="todo_path_prev_folder">… Upp till %s</string>
+    <string name="todo_path_add_new">Skapa ny …</string>
+    <string name="todo_path_empty">Misslyckades med att ladda folder-lista från Dropbox</string>
+    <string name="todo_path_default">/todo</string>
+    <string name="dropbox_settings_header">Dropbox</string>
+    <string name="todotxt_settings_header">todo.txt</string>
+    <string name="about_settings_header">Om</string>
+    <string name="prepend_date_pref_title">Datera nya uppgifter</string>
+    <string name="prepend_date_pref_summary">Lägg automatiskt till datumet för skapandet till nya uppgifter.</string>
+    <string name="periodic_sync_pref_title">Synkronisera automatiskt</string>
+
+    <!-- sync dialog -->
+    <string name="sync_dialog_title">Manuell Synkronisering</string>
+    <string name="sync_dialog_msg">Vill du ladda up eller ner din todo.txt-fil?</string>
+    <string name="sync_dialog_upload">Ladda upp till Dropbox</string>
+    <string name="sync_dialog_download">Ladda ner till enheten</string>
+    <string name="sync_upload_message">Laddar upp todo.txt…</string>
+    <string name="sync_download_message">Laddar ner todo.txt…</string>
+    <!-- sync conflict dialog -->
+    <string name="sync_conflict_dialog_title">Synkroniseringsproblem</string>
+    <string name="sync_conflict_dialog_msg">Ojsan! Det finns en nyare version av din todo.txt-fil på Dropbox. \nVill du ladda upp dina lokala ändringar eller ladda ner Dropbox-versionen?</string>
+    <!-- login -->
+    <string name="welcome_message">Välkommen till Todo.txt</string>
+    <string name="login_screen_button">Anslut till Dropbox</string>
+    <!-- delete -->
+    <string name="delete_task_title">Ta bort uppgift</string>
+    <string name="delete_task_message">Detta kan inte ångras. Är du säker?</string>
+    <string name="delete_task_confirm">Ta bort</string>
+    <!-- search -->
+    <string name="search_hint">Sök i todo.txt</string>
+    <!-- filter tabs -->
+    <string name="filter_tab_priorities">Prioritet</string>
+    <string name="filter_tab_projects">Projekt</string>
+    <string name="filter_tab_contexts">Kontext</string>
+    <string name="filter_tab_search">Nyckelord</string>
+    <!-- title bar changes -->
+    <string name="title_search_results">Sökkriterier: </string>
+    <string name="title_filter_applied">Filtrerat enligt: </string>
+    <string name="add_task_priority_btn">Prioritet</string>
+    <string name="add_task_context_btn">Kontext</string>
+    <string name="add_task_project_btn">Projekt</string>
+    <string name="add_task_help_btn">Hjälp</string>
+    <string name="priority_prompt">Prioritet</string>
+    <string name="project_prompt">Projekt</string>
+    <string name="context_prompt">Kontext</string>
+    <string name="refine">Förfina</string>
+    <string name="separator">Avskiljare</string>
+    <string name="contextproject_prompt">Kontext och projekt</string>
+
+    <!-- launcher shortcut -->
+    <string name="shortcut_addtask_name">Lägg till Uppgift</string>
+    <!-- share -->
+    <string name="share_addtask_name">Lägg till till Todo.txt</string>
+    <string name="share_subject">Todo.txt uppgift</string>
+    <string name="share_title">Dela</string>
+
+    <!-- online/offline toasts -->
+    <string name="toast_login_notconnected">Kan inte logga in:\nIngen internet-förbindelse.</string>
+    <string name="toast_notconnected">Ingen internet-förbindelse: Kan inte synkronisera med Dropbox just nu.</string>
+
+    <!-- Relative Dates -->
+    <string name="dates_days_ago">%d dagar sedan</string>
+    <string name="dates_one_day_ago">1 dag sedan</string>
+    <string name="dates_today">idag</string>
+    <string name="dates_months_ago">%d månader sedan</string>
+    <string name="dates_one_month_ago">1 månad sedan</string>
+
+    <!-- contextual action bar progress and error messages -->
+    <string name="progress_uncomplete">Markerar uppgift ej utförd</string>
+    <string name="progress_complete">Markerar uppgift utförd</string>
+    <string name="progress_archive">Arkiverar uppgifter</string>
+    <string name="progress_delete">Tar bort</string>
+    <string name="progress_prioritize">Prioriterar uppgifter</string>
+    <string name="confirm_archive">Arkiverar utförda uppgifter</string>
+    <string name="select_priority">Välj prioritet</string>
+    <string name="error_prioritize">kunde inte prioritera uppgifter</string>
+    <string name="error_uncomplete">kunde inte avmarkera uppgifter</string>
+    <string name="error_complete">kunde inte klarmarkera uppgifter</string>
+    <string name="error_delete">kunde inte ta bort uppgifter</string>
+    <string name="error_archive">kunde inte arkivera uppgifter</string>
+    <string name="wait_progress">Vänta&#8230;</string>
+
+    <!-- pull-to-refresh -->
+    <string name="pull_to_refresh">Dra för att uppdatera</string>
+    <string name="syncing">Synkroniserar med Dropbox…</string>
+
+    <!-- path activity -->
+    <string name="discard">Ta bort</string>
+    <string name="done">Klart</string>
+
+</resources>

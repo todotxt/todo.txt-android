@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+-->
+
+<resources>
+
+    <string-array name="sort">
+        <item>Prioritet</item>
+        <item>Rad stigande</item>
+        <item>Rad fallande</item>
+        <item>Text (A-Z)</item>
+        <item>Datum stigande</item>
+        <item>Datum fallande</item>
+    </string-array>
+    <string-array name="periodic_sync_lengths">
+        <item>Aldrig (arbeta offline)</item>
+        <item>När appen används</item>
+        <item>Var 15:e minut</item>
+        <item>Varje timme</item>
+        <item>Två ggr per dag</item>
+        <item>En gång per dag</item>
+    </string-array>
+    <string-array name="periodic_sync_values"> <!-- values from AlarmManager.INTERVAL_* -->
+        <item>-1</item>
+        <item>0</item>
+        <item>900000</item>
+        <item>3600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+    </string-array>
+
+</resources>
