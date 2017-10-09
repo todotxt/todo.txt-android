@@ -124,7 +124,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="filter_tab_contexts">Contexto</string>
     <string name="filter_tab_search">Palavra chave</string>
     <!-- title bar changes -->
-    <string name="title_search_results">Pesquisar termo: </string>
+    <string name="title_search_results">Termo de pesquisa: </string>
     <string name="title_filter_applied">Filtrado por: </string>
     <string name="add_task_priority_btn">Prioridade</string>
     <string name="add_task_context_btn">Contexto</string>
@@ -163,9 +163,9 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="progress_prioritize">Priorizando tarefas</string>
     <string name="confirm_archive">Tarefas concluídas arquivadas</string>
     <string name="select_priority">Selecionar prioridade</string>
-    <string name="error_prioritize">Não foi possível priorizar tarefas</string>
+    <string name="error_prioritize">Não foi possível priorizar as tarefas</string>
     <string name="error_uncomplete">Não foi possível priorizar tarefas como não concluídas</string>
-    <string name="error_complete">Não foi possível concluir tarefas</string>
+    <string name="error_complete">Não foi possível concluir as tarefas</string>
     <string name="error_delete">Não foi possível apagar tarefas</string>
     <string name="error_archive">Não foi possível arquivar tarefas</string>
     <string name="wait_progress">Por favor, espere&#8230;</string>
