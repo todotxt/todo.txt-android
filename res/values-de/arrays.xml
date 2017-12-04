@@ -30,7 +30,7 @@ Todo.txt for Android's source code is available at https://github.com/ginatrapan
 <resources>
 
     <string-array name="sort">
-        <item>Gewichtung</item>
+        <item>Priorisierung</item>
         <item>ID aufsteigend</item>
         <item>ID absteigend</item>
         <item>Text (A-Z)</item>
