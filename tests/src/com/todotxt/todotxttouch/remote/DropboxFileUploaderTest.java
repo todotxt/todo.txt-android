@@ -25,6 +25,7 @@ package com.todotxt.todotxttouch.remote;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
@@ -33,15 +34,15 @@ import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
 
-import junit.framework.TestCase;
-import android.os.Environment;
+import android.test.ApplicationTestCase;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.ProgressListener;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
+import com.todotxt.todotxttouch.TodoApplication;
 
-public class DropboxFileUploaderTest extends TestCase {
+public class DropboxFileUploaderTest extends ApplicationTestCase<TodoApplication> {
     private static final String remotefile1 = "remotefile1";
     private static final String remotefile2 = "remotefile2";
     private static final String localpath1 = "data/com.todotxt.todotxttouch/tmp/test1.txt";
@@ -52,17 +53,23 @@ public class DropboxFileUploaderTest extends TestCase {
     private static final String localrev1 = "localrev1";
     private static final String localrev2 = "localrev2";
 
-    private File localFile1 = new File(
-            Environment.getExternalStorageDirectory(), localpath1);
-    private File localFile2 = new File(
-            Environment.getExternalStorageDirectory(), localpath2);
-
+    private File localFile1;
+    private File localFile2;
     DropboxFile dbFile1;
     DropboxFile dbFile2;
     ArrayList<DropboxFile> dropboxFiles1;
     ArrayList<DropboxFile> dropboxFiles2;
 
+    public DropboxFileUploaderTest() {
+        super(TodoApplication.class);
+    }
+
     protected void setUp() throws Exception {
+        createApplication();
+
+        localFile1 = new File(TodoApplication.getAppContetxt().getFilesDir(), localpath1);
+        localFile2 = new File(TodoApplication.getAppContetxt().getFilesDir(), localpath2);
+
         if (localFile1.exists()) {
             localFile1.delete();
         }
@@ -187,7 +194,7 @@ public class DropboxFileUploaderTest extends TestCase {
             public DropboxAPI.Entry putFile(String arg0,
                     InputStream arg1, long arg2, String arg3,
                     ProgressListener arg4) throws DropboxException {
-                return create_metadata(remotefile1.toUpperCase(), remoterev1);
+                return create_metadata(remotefile1.toUpperCase(Locale.US), remoterev1);
             }
         };
 

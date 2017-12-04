@@ -62,8 +62,8 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     ArrayList<DropboxFile> dropboxFiles1;
     ArrayList<DropboxFile> dropboxFiles2;
 
-    public DropboxFileDownloaderTest(Class<TodoApplication> applicationClass) {
-        super(applicationClass);
+    public DropboxFileDownloaderTest() {
+        super(TodoApplication.class);
     }
 
     protected void setUp() throws Exception {
