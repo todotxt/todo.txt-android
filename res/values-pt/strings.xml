@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_label">Todo.txt</string>
+    <string name="added_task">Adicionar tarefas</string>
+    <string name="add_task_failed">Não foi possível adicionar a tarefa</string>
+    <string name="add_empty_task">Digite uma tarefa</string>
+    <string name="updated_task">Tarefa atualizada</string>
+    <string name="update_task_failed">Não foi possível atualizar a tarefa</string>
+    <string name="sort">Ordenar</string>
+    <string name="sort_dialog_header">Ordenar tarefas</string>
+    <string name="filter">Filtro</string>
+    <string name="main_no_items">Nenhuma tarefa disponível.</string>
+    <string name="set_preferences">Configurações</string>
+    <string name="preferences">Configurações</string>
+    <string name="sync">Sincronizar</string>
+    <string name="search">Pesquisar</string>
+    <string name="refresh">Atualizar</string>
+    <string name="add">Adicionar</string>
+    <string name="addtask">Adicionar tarefas</string>
+    <string name="quickfilter">Filtro rápido</string>
+    <string name="nocontextsprojectsfilter">Sem contextos ou projetos em seu todo.txt para filtrar.</string>
+    <string name="updatetask">Atualizar tarefa</string>
+    <string name="done">Concluído</string>
+    <string name="priority">Priorizar</string>
+    <string name="update">Atualizar</string>
+    <string name="delete">Remover</string>
+    <string name="share">Compartilhar</string>
+    <string name="add_to_calendar">Agendar</string>
+    <string name="calendar_title">Todo.txt lembrete</string>
+    <string name="archive">Arquivo</string>
+    <string name="unComplete">Desfazer concluído</string>
+    <string name="swipe_action_complete">Tarefa concluída.</string>
+    <string name="swipe_action_unComplete">Tarefa marcada como incompleta.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="close">Fechar</string>
+    <string name="clear">Limpar</string>
+    <string name="selected">selecionado</string>
+    <string name="areyousure">Você tem certeza?</string>
+    <string name="tasktexthint0">Rascunho capítulo 1 +Novel @typewriter\nLigar para agente literário @fone</string>
+    <string name="tasktexthint1">Aprenda a codificar +SelfEducation\nCrie um aplicativo assassino @computer</string>
+    <string name="tasktexthint2">Pegue a estrada menos percorrida @Woods\nFaça toda a diferença em sua vida +Vida</string>
+    <string name="tasktexthint3">Agende a mala direta do catálogo @castle\nAmolar espada +SelfPreservation</string>
+    <string name="tasktexthint4">Revisão semanal concluída +GTD\nAlcance a mente como a água +GTD</string>
+    <string name="add_task_help">Digite um projeto em sua tarefa usando o formato +SeuProjeto ou um contexto usando @SeuContexto.\n\n<b>Projetos</b> iniciam com um sinal de + sem espaços, como +WebsiteRedesign ou
+        +Novel.\n\n<b>Contextos</b> (onde ou com o que você vai completar uma tarefa) inicia com um sinal de @, como @fone ou
+		@Bomboneria.</string>
+    <string name="addcontextproject">Adicionar @contexto ou +projeto</string>
+    <string name="assignpriority">Priorizar esta tarefa</string>
+    <string name="filterbycontextproject">Filtrar por @contexto ou +projeto</string>
+    <string name="taskadded">Tarefa adicionada para todo.txt</string>
+
+    <!-- settings -->
+    <string name="auto_archive_pref_title">Arquivamento automático</string>
+    <string name="auto_archive_pref_summary">Arquiva automáticamente tarefas concluídas para done.txt.</string>
+    <string name="archive_now_title">Tarefas arquivadas</string>
+    <string name="archive_now_explainer">Mover tarefas concluídas para done.txt? Isto não poderá ser desfeito.</string>
+    <string name="dropbox_logout_pref_title">Log out</string>
+    <string name="dropbox_logout_pref_summary">Desconectar do Dropbox.</string>
+    <string name="dropbox_logout_explainer">Tem certeza de que deseja sair do Dropbox?</string>
+    <string name="dropbox_logout_warning">Você possui alterações locais em seu arquivo todo.txt! Se você sair, elas serão perdidas!</string>
+    <string name="todo_path_title">Localização do arquivo</string>
+    <string name="todo_path_summary">O diretório do Dropbox onde o todo.txt é armazenado.</string>
+    <string name="todo_path_warning">Você possui alterações locais em seu arquivo todo.txt! Se você mudar a localização do arquivo, as alterações serão perdidas!</string>
+    <string name="todo_path_warning_override">Estou me sentindo perigoso!</string>
+    <string name="todo_path_prev_folder">… Até %s</string>
+    <string name="todo_path_add_new">Adicionar novo …</string>
+    <string name="todo_path_empty">Falha ao carregar a lista de pastas do Dropbox</string>
+    <string name="todo_path_default">/todo</string>
+    <string name="dropbox_settings_header">Dropbox</string>
+    <string name="todotxt_settings_header">todo.txt</string>
+    <string name="about_settings_header">Sobre</string>
+    <string name="prepend_date_pref_title">Data de novas tarefas</string>
+    <string name="prepend_date_pref_summary">Adicione automaticamente a data de criação a novas tarefas.</string>
+    <string name="periodic_sync_pref_title">Sincronizar automaticamente</string>
+
+    <!-- sync dialog -->
+    <string name="sync_dialog_title">Sincronismo manual</string>
+    <string name="sync_dialog_msg">Você quer fazer o upload ou download do seu arquivo todo.txt?</string>
+    <string name="sync_dialog_upload">Upload para Dropbox</string>
+    <string name="sync_dialog_download">Download para seu dispositivo</string>
+    <string name="sync_upload_message">Uploading todo.txt…</string>
+    <string name="sync_download_message">Downloading todo.txt…</string>
+    <!-- sync conflict dialog -->
+    <string name="sync_conflict_dialog_title">Conflito de arquivo</string>
+    <string name="sync_conflict_dialog_msg">Oops! Existe uma versão mais recente do seu arquivo todo.txt no Dropbox. \nDeseja fazer o upload de suas alterações locais ou baixar a versão do Dropbox?</string>
+    <!-- login -->
+    <string name="welcome_message">Bem vindo ao Todo.txt</string>
+    <string name="login_screen_button">Conectar no Dropbox</string>
+    <!-- delete -->
+    <string name="delete_task_title">Remover tarefa</string>
+    <string name="delete_task_message">Isto não poderá ser desfeito. Está certo disso?</string>
+    <string name="delete_task_confirm">Remover</string>
+    <!-- search -->
+    <string name="search_hint">Pesquisa todo.txt</string>
+    <!-- filter tabs -->
+    <string name="filter_tab_priorities">Prioridade</string>
+    <string name="filter_tab_projects">Projeto</string>
+    <string name="filter_tab_contexts">Contexto</string>
+    <string name="filter_tab_search">Palavra chave</string>
+    <!-- title bar changes -->
+    <string name="title_search_results">Termo de pesquisa: </string>
+    <string name="title_filter_applied">Filtrado por: </string>
+    <string name="add_task_priority_btn">Prioridade</string>
+    <string name="add_task_context_btn">Contexto</string>
+    <string name="add_task_project_btn">Projeto</string>
+    <string name="add_task_help_btn">Ajuda</string>
+    <string name="priority_prompt">Prioridade</string>
+    <string name="project_prompt">Projeto</string>
+    <string name="context_prompt">Contexto</string>
+    <string name="refine">Refinar</string>
+    <string name="separator">Separador</string>
+    <string name="contextproject_prompt">Contextos e projetos</string>
+
+    <!-- launcher shortcut -->
+    <string name="shortcut_addtask_name">Adicionar Tarefa</string>
+    <!-- share -->
+    <string name="share_addtask_name">Adicionar para Todo.txt</string>
+    <string name="share_subject">Todo.txt tarefa</string>
+    <string name="share_title">Compartilhar</string>
+
+    <!-- online/offline toasts -->
+    <string name="toast_login_notconnected">Não é possível entrar:\nSem conexão com a internet.</string>
+    <string name="toast_notconnected"> Sem conexão com a internet: Não é possível sincronizar com o Dropbox neste momento.</string>
+
+    <!-- Relative Dates -->
+    <string name="dates_days_ago">%d dias atrás</string>
+    <string name="dates_one_day_ago">1 day atrás</string>
+    <string name="dates_today">today</string>
+    <string name="dates_months_ago">%d meses atrás</string>
+    <string name="dates_one_month_ago">1 mês atrás</string>
+
+    <!-- contextual action bar progress and error messages -->
+    <string name="progress_uncomplete">Marcação de tarefas incompletas</string>
+    <string name="progress_complete">Marcação de tarefas concluídas</string>
+    <string name="progress_archive">Arquivamento de tarefas</string>
+    <string name="progress_delete">Apagando</string>
+    <string name="progress_prioritize">Priorizando tarefas</string>
+    <string name="confirm_archive">Tarefas concluídas arquivadas</string>
+    <string name="select_priority">Selecionar prioridade</string>
+    <string name="error_prioritize">Não foi possível priorizar as tarefas</string>
+    <string name="error_uncomplete">Não foi possível priorizar tarefas como não concluídas</string>
+    <string name="error_complete">Não foi possível concluir as tarefas</string>
+    <string name="error_delete">Não foi possível apagar tarefas</string>
+    <string name="error_archive">Não foi possível arquivar tarefas</string>
+    <string name="wait_progress">Por favor, espere&#8230;</string>
+
+    <!-- pull-to-refresh -->
+    <string name="pull_to_refresh">Puxe para atualizar</string>
+    <string name="syncing">Sincronização com Dropbox…</string>
+
+    <!-- path activity -->
+    <string name="discard">Descartar</string>
+    <string name="done">Concluído</string>
+
+</resources>
