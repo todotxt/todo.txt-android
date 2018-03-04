@@ -16,4 +16,7 @@ proguard.cfg
 *.iml
 *.ipr
 *.iws
+.idea/.gradle
+build/
 .idea/
+.gradle/
