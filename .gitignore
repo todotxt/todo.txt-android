@@ -20,3 +20,4 @@ proguard.cfg
 build/
 .idea/
 .gradle/
+app/build/

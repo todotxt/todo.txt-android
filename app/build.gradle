@@ -7,15 +7,20 @@ android {
 
     defaultConfig {
 
-        applicationId 'com.example.myapp'
-        minSdkVersion 15
-        targetSdkVersion 26
+        applicationId 'com.todotxt.todotxttouch'
+        minSdkVersion 14
+        targetSdkVersion 17
         versionCode 35
         versionName "release35"
     }
 
 
     buildTypes {
+
+        debug {
+            resValue "string", "dropbox_consumer_key", "123"
+            resValue "string", "dropbox_consumer_secret", "456"
+        }
 
         release {
             minifyEnabled true // Enables code shrinking for the release build type.
@@ -42,15 +47,31 @@ android {
             exclude "ldpi", "tvdpi", "xxxhdpi", "400dpi", "560dpi"
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 }
 
+
+
 dependencies {
-    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:support-compat:26.1.0'
     compile 'org.apache.james:apache-mime4j-james-utils:0.8.1'
     compile 'org.apache.httpcomponents:httpmime:4.5.5'
     compile 'com.github.cliftonlabs:json-simple:3.0.2'
     compile 'com.googlecode.libphonenumber:libphonenumber:8.9.0'
     compile 'oauth.signpost:signpost-commonshttp4:1.2.1.2'
     compile 'oauth.signpost:signpost-core:1.2.1.2'
+    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'com.android.support:support-v4:26.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
 }

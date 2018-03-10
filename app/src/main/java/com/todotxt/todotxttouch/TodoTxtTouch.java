@@ -32,8 +32,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
-import uk.co.senab.actionbarpulltorefresh.library.DefaultHeaderTransformer;
+//import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
+//import uk.co.senab.actionbarpulltorefresh.library.DefaultHeaderTransformer;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -94,11 +94,10 @@ import com.todotxt.todotxttouch.task.TaskPersistException;
 import com.todotxt.todotxttouch.util.Strings;
 import com.todotxt.todotxttouch.util.Util;
 
-import de.timroes.swipetodismiss.SwipeDismissList;
+//import de.timroes.swipetodismiss.SwipeDismissList;
 
 public class TodoTxtTouch extends SherlockListActivity implements
-		OnSharedPreferenceChangeListener,
-		PullToRefreshAttacher.OnRefreshListener, OnScrollListener {
+		OnSharedPreferenceChangeListener, OnScrollListener {
 
 	final static String TAG = TodoTxtTouch.class.getSimpleName();
 
@@ -124,9 +123,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	private static final int SYNC_CHOICE_DIALOG = 100;
 	private static final int SYNC_CONFLICT_DIALOG = 101;
 	private static final int ARCHIVE_DIALOG = 103;
-
-	private SwipeDismissList m_swipeList;
-	private PullToRefreshAttacher m_pullToRefreshAttacher;
 
 	private ActionMode mMode;
 
@@ -209,61 +205,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		// Set the adapter for the list view
 		updateNavigationDrawer();
 
-		SwipeDismissList.OnDismissCallback callback = new SwipeDismissList.OnDismissCallback() {
-			// Gets called whenever the user deletes an item.
-			public SwipeDismissList.Undoable onDismiss(AbsListView listView,
-					final int position) {
-				m_swipeList.setEnabled(false);
-				final Task task = m_adapter.getItem(position);
-				m_adapter.remove(task);
-				ArrayList<Task> tasks = new ArrayList<Task>();
-				tasks.add(task);
-				final boolean wasComplete = task.isCompleted();
-				final String popupTitle = listView.getResources().getString(
-						wasComplete ? R.string.swipe_action_unComplete
-								: R.string.swipe_action_complete);
 
-				if (wasComplete) {
-					undoCompleteTasks(tasks, false);
-				} else {
-					completeTasks(tasks, false);
-				}
-
-				// Return an Undoable implementing every method
-				return new SwipeDismissList.Undoable() {
-					// Method is called when user undoes this deletion
-					public void undo() {
-						// Reinsert item to list
-						ArrayList<Task> tasks = new ArrayList<Task>();
-						tasks.add(task);
-
-						if (wasComplete) {
-							completeTasks(tasks, false);
-						} else {
-							undoCompleteTasks(tasks, false);
-						}
-					}
-
-					@Override
-					public String getTitle() {
-						return popupTitle;
-					}
-				};
-			}
-		};
-
-		m_swipeList = new SwipeDismissList(lv, callback,
-				SwipeDismissList.UndoMode.SINGLE_UNDO);
-		m_swipeList.setPopupYOffset(56);
-		m_swipeList.setAutoHideDelay(250);
-		m_swipeList.setSwipeLayout(R.id.swipe_view);
-
-		m_pullToRefreshAttacher = PullToRefreshAttacher.get(this);
-		DefaultHeaderTransformer ht = (DefaultHeaderTransformer) m_pullToRefreshAttacher
-				.getHeaderTransformer();
-		ht.setPullText(getString(R.string.pull_to_refresh));
-		ht.setRefreshingText(getString(R.string.syncing));
-		m_pullToRefreshAttacher.addRefreshableView(lv, this);
 
 		// Delegate OnTouch calls to both libraries that want to receive them
 		// Don't forward swipes when swiping on the left
@@ -279,11 +221,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
 					return false;
 				}
 
-				m_pullToRefreshAttacher.onTouch(view, motionEvent);
 
 				// Only listen to item swipes if we are not scrolling the
 				// listview
-				if (!mListScrolling && m_swipeList.onTouch(view, motionEvent)) {
+				if (!mListScrolling) {
 					return false;
 				}
 
@@ -438,7 +379,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected void onStop() {
-		m_swipeList.discardUndo();
 		super.onStop();
 	}
 
@@ -876,8 +816,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
 
-		m_swipeList.discardUndo();
-
 		switch (item.getItemId()) {
 		case R.id.add_new:
 			startAddTaskActivity();
@@ -1003,7 +941,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 	 */
 	@SuppressWarnings("deprecation")
 	private void syncClient(boolean force) {
-		m_pullToRefreshAttacher.setRefreshing(true);
 
 		if (!force && m_app.m_prefs.isManualModeEnabled()) {
 			Log.v(TAG,
@@ -1074,7 +1011,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
 	@Override
 	protected Dialog onCreateDialog(final int id) {
-		m_swipeList.discardUndo();
 
 		if (id == SYNC_CHOICE_DIALOG) {
 			Log.v(TAG, "Time to show the sync choice dialog");
@@ -1109,7 +1045,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onCancel(DialogInterface dialog) {
-					m_pullToRefreshAttacher.setRefreshComplete();
 					updateSyncUI(false);
 					removeDialog(id);
 				}
@@ -1276,7 +1211,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 		}
 
 		if (mMode == null) {
-			m_swipeList.setEnabled(false);
 			mMode = startActionMode(new Callback() {
 				@Override
 				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -1371,7 +1305,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
 				public void onDestroyActionMode(ActionMode mode) {
 					getListView().clearChoices();
 					m_adapter.notifyDataSetChanged();
-					m_swipeList.setEnabled(true);
 					mMode = null;
 				}
 			});
@@ -1489,26 +1422,22 @@ public class TodoTxtTouch extends SherlockListActivity implements
 			}
 		}
 
-		m_swipeList.setEnabled(!inActionMode());
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		m_swipeList.discardUndo();
 		l.setItemChecked(position, l.isItemChecked(position));
 		showContextActionBarIfNeeded();
 	}
 
 	private void updateSyncUI(boolean redrawList) {
 		if (redrawList) {
-			m_pullToRefreshAttacher.setRefreshComplete();
 			// hide action bar
 			findViewById(R.id.actionbar).setVisibility(View.GONE);
 			setFilteredTasks(false);
 		}
 	}
 
-	@Override
 	public void onRefreshStarted(View view) {
 		syncClient(false);
 	}
