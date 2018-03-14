@@ -72,6 +72,7 @@ dependencies {
     compile 'oauth.signpost:signpost-core:1.2.1.2'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.dropbox.core:dropbox-core-sdk:3.0.6'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.15.0'
