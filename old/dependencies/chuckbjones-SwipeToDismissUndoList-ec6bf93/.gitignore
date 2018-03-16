@@ -1,8 +1,0 @@
-bin/
-gen/
-local.properties
-nbandroid/
-private/
-.classpath
-.project
-.settings/
