@@ -29,14 +29,14 @@ You should have received a copy of the GNU General Public License along with Tod
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:resizeMode="vertical" >
+    android:resizeMode="vertical">
 
     <LinearLayout
         style="@style/widget_w1_TaskBar"
         android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dip"
@@ -45,7 +45,7 @@ You should have received a copy of the GNU General Public License along with Tod
             android:layout_marginLeft="10dip"
             android:layout_weight="1"
             android:gravity="top"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/empty"
@@ -57,7 +57,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/todoWidget_IdTask1"
@@ -90,7 +90,7 @@ You should have received a copy of the GNU General Public License along with Tod
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/todoWidget_IdTask2"
@@ -124,7 +124,7 @@ You should have received a copy of the GNU General Public License along with Tod
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dip" >
+                android:layout_marginBottom="4dip">
 
                 <TextView
                     android:id="@+id/todoWidget_IdTask3"
@@ -162,7 +162,7 @@ You should have received a copy of the GNU General Public License along with Tod
             android:layout_marginRight="5dip"
             android:gravity="center|top"
             android:orientation="vertical"
-            android:paddingTop="5dip" >
+            android:paddingTop="5dip">
 
             <ImageView
                 android:id="@+id/widget_launchbutton"
@@ -178,7 +178,7 @@ You should have received a copy of the GNU General Public License along with Tod
                 android:layout_height="fill_parent"
                 android:layout_gravity="fill_vertical|bottom"
                 android:gravity="bottom|center"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <ImageButton
                     android:id="@+id/widget_addbutton"

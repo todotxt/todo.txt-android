@@ -24,7 +24,5 @@ Todo.txt for Android's source code is available at https://github.com/ginatrapan
 @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- -->
-<?xml version="1.0" encoding="UTF-8"?>
-<lint>
-</lint>
+ --><?xml version="1.0" encoding="UTF-8"?>
+<lint></lint>

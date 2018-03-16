@@ -1,21 +1,21 @@
 /**
  * This file is part of Todo.txt for Android, an app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.txt for Android is free software: you can redistribute it and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
- * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+ * <p>
+ * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt for Android. If not, see
  * <http://www.gnu.org/licenses/>.
- *
+ * <p>
  * Todo.txt for Android's source code is available at https://github.com/ginatrapani/todo.txt-android
  *
  * @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
@@ -25,23 +25,22 @@
 
 package com.todotxt.todotxttouch;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.todotxt.todotxttouch.util.Util;
-
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.util.Log;
 
+import com.todotxt.todotxttouch.util.Util;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 public class UpgradeHandler {
     private static final String TAG = UpgradeHandler.class.getSimpleName();
-
+    List<UpgradeTask> mHandlers = new ArrayList<UpgradeTask>();
     private TodoApplication mApp;
     private int mCurVersion;
     private int mPrevVersion;
-    List<UpgradeTask> mHandlers = new ArrayList<UpgradeTask>();
 
     public UpgradeHandler(TodoApplication application) {
         mApp = application;
@@ -77,30 +76,6 @@ public class UpgradeHandler {
         Log.i(TAG, "Successfully upgraded to version " + mCurVersion);
     }
 
-    final class UpgradeTask {
-        private String mDescription;
-        private int mVersion;
-        private Runnable mRunnable;
-
-        public UpgradeTask(String description, int version, Runnable runnable) {
-            mDescription = description;
-            mVersion = version;
-            mRunnable = runnable;
-        }
-
-        public String getDescription() {
-            return mDescription;
-        }
-
-        public int getVersion() {
-            return mVersion;
-        }
-
-        public Runnable getRunnable() {
-            return mRunnable;
-        }
-    }
-
     void initHandlers() {
         UpgradeTask up53 = new UpgradeTask(
                 "Migrate data from external to internal storage", 53,
@@ -132,5 +107,29 @@ public class UpgradeHandler {
                     }
                 });
         mHandlers.add(up53);
+    }
+
+    final class UpgradeTask {
+        private String mDescription;
+        private int mVersion;
+        private Runnable mRunnable;
+
+        public UpgradeTask(String description, int version, Runnable runnable) {
+            mDescription = description;
+            mVersion = version;
+            mRunnable = runnable;
+        }
+
+        public String getDescription() {
+            return mDescription;
+        }
+
+        public int getVersion() {
+            return mVersion;
+        }
+
+        public Runnable getRunnable() {
+            return mRunnable;
+        }
     }
 }

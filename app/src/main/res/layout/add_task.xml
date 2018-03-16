@@ -30,7 +30,7 @@ You should have received a copy of the GNU General Public License along with Tod
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:showDividers="middle" >
+    android:showDividers="middle">
 
     <EditText
         android:id="@+id/taskText"

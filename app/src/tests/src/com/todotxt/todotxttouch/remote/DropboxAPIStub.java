@@ -1,18 +1,18 @@
 /**
  * This file is part of Todo.txtndroid app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.tTodo.txttware: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
+ * <p>
  * Todo.txt is Todo.txt the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt.  If not,Todo.txt//www.gnu.org/licenses/>.
  *
  * @author Todo.txt contributors <todotxt@yahoogroups.com>
@@ -22,15 +22,15 @@
 
 package com.todotxt.todotxttouch.remote;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.ProgressListener;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.dropbox.client2.session.Session;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
 
 public class DropboxAPIStub extends DropboxAPI<Session> {
 
@@ -93,7 +93,7 @@ public class DropboxAPIStub extends DropboxAPI<Session> {
      */
     @Override
     public com.dropbox.client2.DropboxAPI.DropboxFileInfo getFile(String arg0,
-            String arg1, OutputStream arg2, ProgressListener arg3)
+                                                                  String arg1, OutputStream arg2, ProgressListener arg3)
             throws DropboxException {
         return null;
     }
@@ -153,7 +153,7 @@ public class DropboxAPIStub extends DropboxAPI<Session> {
      */
     @Override
     public com.dropbox.client2.DropboxAPI.DropboxLink media(String arg0,
-            boolean arg1) throws DropboxException {
+                                                            boolean arg1) throws DropboxException {
         return null;
     }
 
@@ -164,7 +164,7 @@ public class DropboxAPIStub extends DropboxAPI<Session> {
      */
     @Override
     public com.dropbox.client2.DropboxAPI.Entry metadata(String arg0, int arg1,
-            String arg2, boolean arg3, String arg4) throws DropboxException {
+                                                         String arg2, boolean arg3, String arg4) throws DropboxException {
         return null;
     }
 
@@ -187,7 +187,7 @@ public class DropboxAPIStub extends DropboxAPI<Session> {
      */
     @Override
     public com.dropbox.client2.DropboxAPI.Entry putFile(String arg0,
-            InputStream arg1, long arg2, String arg3, ProgressListener arg4)
+                                                        InputStream arg1, long arg2, String arg3, ProgressListener arg4)
             throws DropboxException {
         return null;
     }
@@ -199,7 +199,7 @@ public class DropboxAPIStub extends DropboxAPI<Session> {
      */
     @Override
     public com.dropbox.client2.DropboxAPI.Entry putFileOverwrite(String arg0,
-            InputStream arg1, long arg2, ProgressListener arg3)
+                                                                 InputStream arg1, long arg2, ProgressListener arg3)
             throws DropboxException {
         return null;
     }
@@ -247,7 +247,7 @@ public class DropboxAPIStub extends DropboxAPI<Session> {
      */
     @Override
     public List<com.dropbox.client2.DropboxAPI.Entry> revisions(String arg0,
-            int arg1) throws DropboxException {
+                                                                int arg1) throws DropboxException {
         return null;
     }
 
@@ -258,7 +258,7 @@ public class DropboxAPIStub extends DropboxAPI<Session> {
      */
     @Override
     public List<com.dropbox.client2.DropboxAPI.Entry> search(String arg0,
-            String arg1, int arg2, boolean arg3) throws DropboxException {
+                                                             String arg1, int arg2, boolean arg3) throws DropboxException {
         return null;
     }
 

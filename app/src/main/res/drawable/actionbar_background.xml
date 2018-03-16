@@ -22,16 +22,16 @@ You should have received a copy of the GNU General Public License along with Tod
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-	<item>
-		<shape android:shape="rectangle"> 
-		    <solid android:color="#FFCCCCCC" />
-		    <padding android:bottom="1.5dp" />
-		</shape> 
-	</item>
-	<item>
-		<shape android:shape="rectangle"> 
-		    <solid android:color="#FFEEEEEE" />
-		</shape> 
-	</item>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFCCCCCC" />
+            <padding android:bottom="1.5dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFEEEEEE" />
+        </shape>
+    </item>
 </layer-list>

@@ -1,18 +1,18 @@
 /**
  * This file is part of Todo.txtndroid app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.tTodo.txttware: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
+ * <p>
  * Todo.txt is Todo.txt the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt.  If not,Todo.txt//www.gnu.org/licenses/>.
  *
  * @author Todo.txt contributors <todotxt@yahoogroups.com>
@@ -22,6 +22,8 @@
 
 package com.todotxt.todotxttouch.task;
 
+import junit.framework.TestCase;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -29,8 +31,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 public class TaskTest extends TestCase {
 
@@ -44,8 +44,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(input, task.inScreenFormat());
@@ -64,8 +64,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("2011-02-28", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(input, task.inScreenFormat());
@@ -85,8 +85,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.A, task.getOriginalPriority());
         assertEquals(Priority.A, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A priority test with no curve balls",
@@ -106,8 +106,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("2011-11-28", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A priority test with no curve balls",
@@ -129,8 +129,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("2011-11-28", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A priority test with no curve balls",
@@ -150,8 +150,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.C, task.getOriginalPriority());
         assertEquals(Priority.C, task.getPriority());
         assertEquals("2011-11-28", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A priority test with no curve balls",
@@ -172,7 +172,7 @@ public class TaskTest extends TestCase {
         assertEquals("", task.getPrependedDate());
         assertEquals(1, task.getContexts().size());
         assertTrue(task.getContexts().contains("phone"));
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(input, task.inScreenFormat());
@@ -196,7 +196,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getContexts().contains("multiple"));
         assertTrue(task.getContexts().contains("contexts"));
         assertTrue(task.getContexts().contains("phone"));
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(input, task.inScreenFormat());
@@ -218,7 +218,7 @@ public class TaskTest extends TestCase {
         assertTrue(task.getContexts().contains("simple"));
         assertTrue(task.getContexts().contains("with"));
         assertTrue(task.getContexts().contains("phone"));
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(input, task.inScreenFormat());
@@ -236,7 +236,7 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
         assertEquals(1, task.getProjects().size());
         assertTrue(task.getProjects().contains("myproject"));
         assertFalse(task.isDeleted());
@@ -258,7 +258,7 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
         assertEquals(3, task.getProjects().size());
         assertTrue(task.getProjects().contains("multiple"));
         assertTrue(task.getProjects().contains("projects"));
@@ -282,7 +282,7 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
         assertEquals(4, task.getProjects().size());
         assertTrue(task.getProjects().contains("simple"));
         assertTrue(task.getProjects().contains("with"));
@@ -306,8 +306,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertEquals(1, task.getLinks().size());
         assertTrue(task.getLinks().contains(new URL("http://www.url.com")));
         assertFalse(task.isDeleted());
@@ -332,8 +332,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertEquals(2, task.getLinks().size());
         assertTrue(task.getLinks().contains(new URL("http://www.urls.com")));
         assertTrue(task.getLinks().contains(new URL("http://www.another.one")));
@@ -359,8 +359,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertEquals(3, task.getLinks().size());
         assertTrue(task.getLinks().contains(new URL("https://ww.url.com")));
         assertTrue(task.getLinks().contains(new URL("http://www.urls.com")));
@@ -415,9 +415,9 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
-        assertEquals(Collections.<String> emptyList(), task.getLinks());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getLinks());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(input, task.inScreenFormat());
@@ -435,9 +435,9 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
-        assertEquals(Collections.<String> emptyList(), task.getLinks());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getLinks());
         assertTrue(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("", task.inScreenFormat());
@@ -454,9 +454,9 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
-        assertEquals(Collections.<String> emptyList(), task.getLinks());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getLinks());
         assertTrue(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("", task.inScreenFormat());
@@ -762,8 +762,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.D, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertTrue(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("", task.inScreenFormat());
@@ -785,8 +785,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.D, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertTrue(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("", task.inScreenFormat());
@@ -893,8 +893,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.C, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A Simple test with no curve balls", task.inScreenFormat());
@@ -915,8 +915,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.B, task.getPriority());
         assertEquals("2011-11-01", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A Simple test with no curve balls", task.inScreenFormat());
@@ -937,8 +937,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.A, task.getOriginalPriority());
         assertEquals(Priority.C, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A Simple test with no curve balls", task.inScreenFormat());
@@ -959,8 +959,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.A, task.getOriginalPriority());
         assertEquals(Priority.C, task.getPriority());
         assertEquals("2011-11-01", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("A Simple test with no curve balls", task.inScreenFormat());
@@ -981,8 +981,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(expectedResult, task.inScreenFormat());
@@ -1005,7 +1005,7 @@ public class TaskTest extends TestCase {
         assertEquals(2, task.getContexts().size());
         assertTrue(task.getContexts().contains("test"));
         assertTrue(task.getContexts().contains("contexts"));
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals(expectedResult, task.inScreenFormat());
@@ -1025,7 +1025,7 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
         assertEquals(2, task.getProjects().size());
         assertTrue(task.getProjects().contains("test"));
         assertTrue(task.getProjects().contains("projects"));
@@ -1049,8 +1049,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.A, task.getPriority());
         assertEquals("", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("Another simple test with a priority curve ball",
@@ -1072,8 +1072,8 @@ public class TaskTest extends TestCase {
         assertEquals(Priority.NONE, task.getOriginalPriority());
         assertEquals(Priority.NONE, task.getPriority());
         assertEquals("2011-10-01", task.getPrependedDate());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertFalse(task.isDeleted());
         assertFalse(task.isCompleted());
         assertEquals("Another simple test with a prepended date curve ball",
@@ -1087,8 +1087,8 @@ public class TaskTest extends TestCase {
         task.initWithFilters(null, null, null);
 
         assertEquals(Priority.NONE, task.getPriority());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
     }
 
     public void testFilterInit_empty() {
@@ -1097,8 +1097,8 @@ public class TaskTest extends TestCase {
                 new ArrayList<String>());
 
         assertEquals(Priority.NONE, task.getPriority());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
     }
 
     public void testFilterInit_onePriority() {
@@ -1108,8 +1108,8 @@ public class TaskTest extends TestCase {
         Task task = new Task(1, "");
         task.initWithFilters(ps, new ArrayList<String>(), new ArrayList<String>());
 
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
 
         assertEquals("initialized with A", Priority.A, task.getPriority());
 
@@ -1119,8 +1119,8 @@ public class TaskTest extends TestCase {
         task = new Task(1, "");
         task.initWithFilters(ps, new ArrayList<String>(), new ArrayList<String>());
 
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
 
         assertEquals("initialized with D", Priority.D, task.getPriority());
     }
@@ -1133,8 +1133,8 @@ public class TaskTest extends TestCase {
         Task task = new Task(1, "");
         task.initWithFilters(ps, new ArrayList<String>(), new ArrayList<String>());
 
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
         assertEquals(Priority.NONE, task.getPriority());
     }
 
@@ -1146,7 +1146,7 @@ public class TaskTest extends TestCase {
         task.initWithFilters(null, null, projects);
 
         assertEquals(Priority.NONE, task.getPriority());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
 
         List<String> tp = task.getProjects();
         assertEquals("project count", 1, tp.size());
@@ -1162,8 +1162,8 @@ public class TaskTest extends TestCase {
         task.initWithFilters(null, null, projects);
 
         assertEquals(Priority.NONE, task.getPriority());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
     }
 
     public void testFilterInit_oneContext() {
@@ -1174,7 +1174,7 @@ public class TaskTest extends TestCase {
         task.initWithFilters(null, contexts, null);
 
         assertEquals(Priority.NONE, task.getPriority());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
 
         List<String> tc = task.getContexts();
         assertEquals("context count", 1, tc.size());
@@ -1190,7 +1190,7 @@ public class TaskTest extends TestCase {
         task.initWithFilters(null, contexts, null);
 
         assertEquals(Priority.NONE, task.getPriority());
-        assertEquals(Collections.<String> emptyList(), task.getProjects());
-        assertEquals(Collections.<String> emptyList(), task.getContexts());
+        assertEquals(Collections.<String>emptyList(), task.getProjects());
+        assertEquals(Collections.<String>emptyList(), task.getContexts());
     }
 }

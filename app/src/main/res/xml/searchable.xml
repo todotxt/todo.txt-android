@@ -25,6 +25,6 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:hint="@string/search_hint"
-    android:label="@string/app_label" >
+    android:label="@string/app_label">
 
 </searchable>

@@ -1,21 +1,21 @@
 /**
  * This file is part of Todo.txt for Android, an app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.txt for Android is free software: you can redistribute it and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
- * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+ * <p>
+ * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt for Android. If not, see
  * <http://www.gnu.org/licenses/>.
- *
+ * <p>
  * Todo.txt for Android's source code is available at https://github.com/ginatrapani/todo.txt-android
  *
  * @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
@@ -25,6 +25,9 @@
 
 package com.todotxt.todotxttouch.task;
 
+import com.todotxt.todotxttouch.util.RelativeDate;
+import com.todotxt.todotxttouch.util.Strings;
+
 import java.io.Serializable;
 import java.net.URL;
 import java.text.ParseException;
@@ -32,9 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.todotxt.todotxttouch.util.RelativeDate;
-import com.todotxt.todotxttouch.util.Strings;
 
 @SuppressWarnings("serial")
 public class Task implements Serializable {
@@ -122,12 +122,12 @@ public class Task implements Serializable {
         return id;
     }
 
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
-
     public Priority getPriority() {
         return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     public List<String> getContexts() {
@@ -373,7 +373,7 @@ public class Task implements Serializable {
 
     /**
      * Returns the fully extended priority order: A - Z, None, Completed
-     * 
+     *
      * @return fullyExtendedPriority
      */
     public Integer getSortPriority() {
@@ -409,7 +409,7 @@ public class Task implements Serializable {
     }
 
     public void initWithFilters(ArrayList<Priority> prios, ArrayList<String> ctxts,
-            ArrayList<String> pjs) {
+                                ArrayList<String> pjs) {
         if ((prios != null) && (prios.size() == 1)) {
             setPriority(prios.get(0));
         }

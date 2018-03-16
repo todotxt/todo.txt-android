@@ -1,18 +1,18 @@
 /**
  * This file is part of Todo.txtndroid app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.tTodo.txttware: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
+ * <p>
  * Todo.txt is Todo.txt the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt.  If not,Todo.txt//www.gnu.org/licenses/>.
  *
  * @author Todo.txt contributors <todotxt@yahoogroups.com>
@@ -22,12 +22,13 @@
 
 package com.todotxt.todotxttouch.remote;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import android.test.ApplicationTestCase;
+
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.ProgressListener;
+import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.exception.DropboxServerException;
+import com.todotxt.todotxttouch.TodoApplication;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
@@ -36,13 +37,12 @@ import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
 
-import android.test.ApplicationTestCase;
-
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.ProgressListener;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.exception.DropboxServerException;
-import com.todotxt.todotxttouch.TodoApplication;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplication> {
     private static final String remotefile1 = "remotefile1";
@@ -54,13 +54,12 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     private static final String remoterev2 = "remoterev2";
     private static final String origrev1 = "origrev1";
     private static final String origrev2 = "origrev2";
-
-    private File localFile1;
-    private File localFile2;
     DropboxFile dbFile1;
     DropboxFile dbFile2;
     ArrayList<DropboxFile> dropboxFiles1;
     ArrayList<DropboxFile> dropboxFiles2;
+    private File localFile1;
+    private File localFile2;
 
     public DropboxFileDownloaderTest(Class<TodoApplication> applicationClass) {
         super(applicationClass);
@@ -109,7 +108,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testRemoteFileMissing() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 throw notFoundException();
             }
@@ -129,7 +128,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testRemoteFileDeleted() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remoterev1, true);
             }
@@ -149,13 +148,13 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testRemoteFileExists() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remoterev1);
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String arg0, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 assertEquals(remotefile1, arg0);
                 PrintWriter w = new PrintWriter(out);
@@ -192,13 +191,13 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testRemoteFileUpToDate() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(origrev1);
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String arg0, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 fail("getFile should not be called");
                 return null;
@@ -226,13 +225,13 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testRemoteFileDownloadError() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remoterev1);
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String arg0, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 throw new DropboxException("stub throw");
             }
@@ -266,7 +265,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testBothFilesMissing() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 throw notFoundException();
             }
@@ -288,7 +287,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testFirstRemoteFileExists() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remoterev1);
@@ -298,7 +297,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     PrintWriter w = new PrintWriter(out);
@@ -337,7 +336,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testSecondRemoteFileExists() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile2)) {
                     return create_metadata(remoterev1);
@@ -347,7 +346,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 if (file.equals(remotefile2)) {
                     PrintWriter w = new PrintWriter(out);
@@ -386,7 +385,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testBothRemoteFilesExist() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remoterev1);
@@ -396,7 +395,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 PrintWriter w = new PrintWriter(out);
                 if (file.equals(remotefile1)) {
@@ -441,7 +440,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testFirstRemoteFileUpToDate() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(origrev1);
@@ -451,7 +450,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     fail("getFile should not be called for first file");
@@ -490,7 +489,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testSecondRemoteFileUpToDate() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remoterev1);
@@ -500,7 +499,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 if (file.equals(remotefile2)) {
                     fail("getFile should not be called for second file");
@@ -539,7 +538,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testBothRemoteFilesUpToDate() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(origrev1);
@@ -549,7 +548,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 fail("getFile should not be called for either file");
                 return null;
@@ -576,7 +575,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testFirstRemoteFileError() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remoterev1);
@@ -586,7 +585,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     throw new DropboxException("stub throw");
@@ -627,7 +626,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
     public void testSecondRemoteFileError() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remoterev1);
@@ -637,7 +636,7 @@ public class DropboxFileDownloaderTest extends ApplicationTestCase<TodoApplicati
             }
 
             public DropboxAPI.DropboxFileInfo getFile(String file, String arg1,
-                    OutputStream out, ProgressListener arg3)
+                                                      OutputStream out, ProgressListener arg3)
                     throws DropboxException {
                 if (file.equals(remotefile2)) {
                     throw new DropboxException("stub throw");

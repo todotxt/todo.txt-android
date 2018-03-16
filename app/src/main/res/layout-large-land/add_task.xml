@@ -29,7 +29,7 @@ You should have received a copy of the GNU General Public License along with Tod
     android:id="@+id/tablet_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <ListView
         android:id="@+id/left_drawer"
@@ -44,7 +44,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:showDividers="middle" >
+        android:showDividers="middle">
 
         <EditText
             android:id="@+id/taskText"

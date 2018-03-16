@@ -24,28 +24,27 @@ Todo.txt for Android's source code is available at https://github.com/ginatrapan
 @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
 @license http://www.gnu.org/licenses/gpl.html
 @copyright 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- -->
-<!-- suppress ALL -->
+ --><!-- suppress ALL -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_add_prio"
         android:icon="@drawable/ic_action_prioritize"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="@string/priority_prompt"/>
+        android:title="@string/priority_prompt" />
     <item
         android:id="@+id/menu_add_tag"
         android:icon="@drawable/ic_action_filter"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="@string/contextproject_prompt"/>
+        android:title="@string/contextproject_prompt" />
     <item
         android:id="@+id/menu_save_task"
         android:icon="@drawable/navigation_accept"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="@string/add"/>
+        android:title="@string/add" />
 
 </menu>

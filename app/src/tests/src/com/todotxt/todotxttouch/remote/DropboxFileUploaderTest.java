@@ -1,18 +1,18 @@
 /**
  * This file is part of Todo.txtndroid app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.tTodo.txttware: you can redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
+ * <p>
  * Todo.txt is Todo.txt the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt.  If not,Todo.txt//www.gnu.org/licenses/>.
  *
  * @author Todo.txt contributors <todotxt@yahoogroups.com>
@@ -22,9 +22,14 @@
 
 package com.todotxt.todotxttouch.remote;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
+import android.os.Environment;
+
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.ProgressListener;
+import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.exception.DropboxServerException;
+
+import junit.framework.TestCase;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
@@ -33,13 +38,9 @@ import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
 
-import junit.framework.TestCase;
-import android.os.Environment;
-
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.ProgressListener;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.exception.DropboxServerException;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 public class DropboxFileUploaderTest extends TestCase {
     private static final String remotefile1 = "remotefile1";
@@ -51,16 +52,14 @@ public class DropboxFileUploaderTest extends TestCase {
     private static final String remoterev2 = "remoterev2";
     private static final String localrev1 = "localrev1";
     private static final String localrev2 = "localrev2";
-
-    private File localFile1 = new File(
-            Environment.getExternalStorageDirectory(), localpath1);
-    private File localFile2 = new File(
-            Environment.getExternalStorageDirectory(), localpath2);
-
     DropboxFile dbFile1;
     DropboxFile dbFile2;
     ArrayList<DropboxFile> dropboxFiles1;
     ArrayList<DropboxFile> dropboxFiles2;
+    private File localFile1 = new File(
+            Environment.getExternalStorageDirectory(), localpath1);
+    private File localFile2 = new File(
+            Environment.getExternalStorageDirectory(), localpath2);
 
     protected void setUp() throws Exception {
         if (localFile1.exists()) {
@@ -100,14 +99,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testRemoteFileMissing() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 throw notFoundException();
             }
 
             public DropboxAPI.Entry putFile(String arg0,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 return create_metadata(remotefile1, localrev1);
             }
         };
@@ -126,14 +125,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testRemoteFileDeleted() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remotefile1, remoterev1, true);
             }
 
             public DropboxAPI.Entry putFile(String arg0,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 return create_metadata(remotefile1, localrev1);
             }
         };
@@ -152,14 +151,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testRemoteFileExists() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remotefile1, localrev1);
             }
 
             public DropboxAPI.Entry putFile(String arg0,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 return create_metadata(remotefile1, remoterev1);
             }
         };
@@ -179,14 +178,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testRemoteFileUppercase() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remotefile1, localrev1);
             }
 
             public DropboxAPI.Entry putFile(String arg0,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 return create_metadata(remotefile1.toUpperCase(), remoterev1);
             }
         };
@@ -206,14 +205,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testRemoteFileConflict() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remotefile1, remoterev1);
             }
 
             public DropboxAPI.Entry putFile(String arg0,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 fail("putFile should not be called");
                 return null;
             }
@@ -240,14 +239,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testRemoteFileOverwrite() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remotefile1, remoterev1);
             }
 
             public DropboxAPI.Entry putFile(String arg0,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 return create_metadata(remotefile1, remoterev2);
             }
         };
@@ -266,14 +265,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testRemoteFileUploadError() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 return create_metadata(remotefile1, localrev1);
             }
 
             public DropboxAPI.Entry putFile(String arg0,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 throw new DropboxException("stub throw");
             }
         };
@@ -298,14 +297,14 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testBothFilesMissing() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String arg0, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 throw notFoundException();
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, localrev1);
                 } else {
@@ -330,7 +329,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testFirstRemoteFileExists() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, localrev1);
@@ -340,8 +339,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, remoterev1);
                 } else {
@@ -366,7 +365,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testSecondRemoteFileExists() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     throw notFoundException();
@@ -376,8 +375,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, remoterev1);
                 } else {
@@ -402,7 +401,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testBothRemoteFilesExist() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, localrev1);
@@ -412,8 +411,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, remoterev1);
                 } else {
@@ -438,7 +437,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testFirstRemoteFileError() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, localrev1);
@@ -448,8 +447,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 if (file.equals(remotefile1)) {
                     throw new DropboxException("stub throw");
                 } else {
@@ -481,7 +480,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testSecondRemoteFileError() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, localrev1);
@@ -491,8 +490,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, remoterev1);
                 } else {
@@ -523,7 +522,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testFirstRemoteFileConflict() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, remoterev1);
@@ -534,8 +533,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 fail("putFile should not be called for either file");
                 return null;
             }
@@ -563,7 +562,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testSecondRemoteFileConflict() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, localrev1);
@@ -573,8 +572,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 fail("putFile should not be called for either file");
                 return null;
             }
@@ -602,7 +601,7 @@ public class DropboxFileUploaderTest extends TestCase {
     public void testBothRemoteFilesOverwrite() {
         DropboxAPI<?> dropboxapi = new DropboxAPIStub() {
             public DropboxAPI.Entry metadata(String file, int arg1,
-                    String arg2, boolean arg3, String arg4)
+                                             String arg2, boolean arg3, String arg4)
                     throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, remoterev1);
@@ -612,8 +611,8 @@ public class DropboxFileUploaderTest extends TestCase {
             }
 
             public DropboxAPI.Entry putFile(String file,
-                    InputStream arg1, long arg2, String arg3,
-                    ProgressListener arg4) throws DropboxException {
+                                            InputStream arg1, long arg2, String arg3,
+                                            ProgressListener arg4) throws DropboxException {
                 if (file.equals(remotefile1)) {
                     return create_metadata(remotefile1, "newrev1");
                 } else {

@@ -1,21 +1,21 @@
 /**
  * This file is part of Todo.txt for Android, an app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.txt for Android is free software: you can redistribute it and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
- * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+ * <p>
+ * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt for Android. If not, see
  * <http://www.gnu.org/licenses/>.
- *
+ * <p>
  * Todo.txt for Android's source code is available at https://github.com/ginatrapani/todo.txt-android
  *
  * @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
@@ -24,8 +24,6 @@
  */
 
 package com.todotxt.todotxttouch;
-
-import java.util.ArrayList;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -44,17 +42,12 @@ import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 import com.todotxt.todotxttouch.util.Util;
 
+import java.util.ArrayList;
+
 public class TodoApplication extends Application {
     private final static String TAG = TodoApplication.class.getSimpleName();
-    public TodoPreferences m_prefs;
-    private RemoteClientManager remoteClientManager;
-    private boolean m_pulling = false;
-    private boolean m_pushing = false;
-    private int pushQueue = 0;
-    private TaskBag taskBag;
-    private BroadcastReceiver m_broadcastReceiver;
     private static Context appContext;
-
+    public TodoPreferences m_prefs;
     // filter variables
     public ArrayList<Priority> m_prios = new ArrayList<Priority>();
     public ArrayList<String> m_contexts = new ArrayList<String>();
@@ -62,6 +55,16 @@ public class TodoApplication extends Application {
     public String m_search;
     public ArrayList<String> m_filters = new ArrayList<String>();
     public Sort sort = Sort.PRIORITY_DESC;
+    private RemoteClientManager remoteClientManager;
+    private boolean m_pulling = false;
+    private boolean m_pushing = false;
+    private int pushQueue = 0;
+    private TaskBag taskBag;
+    private BroadcastReceiver m_broadcastReceiver;
+
+    public static Context getAppContetxt() {
+        return appContext;
+    }
 
     @Override
     public void onCreate() {
@@ -110,7 +113,7 @@ public class TodoApplication extends Application {
 
     /**
      * Are we currently pushing or pulling remote data?
-     * 
+     *
      * @return true iff a remote operation currently in progress.
      */
     public boolean syncInProgress() {
@@ -192,10 +195,6 @@ public class TodoApplication extends Application {
         return remoteClientManager;
     }
 
-    public static Context getAppContetxt() {
-        return appContext;
-    }
-
     public void showToast(int resid) {
         Util.showToastLong(this, resid);
     }
@@ -217,6 +216,93 @@ public class TodoApplication extends Application {
 
             showToast("NOT AUTHENTICATED!");
         }
+    }
+
+    /**
+     * Do an asynchronous pull from remote. Check network availability before
+     * calling this.
+     */
+    private void backgroundPullFromRemote() {
+        if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
+            m_pulling = true;
+            updateSyncUI(false);
+
+            new AsyncTask<Void, Void, Boolean>() {
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    try {
+                        Log.d(TAG, "start taskBag.pullFromRemote");
+
+                        taskBag.pullFromRemote(true);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                @Override
+                protected void onPostExecute(Boolean result) {
+                    Log.d(TAG, "post taskBag.pullFromRemote");
+
+                    m_pulling = false;
+
+                    if (result) {
+                        Log.d(TAG, "taskBag.pullFromRemote done");
+
+                        updateSyncUI(true);
+                    } else {
+                        sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
+                    }
+
+                    super.onPostExecute(result);
+                }
+            }.execute();
+        } else {
+            Log.e(TAG, "NOT AUTHENTICATED!");
+
+            showToast("NOT AUTHENTICATED!");
+        }
+    }
+
+    private void updateSyncUI(boolean redrawList) {
+        sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI).putExtra("redrawList", redrawList));
+
+        if (redrawList) {
+            broadcastWidgetUpdate();
+        }
+    }
+
+    public void broadcastWidgetUpdate() {
+        Log.d(TAG, "Broadcasting widget update intent");
+
+        Intent intent = new Intent(Constants.INTENT_WIDGET_UPDATE);
+        sendBroadcast(intent);
+    }
+
+    public void storeSort() {
+        m_prefs.storeSort(sort);
+        broadcastWidgetUpdate();
+    }
+
+    public void getStoredSort() {
+        sort = m_prefs.getSort();
+    }
+
+    public void storeFilters() {
+        m_prefs.storeFilters(m_prios, m_contexts, m_projects, m_search, m_filters);
+        broadcastWidgetUpdate();
+    }
+
+    public void getStoredFilters() {
+        m_prios = m_prefs.getFilteredPriorities();
+        m_contexts = m_prefs.getFilteredContexts();
+        m_projects = m_prefs.getFilteredProjects();
+        m_search = m_prefs.getSearch();
+        // split on tab just in case there is a space in the text
+        m_filters = m_prefs.getFilterSummaries();
     }
 
     private class AsyncPushTask extends AsyncTask<Void, Void, Integer> {
@@ -291,63 +377,6 @@ public class TodoApplication extends Application {
         }
     }
 
-    /**
-     * Do an asynchronous pull from remote. Check network availability before
-     * calling this.
-     */
-    private void backgroundPullFromRemote() {
-        if (getRemoteClientManager().getRemoteClient().isAuthenticated()) {
-            m_pulling = true;
-            updateSyncUI(false);
-
-            new AsyncTask<Void, Void, Boolean>() {
-                @Override
-                protected Boolean doInBackground(Void... params) {
-                    try {
-                        Log.d(TAG, "start taskBag.pullFromRemote");
-
-                        taskBag.pullFromRemote(true);
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
-
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                @Override
-                protected void onPostExecute(Boolean result) {
-                    Log.d(TAG, "post taskBag.pullFromRemote");
-
-                    m_pulling = false;
-
-                    if (result) {
-                        Log.d(TAG, "taskBag.pullFromRemote done");
-
-                        updateSyncUI(true);
-                    } else {
-                        sendBroadcast(new Intent(Constants.INTENT_ASYNC_FAILED));
-                    }
-
-                    super.onPostExecute(result);
-                }
-            }.execute();
-        } else {
-            Log.e(TAG, "NOT AUTHENTICATED!");
-
-            showToast("NOT AUTHENTICATED!");
-        }
-    }
-
-    private void updateSyncUI(boolean redrawList) {
-        sendBroadcast(new Intent(Constants.INTENT_UPDATE_UI).putExtra("redrawList", redrawList));
-
-        if (redrawList) {
-            broadcastWidgetUpdate();
-        }
-    }
-
     private final class BroadcastReceiverExtension extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -371,35 +400,5 @@ public class TodoApplication extends Application {
                 updateSyncUI(true);
             }
         }
-    }
-
-    public void broadcastWidgetUpdate() {
-        Log.d(TAG, "Broadcasting widget update intent");
-
-        Intent intent = new Intent(Constants.INTENT_WIDGET_UPDATE);
-        sendBroadcast(intent);
-    }
-
-    public void storeSort() {
-        m_prefs.storeSort(sort);
-        broadcastWidgetUpdate();
-    }
-
-    public void getStoredSort() {
-        sort = m_prefs.getSort();
-    }
-
-    public void storeFilters() {
-        m_prefs.storeFilters(m_prios, m_contexts, m_projects, m_search, m_filters);
-        broadcastWidgetUpdate();
-    }
-
-    public void getStoredFilters() {
-        m_prios = m_prefs.getFilteredPriorities();
-        m_contexts = m_prefs.getFilteredContexts();
-        m_projects = m_prefs.getFilteredProjects();
-        m_search = m_prefs.getSearch();
-        // split on tab just in case there is a space in the text
-        m_filters = m_prefs.getFilterSummaries();
     }
 }

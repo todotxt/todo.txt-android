@@ -23,23 +23,23 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/add_new"
         android:icon="@drawable/ic_action_add"
         android:showAsAction="always"
-        android:title="@string/addtask"/>
+        android:title="@string/addtask" />
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_action_search"
         android:showAsAction="always"
-        android:title="@string/search"/>
+        android:title="@string/search" />
     <item
         android:id="@+id/sort"
         android:icon="@drawable/collections_sort_by_size"
         android:showAsAction="ifRoom"
-        android:title="@string/sort"/>
+        android:title="@string/sort" />
     <!--
     <item
         android:id="@+id/filter"
@@ -51,21 +51,21 @@ You should have received a copy of the GNU General Public License along with Tod
         android:id="@+id/sync"
         android:icon="@drawable/ic_action_sync"
         android:showAsAction="never"
-        android:title="@string/sync"/>
+        android:title="@string/sync" />
     <item
         android:id="@+id/archive"
         android:icon="@drawable/ic_action_archive"
         android:showAsAction="never"
-        android:title="@string/archive"/>
+        android:title="@string/archive" />
     <item
         android:id="@+id/share"
         android:icon="@drawable/social_share"
         android:showAsAction="never"
-        android:title="@string/share"/>
+        android:title="@string/share" />
     <item
         android:id="@+id/preferences"
         android:icon="@drawable/action_settings"
         android:showAsAction="never"
-        android:title="@string/preferences"/>
+        android:title="@string/preferences" />
 
 </menu>

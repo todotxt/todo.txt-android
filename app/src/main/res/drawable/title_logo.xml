@@ -2,8 +2,7 @@
 
 <!--
 This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
--->
-<!--
+--><!--
     Copyright 2010 Google Inc.
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,5 +18,5 @@ This file is part of Todo.txt, an Android app for managing your todo.txt file (h
     limitations under the License.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_focused="false" android:state_pressed="false" android:drawable="@drawable/title_logo_default"/>
+    <item android:drawable="@drawable/title_logo_default" android:state_focused="false" android:state_pressed="false" />
 </selector>

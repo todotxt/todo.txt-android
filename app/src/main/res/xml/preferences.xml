@@ -29,11 +29,11 @@
 	@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:key="todotxt_settings"
-        android:title="@string/todotxt_settings_header" >
+        android:title="@string/todotxt_settings_header">
         <CheckBoxPreference
             android:key="@string/auto_archive_pref_key"
             android:summary="@string/auto_archive_pref_summary"
@@ -45,7 +45,7 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="dropbox_settings"
-        android:title="@string/dropbox_settings_header" >
+        android:title="@string/dropbox_settings_header">
         <com.todotxt.todotxttouch.TodoLocationPreference
             android:defaultValue="@string/todo_path_default"
             android:key="@string/todo_path_key"
@@ -66,7 +66,7 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="about_settings_header"
-        android:title="@string/about_settings_header" >
+        android:title="@string/about_settings_header">
         <Preference
             android:key="app_version"
             android:title="@string/app_label" />

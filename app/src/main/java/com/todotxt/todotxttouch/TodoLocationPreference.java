@@ -1,21 +1,21 @@
 /**
  * This file is part of Todo.txt for Android, an app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.txt for Android is free software: you can redistribute it and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
- * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+ * <p>
+ * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt for Android. If not, see
  * <http://www.gnu.org/licenses/>.
- *
+ * <p>
  * Todo.txt for Android's source code is available at https://github.com/ginatrapani/todo.txt-android
  *
  * @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
@@ -24,9 +24,6 @@
  */
 
 package com.todotxt.todotxttouch;
-
-import java.io.File;
-import java.util.List;
 
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
@@ -53,13 +50,11 @@ import android.widget.TextView;
 import com.todotxt.todotxttouch.remote.RemoteFolder;
 import com.todotxt.todotxttouch.util.Tree;
 
+import java.io.File;
+import java.util.List;
+
 public class TodoLocationPreference extends DialogPreference {
     final static String TAG = TodoLocationPreference.class.getSimpleName();
-
-    enum DisplayMode {
-        NORMAL, WARNING, ADD_NEW
-    }
-
     private TodoApplication mApp;
     private DisplayMode mDisplayMode = DisplayMode.NORMAL;
     private boolean mDisplayWarning = false;
@@ -67,13 +62,11 @@ public class TodoLocationPreference extends DialogPreference {
     private String mInitialPath;
     private Tree<RemoteFolder> mRootFolder;
     private Tree<RemoteFolder> mCurrentSelection;
-
     private ListView mListView;
     private View mEmptyView;
     private View mListFrame;
     private EditText mEditText;
     private TextView mCurrentFolderTextView;
-
     public TodoLocationPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -202,7 +195,7 @@ public class TodoLocationPreference extends DialogPreference {
 
         mListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
+                                    int position, long id) {
 
                 if (position == 0 && mCurrentSelection.getData().hasParent()) {
                     // go back up to previous directory
@@ -415,27 +408,11 @@ public class TodoLocationPreference extends DialogPreference {
         super.onRestoreInstanceState(myState.getSuperState());
     }
 
+    enum DisplayMode {
+        NORMAL, WARNING, ADD_NEW
+    }
+
     private static class SavedState extends BaseSavedState {
-        String displayMode;
-        String initialPath;
-
-        public SavedState(Parcel source) {
-            super(source);
-            displayMode = source.readString();
-            initialPath = source.readString();
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            super.writeToParcel(dest, flags);
-            dest.writeString(displayMode);
-            dest.writeString(initialPath);
-        }
-
-        public SavedState(Parcelable superState) {
-            super(superState);
-        }
-
         @SuppressWarnings("unused")
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
@@ -446,5 +423,24 @@ public class TodoLocationPreference extends DialogPreference {
                 return new SavedState[size];
             }
         };
+        String displayMode;
+        String initialPath;
+
+        public SavedState(Parcel source) {
+            super(source);
+            displayMode = source.readString();
+            initialPath = source.readString();
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            dest.writeString(displayMode);
+            dest.writeString(initialPath);
+        }
     }
 }

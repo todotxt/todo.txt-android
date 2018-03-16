@@ -1,21 +1,21 @@
 /**
  * This file is part of Todo.txt for Android, an app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.txt for Android is free software: you can redistribute it and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
- * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+ * <p>
+ * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt for Android. If not, see
  * <http://www.gnu.org/licenses/>.
- *
+ * <p>
  * Todo.txt for Android's source code is available at https://github.com/ginatrapani/todo.txt-android
  *
  * @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
@@ -24,27 +24,6 @@
  */
 
 package com.todotxt.todotxttouch.util;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -64,12 +43,31 @@ import android.widget.Toast;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoException;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 public class Util {
-    private static String TAG = Util.class.getSimpleName();
-
     private static final int CONNECTION_TIMEOUT = 120000;
-
     private static final int SOCKET_TIMEOUT = 120000;
+    private static String TAG = Util.class.getSimpleName();
 
     private Util() {
     }
@@ -184,13 +182,9 @@ public class Util {
         Toast.makeText(cxt, msg, Toast.LENGTH_SHORT).show();
     }
 
-    public interface OnMultiChoiceDialogListener {
-        void onClick(boolean[] selected);
-    }
-
     public static Dialog createMultiChoiceDialog(Context cxt,
-            CharSequence[] keys, boolean[] values, Integer titleId,
-            Integer iconId, final OnMultiChoiceDialogListener listener) {
+                                                 CharSequence[] keys, boolean[] values, Integer titleId,
+                                                 Integer iconId, final OnMultiChoiceDialogListener listener) {
         final boolean[] res;
 
         if (values == null) {
@@ -212,7 +206,7 @@ public class Util {
         builder.setMultiChoiceItems(keys, values,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     public void onClick(DialogInterface dialog,
-                            int whichButton, boolean isChecked) {
+                                        int whichButton, boolean isChecked) {
                         res[whichButton] = isChecked;
                     }
                 });
@@ -258,7 +252,7 @@ public class Util {
     }
 
     public static void showConfirmationDialog(Context cxt, int msgid, OnClickListener oklistener,
-            int titleid) {
+                                              int titleid) {
         AlertDialog.Builder builder = new AlertDialog.Builder(cxt);
         // builder.setTitle(cxt.getPackageName());
         builder.setTitle(titleid);
@@ -297,14 +291,6 @@ public class Util {
         } else {
             return false;
         }
-    }
-
-    public interface InputDialogListener {
-        void onClick(String input);
-    }
-
-    public interface LoginDialogListener {
-        void onClick(String username, String password);
     }
 
     public static void createParentDirectory(File dest) throws TodoException {
@@ -445,5 +431,17 @@ public class Util {
         }
 
         return new ArrayList<String>(Arrays.asList(s.split(delimeter)));
+    }
+
+    public interface OnMultiChoiceDialogListener {
+        void onClick(boolean[] selected);
+    }
+
+    public interface InputDialogListener {
+        void onClick(String input);
+    }
+
+    public interface LoginDialogListener {
+        void onClick(String username, String password);
     }
 }

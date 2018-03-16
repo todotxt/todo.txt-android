@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License along with Tod
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <!--
          We define separate margins to allow for flexibility in twiddling the margins
@@ -38,7 +38,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:layout_height="40dp"
         android:layout_gravity="right"
         android:background="#006400"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/listwidget_header"
@@ -46,7 +46,7 @@ You should have received a copy of the GNU General Public License along with Tod
             android:layout_height="match_parent"
             android:background="?android:selectableItemBackground"
             android:orientation="horizontal"
-            android:paddingRight="8dp" >
+            android:paddingRight="8dp">
 
             <ImageView
                 android:id="@+id/listwidget_logo"
@@ -73,7 +73,7 @@ You should have received a copy of the GNU General Public License along with Tod
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:gravity="right" >
+            android:gravity="right">
 
             <ImageButton
                 android:id="@+id/listwidget_refresh"
@@ -120,7 +120,7 @@ You should have received a copy of the GNU General Public License along with Tod
         android:layout_height="0dip"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="#ffffffff" >
+        android:background="#ffffffff">
 
         <ListView
             android:id="@+id/widget_list"

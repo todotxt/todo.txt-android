@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
 
 Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
@@ -24,28 +23,12 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- selected tabs -->
-    <item android:drawable="@drawable/tab_selected_pressed"
-        android:state_selected="true"
-        android:state_pressed="true" />
-    <item android:drawable="@drawable/tab_selected_focused"
-        android:state_selected="true"
-        android:state_pressed="false"
-        android:state_focused="true" />
-    <item android:drawable="@drawable/tab_selected"
-        android:state_selected="true"
-        android:state_focused="false"
-        android:state_pressed="false" />
+    <item android:drawable="@drawable/tab_selected_pressed" android:state_pressed="true" android:state_selected="true" />
+    <item android:drawable="@drawable/tab_selected_focused" android:state_focused="true" android:state_pressed="false" android:state_selected="true" />
+    <item android:drawable="@drawable/tab_selected" android:state_focused="false" android:state_pressed="false" android:state_selected="true" />
 
     <!-- unselected tabs -->
-    <item android:drawable="@drawable/tab_unselected_pressed"
-        android:state_selected="false"
-        android:state_pressed="true" />
-    <item android:drawable="@drawable/tab_unselected_focused"
-        android:state_selected="false"
-        android:state_pressed="false"
-        android:state_focused="true" />
-    <item android:drawable="@drawable/tab_unselected"
-        android:state_selected="false"
-        android:state_focused="false"
-        android:state_pressed="false" />
+    <item android:drawable="@drawable/tab_unselected_pressed" android:state_pressed="true" android:state_selected="false" />
+    <item android:drawable="@drawable/tab_unselected_focused" android:state_focused="true" android:state_pressed="false" android:state_selected="false" />
+    <item android:drawable="@drawable/tab_unselected" android:state_focused="false" android:state_pressed="false" android:state_selected="false" />
 </selector>

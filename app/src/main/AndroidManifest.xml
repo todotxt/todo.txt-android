@@ -26,7 +26,7 @@ You should have received a copy of the GNU General Public License along with Tod
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.todotxt.todotxttouch"
     android:versionCode="56"
-    android:versionName="2.2" >
+    android:versionName="2.2">
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -49,11 +49,11 @@ You should have received a copy of the GNU General Public License along with Tod
         android:allowBackup="true"
         android:icon="@drawable/todotxt_touch_icon"
         android:label="@string/app_label"
-        android:theme="@style/Theme.TodoTxt" >
+        android:theme="@style/Theme.TodoTxt">
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
             android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask">
             <intent-filter>
                 <data android:scheme="@string/dropbox_consumer_key" />
 
@@ -66,7 +66,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity
             android:name=".LoginScreen"
             android:label="@string/app_label"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,7 +79,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity
             android:name=".AddTask"
             android:label="@string/addtask"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -88,7 +88,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity-alias
             android:name=".AddTaskShortcut"
             android:label="@string/shortcut_addtask_name"
-            android:targetActivity=".AddTask" >
+            android:targetActivity=".AddTask">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
@@ -98,7 +98,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity-alias
             android:name=".AddTaskShare"
             android:label="@string/share_addtask_name"
-            android:targetActivity=".AddTask" >
+            android:targetActivity=".AddTask">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="com.google.android.gm.action.AUTO_SEND" />
@@ -112,7 +112,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <activity
             android:name=".HelpActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".TodoTxtTouch" >
+        <activity android:name=".TodoTxtTouch">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -126,7 +126,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <receiver
             android:name=".TodoWidgetProvider"
             android:enabled="@bool/below_api_14"
-            android:label="@string/app_label" >
+            android:label="@string/app_label">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -138,7 +138,7 @@ You should have received a copy of the GNU General Public License along with Tod
                 android:name="android.appwidget.provider"
                 android:resource="@xml/todo_widget_provider" />
         </receiver>
-        <receiver android:name=".PeriodicSyncStarter" >
+        <receiver android:name=".PeriodicSyncStarter">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -146,7 +146,7 @@ You should have received a copy of the GNU General Public License along with Tod
         <receiver
             android:name="com.todotxt.todotxttouch.widget.ListWidgetProvider"
             android:enabled="@bool/api_14_or_above"
-            android:label="@string/app_label" >
+            android:label="@string/app_label">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

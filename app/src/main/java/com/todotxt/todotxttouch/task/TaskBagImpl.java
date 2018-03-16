@@ -1,21 +1,21 @@
 /**
  * This file is part of Todo.txt for Android, an app for managing your todo.txt file (http://todotxt.com).
- *
+ * <p>
  * Copyright (c) 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
- *
+ * <p>
  * LICENSE:
- *
+ * <p>
  * Todo.txt for Android is free software: you can redistribute it and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
  * later version.
- *
- * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
+ * <p>
+ * Todo.txt for Android is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
  * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with Todo.txt for Android. If not, see
  * <http://www.gnu.org/licenses/>.
- *
+ * <p>
  * Todo.txt for Android's source code is available at https://github.com/ginatrapani/todo.txt-android
  *
  * @author Todo.txt for Android contributors <todotxt@yahoogroups.com>
@@ -24,6 +24,11 @@
  */
 
 package com.todotxt.todotxttouch.task;
+
+import com.todotxt.todotxttouch.TodoPreferences;
+import com.todotxt.todotxttouch.remote.PullTodoResult;
+import com.todotxt.todotxttouch.remote.RemoteClientManager;
+import com.todotxt.todotxttouch.util.TaskIo;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,30 +40,49 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.todotxt.todotxttouch.TodoPreferences;
-import com.todotxt.todotxttouch.remote.PullTodoResult;
-import com.todotxt.todotxttouch.remote.RemoteClientManager;
-import com.todotxt.todotxttouch.util.TaskIo;
-
 /**
  * Implementation of the TaskBag interface
- * 
+ *
  * @author Tim Barlotta
  */
 class TaskBagImpl implements TaskBag {
-    private TodoPreferences preferences;
     private final LocalTaskRepository localRepository;
     private final RemoteClientManager remoteClientManager;
+    private TodoPreferences preferences;
     private ArrayList<Task> tasks = new ArrayList<Task>();
     private Date lastReload = null;
     private Date lastSync = null;
 
     public TaskBagImpl(TodoPreferences preferences,
-            LocalTaskRepository localRepository,
-            RemoteClientManager remoteClientManager) {
+                       LocalTaskRepository localRepository,
+                       RemoteClientManager remoteClientManager) {
         this.preferences = preferences;
         this.localRepository = localRepository;
         this.remoteClientManager = remoteClientManager;
+    }
+
+    private static Task find(List<Task> tasks, Task task) {
+        Task partialMatch = null;
+
+        for (Task task2 : tasks) {
+            if (task2 == task) {
+                return task2;
+            }
+
+            if (task2.getText().equals(task.getOriginalText())) {
+                if (task2.getPriority() == task.getOriginalPriority()) {
+                    return task2;
+                }
+
+                // We prefer to find an exact match (both text and priority are
+                // the same), but it is possible that priority has been lost
+                // because the task has been completed, so we will consider
+                // partial matches as a last resort.
+                partialMatch = task2;
+            }
+        }
+
+        return partialMatch;
     }
 
     private void store(ArrayList<Task> tasks) {
@@ -317,29 +341,5 @@ class TaskBagImpl implements TaskBag {
         }
 
         return ret;
-    }
-
-    private static Task find(List<Task> tasks, Task task) {
-        Task partialMatch = null;
-
-        for (Task task2 : tasks) {
-            if (task2 == task) {
-                return task2;
-            }
-
-            if (task2.getText().equals(task.getOriginalText())) {
-                if (task2.getPriority() == task.getOriginalPriority()) {
-                    return task2;
-                }
-
-                // We prefer to find an exact match (both text and priority are
-                // the same), but it is possible that priority has been lost
-                // because the task has been completed, so we will consider
-                // partial matches as a last resort.
-                partialMatch = task2;
-            }
-        }
-
-        return partialMatch;
     }
 }
