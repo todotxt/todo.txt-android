@@ -37,6 +37,8 @@ import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.InputStream;
@@ -56,6 +58,7 @@ public class DropboxFileUploaderTest extends TestCase {
     DropboxFile dbFile2;
     ArrayList<DropboxFile> dropboxFiles1;
     ArrayList<DropboxFile> dropboxFiles2;
+
     private File localFile1 = new File(
             Environment.getExternalStorageDirectory(), localpath1);
     private File localFile2 = new File(
