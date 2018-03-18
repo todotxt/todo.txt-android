@@ -37,8 +37,8 @@ import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpResponseFactory;
 import org.apache.http.message.BasicStatusLine;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+//import org.mockito.Mock;
+//import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.InputStream;
