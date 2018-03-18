@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="commons-codec:commons-codec:1.10@jar">
+    <CLASSES>
+      <root url="jar://$APPLICATION_HOME_DIR$/gradle/m2repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

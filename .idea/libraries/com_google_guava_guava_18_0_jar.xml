@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="com.google.guava:guava:18.0@jar">
+    <CLASSES>
+      <root url="jar://$APPLICATION_HOME_DIR$/gradle/m2repository/com/google/guava/guava/18.0/guava-18.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
