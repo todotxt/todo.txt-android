@@ -1,2 +1,2 @@
-include ':app', ':actionbar-pulltorefresh2','ActionBar-PullToRefresh'
+include ':app', ':ActionBar-PullToRefresh'
 
