@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ActionBar-PullToRefresh/ActionBar-PullToRefresh.iml" filepath="$PROJECT_DIR$/ActionBar-PullToRefresh/ActionBar-PullToRefresh.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ttr2.iml" filepath="$PROJECT_DIR$/ttr2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/todo.txt-android.iml" filepath="$PROJECT_DIR$/todo.txt-android.iml" />
     </modules>
   </component>
 </project>
