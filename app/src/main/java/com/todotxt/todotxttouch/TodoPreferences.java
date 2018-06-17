@@ -109,6 +109,10 @@ public class TodoPreferences {
         return m_prefs.getString(PREF_ACCESSTOKEN_SECRET, null);
     }
 
+    public void storeAccessToken(String accessTokenKey) {
+        storeAccessToken(accessTokenKey, null);
+    }
+
     public void storeAccessToken(String accessTokenKey, String accessTokenSecret) {
         Editor editor = m_prefs.edit();
         editor.putString(PREF_ACCESSTOKEN_KEY, accessTokenKey);
