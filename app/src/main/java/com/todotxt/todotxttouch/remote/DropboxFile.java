@@ -25,7 +25,7 @@
 
 package com.todotxt.todotxttouch.remote;
 
-import com.dropbox.client2.DropboxAPI;
+import com.dropbox.core.v2.files.FileMetadata;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ public class DropboxFile {
     private String remoteFile;
     private File localFile;
     private String originalRev;
-    private DropboxAPI.Entry loadedMetadata;
+    private FileMetadata loadedMetadata;
     private DropboxFileStatus status;
     private Exception error;
 
@@ -52,14 +52,14 @@ public class DropboxFile {
     /**
      * @return the loadedMetadata
      */
-    public DropboxAPI.Entry getLoadedMetadata() {
+    public FileMetadata getLoadedMetadata() {
         return loadedMetadata;
     }
 
     /**
      * @param loadedMetadata the loadedMetadata to set
      */
-    public void setLoadedMetadata(DropboxAPI.Entry loadedMetadata) {
+    public void setLoadedMetadata(FileMetadata loadedMetadata) {
         this.loadedMetadata = loadedMetadata;
     }
 
