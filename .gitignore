@@ -67,3 +67,6 @@ fastlane/readme.md
 **/.project
 **/.settings/
 **/.classpath
+
+# Exclude local configurations
+**/dropbox.xml
