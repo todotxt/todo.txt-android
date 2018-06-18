@@ -112,6 +112,7 @@ class DropboxRemoteClient implements RemoteClient {
     public boolean authenticate() {
         String accessToken = sharedPreferences.getAccessToken();
         if (accessToken != null){
+            DropboxClientFactory.init(accessToken);
             return true;
         }
         return false;
@@ -238,6 +239,8 @@ class DropboxRemoteClient implements RemoteClient {
             Log.i(TAG, "Dropbox authentication successful.");
             sharedPreferences.storeAccessToken(accessToken);
             Log.i(TAG, "Dropbox authentication complete.");
+            DropboxClientFactory.init(accessToken);
+            return true;
         }
 
         Log.i(TAG, "Dropbox authentication not successful.");
