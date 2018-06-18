@@ -24,6 +24,7 @@
  */
 package com.todotxt.todotxttouch;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -45,6 +46,7 @@ public class LoginScreen extends Activity {
     private Button m_LoginButton;
     private BroadcastReceiver m_broadcastReceiver;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
