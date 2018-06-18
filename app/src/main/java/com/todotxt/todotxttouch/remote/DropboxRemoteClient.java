@@ -29,10 +29,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.dropbox.core.DbxException;
 import com.dropbox.core.android.Auth;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.DropboxAPI.Entry;
 
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.FolderMetadata;
+import com.dropbox.core.v2.files.ListFolderErrorException;
+import com.dropbox.core.v2.files.ListFolderResult;
+import com.dropbox.core.v2.files.Metadata;
 import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
@@ -57,6 +63,7 @@ class DropboxRemoteClient implements RemoteClient {
             "tmp/done.txt");
 
     // private DropboxAPI<AndroidAuthSession> dropboxApi;
+    private DbxClientV2 client;
     private TodoApplication todoApplication;
     private TodoPreferences sharedPreferences;
 
@@ -64,6 +71,7 @@ class DropboxRemoteClient implements RemoteClient {
                                TodoPreferences sharedPreferences) {
         this.todoApplication = todoApplication;
         this.sharedPreferences = sharedPreferences;
+        this.client = DropboxClientFactory.getClient();
     }
 
     @Override
@@ -283,29 +291,29 @@ class DropboxRemoteClient implements RemoteClient {
         List<RemoteFolder> results = new ArrayList<RemoteFolder>();
 
         try {
-            Log.d(TAG, "getting file listiing for path " + path);
+            Log.d(TAG, "getting file listing for path " + path);
 
-            Entry metadata = dropboxApi.metadata(path, 0, null, true, null);
+            ListFolderResult folders = client.files().listFolder(path);
 
             Log.d(TAG, "num entries returned: " + metadata.contents.size());
 
-            for (Entry e : metadata.contents) {
-                if (e.isDir && !e.isDeleted) {
-                    results.add(new DropboxRemoteFolder(e));
+            for (Metadata m : folders.getEntries()) {
+                if (m instanceof FolderMetadata) {
+                    results.add(new DropboxRemoteFolder((FolderMetadata) m));
                 }
             }
-        } catch (DropboxServerException dse) {
-            if (dse.error != DropboxServerException._404_NOT_FOUND) {
+        } catch (ListFolderErrorException lfe) {
+            if (lfe.errorValue.toString() != "NOT_FOUND") {
                 Log.e(TAG, "Error getting folders for path: " + path);
-                Log.e(TAG, "Dropbox returned error code: " + dse.error);
+                Log.e(TAG, "Dropbox returned error code: " + lfe.errorValue);
 
-                throw new RemoteException("Failed to get folder listing from Dropbox", dse);
+                throw new RemoteException("Failed to get folder listing from Dropbox", lfe);
             }
 
             // A 404 is OK. We will create the directory if necessary when we
             // push
             Log.i(TAG, "Remote path not found: " + path);
-        } catch (DropboxException e) {
+        } catch (DbxException e) {
             Log.e(TAG, "Error getting folders for path: " + path);
 
             throw new RemoteException("Failed to get folder listing from Dropbox", e);
