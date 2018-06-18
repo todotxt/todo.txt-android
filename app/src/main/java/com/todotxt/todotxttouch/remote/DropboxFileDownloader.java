@@ -109,24 +109,24 @@ public class DropboxFileDownloader {
                 return;
             }
 
-            throw new RemoteException("Server Exception: " + se.error + " " + se.reason, se);
+            throw new RemoteException("Server Exception: " + mde.errorValue + " " + mde.getUserMessage(), mde);
         } catch (DbxException e) {
             throw new RemoteException("Dropbox Exception: " + e.getMessage(), e);
         }
-
-        Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + metadata.rev);
-        Log.d(TAG, "local rev = " + file.getOriginalRev());
 
         FileMetadata fileMetadata = null;
         if(metadata instanceof FileMetadata) {
             file.setLoadedMetadata((FileMetadata) metadata);
             fileMetadata = (FileMetadata) metadata;
+            Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + fileMetadata.getRev());
         }
 
         DeletedMetadata deletedMetadata = null;
         if(metadata instanceof DeletedMetadata){
             deletedMetadata = (DeletedMetadata) metadata;
         }
+
+        Log.d(TAG, "local rev = " + file.getOriginalRev());
 
         if (fileMetadata != null && fileMetadata.getRev().equals(file.getOriginalRev())) {
             // don't bother downloading if the rev is the same
@@ -146,7 +146,7 @@ public class DropboxFileDownloader {
     private void loadFile(DropboxFile file) {
         Log.d(TAG,
                 "Downloading " + file.getRemoteFile() + " at rev = "
-                        + file.getLoadedMetadata().rev);
+                        + file.getLoadedMetadata().getRev());
 
         File localFile = file.getLocalFile();
 
