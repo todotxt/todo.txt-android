@@ -31,8 +31,6 @@ import android.util.Log;
 
 import com.dropbox.core.DbxException;
 import com.dropbox.core.android.Auth;
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.DropboxAPI.Entry;
 
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FolderMetadata;
@@ -40,7 +38,6 @@ import com.dropbox.core.v2.files.ListFolderErrorException;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.dropbox.core.v2.files.Metadata;
 import com.todotxt.todotxttouch.Constants;
-import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.TodoPreferences;
 import com.todotxt.todotxttouch.util.Util;
@@ -62,7 +59,6 @@ class DropboxRemoteClient implements RemoteClient {
             TodoApplication.getAppContetxt().getFilesDir(),
             "tmp/done.txt");
 
-    // private DropboxAPI<AndroidAuthSession> dropboxApi;
     private DbxClientV2 client;
     private TodoApplication todoApplication;
     private TodoPreferences sharedPreferences;
@@ -207,7 +203,7 @@ class DropboxRemoteClient implements RemoteClient {
                             .getFileRevision(TodoPreferences.PREF_DONE_REV)));
         }
 
-        DropboxFileUploader uploader = new DropboxFileUploader(dropboxApi,
+        DropboxFileUploader uploader = new DropboxFileUploader(client,
                 dropboxFiles, overwrite);
         uploader.pushFiles();
 
