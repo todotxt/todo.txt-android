@@ -169,7 +169,7 @@ class DropboxRemoteClient implements RemoteClient {
         dropboxFiles.add(doneFile);
 
         DropboxFileDownloader downloader = new DropboxFileDownloader(
-                dropboxApi, dropboxFiles);
+                client, dropboxFiles);
         downloader.pullFiles();
 
         File downloadedTodoFile = null;
