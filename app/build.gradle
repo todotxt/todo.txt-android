@@ -8,10 +8,13 @@ android {
     defaultConfig {
 
         applicationId 'com.todotxt.todotxttouch'
-        minSdkVersion 14
-        targetSdkVersion 17
+        minSdkVersion 21
+        targetSdkVersion 21
         versionCode 35
         versionName "release35"
+
+        multiDexEnabled true
+
     }
 
     lintOptions {
@@ -78,7 +81,7 @@ dependencies {
     compile 'oauth.signpost:signpost-core:1.2.1.2'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.android.support:support-v4:26.1.0'
-    // compile 'com.dropbox.core:dropbox-core-sdk:3.0.6'
+    compile 'com.dropbox.core:dropbox-core-sdk:3.0.6'
     // compile 'net.sf.proguard:proguard-gradle:6.0.3'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
