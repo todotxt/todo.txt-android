@@ -1,0 +1,10 @@
+.git
+.idea
+.gradle
+.settings
+
+local.properties
+
+**build/**
+
+**/*.zip
