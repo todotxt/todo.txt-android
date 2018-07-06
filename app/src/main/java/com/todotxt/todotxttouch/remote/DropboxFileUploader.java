@@ -34,6 +34,7 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.GetMetadataErrorException;
 import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.files.UploadUploader;
+import com.dropbox.core.v2.files.WriteMode;
 import com.todotxt.todotxttouch.util.Util;
 
 import java.io.File;
@@ -41,6 +42,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 
 public class DropboxFileUploader {
     final static String TAG = DropboxFileUploader.class.getSimpleName();
@@ -175,22 +177,16 @@ public class DropboxFileUploader {
 
         Log.d(TAG, "Sending parent_rev = " + rev);
 
-        FileInputStream inputStream;
-
-        try {
-            inputStream = new FileInputStream(localFile);
-        } catch (FileNotFoundException e1) {
+        FileMetadata metadata = null;
+        try (FileInputStream inputStream = new FileInputStream(localFile)) {
+            metadata = dbxClient.files().uploadBuilder(file.getRemoteFile())
+                .withMode(WriteMode.OVERWRITE)
+                .withClientModified(new Date(localFile.lastModified()))
+                .uploadAndFinish(inputStream);
+        }
+        catch (FileNotFoundException e1) {
             throw new RemoteException("File " + localFile.getAbsolutePath()
                     + " not found", e1);
-        }
-
-        UploadUploader uploadUploader = null;
-        FileMetadata metadata = null;
-
-        try {
-            uploadUploader = dbxClient.files().upload(file.getRemoteFile());
-            metadata = uploadUploader.uploadAndFinish(inputStream, localFile.length());
-            inputStream.close();
         } catch (DbxException e) {
             e.printStackTrace();
 
