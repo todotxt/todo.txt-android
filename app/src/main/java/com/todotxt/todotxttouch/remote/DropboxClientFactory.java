@@ -24,4 +24,9 @@ public class DropboxClientFactory {
         }
         return sDbxClient;
     }
+
+    public static DbxClientV2 initAndGetClient(String accessToken) {
+        init(accessToken);
+        return getClient();
+    }
 }

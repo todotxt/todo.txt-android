@@ -101,15 +101,13 @@ class DropboxRemoteClient implements RemoteClient {
             if(accessToken != null) {
                 Log.i(TAG, "Successfully retrieved new token.");
                 sharedPreferences.storeAccessToken(accessToken);
-                DropboxClientFactory.init(accessToken);
-                this.client = DropboxClientFactory.getClient();
+                this.client = DropboxClientFactory.initAndGetClient(accessToken);
                 Log.i(TAG, "Successfully initialized new Dropbox client.");
                 Log.i(TAG, "Authentication completed successfully.");
                 return true;
             }
         } else {
-            DropboxClientFactory.init(accessToken);
-            this.client = DropboxClientFactory.getClient();
+            this.client = DropboxClientFactory.initAndGetClient(accessToken);
             Log.i(TAG, "Successfully initialized new Dropbox client.");
             Log.i(TAG, "Authentication completed successfully.");
             return true;
@@ -238,8 +236,7 @@ class DropboxRemoteClient implements RemoteClient {
             Log.i(TAG, "Dropbox authentication successful.");
             sharedPreferences.storeAccessToken(accessToken);
             Log.i(TAG, "Dropbox authentication complete.");
-            DropboxClientFactory.init(accessToken);
-            this.client = DropboxClientFactory.getClient();
+            this.client = DropboxClientFactory.initAndGetClient(accessToken);
             return true;
         }
 
