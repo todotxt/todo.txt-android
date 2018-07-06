@@ -239,6 +239,7 @@ class DropboxRemoteClient implements RemoteClient {
             sharedPreferences.storeAccessToken(accessToken);
             Log.i(TAG, "Dropbox authentication complete.");
             DropboxClientFactory.init(accessToken);
+            this.client = DropboxClientFactory.getClient();
             return true;
         }
 
