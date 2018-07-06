@@ -284,7 +284,7 @@ class DropboxRemoteClient implements RemoteClient {
 
         try {
             Log.d(TAG, "getting file listing for path " + path);
-            if (path == "/") {
+            if (path.equals("/")) {
                 Log.d(TAG, "setting path to '' from '/' to avoid bad request.");
                 path = "";
             }
