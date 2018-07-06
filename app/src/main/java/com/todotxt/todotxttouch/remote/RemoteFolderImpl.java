@@ -25,6 +25,7 @@
 
 package com.todotxt.todotxttouch.remote;
 
+import com.dropbox.core.v2.files.FolderMetadata;
 import com.todotxt.todotxttouch.util.Path;
 import com.todotxt.todotxttouch.util.Strings;
 
@@ -46,6 +47,13 @@ class RemoteFolderImpl implements RemoteFolder {
         mName = name;
         mParentPath = parentPath;
         mParentName = parentName;
+    }
+
+    public RemoteFolderImpl(FolderMetadata folderMetadata){
+        mPath = folderMetadata.getPathDisplay();
+        mName = folderMetadata.getName();
+        mParentPath = Path.parentPath(mPath);
+        mParentName = Path.fileName(mParentPath);
     }
 
     @Override
