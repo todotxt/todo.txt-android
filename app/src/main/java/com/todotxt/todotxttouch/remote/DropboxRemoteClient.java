@@ -67,7 +67,6 @@ class DropboxRemoteClient implements RemoteClient {
                                TodoPreferences sharedPreferences) {
         this.todoApplication = todoApplication;
         this.sharedPreferences = sharedPreferences;
-        this.client = DropboxClientFactory.getClient();
     }
 
     @Override
@@ -96,8 +95,17 @@ class DropboxRemoteClient implements RemoteClient {
     @Override
     public boolean authenticate() {
         String accessToken = sharedPreferences.getAccessToken();
-        if (accessToken != null){
+        if (accessToken == null){
+            accessToken = Auth.getOAuth2Token();
+            if(accessToken != null) {
+                sharedPreferences.storeAccessToken(accessToken);
+                DropboxClientFactory.init(accessToken);
+                this.client = DropboxClientFactory.getClient();
+                return true;
+            }
+        } else {
             DropboxClientFactory.init(accessToken);
+            this.client = DropboxClientFactory.getClient();
             return true;
         }
         return false;
@@ -235,7 +243,7 @@ class DropboxRemoteClient implements RemoteClient {
 
     boolean hasToken(){
         return sharedPreferences.getAccessToken() != null
-                && sharedPreferences.getAccessToken() == "";
+                && sharedPreferences.getAccessToken() != "";
     }
 
     void sendBroadcast(Intent intent) {
