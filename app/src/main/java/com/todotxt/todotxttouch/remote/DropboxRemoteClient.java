@@ -96,16 +96,22 @@ class DropboxRemoteClient implements RemoteClient {
     public boolean authenticate() {
         String accessToken = sharedPreferences.getAccessToken();
         if (accessToken == null){
+            Log.i(TAG, "Stored accessToken is null. Retrieving new token.");
             accessToken = Auth.getOAuth2Token();
             if(accessToken != null) {
+                Log.i(TAG, "Successfully retrieved new token.");
                 sharedPreferences.storeAccessToken(accessToken);
                 DropboxClientFactory.init(accessToken);
                 this.client = DropboxClientFactory.getClient();
+                Log.i(TAG, "Successfully initialized new Dropbox client.");
+                Log.i(TAG, "Authentication completed successfully.");
                 return true;
             }
         } else {
             DropboxClientFactory.init(accessToken);
             this.client = DropboxClientFactory.getClient();
+            Log.i(TAG, "Successfully initialized new Dropbox client.");
+            Log.i(TAG, "Authentication completed successfully.");
             return true;
         }
         return false;
