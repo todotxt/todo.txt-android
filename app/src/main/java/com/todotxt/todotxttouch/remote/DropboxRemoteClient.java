@@ -223,8 +223,10 @@ class DropboxRemoteClient implements RemoteClient {
     @Override
     public boolean startLogin() {
         Context cxt = todoApplication.getApplicationContext();
+        String appKey = cxt.getString(R.string.dropbox_consumer_key).toString()
+                           .replaceFirst("^db-", "");
         Auth.startOAuth2Authentication(
-                cxt, cxt.getString(R.string.dropbox_consumer_key));
+                cxt, appKey);
 
         return true;
     }
