@@ -23,13 +23,42 @@ You should have received a copy of the GNU General Public License along with Tod
 @copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="TodoTxtTouchLight" parent="@android:style/Theme.Holo.Light"></style>
+    <style name="TodoTxtTouchLight" parent="Theme.AppCompat.Light">
 
-    <style name="TodoTxtTouchDark" parent="@android:style/Theme.Holo"></style>
+        <item name="android:windowActivityTransitions">true</item>
 
-    <style name="TodoTheme.Widget" parent="TodoTxtTouchDark">
+        <item name="colorPrimary">@color/lightgreen</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/orange</item>
+
+        <!-- task priorities -->
+        <item name="colorPriorityA">@color/green</item>
+        <item name="colorPriorityB">@color/blue</item>
+        <item name="colorPriorityC">@color/orange</item>
+        <item name="colorPriorityD">@color/gold</item>
+
+        <item name="colorTaskMetadata">@color/grey</item>
+
+        <item name="actionBarStyle">@style/AppBar</item>
+
+        <item name="chipGroupStyle">@style/FilterChips</item>
+        <item name="chipStyle">@style/FilterChip</item>
+
+
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+    </style>
+
+    <style name="TodoTxtTouchLight.MainActivity" parent="TodoTxtTouchLight">
+        <item name="actionBarStyle">@style/AppBar.MainActivity</item>
+
+    </style>
+
+    <style name="TodoTxtTouchDark" parent="Theme.AppCompat.NoActionBar"></style>
+
+    <style name="TodoTheme.Widget" parent="TodoTxtTouchLight">
         <item name="android:background">@android:color/transparent</item>
     </style>
 

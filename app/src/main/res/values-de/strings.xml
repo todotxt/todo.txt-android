@@ -90,7 +90,7 @@ Todo.txt for Android's source code is available at https://github.com/ginatrapan
     <string name="filter_tab_projects">Projekte</string>
     <string name="filter_tab_contexts">Orte</string>
     <string name="filter_tab_search">Schlüsselworte</string>
-    <string name="title_search_results">Suchergebnisse für: </string>
+    <string name="title_search_results">Suchergebnisse für: %1$s</string>
     <string name="title_filter_applied">aktive Filter: </string>
     <string name="add_task_priority_btn">Priorisierung</string>
     <string name="add_task_context_btn">Ort</string>

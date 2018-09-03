@@ -25,60 +25,105 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.TodoTxt" parent="Theme.Sherlock.Light.DarkActionBar">
-        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>
-        <item name="actionBarStyle">@style/MyActionBar</item>
+    <style name="FAB" parent="Widget.Design.FloatingActionButton">
+        <item name="android:layout_margin">@dimen/fab_layout_margin</item>
+        <item name="android:src">@drawable/ic_action_add</item>
     </style>
 
-    <style name="MyActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#006400</item>
-        <item name="background">#006400</item>
-        <item name="android:actionOverflowButtonStyle" tools:ignore="NewApi">@style/OverFlow</item>
-        <item name="actionOverflowButtonStyle">@style/OverFlow</item>
+    <style name="TaskList" parent="Widget.AppCompat.ListView">
+        <item name="android:divider">@color/divider</item>
+        <item name="android:dividerHeight">@dimen/list_divider_height</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:cacheColorHint">?attr/colorBackgroundFloating</item>
     </style>
 
-    <style name="OverFlow" parent="Widget.Sherlock.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_action_overflow</item>
+    <!-- App Bar -->
+    <style name="AppBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="displayOptions">showHome|showTitle|homeAsUp</item>
     </style>
 
-    <style name="TitleBar">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/title_height</item>
-        <item name="android:orientation">horizontal</item>
+    <style name="AppBar.MainActivity" parent="AppBar">
+        <item name="displayOptions">showTitle</item>
+        <item name="icon">@drawable/todotxt_touch_icon</item>
     </style>
+
+    <style name="FilterChips" parent="@style/Base.Theme.MaterialComponents">
+        <item name="singleLine">false</item>
+        <item name="chipSpacing">@dimen/filter_chipgroup_chipspacing</item>
+    </style>
+
+    <style name="FilterChip" parent="@style/Widget.MaterialComponents.Chip.Action">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <!-- appwidget -->
+    <style name="AppWidget">
+
+    </style>
+
+    <style name="AppWidget.Header">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AppWidget.Header.ImageButton">
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppWidget.Priority">
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <!-- main listview list elements -->
+
+
+    <style name="TaskListElement">
+
+    </style>
+
+    <style name="TaskListElement.Priority">
+        <item name="android:textSize">@dimen/todo_listitem_priority_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">@dimen/todo_listitem_priority_paddingleft</item>
+        <item name="android:paddingRight">@dimen/todo_listitem_priority_paddingright</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="TaskListElement.Title">
+        <item name="android:textSize">@dimen/todo_listitem_text_size</item>
+        <item name="android:paddingBottom">@dimen/todo_listitem_text_paddingbottom</item>
+        <item name="android:paddingRight">@dimen/todo_listitem_text_paddingright</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <!-- not really age, it's all tags -->
+    <style name="TaskListElement.Age">
+        <item name="android:textSize">@dimen/todo_listitem_age_size</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <!-- Navigation drawer -->
+    <style name="NavigationDrawer">
+        <item name="android:choiceMode">singleChoice</item>
+        <item name="android:layout_width">@dimen/navigationdrawer_width</item>
+        <item name="android:icon">@drawable/ic_action_filter</item>
+    </style>
+
+    <!-- for AppWidget -->
+    <style name="ProgressBar" parent="@style/Base.Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateTint">?android:attr/textColorPrimary</item>
+    </style>
+
 
     <style name="TitleBarAction">
         <item name="android:layout_width">@dimen/title_height</item>
         <item name="android:layout_height">fill_parent</item>
-    </style>
-
-    <style name="TitleBarProgressIndicator" parent="@android:style/Widget.ProgressBar.Small">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">20dp</item>
-        <item name="android:layout_marginRight">19dp</item>
-        <item name="android:layout_marginTop">20dp</item>
-        <item name="android:indeterminate">true</item>
-    </style>
-
-    <style name="TitleBarSeparator">
-        <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">0dp</item>
-    </style>
-
-    <style name="TitleBarLabel">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:gravity">bottom</item>
-    </style>
-
-    <style name="TitleBarLogo">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:clickable">true</item>
     </style>
 
     <style name="WidgetTitleBarLogo">
@@ -87,108 +132,11 @@ You should have received a copy of the GNU General Public License along with Tod
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="TitleBarSpring">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_weight">1</item>
-    </style>
-
-    <style name="SubTitleBar">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/subtitle_height</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/subtitle_background</item>
-        <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="ActionBar">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">@dimen/actionbar_height</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/actionbar_background</item>
-        <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="ActionBarButtonSet">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/actionbar_button_set</item>
-        <item name="android:layout_margin">3dp</item>
-    </style>
-
-    <style name="ActionBarSeparator">
-        <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_marginTop">3dp</item>
-        <item name="android:layout_marginBottom">3dp</item>
-        <item name="android:background">@drawable/actionbar_separator</item>
-    </style>
-
-    <style name="ActionBarSeparatorWhite">
-        <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_marginTop">3dp</item>
-        <item name="android:layout_marginBottom">3dp</item>
-        <item name="android:background">@drawable/actionbar_separator_white</item>
-    </style>
-
-    <style name="ActionBarButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">@drawable/actionbar_button</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:paddingLeft">7dp</item>
-        <item name="android:paddingRight">7dp</item>
-        <item name="android:layout_margin">3dp</item>
-    </style>
-
-    <style name="ActionBarLeftButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">@drawable/actionbar_left_button</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:paddingLeft">7dp</item>
-        <item name="android:paddingRight">7dp</item>
-        <item name="android:drawablePadding">4dp</item>
-    </style>
-
-    <style name="ActionBarCenterButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">@drawable/actionbar_center_button</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:paddingLeft">7dp</item>
-        <item name="android:paddingRight">7dp</item>
-        <item name="android:drawablePadding">4dp</item>
-    </style>
-
-    <style name="ActionBarRightButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">@drawable/actionbar_right_button</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:paddingLeft">7dp</item>
-        <item name="android:paddingRight">7dp</item>
-        <item name="android:drawablePadding">4dp</item>
-    </style>
-
+    <!-- used in v14/listwidget layout (and possibly others -->
     <style name="HorizontalRule">
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:background">@drawable/horizontal_rule</item>
     </style>
-
-    <style name="VerticalRule">
-        <item name="android:layout_height">fill_parent</item>
-        <item name="android:layout_width">1dp</item>
-        <item name="android:background">#FFCCCCCC</item>
-    </style>
-
-    <style name="BorderlessButton" parent="Widget.Sherlock.ActionButton" />
 
 </resources>

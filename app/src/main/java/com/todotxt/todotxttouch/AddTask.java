@@ -32,20 +32,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnKeyListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.remote.RemoteClient;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
@@ -57,7 +55,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Random;
 
-public class AddTask extends SherlockActivity {
+public class AddTask extends AppCompatActivity {
     private final static String TAG = AddTask.class.getSimpleName();
 
     private ProgressDialog m_ProgressDialog = null;
@@ -76,15 +74,14 @@ public class AddTask extends SherlockActivity {
 
     private ListView mDrawerList;
 
+    private CompoundButton.OnClickListener m_chipClickListener;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.add_task, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_task, menu);
 
-        if (hasDrawer()) {
-            menu.findItem(R.id.menu_add_tag).setVisible(false);
-        }
-
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void noteToSelf(Intent intent) {
@@ -96,7 +93,7 @@ public class AddTask extends SherlockActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -120,8 +117,10 @@ public class AddTask extends SherlockActivity {
                 showProjectContextMenu();
 
                 break;
-        }
+            default:
+                return super.onOptionsItemSelected(item);
 
+        }
         return true;
     }
 
@@ -130,8 +129,7 @@ public class AddTask extends SherlockActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_task);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 
         m_app = (TodoApplication) getApplication();
 
@@ -243,29 +241,10 @@ public class AddTask extends SherlockActivity {
             }
         }
 
-        if (hasDrawer()) {
-            mDrawerList = (ListView) findViewById(R.id.left_drawer);
-            mDrawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-            mLists = new ArrayList<String>();
-            mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                    R.layout.drawer_list_item, R.id.left_drawer_text, mLists));
-            updateNavigationDrawer();
-
-            // Set the list's click listener
-            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-            textInputField.setOnKeyListener(new OnKeyListener() {
-                @Override
-                public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
-                    updateNavigationDrawer();
-
-                    return false;
-                }
-            });
-        }
-
         textInputField.setSelection(textInputField.getText().toString()
                 .length());
         textInputField.requestFocus();
+
     }
 
     private boolean isAuthenticated() {
@@ -457,7 +436,9 @@ public class AddTask extends SherlockActivity {
         }
     }
 
-    /** Handle help message **/
+    /**
+     * Handle help message
+     **/
     public void onHelpClick() {
         Intent intent = new Intent(getApplicationContext(), HelpActivity.class);
         startActivity(intent);
@@ -465,10 +446,10 @@ public class AddTask extends SherlockActivity {
 
     private ArrayList<String> labelsInTaskbagAndText() {
         /*
-		 * Returns the defined labels in the taskbag and the current task being
-		 * added. This way when adding multiple tasks labels from previous lines
-		 * will be included as well
-		 */
+         * Returns the defined labels in the taskbag and the current task being
+         * added. This way when adding multiple tasks labels from previous lines
+         * will be included as well
+         */
         ArrayList<String> labels = new ArrayList<String>();
         Task temp = new Task(1, textInputField.getText().toString());
 
@@ -491,27 +472,5 @@ public class AddTask extends SherlockActivity {
         // Pass through a LinkedHashSet to remove duplicates without
         // messing up sort order
         return new ArrayList<String>(new LinkedHashSet<String>(labels));
-    }
-
-    /**
-     * Returns true if the left drawer is shown.
-     */
-    private boolean hasDrawer() {
-        return findViewById(R.id.left_drawer) != null;
-    }
-
-    private class DrawerItemClickListener implements
-            AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
-            String itemTitle = tv.getText().toString();
-
-            Log.v(TAG, "Clicked on drawer " + itemTitle);
-
-            replaceTextAtSelection(itemTitle);
-            mDrawerList.clearChoices();
-        }
     }
 }

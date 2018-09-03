@@ -113,7 +113,7 @@
     <string name="ok">Ok</string>
     <string name="periodic_sync_pref_key">Periodo de sincronización</string>
     <string name="swipe_action_complete">Tarea terminada.</string>
-    <string name="title_search_results">Término de búsqueda:</string>
+    <string name="title_search_results">Término de búsqueda: %1$s</string>
     <string name="toast_login_notconnected">No se puede iniciar sesión:\nSin conexión a internet.</string>
     <string name="todo_path_title">Ubicación del archivo</string>
     <string name="calendar_title">Recordatorio de Todo.txt</string>

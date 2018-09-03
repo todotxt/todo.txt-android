@@ -93,7 +93,7 @@ Envoyer vos modifications locales, ou récupérer la version de Dropbox?</string
     <string name="filter_tab_projects">Projets</string>
     <string name="filter_tab_contexts">Contextes</string>
     <string name="filter_tab_search">Mots-clés</string>
-    <string name="title_search_results">Mot recherché : </string>
+    <string name="title_search_results">Mot recherché : %1$s</string>
     <string name="title_filter_applied">Filtrer par : </string>
     <string name="add_task_priority_btn">Priorité</string>
     <string name="add_task_context_btn">Contexte</string>

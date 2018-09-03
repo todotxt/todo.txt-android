@@ -69,4 +69,4 @@ fastlane/readme.md
 **/.classpath
 
 # Exclude local configurations
-**/dropbox.xml
+**/dropbox.xml.idea

@@ -24,7 +24,20 @@ You should have received a copy of the GNU General Public License along with Tod
 -->
 
 <resources>
+    <!-- todo list element -->
+    <dimen name="todo_listitem_priority_size">16sp</dimen>
+    <dimen name="todo_listitem_priority_paddingleft">8dip</dimen>
+    <dimen name="todo_listitem_priority_paddingright">8dip</dimen>
+    <dimen name="todo_listitem_text_size">16sp</dimen>
+    <dimen name="todo_listitem_text_paddingbottom">8dip</dimen>
+    <dimen name="todo_listitem_text_paddingright">4dip</dimen>
+    <dimen name="todo_listitem_age_size">12sp</dimen>
 
+    <dimen name="appbar_elevation">4dp</dimen>
+    <dimen name="appbar_height">50dp</dimen>
+    <dimen name="filter_chipgroup_height">40dp</dimen>
+    <dimen name="filter_chipgroup_chipspacing">5dp</dimen>
+    <dimen name="navigationdrawer_width">240dp</dimen>
     <dimen name="title_height">55dip</dimen>
     <dimen name="subtitle_height">25dip</dimen>
     <dimen name="actionbar_height">35dip</dimen>
@@ -32,5 +45,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <dimen name="tab_height">48dp</dimen>
     <dimen name="tab_side_padding">2dp</dimen>
     <dimen name="path_dialog_height">336dp</dimen>
-
+    <dimen name="fab_layout_margin">20dp</dimen>
+    <dimen name="w720_chipgroup_spacing">10dp</dimen>
+    <dimen name="list_divider_height">1dp</dimen>
 </resources>

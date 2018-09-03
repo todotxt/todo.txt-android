@@ -26,6 +26,7 @@ package com.todotxt.todotxttouch;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.RelativeLayout;
@@ -33,9 +34,18 @@ import android.widget.RelativeLayout;
 public class RelativeLayoutCheckable extends RelativeLayout implements
         Checkable {
     private boolean checked;
+    private int m_colorChecked;
+    private int m_colorBackground;
 
     public RelativeLayoutCheckable(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        TypedValue v = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorAccent, v, true);
+        m_colorChecked = v.data;
+        context.getTheme().resolveAttribute(R.attr.background, v, true);
+        m_colorBackground = v.data;
+
     }
 
     @Override
@@ -51,15 +61,12 @@ public class RelativeLayoutCheckable extends RelativeLayout implements
         if (swipeView != null) {
             // FIXME: this is a hack to get a grey background when swiping
             // without breaking highlight when selected:
-            this.setBackgroundColor(checked ? getResources().getColor(
-                    R.color.activated_background) : getResources().getColor(
-                    R.color.grey));
+            this.setBackgroundColor(checked ? m_colorChecked : m_colorBackground);
             swipeView.setBackgroundColor(checked ? getResources().getColor(
                     android.R.color.transparent) : getResources().getColor(
                     R.color.white));
         } else {
-            this.setBackgroundColor(checked ? getResources().getColor(
-                    R.color.activated_background) : getResources().getColor(
+            this.setBackgroundColor(checked ? m_colorChecked : getResources().getColor(
                     android.R.color.transparent));
         }
     }

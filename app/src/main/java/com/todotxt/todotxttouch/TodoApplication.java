@@ -27,6 +27,7 @@ package com.todotxt.todotxttouch;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -41,6 +42,7 @@ import com.todotxt.todotxttouch.task.Sort;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.task.TaskBagFactory;
 import com.todotxt.todotxttouch.util.Util;
+import com.todotxt.todotxttouch.widget.ListWidgetProvider;
 
 import java.util.ArrayList;
 
@@ -279,6 +281,8 @@ public class TodoApplication extends Application {
         Log.d(TAG, "Broadcasting widget update intent");
 
         Intent intent = new Intent(Constants.INTENT_WIDGET_UPDATE);
+        // https://stackoverflow.com/questions/53578252/widget-issue-broadcastqueue-background-execution-not-allowed-receiving-intent
+        intent.setComponent(new ComponentName(appContext, ListWidgetProvider.class));
         sendBroadcast(intent);
     }
 
