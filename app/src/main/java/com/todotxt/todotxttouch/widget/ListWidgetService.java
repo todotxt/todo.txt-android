@@ -28,7 +28,6 @@ package com.todotxt.todotxttouch.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -42,6 +41,7 @@ import com.todotxt.todotxttouch.Constants;
 import com.todotxt.todotxttouch.R;
 import com.todotxt.todotxttouch.TodoApplication;
 import com.todotxt.todotxttouch.task.FilterFactory;
+import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Task;
 import com.todotxt.todotxttouch.task.TaskBag;
 import com.todotxt.todotxttouch.util.Strings;
@@ -49,6 +49,11 @@ import com.todotxt.todotxttouch.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.todotxt.todotxttouch.task.Priority.A;
+import static com.todotxt.todotxttouch.task.Priority.B;
+import static com.todotxt.todotxttouch.task.Priority.C;
+import static com.todotxt.todotxttouch.task.Priority.D;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class ListWidgetService extends RemoteViewsService {
@@ -98,6 +103,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         Task task = tasks.get(position);
+        int priorityViewId = R.id.listwidget_taskprio_other;
         RemoteViews rv = new RemoteViews(m_app.getPackageName(), R.layout.listwidget_item);
 
         SpannableString ss = new SpannableString(task.inScreenFormat());
@@ -109,33 +115,25 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         }
 
         rv.setTextViewText(R.id.listwidget_tasktext, ss);
+        final Priority priority = task.getPriority();
+        rv.setTextViewText(priorityViewId, priority.inListFormat());
 
-        rv.setTextViewText(R.id.listwidget_taskprio, task.getPriority().inListFormat());
-        int color = R.color.black;
+        // can't seem to resolve theme attributes inside the service, so resorting
+        // to including all views in the layout and controlling visibility
+        rv.setViewVisibility(R.id.listwidget_taskprio_a, priority == A ? View.VISIBLE : View.INVISIBLE);
+        rv.setViewVisibility(R.id.listwidget_taskprio_b, priority == B ? View.VISIBLE : View.INVISIBLE);
+        rv.setViewVisibility(R.id.listwidget_taskprio_c, priority == C ? View.VISIBLE : View.INVISIBLE);
+        rv.setViewVisibility(R.id.listwidget_taskprio_d, priority == D ? View.VISIBLE : View.INVISIBLE);
+        rv.setViewVisibility(R.id.listwidget_taskprio_other,
+                (priority == A || priority == B || priority == C || priority == D)
+                        ? View.INVISIBLE : View.VISIBLE);
 
-        switch (task.getPriority()) {
-            case A:
-                color = R.color.green;
-
-                break;
-            case B:
-                color = R.color.blue;
-
-                break;
-            case C:
-                color = R.color.orange;
-
-                break;
-            case D:
-                color = R.color.gold;
-
-                break;
-            default:
-                color = R.color.black;
-        }
-
-        Resources resources = m_app.getResources();
-        rv.setTextColor(R.id.listwidget_taskprio, resources.getColor(color));
+        // bit clumsy but avoids defining the task priority text strings in xml and in the Priority class
+        rv.setTextViewText(R.id.listwidget_taskprio_a, task.getPriority().inListFormat());
+        rv.setTextViewText(R.id.listwidget_taskprio_b, task.getPriority().inListFormat());
+        rv.setTextViewText(R.id.listwidget_taskprio_c, task.getPriority().inListFormat());
+        rv.setTextViewText(R.id.listwidget_taskprio_d, task.getPriority().inListFormat());
+        rv.setTextViewText(R.id.listwidget_taskprio_other, task.getPriority().inListFormat());
 
         if (m_app.m_prefs.isPrependDateEnabled()
                 && !task.isCompleted()

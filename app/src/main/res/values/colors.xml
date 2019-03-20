@@ -25,20 +25,21 @@ You should have received a copy of the GNU General Public License along with Tod
 
 <resources>
 
-    <color name="green">#587058</color>
+    <color name="green">#26A69A</color>
+    <color name="lightgreen">#80CBC4</color>
     <color name="blue">#587498</color>
     <color name="gold">#FFD800</color>
     <color name="orange">#E86850</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="grey">#888888</color>
+    <color name="divider">#f3f3f3</color>
     <color name="black_trans">#bb000000</color>
 
     <!-- holo colors -->
     <color name="activated_background">#33B5E5</color>
 
     <!-- action bar colors -->
-    <color name="actionbar_label">#FF666666</color>
     <color name="actionbar_btn_default_light">#FFFFFFFF</color>
     <color name="actionbar_btn_default_dark">#FFCCCCCC</color>
     <color name="actionbar_btn_default_stroke">#FFBBBBBB</color>
@@ -46,6 +47,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <color name="actionbar_btn_pressed_light">#FFCCCCCC</color>
     <color name="actionbar_btn_pressed_dark">#FF999999</color>
     <color name="actionbar_btn_pressed_stroke">#FF999999</color>
+    <color name="primary_material_light">#009688</color>
 
 </resources><!--
 http://www.colorcombos.com/ 

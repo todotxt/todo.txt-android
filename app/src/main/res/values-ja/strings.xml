@@ -76,7 +76,7 @@ You should have received a copy of the GNU General Public License along with Tod
     <string name="filter_tab_contexts">コンテキスト</string>
     <string name="filter_tab_search">キーワード</string>
     <!-- title bar changes -->
-    <string name="title_search_results">検索結果: </string>
+    <string name="title_search_results">検索結果: %1$s</string>
     <string name="title_filter_applied">フィルター結果: </string>
     <!-- launcher shortcut -->
     <string name="shortcut_addtask_name">追加</string>

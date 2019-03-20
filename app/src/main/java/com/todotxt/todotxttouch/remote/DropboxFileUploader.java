@@ -27,10 +27,14 @@ package com.todotxt.todotxttouch.remote;
 
 import android.util.Log;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.exception.DropboxServerException;
-import com.dropbox.client2.exception.DropboxUnlinkedException;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.DeletedMetadata;
+import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.GetMetadataErrorException;
+import com.dropbox.core.v2.files.Metadata;
+import com.dropbox.core.v2.files.UploadUploader;
+import com.dropbox.core.v2.files.WriteMode;
 import com.todotxt.todotxttouch.util.Util;
 
 import java.io.File;
@@ -38,11 +42,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 
 public class DropboxFileUploader {
     final static String TAG = DropboxFileUploader.class.getSimpleName();
 
-    private DropboxAPI<?> dropboxApi;
+    private DbxClientV2 dbxClient;
     private DropboxFileStatus status;
     private Collection<DropboxFile> files;
     private boolean overwrite;
@@ -50,9 +55,9 @@ public class DropboxFileUploader {
     /**
      * @param files
      */
-    public DropboxFileUploader(DropboxAPI<?> dropboxApi,
+    public DropboxFileUploader(DbxClientV2 client,
                                Collection<DropboxFile> files, boolean overwrite) {
-        this.dropboxApi = dropboxApi;
+        this.dbxClient = client;
         this.files = files;
         this.overwrite = overwrite;
         status = DropboxFileStatus.INITIALIZED;
@@ -96,35 +101,45 @@ public class DropboxFileUploader {
     private void loadMetadata(DropboxFile file) {
         Log.d(TAG, "Loading metadata for " + file.getRemoteFile());
 
-        DropboxAPI.Entry metadata = null;
+        Metadata metadata = null;
 
         try {
-            metadata = dropboxApi.metadata(file.getRemoteFile(), 1, null,
-                    false, null);
-        } catch (DropboxServerException se) {
-            if (se.error == DropboxServerException._404_NOT_FOUND) {
+            metadata = metadata = dbxClient.files().getMetadata(file.getRemoteFile());
+        } catch (GetMetadataErrorException mde) {
+            if (mde.errorValue.isPath() && mde.errorValue.getPathValue().isNotFound()) {
                 Log.d(TAG, "metadata NOT found! Returning NOT_FOUND status.");
 
                 file.setStatus(DropboxFileStatus.NOT_FOUND);
 
                 return;
             }
-            throw new RemoteException("Server Exception: " + se.error + " " + se.reason, se);
-        } catch (DropboxException e) {
+            throw new RemoteException("Server Exception: " + mde.errorValue + " " + mde.getUserMessage(), mde);
+        } catch (DbxException e) {
             throw new RemoteException("Dropbox Exception: " + e.getMessage(), e);
         }
 
-        Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + metadata.rev);
+        DeletedMetadata deletedMetadata = null;
+        if(metadata instanceof DeletedMetadata){
+            deletedMetadata = (DeletedMetadata) metadata;
+        }
+
+        FileMetadata fileMetadata = null;
+        if(metadata instanceof FileMetadata) {
+            file.setLoadedMetadata((FileMetadata) metadata);
+            fileMetadata = (FileMetadata) metadata;
+            Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + fileMetadata.getRev());
+        }
+
         Log.d(TAG, "local rev = " + file.getOriginalRev());
 
-        if (metadata.isDeleted) {
+        if (deletedMetadata != null) {
             Log.d(TAG, "File marked as deleted on Dropbox! Returning NOT_FOUND status.");
 
             file.setStatus(DropboxFileStatus.NOT_FOUND);
         } else {
-            file.setLoadedMetadata(metadata);
+            file.setLoadedMetadata(fileMetadata);
 
-            if (!overwrite && !metadata.rev.equals(file.getOriginalRev())) {
+            if (!overwrite && !fileMetadata.getRev().equals(file.getOriginalRev())) {
                 Log.d(TAG, "revs don't match! Returning CONFLICT status.");
 
                 file.setStatus(DropboxFileStatus.CONFLICT);
@@ -157,29 +172,22 @@ public class DropboxFileUploader {
         String rev = null;
 
         if (file.getLoadedMetadata() != null) {
-            rev = file.getLoadedMetadata().rev;
+            rev = file.getLoadedMetadata().getRev();
         }
 
         Log.d(TAG, "Sending parent_rev = " + rev);
 
-        FileInputStream inputStream;
-
-        try {
-            inputStream = new FileInputStream(localFile);
-        } catch (FileNotFoundException e1) {
+        FileMetadata metadata = null;
+        try (FileInputStream inputStream = new FileInputStream(localFile)) {
+            metadata = dbxClient.files().uploadBuilder(file.getRemoteFile())
+                .withMode(WriteMode.OVERWRITE)
+                .withClientModified(new Date(localFile.lastModified()))
+                .uploadAndFinish(inputStream);
+        }
+        catch (FileNotFoundException e1) {
             throw new RemoteException("File " + localFile.getAbsolutePath()
                     + " not found", e1);
-        }
-
-        DropboxAPI.Entry metadata = null;
-
-        try {
-            metadata = dropboxApi.putFile(file.getRemoteFile(), inputStream, localFile.length(),
-                    rev, null);
-            inputStream.close();
-        } catch (DropboxUnlinkedException e) {
-            throw new RemoteException("User has unlinked.", e);
-        } catch (DropboxException e) {
+        } catch (DbxException e) {
             e.printStackTrace();
 
             throw new RemoteException("Something went wrong while uploading: " + e.getMessage(), e);
@@ -189,11 +197,11 @@ public class DropboxFileUploader {
             throw new RemoteException("Problem with IO", e);
         }
 
-        Log.d(TAG, "Upload succeeded. new rev = " + metadata.rev + ". path = " + metadata.path);
+        Log.d(TAG, "Upload succeeded. new rev = " + metadata.getRev() + ". path = " + metadata.getPathDisplay());
 
         file.setLoadedMetadata(metadata);
 
-        if (!metadata.path.equalsIgnoreCase(file.getRemoteFile())) {
+        if (!metadata.getPathDisplay().equalsIgnoreCase(file.getRemoteFile())) {
             // If the uploaded remote path does not match our expected
             // remotePath,
             // then a conflict occurred and we should announce the conflict to

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorPriorityA" format="color"/>
+    <attr name="colorPriorityB" format="color"/>
+    <attr name="colorPriorityC" format="color"/>
+    <attr name="colorPriorityD" format="color"/>
+    <attr name="colorTaskMetadata" format="color" />
+</resources>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
 
@@ -29,11 +28,9 @@ First, copy this file to dropbox.xml. Then uncomment out the following lines and
 The dropbox_consumer_key value must start with 'db-'
 -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!--
-    <string name="dropbox_consumer_key">Enter your Dropbox app key here</string>
-    <string name="dropbox_consumer_secret">Enter your Dropbox app secret here</string>
-    -->
+    <!--<string name="dropbox_consumer_key" translatable="false"></string>-->
+    <!--<string name="dropbox_consumer_secret" translatable="false" tools:ignore="MissingTranslation"></string>-->
 
 </resources>

@@ -26,25 +26,26 @@ You should have received a copy of the GNU General Public License along with Tod
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/TodoTxtTouchLight">
 
     <!--
          We define separate margins to allow for flexibility in twiddling the margins
          depending on device form factor and target SDK version.
     -->
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="right"
-        android:background="#006400"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:theme="@style/AppWidget.Header">
 
         <LinearLayout
             android:id="@+id/listwidget_header"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="?android:selectableItemBackground"
             android:orientation="horizontal"
             android:paddingRight="8dp">
 
@@ -63,9 +64,7 @@ You should have received a copy of the GNU General Public License along with Tod
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="@string/app_label"
-                android:textColor="#ffffff"
-                android:textSize="16sp" />
+                android:text="@string/app_label" />
         </LinearLayout>
 
         <RelativeLayout
@@ -77,19 +76,20 @@ You should have received a copy of the GNU General Public License along with Tod
 
             <ImageButton
                 android:id="@+id/listwidget_refresh"
+                style="@style/AppWidget.Header.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/listwidget_additem"
                 android:adjustViewBounds="true"
-                android:background="?android:selectableItemBackground"
                 android:padding="6dp"
                 android:scaleType="fitStart"
-                android:src="@drawable/ic_action_sync"
+                android:src="@drawable/ic_action_sync_tintable"
                 android:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/listwidget_progress"
+                style="@style/ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/listwidget_refresh"
@@ -100,44 +100,39 @@ You should have received a copy of the GNU General Public License along with Tod
 
             <ImageButton
                 android:id="@+id/listwidget_additem"
+                style="@style/AppWidget.Header.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:adjustViewBounds="true"
-                android:background="?android:selectableItemBackground"
                 android:padding="6dp"
                 android:scaleType="fitStart"
-                android:src="@drawable/ic_action_add" />
+                android:src="@drawable/ic_action_add_tintable" />
         </RelativeLayout>
     </LinearLayout>
 
-    <ImageView
-        style="@style/HorizontalRule"
-        android:contentDescription="@string/separator" />
-
     <FrameLayout
+        style="@style/TaskList"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_gravity="center"
-        android:layout_weight="1"
-        android:background="#ffffffff">
+        android:layout_weight="1">
 
         <ListView
             android:id="@+id/widget_list"
+            style="@style/TaskList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#f3f3f3"
-            android:dividerHeight="1dp" />
+            android:dividerHeight="@dimen/list_divider_height" />
 
         <TextView
             android:id="@+id/empty_view"
+            style="@style/TaskList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+
             android:gravity="center"
             android:text="@string/main_no_items"
-            android:textColor="@color/grey"
-            android:textSize="16sp"
             android:visibility="visible" />
     </FrameLayout>
 

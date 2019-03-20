@@ -2,29 +2,38 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion 26
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
 
         applicationId 'com.todotxt.todotxttouch'
-        minSdkVersion 14
-        targetSdkVersion 17
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode 35
         versionName "release35"
+
+        multiDexEnabled true
+
     }
 
+    lintOptions {
+        checkReleaseBuilds true
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 
     buildTypes {
 
         debug {
-            resValue "string", "dropbox_consumer_key", "123"
-            resValue "string", "dropbox_consumer_secret", "456"
+//            resValue "string", "dropbox_consumer_key", "db-"
+//            resValue "string", "dropbox_consumer_secret", ""
         }
 
         release {
-            minifyEnabled true // Enables code shrinking for the release build type.
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // minifyEnabled true // Enables code shrinking for the release build type.
+            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     flavorDimensions "free"
@@ -63,17 +72,22 @@ android {
 
 
 dependencies {
-    compile 'com.android.support:support-compat:26.1.0'
-    compile 'org.apache.james:apache-mime4j-james-utils:0.8.1'
-    compile 'org.apache.httpcomponents:httpmime:4.5.5'
-    compile 'com.github.cliftonlabs:json-simple:3.0.2'
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.9.0'
-    compile 'oauth.signpost:signpost-commonshttp4:1.2.1.2'
-    compile 'oauth.signpost:signpost-core:1.2.1.2'
-    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.dropbox.core:dropbox-core-sdk:3.0.6'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.15.0'
+    implementation 'com.android.support:support-compat:28.0.0'
+    implementation 'com.android.support:preference-v7:28.0.0'
+    implementation 'com.android.support:preference-v14:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'org.apache.james:apache-mime4j-james-utils:0.8.1'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.5'
+    implementation 'com.github.cliftonlabs:json-simple:3.0.2'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.0'
+    implementation 'oauth.signpost:signpost-commonshttp4:1.2.1.2'
+    implementation 'oauth.signpost:signpost-core:1.2.1.2'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.dropbox.core:dropbox-core-sdk:3.0.6'
+    // implementation 'net.sf.proguard:proguard-gradle:6.0.3'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.15.0'
 }

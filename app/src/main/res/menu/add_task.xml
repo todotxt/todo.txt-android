@@ -26,25 +26,26 @@ Todo.txt for Android's source code is available at https://github.com/ginatrapan
 @copyright 2009-2013 Todo.txt for Android contributors (http://todotxt.com)
  --><!-- suppress ALL -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_add_prio"
-        android:icon="@drawable/ic_action_prioritize"
+        android:icon="@drawable/action_prioritize_tintable"
         android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/priority_prompt" />
+        android:title="@string/priority_prompt"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_add_tag"
-        android:icon="@drawable/ic_action_filter"
+        android:icon="@drawable/action_tags_tintable"
         android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/contextproject_prompt" />
+        android:title="@string/contextproject_prompt"
+        app:showAsAction="always" />
     <item
         android:id="@+id/menu_save_task"
-        android:icon="@drawable/navigation_accept"
+        android:icon="@drawable/action_accept_tintable"
         android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/add" />
+        android:title="@string/add"
+        app:showAsAction="always" />
 
 </menu>

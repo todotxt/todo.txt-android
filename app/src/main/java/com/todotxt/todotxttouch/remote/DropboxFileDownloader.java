@@ -27,9 +27,13 @@ package com.todotxt.todotxttouch.remote;
 
 import android.util.Log;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.exception.DropboxServerException;
+import com.dropbox.core.DbxDownloader;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.DeletedMetadata;
+import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.GetMetadataErrorException;
+import com.dropbox.core.v2.files.Metadata;
 import com.todotxt.todotxttouch.util.Util;
 
 import java.io.File;
@@ -41,16 +45,16 @@ import java.util.Collection;
 public class DropboxFileDownloader {
     final static String TAG = DropboxFileDownloader.class.getSimpleName();
 
-    private DropboxAPI<?> dropboxApi;
+    private DbxClientV2 dbxClient;
     private DropboxFileStatus status;
     private Collection<DropboxFile> files;
 
     /**
      * @param files
      */
-    public DropboxFileDownloader(DropboxAPI<?> dropboxApi,
+    public DropboxFileDownloader(DbxClientV2 client,
                                  Collection<DropboxFile> files) {
-        this.dropboxApi = dropboxApi;
+        this.dbxClient = client;
         this.files = files;
         status = DropboxFileStatus.INITIALIZED;
     }
@@ -92,13 +96,12 @@ public class DropboxFileDownloader {
     private void loadMetadata(DropboxFile file) {
         Log.d(TAG, "Loading metadata for " + file.getRemoteFile());
 
-        DropboxAPI.Entry metadata = null;
+        Metadata metadata = null;
 
         try {
-            metadata = dropboxApi.metadata(file.getRemoteFile(), 0, null,
-                    false, null);
-        } catch (DropboxServerException se) {
-            if (se.error == DropboxServerException._404_NOT_FOUND) {
+            metadata = dbxClient.files().getMetadata(file.getRemoteFile());
+        } catch (GetMetadataErrorException mde) {
+            if (mde.errorValue.isPath() && mde.errorValue.getPathValue().isNotFound()) {
                 Log.d(TAG, "metadata NOT found! Returning NOT_FOUND status.");
 
                 file.setStatus(DropboxFileStatus.NOT_FOUND);
@@ -106,22 +109,31 @@ public class DropboxFileDownloader {
                 return;
             }
 
-            throw new RemoteException("Server Exception: " + se.error + " " + se.reason, se);
-        } catch (DropboxException e) {
+            throw new RemoteException("Server Exception: " + mde.errorValue + " " + mde.getUserMessage(), mde);
+        } catch (DbxException e) {
             throw new RemoteException("Dropbox Exception: " + e.getMessage(), e);
         }
 
-        Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + metadata.rev);
+        FileMetadata fileMetadata = null;
+        if(metadata instanceof FileMetadata) {
+            file.setLoadedMetadata((FileMetadata) metadata);
+            fileMetadata = (FileMetadata) metadata;
+            Log.d(TAG, "Metadata retrieved. rev on Dropbox = " + fileMetadata.getRev());
+        }
+
+        DeletedMetadata deletedMetadata = null;
+        if(metadata instanceof DeletedMetadata){
+            deletedMetadata = (DeletedMetadata) metadata;
+        }
+
         Log.d(TAG, "local rev = " + file.getOriginalRev());
 
-        file.setLoadedMetadata(metadata);
-
-        if (metadata.rev.equals(file.getOriginalRev())) {
+        if (fileMetadata != null && fileMetadata.getRev().equals(file.getOriginalRev())) {
             // don't bother downloading if the rev is the same
             Log.d(TAG, "revs match. returning NOT_CHANGED status.");
 
             file.setStatus(DropboxFileStatus.NOT_CHANGED);
-        } else if (metadata.isDeleted) {
+        } else if (deletedMetadata != null) {
             Log.d(TAG, "File marked as deleted on Dropbox! Returning NOT_FOUND status.");
             file.setStatus(DropboxFileStatus.NOT_FOUND);
         } else {
@@ -134,7 +146,7 @@ public class DropboxFileDownloader {
     private void loadFile(DropboxFile file) {
         Log.d(TAG,
                 "Downloading " + file.getRemoteFile() + " at rev = "
-                        + file.getLoadedMetadata().rev);
+                        + file.getLoadedMetadata().getRev());
 
         File localFile = file.getLocalFile();
 
@@ -156,11 +168,12 @@ public class DropboxFileDownloader {
         }
 
         try {
-            dropboxApi.getFile(file.getRemoteFile(), file.getLoadedMetadata().rev, outputStream,
-                    null);
+            DbxDownloader downloader =  dbxClient.files().download(file.getRemoteFile(),
+                    file.getLoadedMetadata().getRev());
+            downloader.download(outputStream);
             outputStream.flush();
             outputStream.close();
-        } catch (DropboxException e) {
+        } catch (DbxException e) {
             throw new RemoteException("Cannot get file from Dropbox", e);
         } catch (IOException e) {
             throw new RemoteException("Failed to find file", e);

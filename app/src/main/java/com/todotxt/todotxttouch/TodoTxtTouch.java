@@ -27,6 +27,7 @@ package com.todotxt.todotxttouch;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -49,32 +50,36 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract.Events;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.widget.DrawerLayout;
+import android.support.design.chip.Chip;
+import android.support.design.chip.ChipGroup;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.text.SpannableString;
+import android.transition.Slide;
+import android.transition.TransitionManager;
+import android.transition.Visibility;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.ActionMode.Callback;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.todotxt.todotxttouch.task.FilterFactory;
 import com.todotxt.todotxttouch.task.Priority;
 import com.todotxt.todotxttouch.task.Sort;
@@ -91,13 +96,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-//import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
-//import uk.co.senab.actionbarpulltorefresh.library.DefaultHeaderTransformer;
+import static android.view.View.GONE;
 
-//import de.timroes.swipetodismiss.SwipeDismissList;
 
-public class TodoTxtTouch extends SherlockListActivity implements
-        OnSharedPreferenceChangeListener, OnScrollListener {
+public class TodoTxtTouch extends AppCompatActivity implements
+        OnSharedPreferenceChangeListener, OnScrollListener, AdapterView.OnItemClickListener {
 
     final static String TAG = TodoTxtTouch.class.getSimpleName();
 
@@ -107,6 +110,30 @@ public class TodoTxtTouch extends SherlockListActivity implements
     private static final int SYNC_CONFLICT_DIALOG = 101;
     private static final int ARCHIVE_DIALOG = 103;
     private static TodoTxtTouch currentActivityPointer = null;
+    private final CompoundButton.OnCheckedChangeListener m_chipChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            String buttonText = compoundButton.getText().toString();
+            String sigil = buttonText.substring(0, 1);
+            String itemText = buttonText.substring(1);
+
+            if (sigil.equals("@")) {
+                if (b) {
+                    m_app.m_contexts.add(itemText);
+                } else {
+                    m_app.m_contexts.remove(itemText);
+                }
+            } else if (sigil.equals("+")) {
+                if (b) {
+                    m_app.m_projects.add(itemText);
+                } else {
+                    m_app.m_projects.remove(itemText);
+                }
+            }
+            m_app.storeFilters();
+            setFilteredTasks(false);
+        }
+    };
     ProgressDialog m_ProgressDialog = null;
     String m_DialogText = "";
     Boolean m_DialogActive = false;
@@ -119,14 +146,17 @@ public class TodoTxtTouch extends SherlockListActivity implements
     private TaskAdapter m_adapter;
     private BroadcastReceiver m_broadcastReceiver;
     private ActionMode mMode;
+//    private ActionMode mSearchActionMode;
 
     // Drawer variables
     private ArrayList<String> m_lists;
-    private ListView m_drawerList;
-    private DrawerLayout m_drawerLayout;
-    private ActionBarDrawerToggle m_drawerToggle;
 
     private boolean mListScrolling = false;
+    private boolean m_FilterActive = false;
+    private SwipeRefreshLayout m_swipe;
+    private ChipGroup m_filterChips;
+    private View m_SearchSrcBar;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,12 +164,15 @@ public class TodoTxtTouch extends SherlockListActivity implements
         currentActivityPointer = this;
 
         setContentView(R.layout.main);
+//        m_actionBar = getSupportActionBar();
 
         m_app = (TodoApplication) getApplication();
         m_app.m_prefs.registerOnSharedPreferenceChangeListener(this);
         this.taskBag = m_app.getTaskBag();
         m_adapter = new TaskAdapter(this, R.layout.list_item,
                 taskBag.getTasks(), getLayoutInflater());
+
+        m_filterChips = findViewById(R.id.filter_chips_contexts);
 
         // listen to the ACTION_LOGOUT intent, if heard display LoginScreen
         // and finish() current activity
@@ -185,16 +218,15 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
         registerReceiver(m_broadcastReceiver, intentFilter);
 
-        setListAdapter(this.m_adapter);
+        // TODO
+//        setListAdapter(this.m_adapter);
 
         ListView lv = getListView();
 
         lv.setTextFilterEnabled(true);
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        // Setup Navigation drawer
-        m_drawerList = (ListView) findViewById(R.id.left_drawer);
-        m_drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        lv.setAdapter(m_adapter);
 
         // Set the adapter for the list view
         updateNavigationDrawer();
@@ -205,14 +237,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
         lv.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                // Don't listen to gestures on the left area of the list
-                // to prevent interference with the DrawerLayout
-                ViewConfiguration vc = ViewConfiguration.get(view.getContext());
-                int deadZoneX = vc.getScaledTouchSlop();
-
-                if (motionEvent.getX() < deadZoneX) {
-                    return false;
-                }
 
 
                 // Only listen to item swipes if we are not scrolling the
@@ -228,6 +252,27 @@ public class TodoTxtTouch extends SherlockListActivity implements
         // We must set the scrollListener after the onTouchListener,
         // otherwise it will not fire
         lv.setOnScrollListener(this);
+        lv.setOnItemClickListener(this);
+
+        // swipe to refresh
+        m_swipe = findViewById(R.id.swipe);
+        m_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // updateSyncUI will eventually be called, we'll turn off the
+                // SwipeLayout's spinner there
+                syncClient(false);
+            }
+        });
+
+        // FAB
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAddTaskActivity(true);
+            }
+        });
 
         initializeTasks(false);
 
@@ -239,7 +284,39 @@ public class TodoTxtTouch extends SherlockListActivity implements
             Log.v(TAG, "Searched for " + m_app.m_search);
             m_app.storeFilters();
             setFilteredTasks(false);
+            startActionMode(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                    String title = m_app.getApplicationContext().getResources()
+                            .getString(R.string.title_search_results, m_app.m_search);
+                    actionMode.setTitle(title);
+
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode actionMode) {
+                    m_app.m_search = "";
+                    m_app.storeFilters();
+                    setFilteredTasks(false);
+                }
+            });
+            setFilteredTasks(false);
         }
+    }
+
+    private ListView getListView() {
+        return findViewById(R.id.list_view);
     }
 
     @Override
@@ -276,55 +353,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
     private void updateNavigationDrawer() {
         m_lists = contextsAndProjects();
-
-        if (m_lists.size() == 0) {
-            if (m_drawerLayout != null) {
-                // No contexts or projects, disable navigation drawer
-                m_drawerLayout.setDrawerLockMode(
-                        DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
-            } else {
-                m_drawerList.setVisibility(View.GONE);
-            }
-
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setHomeButtonEnabled(false);
-        } else {
-            if (m_drawerLayout != null) {
-                m_drawerLayout.setDrawerLockMode(
-                        DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
-                m_drawerToggle = new ActionBarDrawerToggle(this, /*
-                                                                 * host Activity
-																 */
-                        m_drawerLayout, /* DrawerLayout object */
-                        R.drawable.ic_drawer, /* nav drawer icon to replace 'Up' caret */
-                        R.string.quickfilter, /* "open drawer" description */
-                        R.string.app_label /* "close drawer" description */
-                ) {
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-                        // Redraw menu to show or hide menu items
-                        supportInvalidateOptionsMenu();
-                        super.onDrawerSlide(drawerView, slideOffset);
-                    }
-                };
-
-                // Set the drawer toggle as the DrawerListener
-                m_drawerLayout.setDrawerListener(m_drawerToggle);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setHomeButtonEnabled(true);
-                m_drawerToggle.syncState();
-            } else {
-                m_drawerList.setVisibility(View.VISIBLE);
-            }
-
-            m_drawerList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-            m_drawerList.setAdapter(new ArrayAdapter<String>(this,
-                    R.layout.drawer_list_item, R.id.left_drawer_text, m_lists));
-            setDrawerChoices();
-
-            // Set the list's click listener
-            m_drawerList.setOnItemClickListener(new DrawerItemClickListener());
-        }
+        setDrawerChoices();
     }
 
     private void initializeTasks(boolean force) {
@@ -346,17 +375,32 @@ public class TodoTxtTouch extends SherlockListActivity implements
         }
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content
-        if (m_drawerLayout != null) {
-            boolean drawerOpen = m_drawerLayout.isDrawerVisible(Gravity.LEFT);
-            menu.findItem(R.id.add_new).setVisible(!drawerOpen);
-            menu.findItem(R.id.search).setVisible(!drawerOpen);
-            menu.findItem(R.id.sort).setVisible(!drawerOpen);
-            menu.findItem(R.id.share).setVisible(!drawerOpen);
+    @TargetApi(Build.VERSION_CODES.M)
+    private void setFilterState(boolean active) {
+        if (getResources().getConfiguration().screenWidthDp >= 720) {         // force visible in large
+            m_FilterActive = true;
+        } else {
+            m_FilterActive = active;
+
+            Slide slide = new Slide();
+            slide.setMode(Visibility.MODE_IN | Visibility.MODE_OUT);
+            slide.setSlideEdge(Gravity.TOP);
+            slide.addTarget(m_filterChips).addTarget((ViewGroup) findViewById(R.id.swipe));
+            TransitionManager.beginDelayedTransition((ViewGroup) findViewById(R.id.home_main), slide);
+
         }
 
+        m_filterChips.setVisibility(m_FilterActive ? View.VISIBLE : View.GONE);
+
+        // toggle always works regardless of size & orientation
+        if (!active) {
+            clearFilter();
+            setFilteredTasks(false);
+        }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.archive).setVisible(
                 !m_app.m_prefs.isAutoArchiveEnabled());
 
@@ -401,6 +445,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
         // Show contextactionbar if there is a selection
         showContextActionBarIfNeeded();
+
+        setFilterState(m_FilterActive);
+
     }
 
     @Override
@@ -429,6 +476,8 @@ public class TodoTxtTouch extends SherlockListActivity implements
         outState.putBoolean("DialogActive", m_DialogActive);
         outState.putString("DialogText", m_DialogText);
 
+        outState.putBoolean("FilterActive", m_FilterActive);
+
         dismissProgressDialog(false);
         super.onSaveInstanceState(outState);
     }
@@ -445,13 +494,20 @@ public class TodoTxtTouch extends SherlockListActivity implements
         if (m_DialogActive) {
             showProgressDialog(m_DialogText);
         }
+
+        setFilterState(state.getBoolean("FilterActive"));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+//        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         this.options_menu = menu;
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -459,24 +515,59 @@ public class TodoTxtTouch extends SherlockListActivity implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
-        if (m_drawerToggle != null) {
-            m_drawerToggle.onConfigurationChanged(newConfig);
-        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home && m_drawerLayout != null) {
 
-            if (m_drawerLayout.isDrawerOpen(m_drawerList)) {
-                m_drawerLayout.closeDrawer(m_drawerList);
-            } else {
-                m_drawerLayout.openDrawer(m_drawerList);
-            }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                break;
+
+            case R.id.add_new:
+                startAddTaskActivity(false);
+                break;
+
+            case R.id.filter:
+                setFilterState(!m_FilterActive);
+                break;
+
+            case R.id.search:
+                // handled by menu item's actionview
+                break;
+
+            case R.id.preferences:
+                startPreferencesActivity();
+                break;
+
+            case R.id.sync:
+                Log.v(TAG, "onMenuItemSelected: sync");
+
+                // same ux as swipe
+                m_swipe.setRefreshing(true);
+                syncClient(false);
+
+                break;
+
+            case R.id.sort:
+                startSortDialog();
+                break;
+
+            case R.id.share:
+                shareTasks(m_adapter.getItems());
+                break;
+
+            case R.id.archive:
+                showDialog(ARCHIVE_DIALOG);
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
@@ -804,52 +895,16 @@ public class TodoTxtTouch extends SherlockListActivity implements
         }.execute();
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        Log.v(TAG, "onMenuItemSelected: " + item.getItemId());
-
-        switch (item.getItemId()) {
-            case R.id.add_new:
-                startAddTaskActivity();
-
-                break;
-            case R.id.search:
-                onSearchRequested();
-
-                break;
-            case R.id.preferences:
-                startPreferencesActivity();
-
-                break;
-            case R.id.sync:
-                Log.v(TAG, "onMenuItemSelected: sync");
-
-                syncClient(false);
-
-                break;
-            case R.id.sort:
-                startSortDialog();
-
-                break;
-            case R.id.share:
-                shareTasks(m_adapter.getItems());
-
-                break;
-            case R.id.archive:
-                showDialog(ARCHIVE_DIALOG);
-
-                break;
-            default:
-                return super.onMenuItemSelected(featureId, item);
-        }
-
-        return true;
-    }
-
-    private void startAddTaskActivity() {
+    @TargetApi(23)
+    private void startAddTaskActivity(boolean withTransition) {
+        Bundle optionsBundle = null;
         Intent intent = new Intent(this, AddTask.class);
-        startActivity(intent);
+
+        if (withTransition) {
+            FloatingActionButton fab = findViewById(R.id.fab);
+            optionsBundle = ActivityOptions.makeScaleUpAnimation(fab, 0, 0, 0, 0).toBundle();
+        }
+        startActivity(intent, optionsBundle);
     }
 
     private ArrayList<String> contextsAndProjects() {
@@ -929,8 +984,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
      * <li>Will ask "push or pull" in manual mode.
      * </ul>
      *
-     * @param force
-     *            true to force pull
+     * @param force true to force pull
      */
     @SuppressWarnings("deprecation")
     private void syncClient(boolean force) {
@@ -976,7 +1030,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
                 setFilteredTasks(false);
             }
         } else if (requestCode == REQUEST_PREFERENCES) {
-			/* Do nothing */
+            /* Do nothing */
         }
     }
 
@@ -1129,7 +1183,9 @@ public class TodoTxtTouch extends SherlockListActivity implements
         }
     }
 
-    /** Handle "add task" action. */
+    /**
+     * Handle "add task" action.
+     */
     public void onAddTaskClick(View v) {
         Intent i = new Intent(this, AddTask.class);
 
@@ -1140,14 +1196,18 @@ public class TodoTxtTouch extends SherlockListActivity implements
         startActivity(i);
     }
 
-    /** Handle "refresh/download" action. */
+    /**
+     * Handle "refresh/download" action.
+     */
     public void onSyncClick(View v) {
         Log.v(TAG, "titlebar: sync");
 
         syncClient(false);
     }
 
-    /** Handle clear filter click **/
+    /**
+     * Handle clear filter click
+     **/
     public void onClearClick(View v) {
         clearFilter();
 
@@ -1204,10 +1264,10 @@ public class TodoTxtTouch extends SherlockListActivity implements
         }
 
         if (mMode == null) {
-            mMode = startActionMode(new Callback() {
+            mMode = startActionMode(new ActionMode.Callback() {
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    getSupportMenuInflater().inflate(R.menu.main_long, menu);
+                    getMenuInflater().inflate(R.menu.main_long, menu);
 
                     return true;
                 }
@@ -1350,7 +1410,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
         m_app.m_contexts = new ArrayList<String>(); // Collections.emptyList();
         m_app.m_projects = new ArrayList<String>(); // Collections.emptyList();
         m_app.m_filters = new ArrayList<String>();
-        m_app.m_search = "";
+        // m_app.m_search = "";  Filter != Search
         m_app.storeFilters();
         setDrawerChoices();
     }
@@ -1378,57 +1438,23 @@ public class TodoTxtTouch extends SherlockListActivity implements
         ListView lv = getListView();
         lv.setSelectionFromTop(mScrollPosition, mScrollTop);
 
-        final TextView filterText = (TextView) findViewById(R.id.filter_text);
-        final LinearLayout actionbar = (LinearLayout) findViewById(R.id.actionbar);
-        final ImageView actionbar_icon = (ImageView) findViewById(R.id.actionbar_icon);
-
-        if (filterText != null) {
-            if (m_app.m_filters.size() > 0) {
-                String filterTitle = getString(R.string.title_filter_applied)
-                        + " ";
-                int count = m_app.m_filters.size();
-
-                for (int i = 0; i < count; i++) {
-                    filterTitle += m_app.m_filters.get(i) + " ";
-                }
-
-                if (!Strings.isEmptyOrNull(m_app.m_search)) {
-                    filterTitle += getString(R.string.filter_tab_search);
-                }
-
-                actionbar_icon.setImageResource(R.drawable.ic_actionbar_filter);
-
-                actionbar.setVisibility(View.VISIBLE);
-                filterText.setText(filterTitle);
-            } else if (!Strings.isEmptyOrNull(m_app.m_search)) {
-                if (filterText != null) {
-                    actionbar_icon
-                            .setImageResource(R.drawable.ic_actionbar_search);
-                    filterText.setText(getString(R.string.title_search_results)
-                            + " " + m_app.m_search);
-
-                    actionbar.setVisibility(View.VISIBLE);
-                }
-            } else {
-                filterText.setText("");
-                actionbar.setVisibility(View.GONE);
-            }
-        }
-
+//
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        l.setItemChecked(position, l.isItemChecked(position));
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        ListView lv = (ListView) adapterView;
+        lv.setItemChecked(position, lv.isItemChecked(position));
         showContextActionBarIfNeeded();
     }
 
     private void updateSyncUI(boolean redrawList) {
         if (redrawList) {
-            // hide action bar
-            findViewById(R.id.actionbar).setVisibility(View.GONE);
             setFilteredTasks(false);
         }
+
+        // cancel the SwipeLayout's refresh spinner
+        m_swipe.setRefreshing(false);
     }
 
     public void onRefreshStarted(View view) {
@@ -1444,20 +1470,23 @@ public class TodoTxtTouch extends SherlockListActivity implements
     }
 
     private void setDrawerChoices() {
-        m_drawerList.clearChoices();
+
+        ChipGroup contextFilterChips = findViewById(R.id.filter_chips_contexts);
+        contextFilterChips.removeAllViews();
+
         boolean haveContexts = false;
         boolean haveProjects = false;
 
-        for (int i = 0; i < m_lists.size(); i++) {
-            char sigil = m_lists.get(i).charAt(0);
-            String item = m_lists.get(i).substring(1);
+        for (String item : m_lists) {
 
-            if (sigil == '@' && m_app.m_contexts.contains(item)) {
-                m_drawerList.setItemChecked(i, true);
+            Chip c = new Chip(contextFilterChips.getContext());
+            c.setCheckable(true);
+            contextFilterChips.addView(c);
+            c.setText(item, TextView.BufferType.NORMAL);
+            c.setOnCheckedChangeListener(m_chipChangeListener);
+            if (m_app.m_contexts.contains(item.substring(1))) {
                 haveContexts = true;
-            } else if (sigil == '+' && m_app.m_projects.contains(item)) {
-                m_drawerList.setItemChecked(i, true);
-                haveProjects = true;
+                c.setChecked(true);
             }
         }
 
@@ -1480,12 +1509,6 @@ public class TodoTxtTouch extends SherlockListActivity implements
             m_app.m_filters.remove(getString(R.string.filter_tab_projects));
             m_app.m_projects = new ArrayList<String>();
         }
-
-        ArrayAdapter<?> adapter = (ArrayAdapter<?>) m_drawerList.getAdapter();
-
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
     }
 
     private static class ViewHolder {
@@ -1495,7 +1518,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
     }
 
     public class TaskAdapter extends ArrayAdapter<Task> {
-        private LayoutInflater m_inflater;
+        private android.view.LayoutInflater m_inflater;
 
         public TaskAdapter(Context context, int textViewResourceId,
                            List<Task> tasks, LayoutInflater inflater) {
@@ -1568,29 +1591,34 @@ public class TodoTxtTouch extends SherlockListActivity implements
                 Util.setGray(ss, task.getContexts());
                 holder.tasktext.setText(ss);
 
-                Resources res = getResources();
-                holder.tasktext.setTextColor(res.getColor(R.color.black));
+                Resources.Theme t = getTheme();
+//                Resources.Theme t = parent.getContext().getTheme();
+                TypedValue colorVal = new TypedValue();
+                int colorAttribute;
 
                 switch (task.getPriority()) {
                     case A:
-                        holder.taskprio.setTextColor(res.getColor(R.color.green));
+                        colorAttribute = R.attr.colorPriorityA;
 
                         break;
                     case B:
-                        holder.taskprio.setTextColor(res.getColor(R.color.blue));
+                        colorAttribute = R.attr.colorPriorityB;
 
                         break;
                     case C:
-                        holder.taskprio.setTextColor(res.getColor(R.color.orange));
+                        colorAttribute = R.attr.colorPriorityC;
 
                         break;
                     case D:
-                        holder.taskprio.setTextColor(res.getColor(R.color.gold));
+                        colorAttribute = R.attr.colorPriorityD;
 
                         break;
                     default:
-                        holder.taskprio.setTextColor(res.getColor(R.color.black));
+                        colorAttribute = android.R.attr.textColorPrimary;
                 }
+
+                t.resolveAttribute(colorAttribute, colorVal, true);
+                holder.taskprio.setTextColor(colorVal.data);
 
                 if (task.isCompleted()) {
                     // Log.v(TAG, "Striking through " + task.getText());
@@ -1601,7 +1629,7 @@ public class TodoTxtTouch extends SherlockListActivity implements
                             .getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
                 }
 
-                holder.taskage.setVisibility(View.GONE);
+                holder.taskage.setVisibility(GONE);
 
                 if (m_app.m_prefs.isPrependDateEnabled()) {
                     if (!task.isCompleted()
@@ -1628,34 +1656,4 @@ public class TodoTxtTouch extends SherlockListActivity implements
 
     }
 
-    private class DrawerItemClickListener implements
-            AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            TextView tv = (TextView) view.findViewById(R.id.left_drawer_text);
-            String itemTitle = tv.getText().toString();
-
-            Log.v(TAG, "Clicked on drawer " + itemTitle);
-
-            if (itemTitle.substring(0, 1).equals("@")
-                    && !m_app.m_contexts.remove(itemTitle.substring(1))) {
-                m_app.m_contexts = new ArrayList<String>();
-                m_app.m_contexts.add(itemTitle.substring(1));
-            } else if (itemTitle.substring(0, 1).equals("+")
-                    && !m_app.m_projects.remove(itemTitle.substring(1))) {
-                m_app.m_projects = new ArrayList<String>();
-                m_app.m_projects.add(itemTitle.substring(1));
-            }
-
-            setDrawerChoices();
-            m_app.storeFilters();
-
-            if (m_drawerLayout != null) {
-                m_drawerLayout.closeDrawer(m_drawerList);
-            }
-
-            setFilteredTasks(false);
-        }
-    }
 }

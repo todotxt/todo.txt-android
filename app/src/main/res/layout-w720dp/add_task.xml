@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+This file is part of Todo.txt, an Android app for managing your todo.txt file (http://todotxt.com).
+
+Copyright (c) 2009-2013 Todo.txt contributors (http://todotxt.com)
+
+LICENSE:
+
+Todo.txt is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any
+later version.
+
+Todo.txt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along with Todo.txt.  If not, see
+<http://www.gnu.org/licenses/>.
+
+@author Todo.txt contributors <todotxt@yahoogroups.com>
+@license http://www.gnu.org/licenses/gpl.html
+@copyright 2009-2013 Todo.txt contributors (http://todotxt.com)
+-->
+
+
+<!-- suppress ALL -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tablet_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:id="@+id/home_root"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <EditText
+            android:id="@+id/taskText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:gravity="top"
+            android:inputType="textCapSentences|textMultiLine" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
