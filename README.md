@@ -3,7 +3,7 @@
 
 The official Todo.txt Android application is not available anymore. It had stopped working after Dropbox updated their SDK.
 
-There are a number of community-developed apps available for Todo.txt on Android. The full, updated list of community developed apps is under '`Community Apps > Mobile`' on the [home page](//todotxt.org/#communityMobile).
+There are a number of community-developed apps available for Todo.txt on Android. The full, updated list of community developed apps is under '`Community Apps > Mobile`' on the [home page](http://todotxt.org/#communityMobile).
 
 #### Other Todo.txt compatible apps for Android:
 
